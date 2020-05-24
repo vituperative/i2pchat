@@ -2,3 +2,6 @@
 .cproject
 .project
 temp/**
+.qmake*
+I2P-Messenger
+build*
