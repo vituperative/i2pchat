@@ -1,9 +1,13 @@
 # I2P Chat AKA I2P Qt Messenger
 
+## Screenshot
+
+![изображение](https://user-images.githubusercontent.com/19966907/82762245-7cf1db80-9e32-11ea-9c0c-5e711e6ff5f9.png)
+
 ## Features
 
  * The communication goes «directly over i2p» from client to client, no server is required.[1] Note: The connections to the so-called «seedless» servers were removed from this project ; see : https://github.com/hypnosis-i2p/i2pchat/issues/40 . —hypn.
-
+ 
 ## How to run it
 
 You need to enable SAM in your router on <a href="http://127.0.0.1:7657/configclients">java i2p configclients page</a> or i2pd's i2pd.conf [sam] section to make I2P Chat work over your I2P router.
