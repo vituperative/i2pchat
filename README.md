@@ -49,6 +49,8 @@ or simply
 make
 ```
 
+On Linux, it creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
+
 ## Old files and sites
 
  * http://echelon.i2p/qti2pmessenger/macos → Mac OS X versions, not tested;
