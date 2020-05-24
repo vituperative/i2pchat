@@ -49,7 +49,9 @@ or simply
 make
 ```
 
-On Linux, it creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
+## Running
+
+On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`. When ran, switch yourself to online. It will generate a Dest on first connect to SAM.
 
 ## Old files and sites
 
