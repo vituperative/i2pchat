@@ -49,6 +49,10 @@ or simply
 make
 ```
 
+## Running
+
+On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`. When ran, switch yourself to online. It will generate your Destination address (a key) on first connect to SAM.
+
 ## Old files and sites
 
  * http://echelon.i2p/qti2pmessenger/macos → Mac OS X versions, not tested;
