@@ -278,7 +278,7 @@ void CCore::slotStreamStatusRecived(const SAM_Message_Types::RESULT result,const
         }else{
             mConnectionManager->doDestroyStreamObjectByID(ID);
             user->slotIncomingMessageFromSystem(tr("Invalid User - Destination: please delete the user\n"));
-            user->setConnectionStatus(ERROR);
+            user->setConnectionStatus(CONNECTERROR);
         }
         deletePacketManagerByID(ID);
 
@@ -291,7 +291,7 @@ void CCore::slotStreamStatusRecived(const SAM_Message_Types::RESULT result,const
         user->slotIncomingMessageFromSystem(tr("I2P_Error: %1").arg(Message));
         deletePacketManagerByID(ID);
         mConnectionManager->doDestroyStreamObjectByID(ID);
-        user->setConnectionStatus(ERROR);
+        user->setConnectionStatus(CONNECTERROR);
     }
 
 }

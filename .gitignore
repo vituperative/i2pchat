@@ -5,3 +5,8 @@ temp/**
 .qmake*
 I2P-Messenger
 build*
+release/
+/i2p-messenger_plugin_import.cpp
+/Makefile*
+/object_script*
+/src/gui/ui_form_*.h
