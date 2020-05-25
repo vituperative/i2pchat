@@ -100,11 +100,11 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status){
 		}
 	}
 
-	if(Status==OFFLINE ||Status==ERROR){
+	if(Status==OFFLINE ||Status==CONNECTERROR){
 		mI2PStream_ID=0;
 		
 		if(mCurrentOnlineState!=USERBLOCKEDYOU){
-		    setOnlineState(USEROFFLINE);
+			setOnlineState(USEROFFLINE);
 		}
 	}
 	emit signOnlineStateChanged();
