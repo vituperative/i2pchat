@@ -2,7 +2,7 @@
 
 ## Screenshots
 
-![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-file-transfer](https://user-images.githubusercontent.com/19966907/82762322-e1149f80-9e32-11ea-80dc-762adcbcac48.png)
+![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
 
 ## Features
