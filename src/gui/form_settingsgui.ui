@@ -79,10 +79,10 @@
    </property>
    <layout class="QGridLayout">
     <property name="leftMargin">
-     <number>9</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>9</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
      <number>9</number>
@@ -91,7 +91,7 @@
      <number>9</number>
     </property>
     <property name="spacing">
-     <number>6</number>
+     <number>9</number>
     </property>
     <item row="0" column="0" alignment="Qt::AlignLeft">
      <widget class="QListWidget" name="itemListWidget">
@@ -120,6 +120,12 @@
         <weight>50</weight>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
       </property>
       <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -335,10 +341,10 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="1">
+    <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="general_page">
        <widget class="QGroupBox" name="groupBox_6">
@@ -787,7 +793,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>4</x>
-          <y>200</y>
+          <y>212</y>
           <width>429</width>
           <height>225</height>
          </rect>
@@ -985,7 +991,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>4</x>
-          <y>124</y>
+          <y>136</y>
           <width>429</width>
           <height>65</height>
          </rect>
@@ -1025,9 +1031,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>-2</x>
           <y>60</y>
-          <width>421</width>
+          <width>433</width>
           <height>371</height>
          </rect>
         </property>
@@ -1330,10 +1336,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_3">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>120</y>
-          <width>421</width>
-          <height>311</height>
+          <x>4</x>
+          <y>148</y>
+          <width>429</width>
+          <height>73</height>
          </rect>
         </property>
         <property name="title">
@@ -1393,9 +1399,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>40</y>
-          <width>421</width>
+          <x>4</x>
+          <y>56</y>
+          <width>429</width>
           <height>71</height>
          </rect>
         </property>
@@ -1497,10 +1503,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_4">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>40</y>
-          <width>421</width>
-          <height>101</height>
+          <width>429</width>
+          <height>93</height>
          </rect>
         </property>
         <property name="title">
@@ -1587,10 +1593,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_19">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>140</y>
-          <width>421</width>
-          <height>291</height>
+          <width>429</width>
+          <height>97</height>
          </rect>
         </property>
         <property name="title">
@@ -2105,9 +2111,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget_4">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>4</x>
           <y>0</y>
-          <width>355</width>
+          <width>361</width>
           <height>41</height>
          </rect>
         </property>
@@ -2165,10 +2171,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_18">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>40</y>
-          <width>421</width>
-          <height>381</height>
+          <width>429</width>
+          <height>397</height>
          </rect>
         </property>
         <property name="title">
@@ -2634,7 +2640,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>10</x>
            <y>310</y>
-           <width>211</width>
+           <width>405</width>
            <height>28</height>
           </rect>
          </property>
@@ -2645,7 +2651,7 @@ p, li { white-space: pre-wrap; }
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>max. ACK-Time in sec:</string>
+             <string>Maximum ACK time (seconds)</string>
             </property>
            </widget>
           </item>
@@ -2664,9 +2670,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget_5">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>1</y>
-          <width>391</width>
+          <width>401</width>
           <height>41</height>
          </rect>
         </property>
@@ -2730,7 +2736,7 @@ p, li { white-space: pre-wrap; }
        <widget class="QPushButton" name="cmd_unblockUserFromBlockList">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>352</x>
           <y>400</y>
           <width>80</width>
           <height>25</height>
@@ -2743,7 +2749,7 @@ p, li { white-space: pre-wrap; }
        <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>262</x>
           <y>400</y>
           <width>80</width>
           <height>25</height>
@@ -2756,9 +2762,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QTreeWidget" name="UserBlockTreeWidget">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>50</y>
-          <width>391</width>
+          <width>433</width>
           <height>341</height>
          </rect>
         </property>
@@ -2781,9 +2787,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget_6">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>3</x>
           <y>0</y>
-          <width>158</width>
+          <width>165</width>
           <height>34</height>
          </rect>
         </property>
@@ -2841,9 +2847,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_20">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>40</y>
-          <width>411</width>
+          <width>429</width>
           <height>391</height>
          </rect>
         </property>
