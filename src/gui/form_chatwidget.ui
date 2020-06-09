@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>716</width>
+    <width>400</width>
     <height>451</height>
    </rect>
   </property>
@@ -42,7 +42,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <property name="enabled">
@@ -457,6 +457,21 @@ p, li { white-space: pre-wrap; }
         <item alignment="Qt::AlignVCenter">
          <widget class="QFrame" name="chattoolsframe_2">
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QSplitter" name="splitter">
              <property name="orientation">
@@ -465,8 +480,8 @@ p, li { white-space: pre-wrap; }
              <widget class="QToolButton" name="cmd_Reaload">
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -504,8 +519,8 @@ p, li { white-space: pre-wrap; }
              <widget class="QToolButton" name="cmd_new">
               <property name="minimumSize">
                <size>
-                <width>24</width>
-                <height>24</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -529,6 +544,12 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
              <widget class="QToolButton" name="cmd_delete">
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="toolTip">
                <string>delete message</string>
               </property>
@@ -552,8 +573,8 @@ p, li { white-space: pre-wrap; }
              <widget class="QToolButton" name="cmd_Save">
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -589,11 +610,22 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
              <widget class="QPushButton" name="cmd_back">
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>32</width>
                 <height>24</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
               </property>
               <property name="text">
                <string>&lt;</string>
@@ -608,13 +640,13 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
-                <height>24</height>
+                <width>32</width>
+                <height>20</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>32</width>
                 <height>24</height>
                </size>
               </property>
@@ -630,13 +662,27 @@ p, li { white-space: pre-wrap; }
               <property name="scaledContents">
                <bool>false</bool>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
              </widget>
              <widget class="QPushButton" name="cmd_next">
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>32</width>
                 <height>24</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
               </property>
               <property name="text">
                <string>&gt;</string>
@@ -648,8 +694,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="toolTip">
@@ -681,8 +727,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="toolTip">
@@ -714,8 +760,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="toolTip">
@@ -747,8 +793,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="toolTip">
@@ -774,8 +820,8 @@ p, li { white-space: pre-wrap; }
              <widget class="QToolButton" name="txtFont_2">
               <property name="minimumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="maximumSize">
