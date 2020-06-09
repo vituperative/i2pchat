@@ -1028,7 +1028,7 @@ border-radius: 1px;
   <action name="actionAvatar_Picture">
    <property name="icon">
     <iconset>
-     <normaloff>:/icons/insert-image.svg</normaloff>:/icons/insert-image.svg</iconset>
+     <normaloff>:/icons/addimage.svg</normaloff>:/icons/addimage.svg</iconset>
    </property>
    <property name="text">
     <string>Set Avatar Picture</string>
