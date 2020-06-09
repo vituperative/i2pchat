@@ -188,7 +188,7 @@ border-radius: 1px;
            <cursorShape>IBeamCursor</cursorShape>
           </property>
           <property name="locale">
-           <locale language="English" country="World"/>
+           <locale language="English" country="UnitedStates"/>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -539,7 +539,7 @@ border-radius: 1px;
            </font>
           </property>
           <property name="locale">
-           <locale language="English" country="World"/>
+           <locale language="English" country="UnitedStates"/>
           </property>
           <property name="html">
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
