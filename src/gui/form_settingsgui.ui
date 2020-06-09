@@ -344,7 +344,7 @@
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>7</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="general_page">
        <widget class="QGroupBox" name="groupBox_6">
@@ -2180,12 +2180,15 @@ p, li { white-space: pre-wrap; }
         <property name="title">
          <string/>
         </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
         <widget class="QGroupBox" name="groupBox_24">
          <property name="geometry">
           <rect>
-           <x>0</x>
+           <x>10</x>
            <y>10</y>
-           <width>411</width>
+           <width>409</width>
            <height>121</height>
           </rect>
          </property>
@@ -2398,7 +2401,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>10</x>
            <y>140</y>
-           <width>401</width>
+           <width>409</width>
            <height>131</height>
           </rect>
          </property>
