@@ -111,7 +111,7 @@ void CSessionController::slotReadFromSocket()
                     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
                     QString Signature="SIGNATURE_TYPE=%s";
                     settings.beginGroup("Network");
-                    Signature.replace("%s",settings.value("Signature_Type","DSA_SHA1").toString());
+                    Signature.replace("%s",settings.value("Signature_Type","ECDSA_SHA512_P521").toString());
                     this->doDestGenerate(Signature);
                     settings.endGroup();
                     settings.sync();
@@ -138,7 +138,8 @@ void CSessionController::slotReadFromSocket()
                     QMessageBox msgBox(NULL);
                     msgBox.setIcon(QMessageBox::Critical);
                     msgBox.setText(tr("I2P-Messenger"));
-                    msgBox.setInformativeText(tr("Session: DUPLICATED_DEST\n\nOnly one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed)\n "));
+//                    msgBox.setInformativeText(tr("Session: DUPLICATED_DEST\n\nOnly one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed)\n "));
+                    msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run Messenger\nwith the same destination twice!\nSAM may need to be restarted."));
                     msgBox.setStandardButtons(QMessageBox::Ok);
                     msgBox.setDefaultButton(QMessageBox::Ok);
                     msgBox.setWindowModality(Qt::NonModal);
@@ -218,7 +219,7 @@ void CSessionController::doDisconnect()
 }
 
 void CSessionController::doNamingLookUP(QString Name)
-{	
+{
     ConnectionReadyCheck();
 
     QByteArray Message="NAMING LOOKUP NAME=";
