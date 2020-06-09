@@ -915,7 +915,7 @@ border-radius: 1px;
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>87</width>
+           <width>4</width>
            <height>210</height>
           </size>
          </property>
@@ -959,7 +959,7 @@ border-radius: 1px;
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>87</width>
+        <width>4</width>
         <height>18</height>
        </size>
       </property>
