@@ -419,7 +419,7 @@ void form_ChatWidget::changeWindowsTitle()
 			    
 					}
 		}
-	this->setWindowTitle(user.getName() +"       ("+ OnlineStatus +")");
+	this->setWindowTitle(user.getName() +" ["+ OnlineStatus +"]");
 }
 
 void form_ChatWidget::newFileTransfer()
@@ -441,7 +441,7 @@ void form_ChatWidget::newFileTransfer()
 		QMessageBox* msgBox= new QMessageBox(this);
 		msgBox->setIcon(QMessageBox::Information);
 		msgBox->setText(tr("Sendfile"));
-		msgBox->setInformativeText(tr("The other user must be online, filesend abborted"));
+		msgBox->setInformativeText(tr("The other user must be online; send aborted"));
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->setDefaultButton(QMessageBox::Ok);
 		msgBox->setWindowModality(Qt::NonModal);
