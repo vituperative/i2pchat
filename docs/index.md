@@ -21,7 +21,7 @@ Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks
 
 ### Current news
 
-June, 2020: dr|z3d starts work on renovating the user interface.
+June, 2020: dr\|z3d starts work on renovating the user interface.
 
 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
 
