@@ -29,7 +29,7 @@ CUser::CUser(	CCore&	Core,
 		QString Name,
 		QString I2PDestination,
 		qint32 I2PStream_ID
-		):mCore(Core),mProtocol(Protocol),mI2PDestination(I2PDestination),mChatMessageChanger(*(CChatMessageChanger::exemplar(Core)))		
+		):mCore(Core),mProtocol(Protocol),mI2PDestination(I2PDestination),mChatMessageChanger(*(CChatMessageChanger::exemplar(Core)))
 {
 	QSettings settings(mCore.getConfigPath()+"/application.ini",QSettings::IniFormat);
 
@@ -43,7 +43,7 @@ CUser::CUser(	CCore&	Core,
 	this->mHaveNewUnreadChatmessage=false;
 
 	settings.beginGroup("Chat");
-		this->mTextFont.fromString(settings.value("DefaultFont","Comic Sans MS,10").toString());
+		this->mTextFont.fromString(settings.value("DefaultFont","sans-serif,10").toString());
 		this->mTextColor.setNamedColor(settings.value("DefaultColor","#000000").toString());
 		this->mLogOnlineStateOfUsers=(settings.value("LogOnlineStatesOfUsers",true).toBool());
 	settings.endGroup();
@@ -54,7 +54,7 @@ CUser::CUser(	CCore&	Core,
 	this->mMaxProtocolVersionFiletransfer="0.1";
 	this->mMinProtocolVersionFiletransfer="0.1";
 	this->mRecivedUserInfos.Age=0;
-	
+
 	if(mI2PDestination.length()==60){
 	    mUseB32Dest=true;
 	}else{
@@ -62,7 +62,7 @@ CUser::CUser(	CCore&	Core,
 	}
 }
 CUser::~CUser()
-{	
+{
 
     emit signUserDeleted();
 }
@@ -72,10 +72,10 @@ void CUser::setName(QString newName){
 	mCore.getUserManager()->saveUserList();
 }
 void CUser::setConnectionStatus(CONNECTIONTOUSER Status){
-	if(mConnectionStatus==Status){return;}  
-  
+	if(mConnectionStatus==Status){return;}
+
 	mConnectionStatus=Status;
-	
+
 	if(Status==ONLINE){
 		if(getUsedB32Dest()==true){
 		    mCore.doNamingLookUP(mI2PDestination);
@@ -84,7 +84,7 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status){
 		mProtocol.send(GET_CLIENTNAME		,mI2PStream_ID);
 		mProtocol.send(GET_CLIENTVERSION	,mI2PStream_ID);
 		mProtocol.send(GET_USER_ONLINESTATUS	,mI2PStream_ID);
-		
+
 
 		if(getProtocolVersion_D()>=0.3){
 			mProtocol.send(GET_MAX_PROTOCOLVERSION_FILETRANSFER,mI2PStream_ID);
@@ -102,7 +102,7 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status){
 
 	if(Status==OFFLINE ||Status==CONNECTERROR){
 		mI2PStream_ID=0;
-		
+
 		if(mCurrentOnlineState!=USERBLOCKEDYOU){
 			setOnlineState(USEROFFLINE);
 		}
@@ -126,7 +126,7 @@ void CUser::slotIncomingNewChatMessage(QString newMessage){
     //TODO fix this in OOP way
 	this->mAllMessages.push_back(mName+" ( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br>");
 	this->mNewMessages.push_back(mName+" ( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br>");
-	
+
 	mHaveNewUnreadMessages=true;
 	mHaveNewUnreadChatmessage=true;
 
@@ -139,22 +139,22 @@ void CUser::slotSendChatMessage(QString Message){
 	using namespace PROTOCOL_TAGS;
 	QString Nickname;
 
-	if(mConnectionStatus==ONLINE && 
+	if(mConnectionStatus==ONLINE &&
 		mCurrentOnlineState != USEROFFLINE &&
 		mCurrentOnlineState != USERINVISIBLE
 	){
 		QByteArray ByteMessage=Message.toUtf8();
 		mProtocol.send(CHATMESSAGE,mI2PStream_ID,ByteMessage);
-		
+
 		if(mCore.getUserInfos().Nickname.isEmpty()==true){
 		  Nickname=tr("Me ");
 		}else{
 		  Nickname=mCore.getUserInfos().Nickname;
 		}
-		  
+
 		this->mAllMessages.push_back(Nickname+" ("+QTime::currentTime().toString("hh:mm:ss")  +"): "+Message+"<br>");
 		this->mNewMessages.push_back(Nickname+" ("+QTime::currentTime().toString("hh:mm:ss")  +"): "+Message+"<br>");
-		
+
 		mHaveNewUnreadMessages=true;
 		emit signNewMessageRecived();
 	}
@@ -175,14 +175,14 @@ const QStringList& CUser::getAllChatMessages()
 	return mAllMessages;
 }
 void CUser::SendAllunsendedMessages()
-{ 
+{
 	using namespace PROTOCOL_TAGS;
 	if(mUnsentedMessages.empty())return;
 
 
 	for(int i=0;i<mUnsentedMessages.count();i++)
 		mProtocol.send(CHATMESSAGE,mI2PStream_ID,mUnsentedMessages.at(i));
-	
+
 	mUnsentedMessages.clear();
 	slotIncomingMessageFromSystem("All previously unsent messages have been sent.",true);
 }
@@ -204,16 +204,16 @@ void CUser::setClientVersion(QString Version)
 void CUser::setOnlineState(const ONLINESTATE newState)
 {
 	if(mCurrentOnlineState==newState)return;
-  
-	if(newState!=USEROFFLINE && 
+
+	if(newState!=USEROFFLINE &&
 	   newState!=USERINVISIBLE &&
-	   newState!=USERBLOCKEDYOU){		
+	   newState!=USERBLOCKEDYOU){
 		if(mCurrentOnlineState==USEROFFLINE || mCurrentOnlineState==USERINVISIBLE ||  mCurrentOnlineState==USERBLOCKEDYOU){
 			if(mLogOnlineStateOfUsers==true){
 			  slotIncomingMessageFromSystem(tr("%1 is online").arg(mName));
 			}
 			emit signConnectionOnline();
-			
+
 		}
 		this->SendAllunsendedMessages();
 	}
@@ -243,20 +243,20 @@ void CUser::setTextFont(QFont textFont)
 
 void CUser::slotIncomingMessageFromSystem(QString newMessage,bool indicateWithSoundAndIcon)
 {
-	this->mAllMessages.push_back(tr("[System] ")+"( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br><br>");	
-	this->mNewMessages.push_back(tr("[System] ")+"( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br><br>");	
-	
-	
-	mHaveNewUnreadMessages=true;	
+	this->mAllMessages.push_back(tr("[System] ")+"( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br><br>");
+	this->mNewMessages.push_back(tr("[System] ")+"( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br><br>");
+
+
+	mHaveNewUnreadMessages=true;
 
 	emit signNewMessageRecived();
-	
+
 	if(indicateWithSoundAndIcon==true){
 	    emit signNewMessageSound();
 	    mHaveNewUnreadChatmessage=true;
 	    emit signNewMessageRecived();
 	}
-	
+
 	emit signOnlineStateChanged();
 }
 
@@ -274,7 +274,7 @@ const QStringList CUser::getNewMessages(bool haveFocus)
 {
 	QStringList tmp(mNewMessages);
 	mNewMessages.clear();
-	
+
 	if(haveFocus==true){
 		mHaveNewUnreadMessages=false;
 		mHaveNewUnreadChatmessage=false;
@@ -337,7 +337,7 @@ void CUser::setRecivedUserInfos(RECIVEDINFOS Tag, QString value)
 			mRecivedUserInfos.Nickname=value;
 			if(mRecivedNicknameToUserNickname==true){
 				if(value.isEmpty()==true){
-					setName(tr("No Nickname"));	
+					setName(tr("No Nickname"));
 				}
 				else{
 					setName(value);
@@ -398,10 +398,10 @@ const QString CUser::getHighestUsableProtocolVersionFiletransfer() const
       return QString::number(getHighestUsableProtocolVersionFiletransfer_D(),'g',2);
 }
 
-double CUser::getHighestUsableProtocolVersionFiletransfer_D() const 
+double CUser::getHighestUsableProtocolVersionFiletransfer_D() const
 {
       double maxVersion=getMaxProtocolVersionFiletransfer_D();
-      
+
       while(maxVersion> FileTransferProtocol::MAXPROTOCOLVERSION_D){
 	maxVersion-=0.1;
       }
@@ -423,16 +423,16 @@ void CUser::setReplaceB32WithB64(QString b64Dest)
 void CUser::setAvatarImage(QByteArray& avatarImage)
 {
     mRecivedUserInfos.AvatarImage.clear();
-  
+
     QPixmap tmpPixmap;
     tmpPixmap.loadFromData(avatarImage);
     tmpPixmap=tmpPixmap.scaled(90,90,Qt::KeepAspectRatio);
-	
-	  
+
+
     QBuffer buffer(&mRecivedUserInfos.AvatarImage);
     buffer.open(QIODevice::WriteOnly);
     tmpPixmap.save(&buffer, "PNG");
-    
+
     emit signNewAvatarImage();
 }
 

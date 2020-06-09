@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
+    <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -93,148 +93,7 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="1" column="0" colspan="4">
-     <layout class="QGridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="1">
-       <widget class="QFrame" name="buttonFrame">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QGridLayout">
-         <property name="leftMargin">
-          <number>9</number>
-         </property>
-         <property name="topMargin">
-          <number>9</number>
-         </property>
-         <property name="rightMargin">
-          <number>9</number>
-         </property>
-         <property name="bottomMargin">
-          <number>9</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="2">
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>16</width>
-             <height>25</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="ok_Button">
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>75</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>OK</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="cancel_Button">
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>75</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Cancel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="help_Button">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Help</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <spacer>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>181</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="0">
+    <item row="0" column="0" alignment="Qt::AlignLeft">
      <widget class="QListWidget" name="itemListWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -289,7 +148,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
+         <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
        </property>
       </item>
       <item>
@@ -298,7 +157,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/socket24.png</normaloff>:/icons/socket24.png</iconset>
+         <normaloff>:/icons/network.svg</normaloff>:/icons/network.svg</iconset>
        </property>
       </item>
       <item>
@@ -307,7 +166,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/userblue24.png</normaloff>:/icons/userblue24.png</iconset>
+         <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
        </property>
       </item>
       <item>
@@ -316,7 +175,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/looknfeel24.png</normaloff>:/icons/looknfeel24.png</iconset>
+         <normaloff>:/icons/theme.svg</normaloff>:/icons/theme.svg</iconset>
        </property>
       </item>
       <item>
@@ -325,7 +184,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/encrypted24.png</normaloff>:/icons/encrypted24.png</iconset>
+         <normaloff>:/icons/security.svg</normaloff>:/icons/security.svg</iconset>
        </property>
       </item>
       <item>
@@ -334,7 +193,8 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/sound.png</normaloff>:/icons/sound.png</iconset>
+         <normaloff>:/icons/sound_on.svg</normaloff>
+         <disabledoff>:/icons/sound_off.svg</disabledoff>:/icons/sound_on.svg</iconset>
        </property>
       </item>
       <item>
@@ -343,7 +203,7 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/mail_unread_new.png</normaloff>:/icons/mail_unread_new.png</iconset>
+         <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
        </property>
       </item>
       <item>
@@ -351,8 +211,8 @@
         <string>Blocklist</string>
        </property>
        <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/encrypted24.png</normaloff>:/icons/encrypted24.png</iconset>
+        <iconset theme="blocked.svg" resource="resourcen.qrc">
+         <normaloff>:/icons/blocked.svg</normaloff>:/icons/blocked.svg</iconset>
        </property>
       </item>
       <item>
@@ -361,10 +221,119 @@
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/add_user.png</normaloff>:/icons/add_user.png</iconset>
+         <normaloff>:/icons/find.svg</normaloff>:/icons/find.svg</iconset>
        </property>
       </item>
      </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <layout class="QGridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="1">
+       <widget class="QFrame" name="buttonFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QGridLayout">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>9</number>
+         </property>
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="cancel_Button">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="ok_Button">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>OK</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>181</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
@@ -376,7 +345,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>100</y>
+          <y>110</y>
           <width>421</width>
           <height>80</height>
          </rect>
@@ -399,22 +368,31 @@
             <property name="text">
              <string>Time in sec.:</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>99999</number>
-            </property>
-            <property name="value">
-             <number>1</number>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
          </layout>
+        </widget>
+        <widget class="QSpinBox" name="waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox">
+         <property name="geometry">
+          <rect>
+           <x>310</x>
+           <y>30</y>
+           <width>101</width>
+           <height>26</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>5</number>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox">
@@ -434,7 +412,7 @@
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>241</width>
+           <width>257</width>
            <height>29</height>
           </rect>
          </property>
@@ -442,14 +420,24 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Max. number of log messages:</string>
+             <string>Max log messages:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QSpinBox" name="spinBox"/>
-          </item>
          </layout>
+        </widget>
+        <widget class="QSpinBox" name="spinBox">
+         <property name="geometry">
+          <rect>
+           <x>310</x>
+           <y>30</y>
+           <width>101</width>
+           <height>26</height>
+          </rect>
+         </property>
         </widget>
        </widget>
        <widget class="QWidget" name="layoutWidget_3">
@@ -457,8 +445,8 @@
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>117</width>
-          <height>32</height>
+          <width>141</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout">
@@ -515,11 +503,35 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="basiciconlabel">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/settings.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/settings.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -532,96 +544,124 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>180</y>
+          <y>200</y>
           <width>421</width>
-          <height>181</height>
+          <height>171</height>
          </rect>
         </property>
         <property name="title">
-         <string>Autoaccept Filerecieve</string>
+         <string/>
         </property>
-        <widget class="QWidget" name="layoutWidget_19">
+        <widget class="QCheckBox" name="checkBox_IncomingSubFolders">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>20</y>
-           <width>401</width>
-           <height>151</height>
+           <x>11</x>
+           <y>439</y>
+           <width>206</width>
+           <height>23</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QCheckBox" name="checkBox_AutoAcceptFileRecive">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Enable</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_16">
-              <property name="text">
-               <string>Incoming Filefolder:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item>
-               <widget class="QLineEdit" name="txt_IncomingFileFolder">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="cmd_IncomingFileFolder">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBox_IncomingSubFolders">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Enable Incomingsubfolders</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="text">
+          <string>Enable Incoming subfolders</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_AutoAcceptFileRecive">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>22</y>
+           <width>221</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Auto-accept file transfers</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_16">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>60</y>
+           <width>172</width>
+           <height>42</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>42</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Location for received files:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="txt_IncomingFileFolder">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>13</x>
+           <y>100</y>
+           <width>301</width>
+           <height>25</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="cmd_IncomingFileFolder">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>330</x>
+           <y>100</y>
+           <width>80</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_22">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>360</y>
+          <y>380</y>
           <width>421</width>
-          <height>61</height>
+          <height>41</height>
          </rect>
         </property>
         <property name="title">
-         <string>Debug  - Logging</string>
+         <string>Debug Logging</string>
         </property>
         <widget class="QCheckBox" name="checkBox_DebugLog">
          <property name="enabled">
@@ -631,7 +671,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>10</x>
            <y>20</y>
-           <width>58</width>
+           <width>81</width>
            <height>21</height>
           </rect>
          </property>
@@ -645,15 +685,14 @@ p, li { white-space: pre-wrap; }
         <widget class="QLabel" name="label_37">
          <property name="geometry">
           <rect>
-           <x>140</x>
+           <x>100</x>
            <y>20</y>
            <width>251</width>
-           <height>31</height>
+           <height>21</height>
           </rect>
          </property>
          <property name="text">
-          <string>write debuginformations to the file DebugLog.txt
-in your settingsdirectory</string>
+          <string>Save debug info to DebugLog.txt </string>
          </property>
         </widget>
        </widget>
@@ -664,8 +703,8 @@ in your settingsdirectory</string>
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>123</width>
-          <height>32</height>
+          <width>129</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout">
@@ -686,7 +725,25 @@ in your settingsdirectory</string>
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="networkiconlabel">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
             <size>
              <width>32</width>
              <height>32</height>
@@ -696,7 +753,10 @@ in your settingsdirectory</string>
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/socket24.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/network.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -776,7 +836,7 @@ p, li { white-space: pre-wrap; }
            <x>10</x>
            <y>60</y>
            <width>391</width>
-           <height>107</height>
+           <height>115</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_10">
@@ -979,9 +1039,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>40</y>
+          <y>60</y>
           <width>421</width>
-          <height>391</height>
+          <height>371</height>
          </rect>
         </property>
         <property name="title">
@@ -993,7 +1053,7 @@ p, li { white-space: pre-wrap; }
            <x>20</x>
            <y>160</y>
            <width>381</width>
-           <height>111</height>
+           <height>61</height>
           </rect>
          </property>
         </widget>
@@ -1093,19 +1153,19 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>20</x>
-           <y>270</y>
+           <y>230</y>
            <width>381</width>
            <height>111</height>
           </rect>
          </property>
          <property name="title">
-          <string>AvatarImage</string>
+          <string>Avatar</string>
          </property>
          <widget class="QLabel" name="ownavatar_label">
           <property name="geometry">
            <rect>
-            <x>280</x>
-            <y>10</y>
+            <x>290</x>
+            <y>20</y>
             <width>90</width>
             <height>90</height>
            </rect>
@@ -1122,10 +1182,25 @@ p, li { white-space: pre-wrap; }
             <height>90</height>
            </size>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>90</width>
+            <height>90</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>80</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">QLabel{ 
-border: 3px solid #CCCCCC;
-border-radius: 10px;
+border: 1px solid #999;
+border-radius: 2px;
 }</string>
           </property>
           <property name="text">
@@ -1162,15 +1237,14 @@ border-radius: 10px;
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>30</y>
-            <width>220</width>
+            <y>20</y>
+            <width>281</width>
             <height>43</height>
            </rect>
           </property>
           <property name="text">
-           <string>The selected AvatarImage
-will auto. resize to 90x90 pixel
-and is stored in your application.ini</string>
+           <string>Your avatar image is stored in
+your application.ini file</string>
           </property>
          </widget>
         </widget>
@@ -1191,27 +1265,14 @@ and is stored in your application.ini</string>
        <widget class="QWidget" name="layoutWidget_12">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>0</y>
-          <width>162</width>
-          <height>32</height>
+          <x>0</x>
+          <y>-10</y>
+          <width>645</width>
+          <height>61</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_13">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/userblue24.png</pixmap>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
+         <item row="0" column="2">
           <widget class="QLabel" name="shareLabel">
            <property name="minimumSize">
             <size>
@@ -1238,6 +1299,40 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -1364,8 +1459,8 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>122</width>
-          <height>31</height>
+          <width>127</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
@@ -1376,20 +1471,35 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Style     &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Style     &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_29">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/looknfeel24.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/theme.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1415,7 +1525,7 @@ p, li { white-space: pre-wrap; }
            <x>20</x>
            <y>30</y>
            <width>391</width>
-           <height>52</height>
+           <height>54</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1447,8 +1557,8 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>122</width>
-          <height>31</height>
+          <width>127</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
@@ -1460,8 +1570,17 @@ p, li { white-space: pre-wrap; }
              <height>32</height>
             </size>
            </property>
+           <property name="baseSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/encrypted24.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/security.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1472,7 +1591,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Security&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Security&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -1496,7 +1615,7 @@ p, li { white-space: pre-wrap; }
            <x>20</x>
            <y>30</y>
            <width>391</width>
-           <height>52</height>
+           <height>54</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1535,9 +1654,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>40</y>
+          <y>60</y>
           <width>421</width>
-          <height>391</height>
+          <height>371</height>
          </rect>
         </property>
         <property name="title">
@@ -1851,20 +1970,29 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
-          <width>101</width>
-          <height>31</height>
+          <width>587</width>
+          <height>41</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
+         <item row="0" column="0" alignment="Qt::AlignVCenter">
           <widget class="QLabel" name="label_24">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/sound.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/sound_on.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1875,11 +2003,13 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Sound&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Sound&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
         </layout>
+        <zorder>label_25</zorder>
+        <zorder>label_24</zorder>
        </widget>
       </widget>
       <widget class="QWidget" name="chat_Page">
@@ -1888,18 +2018,45 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>81</width>
-          <height>31</height>
+          <width>355</width>
+          <height>41</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_8">
          <item row="0" column="0">
           <widget class="QLabel" name="label_33">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/mail_unread_new.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/newmail.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1910,7 +2067,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Chat&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Chat&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -1931,9 +2088,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_24">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>0</x>
            <y>10</y>
-           <width>401</width>
+           <width>411</width>
            <height>121</height>
           </rect>
          </property>
@@ -1962,210 +2119,183 @@ p, li { white-space: pre-wrap; }
            <bool>false</bool>
           </property>
          </widget>
-         <widget class="QToolButton" name="cmdUnderChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+         <widget class="QSplitter" name="splitter">
           <property name="geometry">
            <rect>
-            <x>50</x>
+            <x>21</x>
             <y>40</y>
-            <width>32</width>
+            <width>361</width>
             <height>28</height>
            </rect>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="toolTip">
-           <string>Underline</string>
-          </property>
-          <property name="text">
-           <string>U</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textunder.png</normaloff>:/icons/textunder.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdItalicChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>88</x>
-            <y>40</y>
-            <width>32</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Italic</string>
-          </property>
-          <property name="text">
-           <string>I</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textitalic.png</normaloff>:/icons/textitalic.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdBoldChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>12</x>
-            <y>40</y>
-            <width>32</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Bold</string>
-          </property>
-          <property name="text">
-           <string>B</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textbold.png</normaloff>:/icons/textbold.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdFontChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>166</x>
-            <y>40</y>
-            <width>28</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Font</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/application-x-font-afm.png</normaloff>:/icons/application-x-font-afm.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdColorChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>126</x>
-            <y>40</y>
-            <width>34</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Color</string>
-          </property>
-          <property name="text">
-           <string>C</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/format-text-color.png</normaloff>:/icons/format-text-color.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
+          <widget class="QToolButton" name="cmdBoldChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Bold</string>
+           </property>
+           <property name="text">
+            <string>B</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdUnderChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Underline</string>
+           </property>
+           <property name="text">
+            <string>U</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdItalicChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Italic</string>
+           </property>
+           <property name="text">
+            <string>I</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdColorChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Color</string>
+           </property>
+           <property name="text">
+            <string>C</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdFontChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Font</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
          </widget>
         </widget>
         <widget class="QGroupBox" name="groupBox_25">
@@ -2193,136 +2323,13 @@ p, li { white-space: pre-wrap; }
            <string>Do - Override</string>
           </property>
          </widget>
-         <widget class="QToolButton" name="cmdOverwriteUnderChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>54</x>
-            <y>60</y>
-            <width>32</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Underline</string>
-          </property>
-          <property name="text">
-           <string>U</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textunder.png</normaloff>:/icons/textunder.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdOverwriteItalicChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>92</x>
-            <y>60</y>
-            <width>32</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Italic</string>
-          </property>
-          <property name="text">
-           <string>I</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textitalic.png</normaloff>:/icons/textitalic.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdOverwriteBoldChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>16</x>
-            <y>60</y>
-            <width>32</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Bold</string>
-          </property>
-          <property name="text">
-           <string>B</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/textbold.png</normaloff>:/icons/textbold.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
          <widget class="QTextEdit" name="txtShowCurrentChatStyleOverride">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="geometry">
            <rect>
-            <x>20</x>
+            <x>10</x>
             <y>90</y>
             <width>361</width>
             <height>31</height>
@@ -2341,87 +2348,183 @@ p, li { white-space: pre-wrap; }
            <set>QTextEdit::AutoNone</set>
           </property>
          </widget>
-         <widget class="QToolButton" name="cmdOverwriteFontChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+         <widget class="QSplitter" name="splitter_2">
           <property name="geometry">
            <rect>
-            <x>170</x>
+            <x>16</x>
             <y>60</y>
-            <width>28</width>
+            <width>351</width>
             <height>28</height>
            </rect>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Font</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/application-x-font-afm.png</normaloff>:/icons/application-x-font-afm.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="cmdOverwriteColorChat">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>130</x>
-            <y>60</y>
-            <width>34</width>
-            <height>28</height>
-           </rect>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>28</width>
-            <height>28</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Color</string>
-          </property>
-          <property name="text">
-           <string>C</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resourcen.qrc">
-            <normaloff>:/icons/format-text-color.png</normaloff>:/icons/format-text-color.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
+          <widget class="QToolButton" name="cmdOverwriteBoldChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Bold</string>
+           </property>
+           <property name="text">
+            <string>B</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdOverwriteUnderChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Underline</string>
+           </property>
+           <property name="text">
+            <string>U</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdOverwriteItalicChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Italic</string>
+           </property>
+           <property name="text">
+            <string>I</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdOverwriteColorChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Color</string>
+           </property>
+           <property name="text">
+            <string>C</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QToolButton" name="cmdOverwriteFontChat">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Font</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="resourcen.qrc">
+             <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
          </widget>
         </widget>
         <widget class="QCheckBox" name="LogOnlineStatusBox">
@@ -2443,7 +2546,7 @@ p, li { white-space: pre-wrap; }
            <x>10</x>
            <y>310</y>
            <width>211</width>
-           <height>26</height>
+           <height>28</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -2473,81 +2576,116 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>0</y>
-          <width>122</width>
-          <height>29</height>
+          <y>1</y>
+          <width>391</width>
+          <height>41</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_9">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_35">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/encrypted24.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
+         <item row="1" column="1">
           <widget class="QLabel" name="label_36">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:16pt;&quot;&gt;Blocklist&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Blocklist&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_35">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="resourcen.qrc">:/icons/security.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget1">
+       <widget class="QPushButton" name="cmd_unblockUserFromBlockList">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>400</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Unblock</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>400</y>
+          <width>80</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QTreeWidget" name="UserBlockTreeWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>40</y>
-          <width>421</width>
-          <height>391</height>
+          <y>50</y>
+          <width>391</width>
+          <height>341</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="1" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
-             <property name="text">
-              <string>Delete</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="cmd_unblockUserFromBlockList">
-             <property name="text">
-              <string>Unblock</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="0">
-          <widget class="QTreeWidget" name="UserBlockTreeWidget">
-           <property name="columnCount">
-            <number>2</number>
-           </property>
-           <column>
-            <property name="text">
-             <string notr="true">1</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string notr="true">2</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-        </layout>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">2</string>
+         </property>
+        </column>
        </widget>
       </widget>
       <widget class="QWidget" name="usersearch_Page">
@@ -2556,21 +2694,45 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>153</width>
-          <height>31</height>
+          <width>158</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
           <widget class="QLabel" name="label_27">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="acceptDrops">
+            <bool>false</bool>
+           </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/add_user.png</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/add_user.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -2581,7 +2743,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:16pt;&quot;&gt;Usersearch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Usersearch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -2653,30 +2815,12 @@ p, li { white-space: pre-wrap; }
   </widget>
  </widget>
  <tabstops>
-  <tabstop>ok_Button</tabstop>
   <tabstop>cancel_Button</tabstop>
-  <tabstop>help_Button</tabstop>
  </tabstops>
  <resources>
   <include location="resourcen.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>itemListWidget</sender>
-   <signal>currentRowChanged(int)</signal>
-   <receiver>stackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>62</x>
-     <y>80</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>195</x>
-     <y>80</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>checkBox_AutoAcceptFileRecive</sender>
    <signal>clicked(bool)</signal>
@@ -2690,6 +2834,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>537</x>
      <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>itemListWidget</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>stackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>

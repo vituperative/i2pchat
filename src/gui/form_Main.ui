@@ -6,16 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
-    <height>459</height>
+    <width>280</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>I2P-Messenger</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/userblue24.png</normaloff>:/icons/userblue24.png</iconset>
+   <iconset>
+    <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">img{width: 16px !important;height: 16px !important;}</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -40,8 +43,42 @@
     <property name="verticalSpacing">
      <number>0</number>
     </property>
-    <item row="0" column="0">
+    <item row="2" column="0">
+     <widget class="QListWidget" name="listWidget">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::AllEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>12</width>
+        <height>12</height>
+       </size>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>0</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
      <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>280</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -64,40 +101,79 @@
        <property name="bottomMargin">
         <number>6</number>
        </property>
-       <item row="0" column="0" rowspan="2">
+       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="avatarlabel">
          <property name="minimumSize">
           <size>
-           <width>50</width>
-           <height>50</height>
+           <width>32</width>
+           <height>32</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>50</width>
-           <height>50</height>
+           <width>32</width>
+           <height>32</height>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">QLabel{ 
-border: 3px solid #CCCCCC;
-border-radius: 10px;
+          <string notr="true">QLabel{
+border: 1px solid #999;
+border-radius: 2px;
 }</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
          </property>
          <property name="text">
           <string/>
          </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="0" column="2" alignment="Qt::AlignRight">
         <widget class="QComboBox" name="comboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>200</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>140</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16000</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">img{margin-right:4px;}</string>
+         </property>
          <property name="insertPolicy">
           <enum>QComboBox::NoInsert</enum>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="1" alignment="Qt::AlignLeft">
         <widget class="QLabel" name="nicknamelabel">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>140</width>
+           <height>32</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>10</pointsize>
@@ -106,19 +182,15 @@ border-radius: 10px;
          <property name="text">
           <string>TextLabel</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <property name="margin">
+          <number>5</number>
+         </property>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QListWidget" name="listWidget">
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::AllEditTriggers</set>
-      </property>
      </widget>
     </item>
    </layout>
@@ -130,8 +202,8 @@ border-radius: 10px;
    </property>
    <property name="minimumSize">
     <size>
-     <width>21</width>
-     <height>30</height>
+     <width>0</width>
+     <height>0</height>
     </size>
    </property>
    <property name="contextMenuPolicy">
@@ -142,6 +214,12 @@ border-radius: 10px;
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
    <property name="floatable">
     <bool>false</bool>

@@ -126,7 +126,7 @@ void form_MainWindow::onlineComboBoxChanged()
 
         }
     }
-    else if(text.contains(tr("TryToConnect"),Qt::CaseInsensitive)==true){
+    else if(text.contains(tr("Connecting"),Qt::CaseInsensitive)==true){
     }
 
 }
@@ -229,9 +229,9 @@ void form_MainWindow::closeApplication(){
     if(Core->getFileTransferManager()->checkIfAFileTransferOrReciveisActive()==false){
 
         QMessageBox* msgBox= new QMessageBox(this);
-        msgBox->setIcon(QMessageBox::Question);
+//        msgBox->setIcon(QMessageBox::Question);
         msgBox->setText(tr("I2P-Messenger"));
-        msgBox->setInformativeText(tr("Are you sure ?"));
+        msgBox->setInformativeText(tr("Are you sure you wish to quit?"));
         msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox->setDefaultButton(QMessageBox::Yes);
         msgBox->setWindowModality(Qt::WindowModal);
@@ -405,7 +405,7 @@ void form_MainWindow::eventUserChanged(){
 
 
 void form_MainWindow::openUserListeClicked()
-{	
+{
     QListWidgetItem* t=listWidget->item(listWidget->currentRow()+2);
 
     if(t->text()=="U"){
@@ -584,7 +584,7 @@ void form_MainWindow::closeEvent(QCloseEvent *e)
         hide();
         e->ignore();
     }
-    
+
     if(applicationIsClosing==true) {
         e->accept();
         QApplication::exit(0);
@@ -642,7 +642,7 @@ void form_MainWindow::OnlineStateChanged()
 
     if(onlinestatus==User::USERTRYTOCONNECT){
         comboBox->clear();
-        comboBox->addItem(QIcon(ICON_USER_TRYTOCONNECT)	, tr("TryToConnect"));		//index 0
+        comboBox->addItem(QIcon(ICON_USER_TRYTOCONNECT)	, tr("Connecting..."));		//index 0
         comboBox->addItem(QIcon(ICON_USER_OFFLINE)	, tr("Offline"));		//1
         comboBox->setCurrentIndex(0);
         trayIcon->setIcon(QIcon(ICON_USER_TRYTOCONNECT));
@@ -771,7 +771,7 @@ void form_MainWindow::initTryIcon()
     trayIcon->setToolTip(tr("I2P-Messenger"));
     trayIcon->setContextMenu(menu);
     trayIcon->setIcon(QIcon(ICON_CHAT));
-    
+
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
             SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
 
@@ -1019,7 +1019,7 @@ void form_MainWindow::openFileReciveWindow(qint32 StreamID)
 }
 
 void form_MainWindow::addUserToBlockList()
-{	
+{
     QListWidgetItem* t=listWidget->item(listWidget->currentRow()+2);
 
     if(t->text()=="U"){
