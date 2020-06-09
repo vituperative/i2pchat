@@ -526,7 +526,7 @@ void form_ChatWidget::showAvatarFrame(bool show)
         avatarframe->setVisible(true);
         avatarFrameButton->setChecked(false);
 	avatarFrameButton->setToolTip(tr("Show Avatar"));
-        avatarFrameButton->setIcon(QIcon(tr(":icons/show_frame.svg")));
+        avatarFrameButton->setIcon(QIcon(tr(":icons/show_frame.png")));
     }
 }
 
