@@ -892,7 +892,7 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>:/icons/show_frame.svg</normaloff>:/icons/show_frame.svg</iconset>
+          <normaloff>:/icons/show_frame.png</normaloff>:/icons/show_frame.png</iconset>
         </property>
         <property name="iconSize">
          <size>
