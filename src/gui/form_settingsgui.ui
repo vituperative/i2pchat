@@ -344,29 +344,42 @@
        <widget class="QGroupBox" name="groupBox_6">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>110</y>
+          <x>8</x>
+          <y>144</y>
           <width>421</width>
-          <height>80</height>
+          <height>65</height>
          </rect>
         </property>
         <property name="title">
          <string>Wait time between rechecking for offline users</string>
         </property>
-        <widget class="QWidget" name="layoutWidget_1">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>30</y>
-           <width>241</width>
-           <height>29</height>
+           <x>8</x>
+           <y>28</y>
+           <width>409</width>
+           <height>28</height>
           </rect>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox">
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Time in sec.:</string>
+             <string>Time (seconds):</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -375,49 +388,30 @@
           </item>
          </layout>
         </widget>
-        <widget class="QSpinBox" name="waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox">
-         <property name="geometry">
-          <rect>
-           <x>310</x>
-           <y>30</y>
-           <width>101</width>
-           <height>26</height>
-          </rect>
-         </property>
-         <property name="minimum">
-          <number>5</number>
-         </property>
-         <property name="maximum">
-          <number>99999</number>
-         </property>
-         <property name="value">
-          <number>5</number>
-         </property>
-        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>40</y>
+          <x>8</x>
+          <y>52</y>
           <width>421</width>
-          <height>61</height>
+          <height>65</height>
          </rect>
         </property>
         <property name="title">
          <string>SAM log</string>
         </property>
-        <widget class="QWidget" name="layoutWidget_18">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>30</y>
-           <width>257</width>
-           <height>29</height>
+           <x>4</x>
+           <y>28</y>
+           <width>409</width>
+           <height>28</height>
           </rect>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Max log messages:</string>
@@ -427,17 +421,10 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBox"/>
+          </item>
          </layout>
-        </widget>
-        <widget class="QSpinBox" name="spinBox">
-         <property name="geometry">
-          <rect>
-           <x>310</x>
-           <y>30</y>
-           <width>101</width>
-           <height>26</height>
-          </rect>
-         </property>
         </widget>
        </widget>
        <widget class="QWidget" name="layoutWidget_3">
@@ -445,7 +432,7 @@
          <rect>
           <x>10</x>
           <y>0</y>
-          <width>141</width>
+          <width>123</width>
           <height>34</height>
          </rect>
         </property>
@@ -465,42 +452,6 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <item row="0" column="1">
-          <widget class="QLabel" name="basicLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <pointsize>16</pointsize>
-             <weight>75</weight>
-             <italic>true</italic>
-             <bold>true</bold>
-             <underline>true</underline>
-             <strikeout>false</strikeout>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:16pt; font-weight:600; font-style:italic; text-decoration: underline;&quot;&gt;
-&lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="basiciconlabel">
            <property name="minimumSize">
@@ -538,15 +489,51 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="basicLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>16</pointsize>
+             <weight>75</weight>
+             <italic>true</italic>
+             <bold>true</bold>
+             <underline>true</underline>
+             <strikeout>false</strikeout>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:16pt; font-weight:600; font-style:italic; text-decoration: underline;&quot;&gt;
+&lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QGroupBox" name="groupBox_16">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>200</y>
+          <x>8</x>
+          <y>232</y>
           <width>421</width>
-          <height>171</height>
+          <height>105</height>
          </rect>
         </property>
         <property name="title">
@@ -577,9 +564,9 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="geometry">
           <rect>
-           <x>12</x>
-           <y>22</y>
-           <width>221</width>
+           <x>8</x>
+           <y>8</y>
+           <width>405</width>
            <height>23</height>
           </rect>
          </property>
@@ -593,9 +580,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QLabel" name="label_16">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>60</y>
-           <width>172</width>
+           <x>8</x>
+           <y>36</y>
+           <width>393</width>
            <height>42</height>
           </rect>
          </property>
@@ -621,79 +608,79 @@ p, li { white-space: pre-wrap; }
           <string>Location for received files:</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="txt_IncomingFileFolder">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>13</x>
-           <y>100</y>
-           <width>301</width>
-           <height>25</height>
+           <x>8</x>
+           <y>68</y>
+           <width>409</width>
+           <height>27</height>
           </rect>
          </property>
-        </widget>
-        <widget class="QPushButton" name="cmd_IncomingFileFolder">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>330</x>
-           <y>100</y>
-           <width>80</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_20">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="txt_IncomingFileFolder">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="cmd_IncomingFileFolder">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_22">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>380</y>
+          <y>360</y>
           <width>421</width>
-          <height>41</height>
+          <height>61</height>
          </rect>
         </property>
         <property name="title">
          <string>Debug Logging</string>
         </property>
-        <widget class="QCheckBox" name="checkBox_DebugLog">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>20</y>
-           <width>81</width>
-           <height>21</height>
+           <x>4</x>
+           <y>28</y>
+           <width>413</width>
+           <height>25</height>
           </rect>
          </property>
-         <property name="text">
-          <string>Enable</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_37">
-         <property name="geometry">
-          <rect>
-           <x>100</x>
-           <y>20</y>
-           <width>251</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Save debug info to DebugLog.txt </string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_21">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_DebugLog">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Enable</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>Save debug info to DebugLog.txt </string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
@@ -901,9 +888,9 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="geometry">
           <rect>
-           <x>150</x>
+           <x>160</x>
            <y>180</y>
-           <width>251</width>
+           <width>241</width>
            <height>23</height>
           </rect>
          </property>
@@ -1019,7 +1006,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QLabel" name="label_26">
             <property name="text">
-             <string>Generate a new Dest.,- the old will lost:        </string>
+             <string>Generate a new Destination        </string>
             </property>
            </widget>
           </item>
@@ -1268,7 +1255,7 @@ your application.ini file</string>
           <x>0</x>
           <y>-10</y>
           <width>645</width>
-          <height>61</height>
+          <height>57</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_13">
@@ -1654,9 +1641,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>60</y>
+          <y>46</y>
           <width>421</width>
-          <height>371</height>
+          <height>385</height>
          </rect>
         </property>
         <property name="title">
@@ -1665,105 +1652,141 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_12">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>20</y>
+           <x>8</x>
+           <y>32</y>
            <width>401</width>
-           <height>81</height>
+           <height>89</height>
           </rect>
          </property>
          <property name="title">
           <string>User</string>
          </property>
-         <widget class="QCheckBox" name="checkBoxSound">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>20</y>
-            <width>90</width>
-            <height>23</height>
+            <x>8</x>
+            <y>56</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-          <property name="text">
-           <string>go Online:</string>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_18">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>go Offline:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile_2">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
-         <widget class="QCheckBox" name="checkBoxSound_2">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>50</y>
-            <width>90</width>
-            <height>23</height>
+            <x>8</x>
+            <y>24</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-          <property name="text">
-           <string>go Offline:</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="txt_SoundFile">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>20</y>
-            <width>251</width>
-            <height>24</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="txt_SoundFile2">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>50</y>
-            <width>251</width>
-            <height>24</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_openFile">
-          <property name="geometry">
-           <rect>
-            <x>360</x>
-            <y>20</y>
-            <width>31</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_openFile_2">
-          <property name="geometry">
-           <rect>
-            <x>360</x>
-            <y>50</y>
-            <width>31</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_19">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>go Online:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
         <widget class="QGroupBox" name="groupBox_13">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>100</y>
+           <x>12</x>
+           <y>124</y>
            <width>401</width>
            <height>61</height>
           </rect>
@@ -1771,199 +1794,265 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>FileSend</string>
          </property>
-         <widget class="QLineEdit" name="txt_SoundFile3">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>100</x>
-            <y>20</y>
-            <width>251</width>
-            <height>24</height>
+            <x>8</x>
+            <y>28</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_openFile_3">
-          <property name="geometry">
-           <rect>
-            <x>360</x>
-            <y>20</y>
-            <width>31</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="checkBoxSound_3">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>20</y>
-            <width>82</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Finished:</string>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound_3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Finished:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile_3">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
         <widget class="QGroupBox" name="groupBox_14">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>160</y>
+           <x>12</x>
+           <y>192</y>
            <width>401</width>
-           <height>91</height>
+           <height>97</height>
           </rect>
          </property>
          <property name="title">
           <string>FileRecive</string>
          </property>
-         <widget class="QCheckBox" name="checkBoxSound_4">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>20</y>
-            <width>87</width>
-            <height>23</height>
+            <x>8</x>
+            <y>64</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-          <property name="text">
-           <string>Incoming:</string>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_15">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound_5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Finished:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile_5">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
-         <widget class="QLineEdit" name="txt_SoundFile4">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>100</x>
-            <y>20</y>
-            <width>251</width>
-            <height>24</height>
+            <x>8</x>
+            <y>28</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_openFile_4">
-          <property name="geometry">
-           <rect>
-            <x>360</x>
-            <y>20</y>
-            <width>31</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_openFile_5">
-          <property name="geometry">
-           <rect>
-            <x>360</x>
-            <y>50</y>
-            <width>31</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="checkBoxSound_5">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>50</y>
-            <width>82</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Finished:</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="txt_SoundFile5">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>50</y>
-            <width>251</width>
-            <height>24</height>
-           </rect>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_16">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound_4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Incoming:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile_4">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
         <widget class="QGroupBox" name="groupBox_15">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>250</y>
+           <x>12</x>
+           <y>296</y>
            <width>401</width>
-           <height>131</height>
+           <height>61</height>
           </rect>
          </property>
          <property name="title">
           <string>Chatmessage</string>
          </property>
-         <widget class="QPushButton" name="cmd_openFile_6">
+         <widget class="QWidget" name="">
           <property name="geometry">
            <rect>
-            <x>360</x>
-            <y>20</y>
-            <width>31</width>
-            <height>21</height>
+            <x>8</x>
+            <y>28</y>
+            <width>389</width>
+            <height>27</height>
            </rect>
           </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="checkBoxSound_6">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>20</y>
-            <width>80</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>New:</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="txt_SoundFile6">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>20</y>
-            <width>251</width>
-            <height>24</height>
-           </rect>
-          </property>
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxSound_6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>New:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="txt_SoundFile6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="cmd_openFile_6">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </widget>
@@ -2729,7 +2818,7 @@ p, li { white-space: pre-wrap; }
             <bool>false</bool>
            </property>
            <property name="pixmap">
-            <pixmap resource="resourcen.qrc">:/icons/add_user.svg</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/find.svg</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -2761,49 +2850,63 @@ p, li { white-space: pre-wrap; }
         <property name="title">
          <string/>
         </property>
-        <widget class="QWidget" name="layoutWidget_16">
+        <widget class="QCheckBox" name="check_UserSearchEnable">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>251</width>
-           <height>111</height>
+           <x>12</x>
+           <y>12</y>
+           <width>385</width>
+           <height>23</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCheckBox" name="check_UserSearchEnable">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+         <property name="text">
+          <string>Activate background user search</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>108</y>
+           <width>389</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_32">
             <property name="text">
-             <string>Activate</string>
+             <string>Reannounce timer in hours</string>
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QGridLayout" name="gridLayout_7">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_31">
-              <property name="text">
-               <string>Max. Log Messages</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBox_MaxLogMessagesUserSearch"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_32">
-              <property name="text">
-               <string>Reannouncetimer in hours</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBox_ReAnnouncingUserSearch"/>
-            </item>
-           </layout>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBox_ReAnnouncingUserSearch"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>56</y>
+           <width>389</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Max. Log Messages</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBox_MaxLogMessagesUserSearch"/>
           </item>
          </layout>
         </widget>
