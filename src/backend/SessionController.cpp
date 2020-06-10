@@ -210,10 +210,10 @@ void CSessionController::doDisconnect()
 
     if(mTcpSocket.state()!=0){
         mTcpSocket.disconnectFromHost();
-        emit signDebugMessages("<-- StreamController (I2P) Socket Disconnected -->\n");
+        emit signDebugMessages("<-- StreamController (I2P) Socket disconnected -->\n");
     }
     else if(mTcpSocket.state()==QAbstractSocket::UnconnectedState){
-        emit signDebugMessages("<-- StreamController (I2P) Socket allready Disconnected -->\n");
+        emit signDebugMessages("<-- StreamController (I2P) Socket already disconnected -->\n");
     }
 
 }
