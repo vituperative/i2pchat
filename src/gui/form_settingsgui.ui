@@ -109,7 +109,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>128</width>
+        <width>132</width>
         <height>500</height>
        </size>
       </property>
@@ -120,6 +120,9 @@
         <weight>50</weight>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -146,11 +149,26 @@
        <enum>QListView::SinglePass</enum>
       </property>
       <property name="spacing">
-       <number>0</number>
+       <number>4</number>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>0</width>
+        <height>34</height>
+       </size>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
       <item>
        <property name="text">
         <string>General</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
@@ -359,7 +377,7 @@
         <property name="title">
          <string>Wait time between rechecking for offline users</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>8</x>
@@ -407,7 +425,7 @@
         <property name="title">
          <string>SAM log</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>4</x>
@@ -614,7 +632,7 @@ p, li { white-space: pre-wrap; }
           <string>Location for received files:</string>
          </property>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>8</x>
@@ -656,7 +674,7 @@ p, li { white-space: pre-wrap; }
         <property name="title">
          <string>Debug Logging</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>4</x>
@@ -866,7 +884,7 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>8</x>
@@ -912,7 +930,7 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>8</x>
@@ -1667,7 +1685,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>User</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -1727,7 +1745,7 @@ p, li { white-space: pre-wrap; }
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -1800,7 +1818,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>FileSend</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -1873,7 +1891,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>FileRecive</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -1933,7 +1951,7 @@ p, li { white-space: pre-wrap; }
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -2006,7 +2024,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>Chatmessage</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>8</x>
@@ -2201,9 +2219,9 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="geometry">
            <rect>
-            <x>20</x>
+            <x>8</x>
             <y>80</y>
-            <width>361</width>
+            <width>393</width>
             <height>31</height>
            </rect>
           </property>
@@ -2220,9 +2238,9 @@ p, li { white-space: pre-wrap; }
          <widget class="QSplitter" name="splitter">
           <property name="geometry">
            <rect>
-            <x>21</x>
-            <y>40</y>
-            <width>361</width>
+            <x>12</x>
+            <y>44</y>
+            <width>385</width>
             <height>28</height>
            </rect>
           </property>
@@ -2400,25 +2418,25 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>140</y>
+           <y>142</y>
            <width>409</width>
-           <height>131</height>
+           <height>113</height>
           </rect>
          </property>
          <property name="title">
-          <string>Overwrite remote Chatsettings</string>
+          <string/>
          </property>
          <widget class="QCheckBox" name="chatOverrideBox">
           <property name="geometry">
            <rect>
-            <x>20</x>
-            <y>30</y>
-            <width>108</width>
+            <x>8</x>
+            <y>12</y>
+            <width>389</width>
             <height>23</height>
            </rect>
           </property>
           <property name="text">
-           <string>Do - Override</string>
+           <string>Override remote chat styling</string>
           </property>
          </widget>
          <widget class="QTextEdit" name="txtShowCurrentChatStyleOverride">
@@ -2427,9 +2445,9 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>90</y>
-            <width>361</width>
+            <x>8</x>
+            <y>72</y>
+            <width>393</width>
             <height>31</height>
            </rect>
           </property>
@@ -2449,9 +2467,9 @@ p, li { white-space: pre-wrap; }
          <widget class="QSplitter" name="splitter_2">
           <property name="geometry">
            <rect>
-            <x>16</x>
-            <y>60</y>
-            <width>351</width>
+            <x>8</x>
+            <y>36</y>
+            <width>389</width>
             <height>28</height>
            </rect>
           </property>
@@ -2875,7 +2893,7 @@ p, li { white-space: pre-wrap; }
           <string>Activate background user search</string>
          </property>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>12</x>
@@ -2897,7 +2915,7 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>12</x>
