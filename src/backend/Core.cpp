@@ -147,8 +147,15 @@ QString CCore::calcSessionOptionString() const
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
 
     settings.beginGroup("Network");
-    SessionOptionString.append("inbound.nickname="+settings.value("TunnelName","Messenger").toString()+" ");
-    ///FIXME TunnelName no whitespace allowed...
+
+    // + " " for void CSessionController::doSessionCreate() a session option.
+ 
+    SessionOptionString.
+		append("inbound.nickname="+settings.
+			value("TunnelName","Messenger").toString()
+				.replace(" ","_")
+					+ " ");
+    ///FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;
 
     //inbound options
     SessionOptionString.append("inbound.quantity="+settings.value("inbound.quantity","1").toString()+ " ");
@@ -161,10 +168,30 @@ QString CCore::calcSessionOptionString() const
     SessionOptionString.append("outbound.length="+settings.value("outbound.length","3").toString()+ " ");
 
     //SIGNATURE_TYPE
-//    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","DSA_SHA1").toString()+ " ");
-    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","ECDSA_SHA512_P521").toString()+ " ");
-    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ...
+    
+    { 
+            // TODO: get from ui_form_settingsgui.h
+	    QStringList AllowSignTypes = { "DSA_SHA1", "ECDSA_SHA256_P256", "ECDSA_SHA384_P384","ECDSA_SHA512_P521" };
+	    auto sign_type = settings.value("Signature_Type","DSA_SHA1").toString();
+	    auto notfound = true;
+	    for (int i = 0; i < AllowSignTypes.size(); ++i){
+			if ( sign_type.contains( AllowSignTypes.at(i) ) ){
+				SessionOptionString.append("SIGNATURE_TYPE="+sign_type+ " ");
+				notfound=false;
+				break;
+			}
+	    }
+	    if( notfound ) SessionOptionString.append("SIGNATURE_TYPE="+QString("DSA_SHA1")+ " ");
+    }
+    
+    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD: Maybe is fixed;
     ///TODO which Signature_Type as default for best security ???
+
+
+    
+    // Encryption
+    // TODO: Add to UI
+    SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
 
     // Encryption
     SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");

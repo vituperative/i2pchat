@@ -893,8 +893,9 @@ void form_MainWindow::UserInvisible(bool b)
 void form_MainWindow::eventChatWindowClosed(QString Destination)
 {
     if(mAllOpenChatWindows.contains(Destination)==true){
-        delete (mAllOpenChatWindows.value(Destination));
-        mAllOpenChatWindows.remove(Destination);
+        //delete (mAllOpenChatWindows.value(Destination)); // TODO: What for is what added?
+        //mAllOpenChatWindows.remove(Destination);
+        mAllOpenChatWindows[Destination]->hide();
     }
     else{
         qCritical()<<"form_MainWindow::eventChatWindowClosed\n"
@@ -937,6 +938,7 @@ void form_MainWindow::openChatWindow(QString Destination)
     }
     else{
         //open the existing chatwindow
+	mAllOpenChatWindows.value(Destination)->show();
         mAllOpenChatWindows.value(Destination)->getFocus();
     }
 
