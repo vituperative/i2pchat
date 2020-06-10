@@ -32,7 +32,7 @@
 #include <QStandardPaths>
 
 CCore::CCore(QString configPath)
-{	
+{
     mConfigPath=configPath;
 
     mDebugMessageHandler= new CDebugMessageManager("General", configPath);
@@ -147,7 +147,7 @@ QString CCore::calcSessionOptionString() const
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
 
     settings.beginGroup("Network");
-    SessionOptionString.append("inbound.nickname="+settings.value("TunnelName","I2P-Messenger").toString()+" ");
+    SessionOptionString.append("inbound.nickname="+settings.value("TunnelName","Messenger").toString()+" ");
     ///FIXME TunnelName no whitespace allowed...
 
     //inbound options
@@ -161,9 +161,13 @@ QString CCore::calcSessionOptionString() const
     SessionOptionString.append("outbound.length="+settings.value("outbound.length","3").toString()+ " ");
 
     //SIGNATURE_TYPE
-    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","DSA_SHA1").toString()+ " ");
+//    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","DSA_SHA1").toString()+ " ");
+    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","ECDSA_SHA512_P521").toString()+ " ");
     ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ...
     ///TODO which Signature_Type as default for best security ???
+
+    // Encryption
+    SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
 
     settings.remove("SessionOptionString");//no longer used,- so erase it
     settings.endGroup();
@@ -840,7 +844,7 @@ const QString CCore::getMyDestinationB32() const
 void CCore::setMyDestinationB32(QString B32Dest)
 {
     if(mMyDestinationB32==B32Dest) return;
-    
+
     if(!B32Dest.right(8).contains(".b32.i2p",Qt::CaseInsensitive)){
         qCritical()<<"File\t"<<__FILE__<<endl
                   <<"Line:\t"<<__LINE__<<endl
@@ -849,13 +853,13 @@ void CCore::setMyDestinationB32(QString B32Dest)
                <<"\tDestination:\n"<<B32Dest<<endl
               <<"\tAction apported"<<endl;
     }
-    
+
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
     settings.beginGroup("Network");
     settings.setValue("MyDestinationB32",B32Dest);
     settings.endGroup();
     settings.sync();
-    
+
     mMyDestinationB32=B32Dest;
 }
 
