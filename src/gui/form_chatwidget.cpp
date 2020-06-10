@@ -220,8 +220,16 @@ void form_ChatWidget::addAllMessages(){
 
 void form_ChatWidget::addMessage(QString text){
 	QTextBrowser *chat=this->chat;
-    QString& newMessage=text;
+    QString& newMessage=text; // UDP(By Voron): DONT NEED, will be deleted!!!
 	
+
+/* UPD: (by Voron)  temporarly disabled by me, because there is infinite cycle!! is willbe fixed.
+//<Voron> i did even with itteration, and some another magick. so i did it for one link, but for 2-3 not yet. I will read it firstly 
+//<Voron> https://doc.qt.io/archives/qt-4.8/qregexp.html
+//<Voron> i did with QStringList list = rx.capturedTexts();
+//<Voron> for (auto it = ...
+//<Voron> also i disable
+//<Voron> open the browser?!
 	//replace http://, https:// and www. with <a href> links
 	QRegExp rx("(https?://[^ <>]*)|(www\\.[^ <>]*)");
   	int pos = 100; //ignore the first 100 char because of the standard DTD ref
@@ -248,6 +256,7 @@ void form_ChatWidget::addMessage(QString text){
 		}
 		pos += rx.matchedLength();
   	}
+*/
 	
     //append HTML (newMessage)
     {
@@ -452,7 +461,7 @@ void form_ChatWidget::newFileTransfer()
 
 void form_ChatWidget::anchorClicked (const QUrl& link ) 
 {
-
+	// Open browser, after clicking to link? TODO: add WARNING MESSAGE!!!
 	if (link.scheme() == "http" || link.scheme() == "https")
 		QDesktopServices::openUrl(link);
 	else if (link.scheme() == "") 
