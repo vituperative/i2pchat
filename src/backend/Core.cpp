@@ -147,7 +147,7 @@ QString CCore::calcSessionOptionString() const
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
 
     settings.beginGroup("Network");
-<<<<<<< HEAD
+
     // + " " for void CSessionController::doSessionCreate() a session option.
 
     SessionOptionString.
@@ -155,15 +155,7 @@ QString CCore::calcSessionOptionString() const
 			value("TunnelName","Messenger").toString()
 				.replace(" ","_")
 					+ " ");
-<<<<<<< HEAD
-    ///FIXME TunnelName no whitespace allowed... (?)
-=======
-    SessionOptionString.append("inbound.nickname="+settings.value("TunnelName","Messenger").toString()+" ");
-    ///FIXME TunnelName no whitespace allowed...
->>>>>>> a986ae2... Add both encryption types as default config; set sig type to ECDSA_SHA512_P521
-=======
     ///FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;
->>>>>>> be7f08a... Delete a dump
 
     //inbound options
     SessionOptionString.append("inbound.quantity="+settings.value("inbound.quantity","1").toString()+ " ");
@@ -176,18 +168,8 @@ QString CCore::calcSessionOptionString() const
     SessionOptionString.append("outbound.length="+settings.value("outbound.length","3").toString()+ " ");
 
     //SIGNATURE_TYPE
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    {// QVariant 	value(const QString &key, const QVariant &defaultValue = QVariant()) const
-=======
-    
-    { 
->>>>>>> be7f08a... Delete a dump
-=======
 
     {
->>>>>>> be5daae... Remove duplicate encryption parameters
             // TODO: get from ui_form_settingsgui.h
 	    QStringList AllowSignTypes = { "DSA_SHA1", "ECDSA_SHA256_P256", "ECDSA_SHA384_P384","ECDSA_SHA512_P521" };
 	    auto sign_type = settings.value("Signature_Type","DSA_SHA1").toString();
@@ -206,19 +188,6 @@ QString CCore::calcSessionOptionString() const
     ///TODO which Signature_Type as default for best security ???
 
 
-<<<<<<< HEAD
-    
-    // Encryption
-    // TODO: Add to UI
-    SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
-=======
-//    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","DSA_SHA1").toString()+ " ");
-    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","ECDSA_SHA512_P521").toString()+ " ");
-    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ...
-    ///TODO which Signature_Type as default for best security ???
->>>>>>> a986ae2... Add both encryption types as default config; set sig type to ECDSA_SHA512_P521
-=======
->>>>>>> be5daae... Remove duplicate encryption parameters
 
     // Encryption
     // TODO: Add to UI

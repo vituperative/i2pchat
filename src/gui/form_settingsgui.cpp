@@ -273,8 +273,8 @@ void form_settingsgui::loadSettings()
 		txtShowCurrentChatStyle->moveCursor(QTextCursor::End,QTextCursor::MoveAnchor);
 		txtShowCurrentChatStyle->textCursor().clearSelection();
 
-		//override remoute chatmessageSettings Font/Color
-		chatOverrideBox->setChecked(settings->value("DoOverride",false).toBool());
+		//override remote chatmessage settings -> font/color
+		chatOverrideBox->setChecked(settings->value("Override",false).toBool());
 		if(chatOverrideBox->isChecked()==false){
 			txtShowCurrentChatStyleOverride->selectAll();
 				QFont  font;
@@ -407,7 +407,7 @@ void form_settingsgui::saveSettings()
 		settings->setValue("DefaultColor",txtShowCurrentChatStyle->textColor().name());
 		
 		//override remoute chatmessageSettings Font/Color
-		settings->setValue("DoOverride",chatOverrideBox->isChecked());
+		settings->setValue("Override remote chat styling",chatOverrideBox->isChecked());
 		settings->setValue("FontForOverwrite" ,txtShowCurrentChatStyleOverride->currentFont().toString());
 		settings->setValue("ColorForOverwrite",txtShowCurrentChatStyleOverride->textColor().name());
 		settings->setValue("LogOnlineStatesOfUsers",LogOnlineStatusBox->isChecked());
