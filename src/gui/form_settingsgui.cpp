@@ -788,7 +788,7 @@ void form_settingsgui::clicked_SelectAvatarImage()
 {
 	QPixmap tmpPixmap;
 	
-	QString tmp=QFileDialog::getOpenFileName(this,tr("Open File"), ".", tr("Images (*.png, *.svg *.jpg *.gif)"));
+	QString tmp=QFileDialog::getOpenFileName(this,tr("Open File"), ".", tr("Images (*.png *.svg *.jpg *.gif)"));
 	if(tmp.isEmpty()==false && QFile::exists(tmp)==true){
 	  tmpPixmap.load(tmp);
 	  tmpPixmap=tmpPixmap.scaled(90,90,Qt::KeepAspectRatio);
