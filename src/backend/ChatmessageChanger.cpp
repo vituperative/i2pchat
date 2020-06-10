@@ -28,7 +28,7 @@ CChatMessageChanger::CChatMessageChanger(QString& ConfigPath)
 
 	QSettings settings(ConfigPath,QSettings::IniFormat);
 	settings.beginGroup("Chat");
-		mDoChange=settings.value("Override remote chat styling",false).toBool();
+		mDoChange=settings.value("Override",false).toBool();
 		if(mDoChange==true){
 			mControllForChange= new QTextEdit();
 			mFont.fromString(settings.value("FontForOverwrite","sans-serif,10").toString());

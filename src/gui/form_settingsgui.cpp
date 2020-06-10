@@ -258,8 +258,8 @@ void form_settingsgui::loadSettings()
 	settings->endGroup();
 
 	settings->beginGroup("Chat");
-		txtShowCurrentChatStyle->setText("Current-Settings-Preview");
-		txtShowCurrentChatStyleOverride->setText("Current-Overwrite-Settings-Preview");
+		txtShowCurrentChatStyle->setText("Local settings preview");
+		txtShowCurrentChatStyleOverride->setText("Remote override preview");
 
 		txtShowCurrentChatStyle->selectAll();
 			QFont  font;				
@@ -407,7 +407,7 @@ void form_settingsgui::saveSettings()
 		settings->setValue("DefaultColor",txtShowCurrentChatStyle->textColor().name());
 		
 		//override remoute chatmessageSettings Font/Color
-		settings->setValue("Override remote chat styling",chatOverrideBox->isChecked());
+		settings->setValue("Override",chatOverrideBox->isChecked());
 		settings->setValue("FontForOverwrite" ,txtShowCurrentChatStyleOverride->currentFont().toString());
 		settings->setValue("ColorForOverwrite",txtShowCurrentChatStyleOverride->textColor().name());
 		settings->setValue("LogOnlineStatesOfUsers",LogOnlineStatusBox->isChecked());
@@ -546,7 +546,7 @@ void form_settingsgui::clicked_DestinationGenerate()
 	QMessageBox* msgBox= new QMessageBox(NULL);
 	msgBox->setIcon(QMessageBox::Information);
 	msgBox->setText(tr("I2P-Messenger"));
-	msgBox->setInformativeText(tr("Please restart the I2P-Messenger !"));
+	msgBox->setInformativeText(tr("Please restart I2P Messenger!"));
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->setDefaultButton(QMessageBox::Ok);
 	msgBox->setWindowModality(Qt::NonModal);
