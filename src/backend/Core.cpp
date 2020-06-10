@@ -32,7 +32,7 @@
 #include <QStandardPaths>
 
 CCore::CCore(QString configPath)
-{	
+{
     mConfigPath=configPath;
 
     mDebugMessageHandler= new CDebugMessageManager("General", configPath);
@@ -147,6 +147,7 @@ QString CCore::calcSessionOptionString() const
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
 
     settings.beginGroup("Network");
+
     // + " " for void CSessionController::doSessionCreate() a session option.
    // https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
     SessionOptionString.
@@ -188,6 +189,9 @@ QString CCore::calcSessionOptionString() const
 
     
     // Encryption (Idea of dr.zed, todo: add it in UI!!) https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
+    SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
+
+    // Encryption
     SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
 
     settings.remove("SessionOptionString");//no longer used,- so erase it
@@ -865,7 +869,7 @@ const QString CCore::getMyDestinationB32() const
 void CCore::setMyDestinationB32(QString B32Dest)
 {
     if(mMyDestinationB32==B32Dest) return;
-    
+
     if(!B32Dest.right(8).contains(".b32.i2p",Qt::CaseInsensitive)){
         qCritical()<<"File\t"<<__FILE__<<endl
                   <<"Line:\t"<<__LINE__<<endl
@@ -874,13 +878,13 @@ void CCore::setMyDestinationB32(QString B32Dest)
                <<"\tDestination:\n"<<B32Dest<<endl
               <<"\tAction apported"<<endl;
     }
-    
+
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
     settings.beginGroup("Network");
     settings.setValue("MyDestinationB32",B32Dest);
     settings.endGroup();
     settings.sync();
-    
+
     mMyDestinationB32=B32Dest;
 }
 
