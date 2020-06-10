@@ -117,7 +117,7 @@ void form_MainWindow::onlineComboBoxChanged()
             QMessageBox* msgBox= new QMessageBox(NULL);
             msgBox->setIcon(QMessageBox::Information);
             msgBox->setText(tr("I2P-Messenger"));
-            msgBox->setInformativeText(tr("Sorry a File transfer or File receive is active,\nclosing aborted"));
+            msgBox->setInformativeText(tr("File transfer is in progress - cannot quit.\nAbort the transfer first."));
             msgBox->setStandardButtons(QMessageBox::Ok);
             msgBox->setDefaultButton(QMessageBox::Ok);
             msgBox->setWindowModality(Qt::NonModal);
@@ -256,7 +256,7 @@ void form_MainWindow::closeApplication(){
         QMessageBox* msgBox= new QMessageBox(NULL);
         msgBox->setIcon(QMessageBox::Information);
         msgBox->setText(tr("I2P-Messenger"));
-        msgBox->setInformativeText(tr("Sorry a File transfer or File receive is active,\nClosing aborted"));
+        msgBox->setInformativeText(tr("File transfer is in progress - cannot quit.\nAbort the transfer first."));
         msgBox->setStandardButtons(QMessageBox::Ok);
         msgBox->setDefaultButton(QMessageBox::Ok);
         msgBox->setWindowModality(Qt::NonModal);

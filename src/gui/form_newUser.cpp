@@ -23,7 +23,7 @@
 form_newUserWindow::form_newUserWindow(CCore& Core,QDialog *parent)
 :QDialog(parent),Core(Core)
 {
-	setupUi(this);	
+	setupUi(this);
 	//this->setAttribute(Qt::WA_DeleteOnClose,true);
 	connect(buttonBox,SIGNAL(accepted()),this,SLOT(addnewUser()));
 	connect(buttonBox,SIGNAL(rejected()),this,SLOT(close()));
@@ -53,7 +53,7 @@ void form_newUserWindow::addnewUser()
 	}
 
 	if(Core.getUserManager()->validateI2PDestination(I2PDestination)==false){
-	
+
 		QMessageBox* msgBox= new QMessageBox(this);
 			msgBox->setIcon(QMessageBox::Warning);
 			msgBox->setText(tr("Adding User"));
@@ -64,9 +64,9 @@ void form_newUserWindow::addnewUser()
 			msgBox->show();
 
 		return;
-	  
+
 	}
-	
+
 
 	if(I2PDestination==Core.getMyDestination())
 	{
@@ -99,7 +99,7 @@ void form_newUserWindow::addnewUser()
 
 		QMessageBox* msgBox= new QMessageBox(NULL);
 		msgBox->setIcon(QMessageBox::Warning);
-                msgBox->setInformativeText(tr("There allready exits one user with the same Destination, adding aborted !"));
+                msgBox->setInformativeText(tr("Destination already exists in your user list!"));
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->setDefaultButton(QMessageBox::Ok);
 		msgBox->setWindowModality(Qt::NonModal);
