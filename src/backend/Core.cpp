@@ -32,7 +32,7 @@
 #include <QStandardPaths>
 
 CCore::CCore(QString configPath)
-{	
+{
     mConfigPath=configPath;
 
     mDebugMessageHandler= new CDebugMessageManager("General", configPath);
@@ -147,6 +147,7 @@ QString CCore::calcSessionOptionString() const
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
 
     settings.beginGroup("Network");
+<<<<<<< HEAD
     // + " " for void CSessionController::doSessionCreate() a session option.
    // https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
     SessionOptionString.
@@ -155,6 +156,10 @@ QString CCore::calcSessionOptionString() const
 				.replace(" ","_")
 					+ " ");
     ///FIXME TunnelName no whitespace allowed... (?)
+=======
+    SessionOptionString.append("inbound.nickname="+settings.value("TunnelName","Messenger").toString()+" ");
+    ///FIXME TunnelName no whitespace allowed...
+>>>>>>> a986ae2... Add both encryption types as default config; set sig type to ECDSA_SHA512_P521
 
     //inbound options
     SessionOptionString.append("inbound.quantity="+settings.value("inbound.quantity","1").toString()+ " ");
@@ -167,6 +172,7 @@ QString CCore::calcSessionOptionString() const
     SessionOptionString.append("outbound.length="+settings.value("outbound.length","3").toString()+ " ");
 
     //SIGNATURE_TYPE
+<<<<<<< HEAD
     {// QVariant 	value(const QString &key, const QVariant &defaultValue = QVariant()) const
             // TODO: get from ui_form_settingsgui.h
 	    QStringList AllowSignTypes = { "DSA_SHA1", "ECDSA_SHA256_P256", "ECDSA_SHA384_P384","ECDSA_SHA512_P521" };
@@ -188,6 +194,15 @@ QString CCore::calcSessionOptionString() const
 
     
     // Encryption (Idea of dr.zed, todo: add it in UI!!) https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
+    SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
+=======
+//    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","DSA_SHA1").toString()+ " ");
+    SessionOptionString.append("SIGNATURE_TYPE="+settings.value("Signature_Type","ECDSA_SHA512_P521").toString()+ " ");
+    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ...
+    ///TODO which Signature_Type as default for best security ???
+>>>>>>> a986ae2... Add both encryption types as default config; set sig type to ECDSA_SHA512_P521
+
+    // Encryption
     SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
 
     settings.remove("SessionOptionString");//no longer used,- so erase it
@@ -865,7 +880,7 @@ const QString CCore::getMyDestinationB32() const
 void CCore::setMyDestinationB32(QString B32Dest)
 {
     if(mMyDestinationB32==B32Dest) return;
-    
+
     if(!B32Dest.right(8).contains(".b32.i2p",Qt::CaseInsensitive)){
         qCritical()<<"File\t"<<__FILE__<<endl
                   <<"Line:\t"<<__LINE__<<endl
@@ -874,13 +889,13 @@ void CCore::setMyDestinationB32(QString B32Dest)
                <<"\tDestination:\n"<<B32Dest<<endl
               <<"\tAction apported"<<endl;
     }
-    
+
     QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
     settings.beginGroup("Network");
     settings.setValue("MyDestinationB32",B32Dest);
     settings.endGroup();
     settings.sync();
-    
+
     mMyDestinationB32=B32Dest;
 }
 
