@@ -149,13 +149,13 @@ QString CCore::calcSessionOptionString() const
     settings.beginGroup("Network");
 
     // + " " for void CSessionController::doSessionCreate() a session option.
-   // https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
+ 
     SessionOptionString.
 		append("inbound.nickname="+settings.
 			value("TunnelName","Messenger").toString()
 				.replace(" ","_")
 					+ " ");
-    ///FIXME TunnelName no whitespace allowed... (?)
+    ///FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;
 
     //inbound options
     SessionOptionString.append("inbound.quantity="+settings.value("inbound.quantity","1").toString()+ " ");
@@ -168,7 +168,8 @@ QString CCore::calcSessionOptionString() const
     SessionOptionString.append("outbound.length="+settings.value("outbound.length","3").toString()+ " ");
 
     //SIGNATURE_TYPE
-    {// QVariant 	value(const QString &key, const QVariant &defaultValue = QVariant()) const
+    
+    { 
             // TODO: get from ui_form_settingsgui.h
 	    QStringList AllowSignTypes = { "DSA_SHA1", "ECDSA_SHA256_P256", "ECDSA_SHA384_P384","ECDSA_SHA512_P521" };
 	    auto sign_type = settings.value("Signature_Type","DSA_SHA1").toString();
@@ -181,14 +182,15 @@ QString CCore::calcSessionOptionString() const
 			}
 	    }
 	    if( notfound ) SessionOptionString.append("SIGNATURE_TYPE="+QString("DSA_SHA1")+ " ");
-    }//
+    }
     
-    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... (?)
-    ///TODO which Signature_Type as default for best security ??? (!)
+    ///TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD: Maybe is fixed;
+    ///TODO which Signature_Type as default for best security ???
 
 
     
-    // Encryption (Idea of dr.zed, todo: add it in UI!!) https://github.com/i2pchat/i2pchat/pull/24/commits/a986ae2f235251d4ecb73f15a5a11dc45beda9fe
+    // Encryption
+    // TODO: Add to UI
     SessionOptionString.append("leaseSetEncType="+settings.value("leaseSetEncType","4,0").toString()+ " ");
 
     // Encryption
