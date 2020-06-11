@@ -1,0 +1,18 @@
+branches:
+  only:
+    - master
+
+install:
+  - set QTDIR=C:\Qt\5.13.2\mingw73_32
+  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%;"C:\Program Files (x86)\Inno Setup 5"
+build_script:
+  - qmake I2P-Messenger.pro
+  - mingw32-make
+after_build:
+  - windeployqt release/I2P-Messenger.exe
+  - cmd: cp LICENSE release/LICENSE.txt"
+
+artifacts:
+  - path: Output\I2P-Messenger-*.exe
+  - path: release
+    type: zip

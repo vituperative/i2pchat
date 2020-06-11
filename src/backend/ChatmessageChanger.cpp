@@ -71,3 +71,4 @@ CChatMessageChanger* CChatMessageChanger::exemplar(CCore& Core)
 	return instanz;
 }
 
+
