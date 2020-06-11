@@ -997,6 +997,7 @@ p, li { white-space: pre-wrap; }
           <string notr="true">QLabel{ 
 border: 1px solid #999;
 border-radius: 1px;
+background: #fff;
 }</string>
          </property>
          <property name="text">
@@ -1041,6 +1042,7 @@ border-radius: 1px;
           <string notr="true">QLabel{ 
 border: 1px solid #999;
 border-radius: 1px;
+background: #fff;
 }</string>
          </property>
          <property name="text">
@@ -1088,4 +1090,3 @@ border-radius: 1px;
  </resources>
  <connections/>
 </ui>
-
