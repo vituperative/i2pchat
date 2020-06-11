@@ -1,4 +1,13 @@
 #!/bin/bash
+# +++++++++++++++++++++++++++++++ 
+# VORON HOW-TO
+# git clone https://github.com/mxe/mxe.git
+# cd mxe
+# make qtbase
+# make qtmultimedia
+# make qt5
+# // maybe one make qt5 try, but i did all
+# +++++++++++++++++++++++++++++++ 
 export MXE="/home/user/mxe/"
 export MXEBIN="$MXE/usr/bin/"
 export MXEQMAKE=$MXE/usr/i686-w64-mingw32.static/qt5/bin/qmake
