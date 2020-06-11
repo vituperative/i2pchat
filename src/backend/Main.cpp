@@ -27,8 +27,10 @@
 #include <QSettings>
 #include <QTime>
 #include <QDir>
+#include<QStandardPaths>
 
 #include "form_Main.h"
+
 
 QString debugLogDir;
 
@@ -37,6 +39,10 @@ void enableDebugLogging(QString configPath);
 void myMessageHandler(QtMsgType type,const QMessageLogContext &context,const QString &msg);
 int main(int argc, char *argv[])
 {
+	#ifndef _WIN32
+		constexpr auto NameOfConfigDirectoryOnLinux="/.i2pchat/";
+	#endif
+
 	QApplication app(argc, argv);
 	QString configPath;
 #ifdef ANDROID
@@ -81,7 +87,20 @@ int main(int argc, char *argv[])
     }
     */
 #else
-	configPath=QApplication::applicationDirPath();
+	
+	#ifdef _WIN32
+	 configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	#else
+	 configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+NameOfConfigDirectoryOnLinux;
+	#endif
+
+	{
+	QDir configdir(configPath);
+	if (!configdir.exists())
+    		configdir.mkpath(".");
+	}
+
+	//configPath=QApplication::applicationDirPath();
 	if(QFile::exists(configPath+"/UseHomeForConfigStore")==true){
 		QStringList tmp=QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
 		if(tmp.size()>=1){
