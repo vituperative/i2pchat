@@ -28,13 +28,13 @@ CChatMessageChanger::CChatMessageChanger(QString& ConfigPath)
 
 	QSettings settings(ConfigPath,QSettings::IniFormat);
 	settings.beginGroup("Chat");
-		mDoChange=settings.value("DoOverride",false).toBool();
+		mDoChange=settings.value("Override",false).toBool();
 		if(mDoChange==true){
 			mControllForChange= new QTextEdit();
-			mFont.fromString(settings.value("FontForOverwrite","sans-serif,10").toString());
+			mFont.fromString(settings.value("FontForOverwrite","SansSerif,10").toString());
 			mColor.setNamedColor(settings.value("ColorForOverwrite","#000000").toString());
-			
-		}	
+
+		}
 	settings.endGroup();
 }
 
@@ -58,7 +58,7 @@ QString CChatMessageChanger::changeChatMessage(QString Chatmessage)
 	}
 
 	return Chatmessage;
-	
+
 }
 
 CChatMessageChanger* CChatMessageChanger::exemplar(CCore& Core)
@@ -70,4 +70,5 @@ CChatMessageChanger* CChatMessageChanger::exemplar(CCore& Core)
 	}
 	return instanz;
 }
+
 

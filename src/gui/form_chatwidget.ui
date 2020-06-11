@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>451</height>
+    <width>816</width>
+    <height>576</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -56,8 +56,7 @@
          <widget class="QTextBrowser" name="chat">
           <property name="font">
            <font>
-            <pointsize>11</pointsize>
-            <stylestrategy>PreferAntialias</stylestrategy>
+            <family>Sans Serif</family>
            </font>
           </property>
           <property name="cursor" stdset="0">
@@ -70,8 +69,8 @@
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Open Sans Semi-Bold'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Open Sans Semi-Bold, sans-serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9.5pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Open Sans Semi-Bold','sans-serif'; font-weight:600; font-style:normal;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -394,10 +393,11 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="font">
            <font>
-            <family>Sans</family>
-            <pointsize>11</pointsize>
-            <stylestrategy>PreferAntialias</stylestrategy>
+            <family>Sans Serif</family>
            </font>
+          </property>
+          <property name="cursor" stdset="0">
+           <cursorShape>IBeamCursor</cursorShape>
           </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
@@ -406,8 +406,8 @@ p, li { white-space: pre-wrap; }
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Open Sans Semi-Bold, sans-serif';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9.5pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Open Sans Semi-Bold', 'sans-serif'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -498,8 +498,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="maximumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>40</width>
+                <height>24</height>
                </size>
               </property>
               <property name="focusPolicy">
@@ -537,7 +537,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="maximumSize">
                <size>
-                <width>24</width>
+                <width>40</width>
                 <height>24</height>
                </size>
               </property>
@@ -560,6 +560,12 @@ p, li { white-space: pre-wrap; }
                <size>
                 <width>16</width>
                 <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
                </size>
               </property>
               <property name="toolTip">
@@ -591,8 +597,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="maximumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>40</width>
+                <height>24</height>
                </size>
               </property>
               <property name="focusPolicy">
@@ -658,7 +664,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="maximumSize">
                <size>
-                <width>32</width>
+                <width>80</width>
                 <height>24</height>
                </size>
               </property>
@@ -710,6 +716,12 @@ p, li { white-space: pre-wrap; }
                 <height>16</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
+               </size>
+              </property>
               <property name="toolTip">
                <string>Bold</string>
               </property>
@@ -741,6 +753,12 @@ p, li { white-space: pre-wrap; }
                <size>
                 <width>16</width>
                 <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
                </size>
               </property>
               <property name="toolTip">
@@ -776,6 +794,12 @@ p, li { white-space: pre-wrap; }
                 <height>16</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
+               </size>
+              </property>
               <property name="toolTip">
                <string>Italic</string>
               </property>
@@ -809,6 +833,12 @@ p, li { white-space: pre-wrap; }
                 <height>16</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
+               </size>
+              </property>
               <property name="toolTip">
                <string>Color</string>
               </property>
@@ -838,8 +868,8 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="maximumSize">
                <size>
-                <width>28</width>
-                <height>28</height>
+                <width>40</width>
+                <height>24</height>
                </size>
               </property>
               <property name="toolTip">
@@ -891,7 +921,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../../../gitlab/i2pchat/src/gui/resourcen.qrc">
           <normaloff>:/icons/show_frame.png</normaloff>:/icons/show_frame.png</iconset>
         </property>
         <property name="iconSize">
@@ -951,8 +981,14 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="minimumSize">
           <size>
-           <width>90</width>
-           <height>90</height>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -989,8 +1025,14 @@ border-radius: 1px;
          </property>
          <property name="minimumSize">
           <size>
-           <width>90</width>
-           <height>90</height>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -1027,7 +1069,7 @@ border-radius: 1px;
   </widget>
   <action name="actionAvatar_Picture">
    <property name="icon">
-    <iconset>
+    <iconset resource="resourcen.qrc">
      <normaloff>:/icons/addimage.svg</normaloff>:/icons/addimage.svg</iconset>
    </property>
    <property name="text">
@@ -1044,3 +1086,4 @@ border-radius: 1px;
  </resources>
  <connections/>
 </ui>
+
