@@ -258,14 +258,14 @@ void form_settingsgui::loadSettings()
 	settings->endGroup();
 
 	settings->beginGroup("Chat");
-		txtShowCurrentChatStyle->setText("Current-Settings-Preview");
-		txtShowCurrentChatStyleOverride->setText("Current-Overwrite-Settings-Preview");
+		txtShowCurrentChatStyle->setText("Local settings preview");
+		txtShowCurrentChatStyleOverride->setText("Remote override preview");
 
 		txtShowCurrentChatStyle->selectAll();
 			QFont  font;				
 			QColor color;
 
-			font.fromString(settings->value("DefaultFont" ,"sans-serif,10").toString());			
+			font.fromString(settings->value("DefaultFont" ,"SansSerif,10").toString());			
 			color.setNamedColor(settings->value("DefaultColor","#000000").toString());
 
 			txtShowCurrentChatStyle->setFont(font);
@@ -273,14 +273,14 @@ void form_settingsgui::loadSettings()
 		txtShowCurrentChatStyle->moveCursor(QTextCursor::End,QTextCursor::MoveAnchor);
 		txtShowCurrentChatStyle->textCursor().clearSelection();
 
-		//override remoute chatmessageSettings Font/Color
-		chatOverrideBox->setChecked(settings->value("DoOverride",false).toBool());
+		//override remote chatmessage settings -> font/color
+		chatOverrideBox->setChecked(settings->value("Override",false).toBool());
 		if(chatOverrideBox->isChecked()==false){
 			txtShowCurrentChatStyleOverride->selectAll();
 				QFont  font;
 				QColor color;
 
-				font.fromString(settings->value("FontForOverwrite" ,"sans-serif,10").toString());
+				font.fromString(settings->value("FontForOverwrite" ,"SansSerif,10").toString());
 				color.setNamedColor(settings->value("ColorForOverwrite","#000000").toString());
 
 				txtShowCurrentChatStyleOverride->setFont(font);
@@ -292,7 +292,7 @@ void form_settingsgui::loadSettings()
 		else{
 			txtShowCurrentChatStyleOverride->selectAll();
 				QFont  font;
-				font.fromString(settings->value("FontForOverwrite","sans-serif,10").toString());
+				font.fromString(settings->value("FontForOverwrite","SansSerif,10").toString());
 				QColor color(settings->value("ColorForOverwrite","#000000").toString());
 
 				txtShowCurrentChatStyleOverride->setFont(font);
@@ -407,7 +407,7 @@ void form_settingsgui::saveSettings()
 		settings->setValue("DefaultColor",txtShowCurrentChatStyle->textColor().name());
 		
 		//override remoute chatmessageSettings Font/Color
-		settings->setValue("DoOverride",chatOverrideBox->isChecked());
+		settings->setValue("Override",chatOverrideBox->isChecked());
 		settings->setValue("FontForOverwrite" ,txtShowCurrentChatStyleOverride->currentFont().toString());
 		settings->setValue("ColorForOverwrite",txtShowCurrentChatStyleOverride->textColor().name());
 		settings->setValue("LogOnlineStatesOfUsers",LogOnlineStatusBox->isChecked());
@@ -546,7 +546,7 @@ void form_settingsgui::clicked_DestinationGenerate()
 	QMessageBox* msgBox= new QMessageBox(NULL);
 	msgBox->setIcon(QMessageBox::Information);
 	msgBox->setText(tr("I2P-Messenger"));
-	msgBox->setInformativeText(tr("Please restart the I2P-Messenger !"));
+	msgBox->setInformativeText(tr("Please restart I2P Messenger!"));
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->setDefaultButton(QMessageBox::Ok);
 	msgBox->setWindowModality(Qt::NonModal);
@@ -788,7 +788,7 @@ void form_settingsgui::clicked_SelectAvatarImage()
 {
 	QPixmap tmpPixmap;
 	
-	QString tmp=QFileDialog::getOpenFileName(this,tr("Open File"), ".", tr("Images (*.png, *.svg *.jpg *.gif)"));
+	QString tmp=QFileDialog::getOpenFileName(this,tr("Open File"), ".", tr("Images (*.png *.svg *.jpg *.gif)"));
 	if(tmp.isEmpty()==false && QFile::exists(tmp)==true){
 	  tmpPixmap.load(tmp);
 	  tmpPixmap=tmpPixmap.scaled(90,90,Qt::KeepAspectRatio);
@@ -806,5 +806,6 @@ void form_settingsgui::clicked_ClearAvatarImage()
       avatarImageByteArray.clear();
       ownavatar_label->clear();
 }
+
 
 
