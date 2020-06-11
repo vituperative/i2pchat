@@ -42,7 +42,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <property name="enabled">
@@ -398,6 +398,9 @@ p, li { white-space: pre-wrap; }
             <pointsize>11</pointsize>
             <stylestrategy>PreferAntialias</stylestrategy>
            </font>
+          </property>
+          <property name="cursor" stdset="0">
+           <cursorShape>IBeamCursor</cursorShape>
           </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
@@ -981,8 +984,14 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="minimumSize">
           <size>
-           <width>90</width>
-           <height>90</height>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -1019,8 +1028,14 @@ border-radius: 1px;
          </property>
          <property name="minimumSize">
           <size>
-           <width>90</width>
-           <height>90</height>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
           </size>
          </property>
          <property name="styleSheet">
