@@ -43,7 +43,7 @@ CUser::CUser(	CCore&	Core,
 	this->mHaveNewUnreadChatmessage=false;
 
 	settings.beginGroup("Chat");
-		this->mTextFont.fromString(settings.value("DefaultFont","sans-serif,10").toString());
+		this->mTextFont.fromString(settings.value("DefaultFont","SansSerif,10").toString());
 		this->mTextColor.setNamedColor(settings.value("DefaultColor","#000000").toString());
 		this->mLogOnlineStateOfUsers=(settings.value("LogOnlineStatesOfUsers",true).toBool());
 	settings.endGroup();

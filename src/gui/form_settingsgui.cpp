@@ -265,7 +265,7 @@ void form_settingsgui::loadSettings()
 			QFont  font;				
 			QColor color;
 
-			font.fromString(settings->value("DefaultFont" ,"sans-serif,10").toString());			
+			font.fromString(settings->value("DefaultFont" ,"SansSerif,10").toString());			
 			color.setNamedColor(settings->value("DefaultColor","#000000").toString());
 
 			txtShowCurrentChatStyle->setFont(font);
@@ -280,7 +280,7 @@ void form_settingsgui::loadSettings()
 				QFont  font;
 				QColor color;
 
-				font.fromString(settings->value("FontForOverwrite" ,"sans-serif,10").toString());
+				font.fromString(settings->value("FontForOverwrite" ,"SansSerif,10").toString());
 				color.setNamedColor(settings->value("ColorForOverwrite","#000000").toString());
 
 				txtShowCurrentChatStyleOverride->setFont(font);
@@ -292,7 +292,7 @@ void form_settingsgui::loadSettings()
 		else{
 			txtShowCurrentChatStyleOverride->selectAll();
 				QFont  font;
-				font.fromString(settings->value("FontForOverwrite","sans-serif,10").toString());
+				font.fromString(settings->value("FontForOverwrite","SansSerif,10").toString());
 				QColor color(settings->value("ColorForOverwrite","#000000").toString());
 
 				txtShowCurrentChatStyleOverride->setFont(font);
