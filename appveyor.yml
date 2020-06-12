@@ -4,7 +4,7 @@ branches:
 
 install:
   - set QTDIR=C:\Qt\5.13.2\mingw73_32
-  - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
+  - set PATH=%PATH%;C:\MinGW\msys\1.0;%QTDIR%\bin;C:\MinGW\bin
 build_script:
   - qmake I2P-Messenger.pro
   - mingw32-make
