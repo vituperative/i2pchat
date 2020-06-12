@@ -27,16 +27,40 @@
 #include <QSettings>
 #include <QTime>
 #include <QDir>
+#include<QStandardPaths>
+
+#include<unistd.h>
+#include <getopt.h>
 
 #include "form_Main.h"
+
 
 QString debugLogDir;
 
 void enableDebugLogging(QString configPath);
 //void myMessageHandler(QtMsgType type, const char *msg);
 void myMessageHandler(QtMsgType type,const QMessageLogContext &context,const QString &msg);
+
+
+void help(void){
+	
+	printf(
+		"%s \r\n"
+		"COMPILED:" __DATE__ "-" __TIME__ "\r\n"
+		"-h help\r\n"
+		"-w --workdir <own path to work dir>\r\n"
+		"\r\n"
+	,"I2P-Messenger");
+	exit(0);
+}
+
 int main(int argc, char *argv[])
 {
+	//for configPath
+	#ifndef _WIN32
+		constexpr auto NameOfConfigDirectoryOnLinux="/.i2pchat/";
+	#endif
+
 	QApplication app(argc, argv);
 	QString configPath;
 #ifdef ANDROID
@@ -81,7 +105,66 @@ int main(int argc, char *argv[])
     }
     */
 #else
-	configPath=QApplication::applicationDirPath();
+
+
+	#ifdef _WIN32
+	 configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	#else
+	 configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+NameOfConfigDirectoryOnLinux;
+	#endif
+
+
+	{ // getopt_long + getopt (short)
+		
+
+		int ret;
+		int option_index;
+		// :: = optional_argument ; = no_argument ; : = required_argument
+		const char* short_options_optarg = "hb::w:"; 
+
+		const struct option long_options_optarg[] = {
+			{"help",no_argument,NULL,'h'},
+			{"workdir",required_argument,NULL,'w'},
+			{"bark",optional_argument,NULL,'b'},
+			{NULL,0,NULL,0}
+		};
+		while ((ret=getopt_long(argc,argv,short_options_optarg,
+			long_options_optarg,&option_index))!=-1){
+
+			switch(ret){
+				case 'h': {
+					help();
+					break;
+				};
+				case 'b': {
+					if (optarg!=NULL)
+						for(int i = atoi(optarg);i--;)
+							printf("BARK-BARK %d time\n", i);
+					else
+						printf("woof!!\n");
+					break;
+				};
+		
+				case 'w': {
+					configPath=QString(optarg);
+					break;
+				};
+				case '?': default: {
+					help();
+					break;
+				};
+			};
+		};
+	}
+
+
+	{
+	QDir configdir(configPath);
+	if (!configdir.exists())
+    		configdir.mkpath(".");
+	}
+
+	//configPath=QApplication::applicationDirPath();
 	if(QFile::exists(configPath+"/UseHomeForConfigStore")==true){
 		QStringList tmp=QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
 		if(tmp.size()>=1){

@@ -1,13 +1,38 @@
 branches:
   only:
     - master
+environment:
+  matrix:
+  # MSVC x86
+  #- name: win32
+  #  platform: amd64_x86
+  #  qt: 5.9\msvc2015
+  #  suffix: msvc2015
+
+  # MSVC x64
+  #  - name: win64
+  #  platform: amd64
+  #  qt: 5.9\msvc2015_64
+  #  suffix: msvc2015
+
+  # MinGW
+  - name: win32
+    platform: mingw
+    qt: 5.9\mingw53_32
+    suffix: mingw
+
+init:
+  - if %platform%==mingw set PATH=C:\Qt\Tools\mingw530_32\bin;%PATH%
+  - set PATH=C:\Qt\%qt%\bin;%PATH%
+  - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+  - if not %platform%==mingw (set makefiles="NMake Makefiles") else (set makefiles="MinGW Makefiles")
+  - if %APPVEYOR_REPO_TAG%==true (set nogitinfo=ON) else (set nogitinfo=OFF)
 
 install:
-  - set QTDIR=C:\Qt\5.13.2\mingw73_32
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%;"C:\Program Files (x86)\Inno Setup 5"
+  - set PATH=C:\Qt\Tools\mingw530_32\bin;%PATH%
 build_script:
   - qmake I2P-Messenger.pro
-  - mingw32-make
+  - if not %platform%==mingw (nmake) else (mingw32-make)
 after_build:
   - windeployqt release/I2P-Messenger.exe
   - cmd: cp LICENSE release/LICENSE.txt"
@@ -16,3 +41,4 @@ artifacts:
   - path: Output\I2P-Messenger-*.exe
   - path: release
     type: zip
+

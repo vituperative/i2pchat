@@ -1,5 +1,5 @@
 #include <QErrorMessage>
-
+//#include <QTimer> 
 #include "form_chatwidget.h"
 #include "User.h"
 
@@ -165,6 +165,10 @@ form_ChatWidget::form_ChatWidget(CUser& user,CCore& Core,QDialog* parent /* = 0 
 	
 	useravatar_label->setAlignment(Qt::AlignCenter);
 	remoteAvatarImageChanged();
+
+	//QTimer *updater_chat = new QTimer(this);
+	//connect(timer, &QTimer::timeout, this, &form_ChatWidget::raise);
+	//timer->start();
 }
 
 void form_ChatWidget::newMessageRecived(){
@@ -195,8 +199,7 @@ void form_ChatWidget::newMessageRecived(){
 	else{
 		sb->setValue(sb->maximum());
 	}
-	
-	
+	this->raise();
 }
 
 void form_ChatWidget::addAllMessages(){
