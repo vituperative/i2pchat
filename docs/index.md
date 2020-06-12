@@ -4,7 +4,7 @@
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
-##Downloads (pre-built binaries)
+## Downloads (pre-built binaries)
 
 * https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts (Win32/64 and .deb 64 bit builds)
 
