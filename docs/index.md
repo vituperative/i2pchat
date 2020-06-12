@@ -6,7 +6,7 @@
 
 ## Downloads (pre-built binaries)
 
-* https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts (Win32/64 and .deb 64 bit builds)
+* <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a> (Win32/64 and .deb 64 bit builds)
 
 ## Features
 
