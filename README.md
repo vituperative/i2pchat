@@ -55,6 +55,11 @@ or simply
 ```
 make
 ```
+### Download Alpha Version
+ #### Linux:
+ [Debian/Ubuntu deb for x86_64](https://github.com/wipedlifepotato/i2pchat/releases/download/alpha0.1/i2p-messenger_amd64.deb)
+ #### Windows:
+ [WINDOWS32 will works on 64bit too](https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts)
 
 ## Running
 
