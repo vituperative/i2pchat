@@ -139,6 +139,12 @@
       <property name="showDropIndicator" stdset="0">
        <bool>false</bool>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
       <property name="flow">
        <enum>QListView::TopToBottom</enum>
       </property>
