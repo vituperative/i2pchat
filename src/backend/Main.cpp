@@ -46,7 +46,7 @@ void help(void){
 	
 	printf(
 		"%s \r\n"
-		"COMPILED:"__TIME__"\r\n"
+		"COMPILED:"__DATE__"-" __TIME__"\r\n"
 		"-h help\r\n"
 		"-w --workdir <own path to work dir>\r\n"
 		"\r\n"
