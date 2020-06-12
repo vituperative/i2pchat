@@ -362,13 +362,13 @@
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="general_page">
        <widget class="QGroupBox" name="groupBox_6">
         <property name="geometry">
          <rect>
-          <x>8</x>
+          <x>4</x>
           <y>144</y>
           <width>421</width>
           <height>65</height>
@@ -380,9 +380,9 @@
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
-           <x>8</x>
+           <x>12</x>
            <y>28</y>
-           <width>409</width>
+           <width>397</width>
            <height>28</height>
           </rect>
          </property>
@@ -416,7 +416,7 @@
        <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
-          <x>8</x>
+          <x>4</x>
           <y>52</y>
           <width>421</width>
           <height>65</height>
@@ -428,9 +428,9 @@
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
-           <x>4</x>
+           <x>12</x>
            <y>28</y>
-           <width>409</width>
+           <width>397</width>
            <height>28</height>
           </rect>
          </property>
@@ -454,9 +454,9 @@
        <widget class="QWidget" name="layoutWidget_3">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
-          <width>123</width>
+          <width>129</width>
           <height>34</height>
          </rect>
         </property>
@@ -476,7 +476,43 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <item row="0" column="0">
+         <item row="0" column="2">
+          <widget class="QLabel" name="basicLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>16</pointsize>
+             <weight>75</weight>
+             <italic>true</italic>
+             <bold>true</bold>
+             <underline>true</underline>
+             <strikeout>false</strikeout>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:16pt; font-weight:600; font-style:italic; text-decoration: underline;&quot;&gt;
+&lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
           <widget class="QLabel" name="basiciconlabel">
            <property name="minimumSize">
             <size>
@@ -513,48 +549,12 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="basicLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <pointsize>16</pointsize>
-             <weight>75</weight>
-             <italic>true</italic>
-             <bold>true</bold>
-             <underline>true</underline>
-             <strikeout>false</strikeout>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:16pt; font-weight:600; font-style:italic; text-decoration: underline;&quot;&gt;
-&lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
        <widget class="QGroupBox" name="groupBox_16">
         <property name="geometry">
          <rect>
-          <x>8</x>
+          <x>4</x>
           <y>232</y>
           <width>421</width>
           <height>105</height>
@@ -635,9 +635,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
-           <x>8</x>
+           <x>12</x>
            <y>68</y>
-           <width>409</width>
+           <width>397</width>
            <height>27</height>
           </rect>
          </property>
@@ -665,9 +665,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_22">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>360</y>
-          <width>421</width>
+          <width>425</width>
           <height>61</height>
          </rect>
         </property>
@@ -677,9 +677,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
-           <x>4</x>
+           <x>12</x>
            <y>28</y>
-           <width>413</width>
+           <width>401</width>
            <height>25</height>
           </rect>
          </property>
@@ -712,7 +712,7 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget_20">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
           <width>129</width>
           <height>34</height>
@@ -812,8 +812,8 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>4</x>
           <y>212</y>
-          <width>429</width>
-          <height>225</height>
+          <width>421</width>
+          <height>221</height>
          </rect>
         </property>
         <property name="title">
@@ -958,7 +958,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>4</x>
           <y>52</y>
-          <width>429</width>
+          <width>421</width>
           <height>65</height>
          </rect>
         </property>
@@ -970,7 +970,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>8</x>
            <y>28</y>
-           <width>409</width>
+           <width>405</width>
            <height>29</height>
           </rect>
          </property>
@@ -1010,7 +1010,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>4</x>
           <y>136</y>
-          <width>429</width>
+          <width>421</width>
           <height>65</height>
          </rect>
         </property>
@@ -1020,9 +1020,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="layoutWidget_10">
          <property name="geometry">
           <rect>
-           <x>4</x>
+           <x>8</x>
            <y>28</y>
-           <width>409</width>
+           <width>405</width>
            <height>29</height>
           </rect>
          </property>
@@ -1049,21 +1049,21 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
          <rect>
-          <x>-2</x>
+          <x>2</x>
           <y>60</y>
-          <width>433</width>
-          <height>371</height>
+          <width>421</width>
+          <height>349</height>
          </rect>
         </property>
         <property name="title">
-         <string/>
+         <string>Details about yourself</string>
         </property>
         <widget class="QPlainTextEdit" name="txt_Interests">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>12</x>
            <y>160</y>
-           <width>381</width>
+           <width>397</width>
            <height>61</height>
           </rect>
          </property>
@@ -1071,9 +1071,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QWidget" name="layoutWidget_11">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>381</width>
+           <x>12</x>
+           <y>32</y>
+           <width>397</width>
            <height>131</height>
           </rect>
          </property>
@@ -1163,22 +1163,22 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_21">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>12</x>
            <y>230</y>
-           <width>381</width>
-           <height>111</height>
+           <width>397</width>
+           <height>109</height>
           </rect>
          </property>
          <property name="title">
-          <string>Avatar</string>
+          <string>Avatar (stored in your application.ini file)</string>
          </property>
          <widget class="QLabel" name="ownavatar_label">
           <property name="geometry">
            <rect>
-            <x>290</x>
-            <y>20</y>
-            <width>90</width>
-            <height>90</height>
+            <x>312</x>
+            <y>24</y>
+            <width>80</width>
+            <height>80</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1189,14 +1189,14 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="minimumSize">
            <size>
-            <width>90</width>
-            <height>90</height>
+            <width>80</width>
+            <height>80</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>90</width>
-            <height>90</height>
+            <width>80</width>
+            <height>80</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -1218,45 +1218,44 @@ border-radius: 2px;
            <string/>
           </property>
          </widget>
-         <widget class="QPushButton" name="cmd_selectAvatarImage">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>80</y>
-            <width>71</width>
-            <height>24</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Select</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="cmd_clearAvatarImage">
-          <property name="geometry">
-           <rect>
-            <x>100</x>
-            <y>80</y>
-            <width>64</width>
-            <height>24</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Clear</string>
-          </property>
-         </widget>
          <widget class="QLabel" name="label">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>20</y>
+            <x>16</x>
+            <y>40</y>
             <width>281</width>
-            <height>43</height>
+            <height>17</height>
            </rect>
           </property>
           <property name="text">
-           <string>Your avatar image is stored in
-your application.ini file</string>
+           <string>Image will be scaled to 80 x 80</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QSplitter" name="splitter_3">
+          <property name="geometry">
+           <rect>
+            <x>12</x>
+            <y>76</y>
+            <width>289</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QPushButton" name="cmd_clearAvatarImage">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="cmd_selectAvatarImage">
+           <property name="text">
+            <string>Select</string>
+           </property>
+          </widget>
          </widget>
         </widget>
        </widget>
@@ -1277,13 +1276,16 @@ your application.ini file</string>
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-10</y>
-          <width>645</width>
-          <height>57</height>
+          <y>0</y>
+          <width>168</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_13">
-         <item row="0" column="2">
+         <property name="horizontalSpacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="2" alignment="Qt::AlignVCenter">
           <widget class="QLabel" name="shareLabel">
            <property name="minimumSize">
             <size>
@@ -1354,121 +1356,163 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_3">
         <property name="geometry">
          <rect>
-          <x>4</x>
+          <x>0</x>
           <y>148</y>
-          <width>429</width>
-          <height>73</height>
+          <width>425</width>
+          <height>69</height>
          </rect>
         </property>
         <property name="title">
-         <string>StyleSheet</string>
+         <string>Custom StyleSheet</string>
         </property>
-        <widget class="QComboBox" name="styleSheetCombo">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>12</x>
            <y>30</y>
-           <width>271</width>
-           <height>21</height>
+           <width>401</width>
+           <height>27</height>
           </rect>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>87</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>200</width>
-           <height>87</height>
-          </size>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_8">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>81</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Style Sheet:</string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_24">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>120</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Style Sheet:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="styleSheetCombo">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>200</width>
+              <height>92</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>4</x>
+          <x>0</x>
           <y>56</y>
-          <width>429</width>
+          <width>425</width>
           <height>71</height>
          </rect>
         </property>
         <property name="title">
-         <string>Style</string>
+         <string>Window Style</string>
         </property>
-        <widget class="QComboBox" name="styleCombo">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>110</x>
+           <x>12</x>
            <y>30</y>
-           <width>271</width>
-           <height>18</height>
+           <width>401</width>
+           <height>29</height>
           </rect>
          </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_7">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>51</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Style:</string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_25">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>120</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Style:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="styleCombo">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>200</width>
+              <height>92</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="layoutWidget_17">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
           <width>127</width>
           <height>34</height>
@@ -1521,52 +1565,49 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_4">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>40</y>
-          <width>429</width>
-          <height>93</height>
+          <x>0</x>
+          <y>52</y>
+          <width>425</width>
+          <height>89</height>
          </rect>
         </property>
         <property name="title">
          <string>General</string>
         </property>
-        <widget class="QWidget" name="layoutWidget_13">
+        <widget class="QSplitter" name="splitter_4">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>391</width>
-           <height>54</height>
+           <x>13</x>
+           <y>31</y>
+           <width>405</width>
+           <height>46</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QCheckBox" name="blockallcheckBox">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Block all unknown Users</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="requestauthcheckBox">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Request Authorization</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QCheckBox" name="blockallcheckBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Block all unknown Users</string>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="requestauthcheckBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Request Authorization</string>
+          </property>
+         </widget>
         </widget>
        </widget>
        <widget class="QWidget" name="layoutWidget_14">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
           <width>127</width>
           <height>34</height>
@@ -1611,52 +1652,49 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_19">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>140</y>
-          <width>429</width>
-          <height>97</height>
+          <x>0</x>
+          <y>160</y>
+          <width>425</width>
+          <height>89</height>
          </rect>
         </property>
         <property name="title">
          <string>User - BlockStyle</string>
         </property>
-        <widget class="QWidget" name="layoutWidget_15">
+        <widget class="QSplitter" name="splitter_5">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>391</width>
-           <height>54</height>
+           <x>13</x>
+           <y>31</y>
+           <width>405</width>
+           <height>46</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QCheckBox" name="check_BlockInvisible">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Invisible</string>
-            </property>
-            <property name="autoExclusive">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="check_BlockNormal">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Normal</string>
-            </property>
-            <property name="autoExclusive">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QCheckBox" name="check_BlockInvisible">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Invisible</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="check_BlockNormal">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Normal</string>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
         </widget>
        </widget>
       </widget>
@@ -1664,14 +1702,17 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_11">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>2</x>
           <y>46</y>
           <width>421</width>
-          <height>385</height>
+          <height>389</height>
          </rect>
         </property>
         <property name="title">
          <string>Sound Events</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
         </property>
         <widget class="QGroupBox" name="groupBox_12">
          <property name="geometry">
@@ -1690,7 +1731,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>56</y>
-            <width>389</width>
+            <width>385</width>
             <height>27</height>
            </rect>
           </property>
@@ -1728,6 +1769,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -1750,7 +1797,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>24</y>
-            <width>389</width>
+            <width>385</width>
             <height>27</height>
            </rect>
           </property>
@@ -1788,6 +1835,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -1811,7 +1864,7 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>12</x>
            <y>124</y>
-           <width>401</width>
+           <width>397</width>
            <height>61</height>
           </rect>
          </property>
@@ -1823,7 +1876,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>28</y>
-            <width>389</width>
+            <width>381</width>
             <height>27</height>
            </rect>
           </property>
@@ -1861,6 +1914,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -1896,7 +1955,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>64</y>
-            <width>389</width>
+            <width>381</width>
             <height>27</height>
            </rect>
           </property>
@@ -1934,6 +1993,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -1956,7 +2021,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>28</y>
-            <width>389</width>
+            <width>381</width>
             <height>27</height>
            </rect>
           </property>
@@ -1994,6 +2059,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -2029,7 +2100,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>28</y>
-            <width>389</width>
+            <width>381</width>
             <height>27</height>
            </rect>
           </property>
@@ -2061,6 +2132,12 @@ p, li { white-space: pre-wrap; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>92</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -2085,8 +2162,8 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>587</width>
-          <height>41</height>
+          <width>107</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
@@ -2131,8 +2208,8 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>4</x>
           <y>0</y>
-          <width>361</width>
-          <height>41</height>
+          <width>90</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_8">
@@ -2191,7 +2268,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>2</x>
           <y>40</y>
-          <width>429</width>
+          <width>421</width>
           <height>397</height>
          </rect>
         </property>
@@ -2199,19 +2276,19 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="flat">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <widget class="QGroupBox" name="groupBox_24">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>409</width>
+           <width>401</width>
            <height>109</height>
           </rect>
          </property>
          <property name="title">
-          <string>Default Settings</string>
+          <string>Local Settings</string>
          </property>
          <widget class="QTextEdit" name="txtShowCurrentChatStyle">
           <property name="enabled">
@@ -2221,7 +2298,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>68</y>
-            <width>393</width>
+            <width>385</width>
             <height>31</height>
            </rect>
           </property>
@@ -2240,7 +2317,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>12</x>
             <y>32</y>
-            <width>385</width>
+            <width>377</width>
             <height>28</height>
            </rect>
           </property>
@@ -2419,8 +2496,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>12</x>
            <y>140</y>
-           <width>409</width>
-           <height>141</height>
+           <width>401</width>
+           <height>137</height>
           </rect>
          </property>
          <property name="title">
@@ -2447,7 +2524,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>100</y>
-            <width>393</width>
+            <width>385</width>
             <height>31</height>
            </rect>
           </property>
@@ -2469,7 +2546,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>64</y>
-            <width>389</width>
+            <width>381</width>
             <height>28</height>
            </rect>
           </property>
@@ -2692,9 +2769,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>1</y>
-          <width>401</width>
-          <height>41</height>
+          <y>0</y>
+          <width>128</width>
+          <height>34</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_9">
@@ -2754,39 +2831,13 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
-       <widget class="QPushButton" name="cmd_unblockUserFromBlockList">
-        <property name="geometry">
-         <rect>
-          <x>352</x>
-          <y>400</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Unblock</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
-        <property name="geometry">
-         <rect>
-          <x>262</x>
-          <y>400</y>
-          <width>80</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
        <widget class="QTreeWidget" name="UserBlockTreeWidget">
         <property name="geometry">
          <rect>
           <x>2</x>
           <y>50</y>
-          <width>433</width>
-          <height>341</height>
+          <width>417</width>
+          <height>313</height>
          </rect>
         </property>
         <property name="columnCount">
@@ -2803,6 +2854,29 @@ p, li { white-space: pre-wrap; }
          </property>
         </column>
        </widget>
+       <widget class="QSplitter" name="splitter_6">
+        <property name="geometry">
+         <rect>
+          <x>192</x>
+          <y>372</y>
+          <width>225</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
+         <property name="text">
+          <string>Delete</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="cmd_unblockUserFromBlockList">
+         <property name="text">
+          <string>Unblock</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
       <widget class="QWidget" name="usersearch_Page">
        <widget class="QWidget" name="layoutWidget_6">
@@ -2810,7 +2884,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>3</x>
           <y>0</y>
-          <width>165</width>
+          <width>158</width>
           <height>34</height>
          </rect>
         </property>
@@ -2868,10 +2942,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_20">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>40</y>
-          <width>429</width>
-          <height>391</height>
+          <x>4</x>
+          <y>56</y>
+          <width>417</width>
+          <height>149</height>
          </rect>
         </property>
         <property name="title">
@@ -2985,4 +3059,3 @@ p, li { white-space: pre-wrap; }
   </connection>
  </connections>
 </ui>
-
