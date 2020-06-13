@@ -21,10 +21,20 @@ You need to enable SAM in your router on <a href="http://127.0.0.1:7657/configcl
 Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks as testers &amp; bugs+issues reporters.
 
 ### Current news
-
+* June, 2020:
+   * Fixed crash of close chat window
+   * Fixed crash of url link in chat
+   * Added $HOME/.i2pchat/ directory support for using from /usr/bin
+   * Pre inited optarg
+   * Core changes.
+   * Ci pre-inited. Works for windows now.
+   * Created .deb package for ubuntu/debian x86_64
+   * Created Windows build for 32 bit, which will works on 64 bits.
+   * Design changes.
+***
 * June, 2020: dr\|z3d starts work on renovating the user interface.
+***
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
-
 ### History
 
 Original developer of this messenger went away.
