@@ -4,6 +4,9 @@
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
+## Downloads (pre-built binaries)
+
+* <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a> (Win32/64 and .deb 64 bit builds)
 
 ## Features
 
@@ -21,9 +24,9 @@ Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks
 
 ### Current news
 
-June, 2020: dr\|z3d starts work on renovating the user interface.
-
-5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
+* June, 2020: Voron adds CI process
+* June, 2020: dr\|z3d starts work on renovating the user interface.
+* 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
 
 ### History
 
