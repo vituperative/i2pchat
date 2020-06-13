@@ -2,9 +2,9 @@ CONFIG += qt
 
 greaterThan(QT_MAJOR_VERSION, 4): CONFIG += c++11
 
-QT += network xml svg
+QT += network xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia core
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia core svg
 
 TEMPLATE = app
 

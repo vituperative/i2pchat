@@ -37,7 +37,7 @@ start_qmake(){
 start_compile(){
 	make $@
 }
-
+cd ..
 init_MXEBIN_path
 start_qmake
 start_compile

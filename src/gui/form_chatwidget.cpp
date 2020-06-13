@@ -1,6 +1,5 @@
 #include <QErrorMessage>
-//#include <QTimer> 
-#include<iostream>
+
 #include "form_chatwidget.h"
 #include "User.h"
 
