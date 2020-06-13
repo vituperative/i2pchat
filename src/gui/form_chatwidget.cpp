@@ -1,5 +1,6 @@
 #include <QErrorMessage>
 //#include <QTimer> 
+#include<iostream>
 #include "form_chatwidget.h"
 #include "User.h"
 
@@ -699,13 +700,14 @@ void form_ChatWidget::saveChangedOfflineMessages()
     	QString NewMessage=textEdit->toHtml();
 
 	if(NewMessage.length()<65535){
-	    offlineMessages.replace(currentOfflineMessageIndex-1,NewMessage);
-    
-	    //qDebug()<<textEdit->toHtml()<<endl;
+	    if(offlineMessages.size() > 1 )
+	    	offlineMessages.replace(currentOfflineMessageIndex-1, NewMessage);
+	    	//qDebug()<<textEdit->toHtml()<<endl;
 	    user.setUnsentedMessages(offlineMessages);
+	    
 	}
 	else{
-	    QMessageBox* msgBox= new QMessageBox(NULL);
+	    QMessageBox* msgBox= new QMessageBox(this);
 	    msgBox->setIcon(QMessageBox::Critical);
 	    msgBox->setText("I2P-Messenger");
 	    msgBox->setInformativeText(tr("Sorry, the chatmessage is too long!"));
