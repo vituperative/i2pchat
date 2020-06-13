@@ -2,7 +2,7 @@ CONFIG += qt
 
 greaterThan(QT_MAJOR_VERSION, 4): CONFIG += c++11
 
-QT += network xml
+QT += network xml svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia core
 

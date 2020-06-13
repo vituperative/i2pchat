@@ -47,7 +47,7 @@ The license of this software is GPLv2.
 
  * Install prerequisites:
 ```
-sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev
+sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
  * Run qmake for either release:
 ```
