@@ -544,10 +544,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_8">
         <property name="geometry">
          <rect>
-          <x>4</x>
-          <y>212</y>
-          <width>421</width>
-          <height>221</height>
+          <x>0</x>
+          <y>208</y>
+          <width>425</width>
+          <height>229</height>
          </rect>
         </property>
         <property name="title">
@@ -557,7 +557,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>64</y>
+           <y>68</y>
            <width>405</width>
            <height>115</height>
           </rect>
@@ -581,6 +581,12 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>160</width>
               <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -621,6 +627,12 @@ p, li { white-space: pre-wrap; }
               <height>16777215</height>
              </size>
             </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Length:                       </string>
             </property>
@@ -638,6 +650,12 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>160</width>
               <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -658,13 +676,13 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>188</y>
+           <y>192</y>
            <width>405</width>
            <height>27</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_22">
-          <item row="0" column="0">
+          <item row="0" column="0" alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="label_13">
             <property name="minimumSize">
              <size>
@@ -676,6 +694,12 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>160</width>
               <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -716,7 +740,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>27</height>
           </rect>
@@ -736,6 +760,12 @@ p, li { white-space: pre-wrap; }
               <height>16777215</height>
              </size>
             </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Tunnel Name:                </string>
             </property>
@@ -750,10 +780,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_7">
         <property name="geometry">
          <rect>
-          <x>4</x>
+          <x>0</x>
           <y>52</y>
-          <width>421</width>
-          <height>65</height>
+          <width>425</width>
+          <height>69</height>
          </rect>
         </property>
         <property name="title">
@@ -763,7 +793,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>29</height>
           </rect>
@@ -781,6 +811,12 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>160</width>
               <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -814,10 +850,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_17">
         <property name="geometry">
          <rect>
-          <x>4</x>
-          <y>136</y>
-          <width>421</width>
-          <height>65</height>
+          <x>0</x>
+          <y>128</y>
+          <width>425</width>
+          <height>69</height>
          </rect>
         </property>
         <property name="title">
@@ -827,7 +863,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>29</height>
           </rect>
@@ -845,6 +881,12 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>160</width>
               <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -1177,7 +1219,7 @@ p, li { white-space: pre-wrap; }
           <x>0</x>
           <y>148</y>
           <width>425</width>
-          <height>65</height>
+          <height>80</height>
          </rect>
         </property>
         <property name="title">
@@ -1187,9 +1229,9 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>30</y>
+           <y>36</y>
            <width>401</width>
-           <height>27</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_24">
@@ -1226,10 +1268,16 @@ p, li { white-space: pre-wrap; }
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>26</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>200</width>
-              <height>92</height>
+              <height>26</height>
              </size>
             </property>
             <property name="font">
@@ -1244,6 +1292,9 @@ p, li { white-space: pre-wrap; }
               <height>92</height>
              </size>
             </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
          </layout>
@@ -1255,7 +1306,7 @@ p, li { white-space: pre-wrap; }
           <x>0</x>
           <y>54</y>
           <width>425</width>
-          <height>69</height>
+          <height>80</height>
          </rect>
         </property>
         <property name="title">
@@ -1265,9 +1316,9 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>30</y>
+           <y>36</y>
            <width>401</width>
-           <height>29</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_25">
@@ -1310,10 +1361,16 @@ p, li { white-space: pre-wrap; }
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>26</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>200</width>
-              <height>16777215</height>
+              <height>26</height>
              </size>
             </property>
             <property name="baseSize">
@@ -1321,6 +1378,9 @@ p, li { white-space: pre-wrap; }
               <width>200</width>
               <height>92</height>
              </size>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1520,7 +1580,7 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_11">
         <property name="geometry">
          <rect>
-          <x>2</x>
+          <x>0</x>
           <y>54</y>
           <width>421</width>
           <height>381</height>
@@ -1535,10 +1595,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_12">
          <property name="geometry">
           <rect>
-           <x>8</x>
-           <y>32</y>
+           <x>10</x>
+           <y>24</y>
            <width>401</width>
-           <height>89</height>
+           <height>97</height>
           </rect>
          </property>
          <property name="title">
@@ -1548,7 +1608,7 @@ p, li { white-space: pre-wrap; }
           <property name="geometry">
            <rect>
             <x>8</x>
-            <y>56</y>
+            <y>60</y>
             <width>385</width>
             <height>27</height>
            </rect>
@@ -1614,7 +1674,7 @@ p, li { white-space: pre-wrap; }
           <property name="geometry">
            <rect>
             <x>8</x>
-            <y>24</y>
+            <y>28</y>
             <width>385</width>
             <height>27</height>
            </rect>
@@ -1680,10 +1740,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_13">
          <property name="geometry">
           <rect>
-           <x>12</x>
-           <y>132</y>
+           <x>10</x>
+           <y>128</y>
            <width>397</width>
-           <height>61</height>
+           <height>65</height>
           </rect>
          </property>
          <property name="title">
@@ -1759,10 +1819,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_14">
          <property name="geometry">
           <rect>
-           <x>12</x>
-           <y>208</y>
+           <x>10</x>
+           <y>200</y>
            <width>401</width>
-           <height>97</height>
+           <height>101</height>
           </rect>
          </property>
          <property name="title">
@@ -1905,9 +1965,9 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>312</y>
+           <y>308</y>
            <width>401</width>
-           <height>61</height>
+           <height>65</height>
           </rect>
          </property>
          <property name="title">
