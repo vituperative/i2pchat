@@ -6,7 +6,7 @@
 
 ## Downloads (pre-built binaries)
 
-* <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a> (Win32/64 and .deb 64 bit builds)
+* <a href="https://ci.appveyor.com/api/buildjobs/9k0rap1q13bu9qm1/artifacts/release.zip">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a> (Win32/64)
 
 ## Features
 
@@ -24,7 +24,17 @@ Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks
 
 ### Current news
 
-* June, 2020: Voron adds CI process
+* June, 2020:
+   * Fixed crash of close chat window
+   * Fixed crash of url link in chat
+   * Added $HOME/.i2pchat/ directory support for using from /usr/bin
+   * Pre inited optarg
+   * Core changes.
+   * Ci pre-inited. Works for windows now.
+   * Created .deb package for ubuntu/debian x86_64
+   * Created Windows build for 32 bit, which will works on 64 bits.
+   * Design changes.
+   * Fix offline message crash
 * June, 2020: dr\|z3d starts work on renovating the user interface.
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
 
@@ -40,7 +50,7 @@ The license of this software is GPLv2.
 
  * Install prerequisites:
 ```
-sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev
+sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
  * Run qmake for either release:
 ```

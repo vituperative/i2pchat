@@ -27,9 +27,9 @@
 #include <QSettings>
 #include <QTime>
 #include <QDir>
-#include<QStandardPaths>
+#include <QStandardPaths>
 
-#include<unistd.h>
+#include <unistd.h>
 #include <getopt.h>
 
 #include "form_Main.h"
@@ -125,7 +125,6 @@ int main(int argc, char *argv[])
 		const struct option long_options_optarg[] = {
 			{"help",no_argument,NULL,'h'},
 			{"workdir",required_argument,NULL,'w'},
-			{"bark",optional_argument,NULL,'b'},
 			{NULL,0,NULL,0}
 		};
 		while ((ret=getopt_long(argc,argv,short_options_optarg,
@@ -136,15 +135,6 @@ int main(int argc, char *argv[])
 					help();
 					break;
 				};
-				case 'b': {
-					if (optarg!=NULL)
-						for(int i = atoi(optarg);i--;)
-							printf("BARK-BARK %d time\n", i);
-					else
-						printf("woof!!\n");
-					break;
-				};
-		
 				case 'w': {
 					configPath=QString(optarg);
 					break;
