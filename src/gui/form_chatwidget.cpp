@@ -690,7 +690,7 @@ void form_ChatWidget::displayOfflineMessages(int index)
      Ui_form_chatwidget::cmd_back->setEnabled(false);
   }
 }
-
+// UDP: by voron like offline messages does not works correctly.
 void form_ChatWidget::saveChangedOfflineMessages()
 {
   if(textEdit->toPlainText().length()==0){
