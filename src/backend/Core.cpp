@@ -713,7 +713,7 @@ void CCore::createStreamObjectForUser(CUser& User)
 
     QSettings* settings= new QSettings(mConfigPath+"/application.ini",QSettings::IniFormat);
     settings->beginGroup("General");
-    msec=settings->value("Waittime_between_rechecking_offline_mUsers","30000").toInt();
+    msec=settings->value("Waittime_between_rechecking_offline_mUsers","60000").toInt();
     settings->endGroup();
 
     CI2PStream* t =mConnectionManager->doCreateNewStreamObject(CONNECT);

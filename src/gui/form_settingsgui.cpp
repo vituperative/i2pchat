@@ -385,6 +385,11 @@ void form_settingsgui::saveSettings()
 			settings->setValue("NewChatMessage",txt_SoundFile6->text());
 		settings->endGroup();
 	settings->endGroup();
+	
+	settings->beginGroup("Style"); // application.ini
+		//settings->setValue("CurrentStyle", "Fusion");
+		settings->setValue("CustomStyleSheet", "");
+	settings->endGroup();
 
 	settings->beginGroup("User-Infos");
 		settings->setValue("Nickname",txt_Nickname->text());
@@ -448,6 +453,7 @@ void form_settingsgui::on_styleSheetCombo_activated(const QString &sheetName)
 
 void form_settingsgui::loadStyleSheet(const QString &sheetName)
 {
+	// 
 	// external Stylesheets
 	QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
 	

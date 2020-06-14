@@ -44,7 +44,7 @@ CUser::CUser(	CCore&	Core,
 
 	settings.beginGroup("Chat");
 		this->mTextFont.fromString(settings.value("DefaultFont","SansSerif,10").toString());
-		this->mTextColor.setNamedColor(settings.value("DefaultColor","#000000").toString());
+		this->mTextColor.setNamedColor(settings.value("DefaultColor","#000").toString()); 
 		this->mLogOnlineStateOfUsers=(settings.value("LogOnlineStatesOfUsers",true).toBool());
 	settings.endGroup();
 	settings.sync();
@@ -122,10 +122,17 @@ void CUser::setProtocolVersion(QString Version){
 void CUser::slotIncomingNewChatMessage(QString newMessage){
 
 	newMessage=mChatMessageChanger.changeChatMessage(newMessage);
-
+	auto myMessage = 
+		"<span class='Sender' id='IncomingMessages'>"+
+		mName+
+		"</span> <span class='Time IncomingMessages'>( "+
+		 QTime::currentTime().toString("hh:mm:ss") +
+		" ):</span> <br/>"+newMessage+"<br>";
+	
+	
     //TODO fix this in OOP way
-	this->mAllMessages.push_back(mName+" ( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br>");
-	this->mNewMessages.push_back(mName+" ( "+ QTime::currentTime().toString("hh:mm:ss") +" ): "+newMessage+"<br>");
+	this->mAllMessages.push_back(	myMessage	);
+	this->mNewMessages.push_back(	myMessage	);
 
 	mHaveNewUnreadMessages=true;
 	mHaveNewUnreadChatmessage=true;
@@ -152,8 +159,15 @@ void CUser::slotSendChatMessage(QString Message){
 		  Nickname=mCore.getUserInfos().Nickname;
 		}
 
-		this->mAllMessages.push_back(Nickname+" ("+QTime::currentTime().toString("hh:mm:ss")  +"): "+Message+"<br>");
-		this->mNewMessages.push_back(Nickname+" ("+QTime::currentTime().toString("hh:mm:ss")  +"): "+Message+"<br>");
+		auto msg = 
+		"<span class='Sender' id='SendMessages'>"+
+		Nickname+
+		"</span> <span class='Time SendMessages'>( "+
+		 QTime::currentTime().toString("hh:mm:ss") +
+		" ):</span> <br/>"+Message+"<br>";
+
+		this->mAllMessages.push_back(msg);
+		this->mNewMessages.push_back(msg);
 
 		mHaveNewUnreadMessages=true;
 		emit signNewMessageRecived();
