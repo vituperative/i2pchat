@@ -168,7 +168,7 @@ void form_settingsgui::loadSettings()
 
 	settings->beginGroup("Network");
 		lineEdit_3->setText(settings->value("SamHost","127.0.0.1").toString());
-		lineEdit->setText(settings->value("TunnelName","I2P-Messenger").toString());
+		lineEdit->setText(settings->value("TunnelName","I2PChat").toString());
 		spinBox_10->setValue(settings->value("SamPort","7656").toInt());
 		
 		spinBox_4->setMinimum(1);
@@ -545,8 +545,7 @@ void form_settingsgui::clicked_DestinationGenerate()
 
 	QMessageBox* msgBox= new QMessageBox(NULL);
 	msgBox->setIcon(QMessageBox::Information);
-	msgBox->setText(tr("I2P-Messenger"));
-	msgBox->setInformativeText(tr("Please restart I2P Messenger!"));
+	msgBox->setText(tr("Please restart I2PChat"));
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->setDefaultButton(QMessageBox::Ok);
 	msgBox->setWindowModality(Qt::NonModal);
@@ -772,7 +771,7 @@ void form_settingsgui::clicked_EnableUserSearch(bool t)
 	if(txt_Nickname->text().isEmpty()==true){
 	    QMessageBox* msgBox= new QMessageBox(NULL);
 	    msgBox->setIcon(QMessageBox::Information);
-	    msgBox->setText(tr("I2P-Messenger"));
+	    msgBox->setText(tr("I2PChat"));
 	    msgBox->setInformativeText(tr("Sorry you have to enter a Nickname(at User-details) for UserSearch"));
 	    msgBox->setStandardButtons(QMessageBox::Ok);
 	    msgBox->setDefaultButton(QMessageBox::Ok);

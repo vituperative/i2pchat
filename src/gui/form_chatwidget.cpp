@@ -375,8 +375,7 @@ void form_ChatWidget::sendMessageSignal(){
 	else{
 	    QMessageBox* msgBox= new QMessageBox(NULL);
 	    msgBox->setIcon(QMessageBox::Critical);
-	    msgBox->setText("I2P-Messenger");
-	    msgBox->setInformativeText(tr("Sorry, the chatmessage is too long!"));
+	    msgBox->setText("Cannot send, message is too long!");
 	    msgBox->setStandardButtons(QMessageBox::Ok);
 	    msgBox->setDefaultButton(QMessageBox::Ok);
 	    msgBox->setWindowModality(Qt::NonModal);
@@ -708,7 +707,7 @@ void form_ChatWidget::saveChangedOfflineMessages()
 	else{
 	    QMessageBox* msgBox= new QMessageBox(this);
 	    msgBox->setIcon(QMessageBox::Critical);
-	    msgBox->setText("I2P-Messenger");
+	    msgBox->setText("I2PChat");
 	    msgBox->setInformativeText(tr("Sorry, the chatmessage is too long!"));
 	    msgBox->setStandardButtons(QMessageBox::Ok);
 	    msgBox->setDefaultButton(QMessageBox::Ok);

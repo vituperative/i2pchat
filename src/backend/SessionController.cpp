@@ -48,19 +48,19 @@ CSessionController::CSessionController(
     connect(&mTcpSocket,SIGNAL(readyRead() ),this,
             SLOT(slotReadFromSocket()),Qt::DirectConnection);
 
-    emit signDebugMessages("<-- StreamController (I2P) started -->");
+    emit signDebugMessages("• I2P Stream Controller started");
 }
 
 CSessionController::~ CSessionController()
 {
     doDisconnect();
     mTcpSocket.deleteLater();
-    emit signDebugMessages("<-- StreamController (I2P) stopped -->");
+    emit signDebugMessages("• I2P Stream Controller stopped");
 }
 
 void CSessionController::slotConnected()
 {
-    emit signDebugMessages("<-- StreamController (I2P) Connected -->\n");
+    emit signDebugMessages("• I2P Stream Controller Connected");
     emit signDebugMessages(SAM_HANDSHAKE_V3);
     if(mTcpSocket.state()==QAbstractSocket::ConnectedState){
         mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -73,12 +73,12 @@ void CSessionController::slotDisconnected()
     if(mDoneDisconnect==false)
     {
         mTcpSocket.close();
-        emit signDebugMessages("<-- StreamController (I2P) can't connect I2P(sam) or I2P crashed -->\nSamHost:\t"+mSamHost+"\nSamPort:\t" +mSamPort+"\n");
+        emit signDebugMessages("• I2P Stream Controller can't connect\n SAM or I2P crashed\nSAM Host: "+mSamHost+" • SAM Port: " +mSamPort);
         emit signSessionStreamStatusOK(false);
 
         QMessageBox msgBox(NULL);
         msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setInformativeText("<-- StreamController (I2P) can't connect I2P(sam) or I2P crashed -->\nSamHost:\t"+mSamHost+"\nSamPort:\t" +mSamPort+"\n");
+        msgBox.setInformativeText("I2P Stream Controller can't connect\n SAM or I2P crashed\nSAM Host: "+mSamHost+" • SAM Port: " +mSamPort);
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setWindowModality(Qt::NonModal);
@@ -137,9 +137,9 @@ void CSessionController::slotReadFromSocket()
                 if(sam.result==DUPLICATED_DEST){
                     QMessageBox msgBox(NULL);
                     msgBox.setIcon(QMessageBox::Critical);
-                    msgBox.setText(tr("I2P-Messenger"));
+                    msgBox.setText(tr("I2PChat"));
 //                    msgBox.setInformativeText(tr("Session: DUPLICATED_DEST\n\nOnly one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed)\n "));
-                    msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run Messenger\nwith the same destination twice!\nSAM may need to be restarted."));
+                    msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run I2PChat\nwith the same destination twice!\nSAM may need to be restarted."));
                     msgBox.setStandardButtons(QMessageBox::Ok);
                     msgBox.setDefaultButton(QMessageBox::Ok);
                     msgBox.setWindowModality(Qt::NonModal);
@@ -149,7 +149,7 @@ void CSessionController::slotReadFromSocket()
                               <<"Line:\t"<<__LINE__<<endl
                              <<"Function:\t"<<"CStreamController::slotReadFromSocket()"<<endl
                             <<"Message:\t"<<"Session: DUPLICATED_DEST"<<endl
-                           <<"Only one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed"<<endl;
+                           <<"Only one Messenger per Destination,\nor SAMv3 crashed (Tunnel will persist if I2PChat was closed)"<<endl;
                 }
 
 
@@ -210,10 +210,10 @@ void CSessionController::doDisconnect()
 
     if(mTcpSocket.state()!=0){
         mTcpSocket.disconnectFromHost();
-        emit signDebugMessages("<-- StreamController (I2P) Socket disconnected -->\n");
+        emit signDebugMessages("• I2P Stream Controller: Socket disconnected");
     }
     else if(mTcpSocket.state()==QAbstractSocket::UnconnectedState){
-        emit signDebugMessages("<-- StreamController (I2P) Socket already disconnected -->\n");
+        emit signDebugMessages("• I2P Stream Controller: Socket unavailable");
     }
 
 }

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>I2P-Messenger</string>
+   <string>I2PChat</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
@@ -165,7 +165,7 @@ background: #fff;
         <widget class="QLabel" name="nicknamelabel">
          <property name="minimumSize">
           <size>
-           <width>80</width>
+           <width>84</width>
            <height>32</height>
           </size>
          </property>
@@ -187,7 +187,7 @@ background: #fff;
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="margin">
-          <number>2</number>
+          <number>0</number>
          </property>
         </widget>
        </item>

@@ -116,7 +116,7 @@ void form_MainWindow::onlineComboBoxChanged()
         else{
             QMessageBox* msgBox= new QMessageBox(NULL);
             msgBox->setIcon(QMessageBox::Information);
-            msgBox->setText(tr("I2P-Messenger"));
+            msgBox->setText(tr("I2PChat"));
             msgBox->setInformativeText(tr("File transfer is in progress - cannot quit.\nAbort the transfer first."));
             msgBox->setStandardButtons(QMessageBox::Ok);
             msgBox->setDefaultButton(QMessageBox::Ok);
@@ -148,7 +148,7 @@ void form_MainWindow::initToolBars()
             }else{
                 QMessageBox* msgBox= new QMessageBox(NULL);
                 msgBox->setIcon(QMessageBox::Information);
-                msgBox->setText(tr("I2P-Messenger"));
+                msgBox->setText(tr("I2PChat"));
                 msgBox->setInformativeText(tr("You have to enter a Nickname (at User Details) to use the User Search. User Search deactivated"));
                 msgBox->setStandardButtons(QMessageBox::Ok);
                 msgBox->setDefaultButton(QMessageBox::Ok);
@@ -229,9 +229,8 @@ void form_MainWindow::closeApplication(){
     if(Core->getFileTransferManager()->checkIfAFileTransferOrReciveisActive()==false){
 
         QMessageBox* msgBox= new QMessageBox(this);
-//        msgBox->setIcon(QMessageBox::Question);
-        msgBox->setText(tr("I2P-Messenger"));
-        msgBox->setInformativeText(tr("Are you sure you wish to quit?"));
+        msgBox->setIcon(QMessageBox::Question);
+        msgBox->setText(tr("Are you sure you wish to quit?"));
         msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox->setDefaultButton(QMessageBox::Yes);
         msgBox->setWindowModality(Qt::WindowModal);
@@ -255,7 +254,7 @@ void form_MainWindow::closeApplication(){
 
         QMessageBox* msgBox= new QMessageBox(NULL);
         msgBox->setIcon(QMessageBox::Information);
-        msgBox->setText(tr("I2P-Messenger"));
+        msgBox->setText(tr("I2PChat"));
         msgBox->setInformativeText(tr("File transfer is in progress - cannot quit.\nAbort the transfer first."));
         msgBox->setStandardButtons(QMessageBox::Ok);
         msgBox->setDefaultButton(QMessageBox::Ok);
@@ -545,7 +544,7 @@ void form_MainWindow::deleteUserClicked(){
 
     QMessageBox* msgBox= new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Question);
-    msgBox->setText(tr("I2P-Messenger"));
+    msgBox->setText(tr("I2PChat"));
     msgBox->setInformativeText(tr("Do you really want to delete this contact?"));
     msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox->setDefaultButton(QMessageBox::Yes);
@@ -768,7 +767,7 @@ void form_MainWindow::initTryIcon()
 {
     // Create the tray icon
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setToolTip(tr("I2P-Messenger"));
+    trayIcon->setToolTip(tr("I2PChat"));
     trayIcon->setContextMenu(menu);
     trayIcon->setIcon(QIcon(ICON_CHAT));
 

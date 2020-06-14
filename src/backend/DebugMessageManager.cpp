@@ -22,14 +22,14 @@
 //cDebugMessageManager::cDebugMessageManager(CConnectionManager* ConnectionManager)
 CDebugMessageManager::CDebugMessageManager(QString Group, QString configPath)
 {
-	
+
 	QSettings settings(configPath+"/application.ini",QSettings::IniFormat);
 	settings.beginGroup(Group);
 		this->mMaxMessageCount=settings.value("Debug_Max_Message_count","20").toInt();
 	settings.endGroup();
 	settings.sync();
 
-	slotNewIncomingDebugMessage("<-- DebugMessageManager created -->");
+	slotNewIncomingDebugMessage("• I2PChat Debug Message Manager started");
 }
 
 CDebugMessageManager::~CDebugMessageManager()

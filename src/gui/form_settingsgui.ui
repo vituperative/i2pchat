@@ -93,278 +93,6 @@
     <property name="spacing">
      <number>9</number>
     </property>
-    <item row="0" column="0" alignment="Qt::AlignLeft">
-     <widget class="QListWidget" name="itemListWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>132</width>
-        <height>500</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>SansSerif</family>
-        <pointsize>10</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="acceptDrops">
-       <bool>false</bool>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>24</width>
-        <height>24</height>
-       </size>
-      </property>
-      <property name="flow">
-       <enum>QListView::TopToBottom</enum>
-      </property>
-      <property name="resizeMode">
-       <enum>QListView::Fixed</enum>
-      </property>
-      <property name="layoutMode">
-       <enum>QListView::SinglePass</enum>
-      </property>
-      <property name="spacing">
-       <number>4</number>
-      </property>
-      <property name="gridSize">
-       <size>
-        <width>0</width>
-        <height>34</height>
-       </size>
-      </property>
-      <property name="sortingEnabled">
-       <bool>false</bool>
-      </property>
-      <item>
-       <property name="text">
-        <string>General</string>
-       </property>
-       <property name="font">
-        <font>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Network</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/network.svg</normaloff>:/icons/network.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>User Details</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Style</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/theme.svg</normaloff>:/icons/theme.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Security</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/security.svg</normaloff>:/icons/security.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Sound</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/sound_on.svg</normaloff>
-         <disabledoff>:/icons/sound_off.svg</disabledoff>:/icons/sound_on.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Chat</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Blocklist</string>
-       </property>
-       <property name="icon">
-        <iconset theme="blocked.svg" resource="resourcen.qrc">
-         <normaloff>:/icons/blocked.svg</normaloff>:/icons/blocked.svg</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Usersearch</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resourcen.qrc">
-         <normaloff>:/icons/find.svg</normaloff>:/icons/find.svg</iconset>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="4">
-     <layout class="QGridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="1">
-       <widget class="QFrame" name="buttonFrame">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QGridLayout">
-         <property name="leftMargin">
-          <number>9</number>
-         </property>
-         <property name="topMargin">
-          <number>9</number>
-         </property>
-         <property name="rightMargin">
-          <number>9</number>
-         </property>
-         <property name="bottomMargin">
-          <number>9</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="cancel_Button">
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>75</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Cancel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="ok_Button">
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>75</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>OK</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <spacer>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>181</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
@@ -816,10 +544,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_8">
         <property name="geometry">
          <rect>
-          <x>4</x>
-          <y>212</y>
-          <width>421</width>
-          <height>221</height>
+          <x>0</x>
+          <y>208</y>
+          <width>425</width>
+          <height>229</height>
          </rect>
         </property>
         <property name="title">
@@ -829,7 +557,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>64</y>
+           <y>68</y>
            <width>405</width>
            <height>115</height>
           </rect>
@@ -843,6 +571,24 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_12">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Backup Quantity:</string>
             </property>
@@ -869,6 +615,24 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_10">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Length:                       </string>
             </property>
@@ -876,6 +640,24 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_11">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Quantity:</string>
             </property>
@@ -894,14 +676,32 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>188</y>
+           <y>192</y>
            <width>405</width>
            <height>27</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_22">
-          <item row="0" column="0">
+          <item row="0" column="0" alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="label_13">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Signaturetype </string>
             </property>
@@ -940,7 +740,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>27</height>
           </rect>
@@ -948,6 +748,24 @@ p, li { white-space: pre-wrap; }
          <layout class="QGridLayout" name="gridLayout_23">
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Tunnel Name:                </string>
             </property>
@@ -962,10 +780,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_7">
         <property name="geometry">
          <rect>
-          <x>4</x>
+          <x>0</x>
           <y>52</y>
-          <width>421</width>
-          <height>65</height>
+          <width>425</width>
+          <height>69</height>
          </rect>
         </property>
         <property name="title">
@@ -975,7 +793,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>29</height>
           </rect>
@@ -983,6 +801,24 @@ p, li { white-space: pre-wrap; }
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QLabel" name="label_17">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Sam Host IP:                 </string>
             </property>
@@ -1014,10 +850,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_17">
         <property name="geometry">
          <rect>
-          <x>4</x>
-          <y>136</y>
-          <width>421</width>
-          <height>65</height>
+          <x>0</x>
+          <y>128</y>
+          <width>425</width>
+          <height>69</height>
          </rect>
         </property>
         <property name="title">
@@ -1027,7 +863,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>8</x>
-           <y>28</y>
+           <y>32</y>
            <width>405</width>
            <height>29</height>
           </rect>
@@ -1035,8 +871,26 @@ p, li { white-space: pre-wrap; }
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QLabel" name="label_26">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>160</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
-             <string>Generate a new Destination:        </string>
+             <string>New Destination:        </string>
             </property>
            </widget>
           </item>
@@ -1056,9 +910,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>2</x>
-          <y>60</y>
+          <y>52</y>
           <width>421</width>
-          <height>349</height>
+          <height>365</height>
          </rect>
         </property>
         <property name="title">
@@ -1172,7 +1026,7 @@ p, li { white-space: pre-wrap; }
            <x>12</x>
            <y>230</y>
            <width>397</width>
-           <height>109</height>
+           <height>117</height>
           </rect>
          </property>
          <property name="title">
@@ -1181,8 +1035,8 @@ p, li { white-space: pre-wrap; }
          <widget class="QLabel" name="ownavatar_label">
           <property name="geometry">
            <rect>
-            <x>312</x>
-            <y>24</y>
+            <x>308</x>
+            <y>28</y>
             <width>80</width>
             <height>80</height>
            </rect>
@@ -1365,19 +1219,19 @@ p, li { white-space: pre-wrap; }
           <x>0</x>
           <y>148</y>
           <width>425</width>
-          <height>69</height>
+          <height>80</height>
          </rect>
         </property>
         <property name="title">
          <string>Custom StyleSheet</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>30</y>
+           <y>36</y>
            <width>401</width>
-           <height>27</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_24">
@@ -1414,10 +1268,16 @@ p, li { white-space: pre-wrap; }
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>26</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>200</width>
-              <height>92</height>
+              <height>26</height>
              </size>
             </property>
             <property name="font">
@@ -1432,6 +1292,9 @@ p, li { white-space: pre-wrap; }
               <height>92</height>
              </size>
             </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
          </layout>
@@ -1441,21 +1304,21 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>56</y>
+          <y>54</y>
           <width>425</width>
-          <height>71</height>
+          <height>80</height>
          </rect>
         </property>
         <property name="title">
          <string>Window Style</string>
         </property>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>30</y>
+           <y>36</y>
            <width>401</width>
-           <height>29</height>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_25">
@@ -1498,10 +1361,16 @@ p, li { white-space: pre-wrap; }
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>26</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>200</width>
-              <height>16777215</height>
+              <height>26</height>
              </size>
             </property>
             <property name="baseSize">
@@ -1509,6 +1378,9 @@ p, li { white-space: pre-wrap; }
               <width>200</width>
               <height>92</height>
              </size>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1708,10 +1580,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QGroupBox" name="groupBox_11">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>46</y>
+          <x>0</x>
+          <y>54</y>
           <width>421</width>
-          <height>389</height>
+          <height>381</height>
          </rect>
         </property>
         <property name="title">
@@ -1723,10 +1595,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_12">
          <property name="geometry">
           <rect>
-           <x>8</x>
-           <y>32</y>
+           <x>10</x>
+           <y>24</y>
            <width>401</width>
-           <height>89</height>
+           <height>97</height>
           </rect>
          </property>
          <property name="title">
@@ -1736,7 +1608,7 @@ p, li { white-space: pre-wrap; }
           <property name="geometry">
            <rect>
             <x>8</x>
-            <y>56</y>
+            <y>60</y>
             <width>385</width>
             <height>27</height>
            </rect>
@@ -1802,7 +1674,7 @@ p, li { white-space: pre-wrap; }
           <property name="geometry">
            <rect>
             <x>8</x>
-            <y>24</y>
+            <y>28</y>
             <width>385</width>
             <height>27</height>
            </rect>
@@ -1868,10 +1740,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_13">
          <property name="geometry">
           <rect>
-           <x>12</x>
-           <y>124</y>
+           <x>10</x>
+           <y>128</y>
            <width>397</width>
-           <height>61</height>
+           <height>65</height>
           </rect>
          </property>
          <property name="title">
@@ -1947,10 +1819,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_14">
          <property name="geometry">
           <rect>
-           <x>12</x>
-           <y>192</y>
+           <x>10</x>
+           <y>200</y>
            <width>401</width>
-           <height>97</height>
+           <height>101</height>
           </rect>
          </property>
          <property name="title">
@@ -2093,9 +1965,9 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>296</y>
+           <y>308</y>
            <width>401</width>
-           <height>61</height>
+           <height>65</height>
           </rect>
          </property>
          <property name="title">
@@ -2269,7 +2141,7 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
-       <widget class="QGroupBox" name="groupBox_18">
+       <widget class="QFrame" name="frame_18">
         <property name="geometry">
          <rect>
           <x>2</x>
@@ -2278,18 +2150,12 @@ p, li { white-space: pre-wrap; }
           <height>397</height>
          </rect>
         </property>
-        <property name="title">
-         <string/>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
         <widget class="QGroupBox" name="groupBox_24">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>401</width>
+           <x>0</x>
+           <y>12</y>
+           <width>413</width>
            <height>109</height>
           </rect>
          </property>
@@ -2304,7 +2170,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>68</y>
-            <width>385</width>
+            <width>393</width>
             <height>31</height>
            </rect>
           </property>
@@ -2321,9 +2187,9 @@ p, li { white-space: pre-wrap; }
          <widget class="QSplitter" name="splitter">
           <property name="geometry">
            <rect>
-            <x>12</x>
+            <x>4</x>
             <y>32</y>
-            <width>377</width>
+            <width>405</width>
             <height>28</height>
            </rect>
           </property>
@@ -2500,10 +2366,10 @@ p, li { white-space: pre-wrap; }
         <widget class="QGroupBox" name="groupBox_25">
          <property name="geometry">
           <rect>
-           <x>12</x>
+           <x>0</x>
            <y>140</y>
-           <width>401</width>
-           <height>137</height>
+           <width>413</width>
+           <height>141</height>
           </rect>
          </property>
          <property name="title">
@@ -2530,7 +2396,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>8</x>
             <y>100</y>
-            <width>385</width>
+            <width>393</width>
             <height>31</height>
            </rect>
           </property>
@@ -2550,9 +2416,9 @@ p, li { white-space: pre-wrap; }
          <widget class="QSplitter" name="splitter_2">
           <property name="geometry">
            <rect>
-            <x>8</x>
+            <x>4</x>
             <y>64</y>
-            <width>381</width>
+            <width>409</width>
             <height>28</height>
            </rect>
           </property>
@@ -2730,7 +2596,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>12</x>
-           <y>312</y>
+           <y>300</y>
            <width>253</width>
            <height>23</height>
           </rect>
@@ -2746,7 +2612,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>13</x>
-           <y>343</y>
+           <y>332</y>
            <width>199</width>
            <height>26</height>
           </rect>
@@ -2762,7 +2628,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>218</x>
-           <y>343</y>
+           <y>332</y>
            <width>198</width>
            <height>26</height>
           </rect>
@@ -3020,6 +2886,278 @@ p, li { white-space: pre-wrap; }
        </widget>
       </widget>
      </widget>
+    </item>
+    <item row="0" column="0" alignment="Qt::AlignLeft">
+     <widget class="QListWidget" name="itemListWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>132</width>
+        <height>500</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>SansSerif</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <property name="flow">
+       <enum>QListView::TopToBottom</enum>
+      </property>
+      <property name="resizeMode">
+       <enum>QListView::Fixed</enum>
+      </property>
+      <property name="layoutMode">
+       <enum>QListView::SinglePass</enum>
+      </property>
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>0</width>
+        <height>34</height>
+       </size>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>General</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Network</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/network.svg</normaloff>:/icons/network.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>User Details</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Style</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/theme.svg</normaloff>:/icons/theme.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Security</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/security.svg</normaloff>:/icons/security.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sound</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/sound_on.svg</normaloff>
+         <disabledoff>:/icons/sound_off.svg</disabledoff>:/icons/sound_on.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Chat</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Blocklist</string>
+       </property>
+       <property name="icon">
+        <iconset theme="blocked.svg" resource="resourcen.qrc">
+         <normaloff>:/icons/blocked.svg</normaloff>:/icons/blocked.svg</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Usersearch</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resourcen.qrc">
+         <normaloff>:/icons/find.svg</normaloff>:/icons/find.svg</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <layout class="QGridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="1">
+       <widget class="QFrame" name="buttonFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QGridLayout">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>9</number>
+         </property>
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="cancel_Button">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="ok_Button">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>OK</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>181</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

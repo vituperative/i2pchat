@@ -43,14 +43,14 @@ void myMessageHandler(QtMsgType type,const QMessageLogContext &context,const QSt
 
 
 void help(void){
-	
+
 	printf(
 		"%s \r\n"
 		"COMPILED:" __DATE__ "-" __TIME__ "\r\n"
 		"-h help\r\n"
 		"-w --workdir <own path to work dir>\r\n"
 		"\r\n"
-	,"I2P-Messenger");
+	,"I2PChat");
 	exit(0);
 }
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     if(loc.size()<=0){
         QMessageBox::critical(
             NULL,
-            "I2P-Messenger",
+            "I2PChat",
             "Error: no USER folder found");
         app.exec();
         app.closeAllWindows();
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     if(!configPathParentDir.mkpath(configPathDir)) {
         QMessageBox::critical(
             NULL,
-            "I2P-Messenger",
+            "I2PChat",
             "Error: mkpath for config dir returned false");
         app.exec();
         app.closeAllWindows();
@@ -115,12 +115,12 @@ int main(int argc, char *argv[])
 
 
 	{ // getopt_long + getopt (short)
-		
+
 
 		int ret;
 		int option_index;
 		// :: = optional_argument ; = no_argument ; : = required_argument
-		const char* short_options_optarg = "hb::w:"; 
+		const char* short_options_optarg = "hb::w:";
 
 		const struct option long_options_optarg[] = {
 			{"help",no_argument,NULL,'h'},
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 		QStringList tmp=QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
 		if(tmp.size()>=1){
 			configPath=tmp.at(0);
-			configPath+="/.I2P-Messenger";
+			configPath+="/.I2PChat";
 		}
 	}
 #endif
@@ -189,9 +189,9 @@ void enableDebugLogging(QString configPath)
 void myMessageHandler(QtMsgType type,const QMessageLogContext &context,const QString &msg)
 {
 	QString txt;
-	
+
 	txt.append(QTime::currentTime().toString("hh:mm:ss"));
-	
+
 	switch (type) {
 	case QtDebugMsg:{
 		txt.append(QString(" Debug: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
