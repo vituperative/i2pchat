@@ -275,7 +275,7 @@ void CI2PStream::operator <<(const QByteArray Data)
 	QString smID=QString::number(mID,10);
 
 	if(mTcpSocket.state()==QTcpSocket::ConnectedState&& mHandShakeWasSuccesfullDone){
-		emit signDebugMessages("• Outgoing to Stream [ID:  "+smID+"] ‣ "+Data);
+		emit signDebugMessages("• Outgoing to Stream [ID: "+smID+"] ‣ "+Data);
 
 		try{
 		   if(mTcpSocket.isWritable()){
