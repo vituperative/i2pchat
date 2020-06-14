@@ -42,7 +42,7 @@ CI2PStream::CI2PStream(QString mSamHost,QString mSamPort,qint32 mID,QString mStr
 	connect(&mTcpSocket,SIGNAL(disconnected()),this,SLOT(slotDisconnected()) );
 	connect(&mTcpSocket,SIGNAL(readyRead() ),this, SLOT(slotReadFromSocket()));
 
-	connect(&mUnKnownConnectionTimeout,SIGNAL(timeout()),this,SLOT(slotInitConnectionTimeout()));	
+	connect(&mUnKnownConnectionTimeout,SIGNAL(timeout()),this,SLOT(slotInitConnectionTimeout()));
 }
 
 CI2PStream::~ CI2PStream()
@@ -50,7 +50,7 @@ CI2PStream::~ CI2PStream()
 	if(mTimer!=NULL){
 		delete mTimer;
 	}
-	
+
 	disconnect(&mTcpSocket,SIGNAL(disconnected()),this,SLOT(slotDisconnected()) );
 	doDisconnect();
 
@@ -59,7 +59,7 @@ CI2PStream::~ CI2PStream()
 	if(mAnalyser!=NULL){
 		delete mAnalyser;
 	}
-	
+
 	if(mIncomingPackets!=NULL){
 	    delete mIncomingPackets;
 	}
@@ -74,7 +74,7 @@ bool CI2PStream::doConnect(QString mDestination)
 	this->mDestination=mDestination;
 	this->mModeStreamConnect=true;
 	this->mModeStreamAccept=false;
-	
+
 	if(mTcpSocket.state()!=QAbstractSocket::UnconnectedState) return false;
 
 	mTcpSocket.connectToHost(mSamHost,mSamPort.toInt( ));
@@ -86,20 +86,20 @@ bool CI2PStream::doConnect(QString mDestination)
 
 bool CI2PStream::doAccept()
 {
-	if(mMode!=ACCEPT){ 
+	if(mMode!=ACCEPT){
 		return false;
 	}
-	
+
 	this->mDestination="";
 	this->mModeStreamConnect=false;
 	this->mModeStreamAccept=true;
-	
+
 	if(mTcpSocket.state()!=QAbstractSocket::UnconnectedState) return false;
 
 	mTcpSocket.connectToHost(mSamHost,mSamPort.toInt( ));
 	if(!mTcpSocket.waitForConnected(1000))
 		slotDisconnected();
-	
+
 	return true;
 }
 
@@ -107,9 +107,9 @@ void CI2PStream::slotConnected()
 {
 	QString smID=QString::number(mID,10);
 
-	emit signDebugMessages("<-- I2PStream connected to SAMV3 (ID="+smID+")-->\n");	
+	emit signDebugMessages("• I2P Stream Controller connected to SAM v3 [ID: "+smID+"]");
 	mDoneDisconnect=false;
-	emit signDebugMessages("<OUTGOING TO Stream ID: "+smID+">\n"+SAM_HANDSHAKE_V3);
+	emit signDebugMessages("• Outgoing to Stream [ID: "+smID+"] • Handshake: "+SAM_HANDSHAKE_V3);
 	try{
 	    if(mTcpSocket.isWritable()){
 		mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -131,13 +131,13 @@ void CI2PStream::slotDisconnected()
 
 	mUnKnownConnectionTimeout.stop();
 
-	emit signDebugMessages("<-- I2PStream disconnected from SAMV3 (ID="+smID+")-->\n");
+	emit signDebugMessages("• I2P Stream Controller disconnected from SAM [ID: "+smID+"]");
 	emit signStreamStatusRecived(SAM_Message_Types::CLOSED,mID,"");
-	
+
 }
 
 void CI2PStream::slotReadFromSocket()
-{	
+{
 	using namespace SAM_Message_Types;
 	QString smID=QString::number(mID,10);
 	QByteArray newData;
@@ -148,40 +148,40 @@ void CI2PStream::slotReadFromSocket()
 	else{
 		return;
 	}
-	emit signDebugMessages("<INCOMING FROM Stream ID: "+smID+">\n"+newData+"\n");
-	
+	emit signDebugMessages("• Incoming from Stream [ID: "+smID+"] -> "+newData);
+
 	if(mHandShakeWasSuccesfullDone==false){
-		
+
 		mIncomingPackets->append(newData);
 		if(mIncomingPackets->indexOf("\n",0)==-1){
 			//Not the complead Packet recived ??? maybe possible ???
 			return;
 		}
-		
+
 		QByteArray CurrentPacket;
 		CurrentPacket=mIncomingPackets->left(mIncomingPackets->indexOf("\n",0)+1);
-		
+
 
 		mAnalyser= new CI2PSamMessageAnalyser("CI2PStream");
-				
-		QString t(CurrentPacket.data());				
+
+		QString t(CurrentPacket.data());
 		SAM_MESSAGE sam=mAnalyser->Analyse(t);
 		if(sam.type==HELLO_REPLAY && sam.result==OK){
 			mHandShakeWasSuccesfullDone=true;
 		}
-		
+
 		delete mAnalyser;
 		mAnalyser=NULL;
 		QByteArray Data;
-		
+
 
 		if(mMode==ACCEPT){
 			Data.append("STREAM ACCEPT ID="+mStreamBridgeName);
 		}
 		else if(mMode==CONNECT){
-			Data.append("STREAM CONNECT ID="+mStreamBridgeName+" DESTINATION="+mDestination);
+			Data.append("STREAM CONNECT ID="+mStreamBridgeName+" • DESTINATION="+mDestination);
 		}
-		
+
 		if(mSilence==true){
 			Data.append(" Silence=true\n");
 		}
@@ -193,7 +193,7 @@ void CI2PStream::slotReadFromSocket()
 		*(this)<<Data;
 	}
 	else if(mStatusRecived==false)
-	{	
+	{
 		mIncomingPackets->append(newData);
 		if(mIncomingPackets->indexOf("\n",0)==-1){
 			//Not the complead Packet recived ??? maybe possible ???
@@ -202,16 +202,16 @@ void CI2PStream::slotReadFromSocket()
 
 		QByteArray CurrentPacket;
 		CurrentPacket=mIncomingPackets->left(mIncomingPackets->indexOf("\n",0)+1);
-	
-		
+
+
 		//Get Stream Status
 		mAnalyser= new CI2PSamMessageAnalyser("CI2PStream");
-		
+
 		QString t(CurrentPacket.data());
-		
+
 		SAM_MESSAGE sam=mAnalyser->Analyse(t);
 		emit signStreamStatusRecived(sam.result,mID,sam.Message);
-		
+
 		delete mAnalyser;
 		mAnalyser=NULL;
 		mStatusRecived=true;
@@ -219,12 +219,12 @@ void CI2PStream::slotReadFromSocket()
 		mIncomingPackets->remove(0,mIncomingPackets->indexOf("\n",0)+1);
 		if(mModeStreamConnect==true){
 			if(mIncomingPackets->length()!=0){
-				emit signDataRecived(mID,*(mIncomingPackets)); 
+				emit signDataRecived(mID,*(mIncomingPackets));
 			}
 		}
-		
 
-		
+
+
 	}
 	else if (mStatusRecived==true && mModeStreamAccept==true && mDestinationRecived==false){
 		//get Destaintion
@@ -242,22 +242,22 @@ void CI2PStream::slotReadFromSocket()
 		mDestinationRecived=true;
 
 		mIncomingPackets->remove(0,mIncomingPackets->indexOf("\n",0)+1);
-		
-		
+
+
 		emit signModeAcceptIncomingStream(mID);
-	
+
 		if(mIncomingPackets->length()!=0){
-			emit signDataRecived(mID,*(mIncomingPackets)); 
+			emit signDataRecived(mID,*(mIncomingPackets));
 
 		}
 
 		//start mUnKnownConnectionTimeout
 		mUnKnownConnectionTimeout.start();
-		emit signDebugMessages("<-- I2PStream start UnKnownConnectionTimeout (ID="+smID+")-->\n");
+		emit signDebugMessages("• I2P Stream Controller: UnknownConnectionTimeout [ID: "+smID+"]");
 		//--------------------------------
 	}
 	else{
-		emit signDataRecived(mID,newData); 
+		emit signDataRecived(mID,newData);
 	}
 }
 
@@ -275,27 +275,27 @@ void CI2PStream::operator <<(const QByteArray Data)
 	QString smID=QString::number(mID,10);
 
 	if(mTcpSocket.state()==QTcpSocket::ConnectedState&& mHandShakeWasSuccesfullDone){
-		emit signDebugMessages("<OUTGOING TO Stream ID: "+smID+">\n"+Data+"\n");
+		emit signDebugMessages("• Outgoing to Stream [ID:  "+smID+"] -> "+Data);
 
 		try{
 		   if(mTcpSocket.isWritable()){
 			mTcpSocket.write(Data);
 			//mTcpSocket.flush();
-		   } 
+		   }
 		}catch(...){}
 	}
 	else{
-		QByteArray Message="<- I2PStream not connected, can't sent Data(Stream ID: ";
-		Message+=smID+" ) ->\n";
+		QByteArray Message="• I2P Stream Controller not connected - can't sent Data stream [ID: ";
+		Message+=smID+"]";
 		emit signDebugMessages(Message);
 	}
-	
+
 }
 void CI2PStream::operator <<(const QString Data)
 {
 	QByteArray t="";
 	t.insert(0,Data);
-	
+
 	*(this)<<t;
 }
 
@@ -306,7 +306,7 @@ void CI2PStream::setConnectionType ( const Type newTyp )
 	mConnectionType = newTyp;
 	if(newTyp==KNOWN){
 		mUnKnownConnectionTimeout.stop();
-		emit signDebugMessages("<-- I2PStream stop UnKnownConnectionTimeout,- ConnectionType change to KNOWN (ID="+smID+")-->\n");
+		emit signDebugMessages("• I2P Stream Controller: UnknownConnectionTimeout: ConnectionType changed to KNOWN [ID: "+smID+"]");
 	}
 }
 
@@ -316,7 +316,7 @@ void CI2PStream::startUnlimintedReconnect(qint32 msec)
 		mTimer= new QTimer();
 		connect(mTimer,SIGNAL(timeout()),this,SLOT(slotCheckForReconnect()));
 	}
-	mTimer->start(msec);	
+	mTimer->start(msec);
 }
 
 void CI2PStream::stopUnlimintedReconnect()
@@ -333,7 +333,7 @@ void CI2PStream::slotCheckForReconnect()
 		doConnect(mDestination);
 	}
 
-	
+
 	mTimer->start();
 }
 
@@ -341,8 +341,8 @@ void CI2PStream::slotInitConnectionTimeout()
 {
 	QString smID=QString::number(mID,10);
 	emit signStreamStatusRecived(SAM_Message_Types::CLOSED,mID,QString(""));
-	emit signDebugMessages("<-- I2PStream initConnection Timeout, close connection Stream ID("+smID+")-->\n");
-	doDisconnect();	
+	emit signDebugMessages("• I2P Stream Controller init connection timeout: Closed connection Stream [ID: "+smID+"]");
+	doDisconnect();
 }
 
 

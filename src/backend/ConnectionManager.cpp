@@ -26,12 +26,12 @@ CConnectionManager::CConnectionManager(QString SamHost,QString SamPort,QString C
 	mComponentStateStopped=false;
 	StreamController=NULL;
 	mSessionStreamStatusOK=false;
-	emit signDebugMessages("<-- ConnectionManager started -->");
-	
+	emit signDebugMessages("• I2PChat Connection Manager started");
+
 }
 
 bool CConnectionManager::doCreateSession(
-SESSION_ENUMS::SESSION_STYLEV3 SessionStyle, QString SamPrivKey, 
+SESSION_ENUMS::SESSION_STYLEV3 SessionStyle, QString SamPrivKey,
 QString SessionOptions)
 {
 	using namespace SESSION_ENUMS;
@@ -46,10 +46,10 @@ QString SessionOptions)
 								mConfigPath,
 								SessionOptions
  							    );
-		
+
 		connect(StreamController,SIGNAL(signDebugMessages(const QString)),this,
 			SIGNAL(signDebugMessages(const QString)));
-			
+
 		connect(StreamController,SIGNAL(signSessionStreamStatusOK(bool)),this,
 			SLOT(slotSessionStreamStatusOK(bool)));
 
@@ -62,12 +62,12 @@ QString SessionOptions)
 		connect(StreamController,SIGNAL(signNewSamPrivKeyGenerated(const QString)),this,
 			SIGNAL(signNewSamPrivKeyGenerated(const QString)));
 
-		StreamController->doConnect();		
+		StreamController->doConnect();
 	}
 	else{
 		return false;
 	}
-	
+
 	return false;
 }
 
@@ -76,21 +76,21 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status)
 	QString Message;
 	mSessionStreamStatusOK=Status;
 	//start StreamListener
-	CI2PStream* t= new CI2PStream(mSamHost,mSamPort,nextFreeNegID(),StreamController->getBridgeName(),ACCEPT,false);	
+	CI2PStream* t= new CI2PStream(mSamHost,mSamPort,nextFreeNegID(),StreamController->getBridgeName(),ACCEPT,false);
 		t->setUsedFor("Incoming StreamListener");
 		connect(t,SIGNAL(signModeAcceptIncomingStream(qint32)),this,
 			SLOT(slotModeAcceptIncomingStream(qint32)));
 
 		connect(t,SIGNAL(signDebugMessages(const QString)),this,
 			SIGNAL(signDebugMessages(const QString)));
-		
+
 		connect(t,SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)),this,
 			SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)));
-		
+
 		t->doAccept();
-		Message="<-- Create new StreamObjectListener ID(";
+		Message="• Created new StreamObjectListener [ID: ";
 		Message+=QString::number(t->getID(),10);
-		Message+=") -->\n";
+		Message+="]";
 
 		emit signDebugMessages(Message);
 	StreamIncomingListener.insert(t->getID(),t);
@@ -101,7 +101,7 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status)
 qint32 CConnectionManager::nextFreePosID() const
 {
 	qint32 nextNumber=1;
-	
+
 	for(int i=0;i<allStreams.size();i++){
 		if(allStreams.contains(nextNumber)==true){
 			nextNumber++;
@@ -111,12 +111,12 @@ qint32 CConnectionManager::nextFreePosID() const
 		}
 	}
 	return nextNumber;
-}	
+}
 
 qint32 CConnectionManager::nextFreeNegID() const
 {
 	qint32 nextNumber=-1;
-	
+
 	for(int i=0;i<allStreams.size();i++){
 		if(allStreams.contains(nextNumber)==true){
 			nextNumber--;
@@ -129,24 +129,24 @@ qint32 CConnectionManager::nextFreeNegID() const
 }
 
 bool CConnectionManager::doDestroyStreamObjectByID(qint32 ID)
-{	
+{
 	QString Message;
 	if(allStreams.contains(ID)==false)return false;
 	CI2PStream* t=allStreams.take(ID);
-	
-	
+
+
 	disconnect(t,SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)),this,
-		SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)));	
+		SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)));
 
 	disconnect(t,SIGNAL(signDebugMessages(const QString)),this,
 		SIGNAL(signDebugMessages(const QString)));
-	
-	Message="<-- Delete StreamObject ID(";
+
+	Message="• Deleted StreamObject [ID: ";
 	Message+=QString::number(t->getID(),10);
-	Message+=") -->\n";
-	
+	Message+="]";
+
 	t->deleteLater();
-	
+
 	emit signDebugMessages(Message);
 	return true;
 }
@@ -163,20 +163,20 @@ CI2PStream *CConnectionManager::doCreateNewStreamObject(StreamMode Mode,bool Sil
 			IDforNewObject=nextFreePosID();
 		else if(Mode==ACCEPT)
 			IDforNewObject=nextFreeNegID();
-		
-		
+
+
 		CI2PStream* t= new CI2PStream(mSamHost,mSamPort,IDforNewObject,StreamControllerBridgeName,Mode,Silence);
 		connect(t,SIGNAL(signDebugMessages(const QString)),this,
 			SIGNAL(signDebugMessages(const QString)));
-		
+
 		if(dontConnectSendStreamStatus==false){
 			connect(t,SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)),this,
 				SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)));
 		}
-		 
-		Message="<-- Create new StreamObject ID(";
+
+		Message="• Created new StreamObject [ID: ";
 		Message+=QString::number(t->getID(),10);
-		Message+=") -->\n";
+		Message+="]";
 
 		emit signDebugMessages(Message);
 		allStreams.insert(IDforNewObject,t);
@@ -196,7 +196,7 @@ void CConnectionManager::doNamingLookUP(QString Name)
 	}
 }
 
-CI2PStream * CConnectionManager::getStreamObjectByID(qint32 ID) const 
+CI2PStream * CConnectionManager::getStreamObjectByID(qint32 ID) const
 {
 	if(allStreams.contains(ID)==false){
 		return NULL;
@@ -250,11 +250,11 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID)
 
 			connect(t2,SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)),this,
 				SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)));
-			
-			Message="<-- Create new StreamObjectListener ID(";
+
+			Message="• Created new StreamObjectListener [ID: ";
 			Message+=QString::number(t2->getID(),10);
-			Message+=") -->\n";
-	
+			Message+="]";
+
 			emit signDebugMessages(Message);
 			t2->doAccept();
 			StreamIncomingListener.insert(t2->getID(),t2);
@@ -309,7 +309,7 @@ void CConnectionManager::doReStart()
 	mComponentStateStopped=false;
 	StreamController=NULL;
 	mSessionStreamStatusOK=false;
-	emit signDebugMessages("<-- ConnectionManager restarted -->");
+	emit signDebugMessages("• I2PChat: Connection Manager restarted");
 }
 
 
@@ -334,5 +334,5 @@ void CConnectionManager::stopp()
 	//close all StreamContoller
 	delete StreamController;
 	StreamController=NULL;
-	emit signDebugMessages("<-- ConnectionManager stopped -->");
+	emit signDebugMessages("• I2PChat: Connection Manager stopped");
 }

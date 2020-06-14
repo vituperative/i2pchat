@@ -545,7 +545,7 @@ void form_settingsgui::clicked_DestinationGenerate()
 
 	QMessageBox* msgBox= new QMessageBox(NULL);
 	msgBox->setIcon(QMessageBox::Information);
-	msgBox->setText(tr("I2P-Messenger"));
+	msgBox->setText(tr("I2PChat"));
 	msgBox->setInformativeText(tr("Please restart I2P Messenger!"));
 	msgBox->setStandardButtons(QMessageBox::Ok);
 	msgBox->setDefaultButton(QMessageBox::Ok);
@@ -772,7 +772,7 @@ void form_settingsgui::clicked_EnableUserSearch(bool t)
 	if(txt_Nickname->text().isEmpty()==true){
 	    QMessageBox* msgBox= new QMessageBox(NULL);
 	    msgBox->setIcon(QMessageBox::Information);
-	    msgBox->setText(tr("I2P-Messenger"));
+	    msgBox->setText(tr("I2PChat"));
 	    msgBox->setInformativeText(tr("Sorry you have to enter a Nickname(at User-details) for UserSearch"));
 	    msgBox->setStandardButtons(QMessageBox::Ok);
 	    msgBox->setDefaultButton(QMessageBox::Ok);
