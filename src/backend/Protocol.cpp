@@ -290,6 +290,12 @@ using namespace Protocol_Info;
 			else if(ProtocolInfoTag=="0019"){//AVATARIMAGE_CHANGED
 				send(GET_AVATARIMAGE,ID);
 			}
+			/*else if(ProtocolInfoTag=="0020"){//VIDEOCALL
+					//
+			}
+			else if(ProtocolInfoTag=="0021"){//AUDIOCALL
+					//
+			}*/
 		//end Messages
 			else{
 				qWarning()<<"File\t"<<__FILE__<<endl

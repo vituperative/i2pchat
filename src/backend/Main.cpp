@@ -48,7 +48,8 @@ void help(void){
 		"%s \r\n"
 		"COMPILED:" __DATE__ "-" __TIME__ "\r\n"
 		"-h help\r\n"
-		"-w --workdir <own path to work dir>\r\n"
+		"-w --workdir=<own path to work dir>\r\n"
+		"-s --stylesheet=<path to qss file> optional stylesheet\r\n" 
 		"\r\n"
 	,"I2PChat");
 	exit(0);
@@ -56,6 +57,7 @@ void help(void){
 
 int main(int argc, char *argv[])
 {
+	
 	//for configPath
 	#ifndef _WIN32
 		constexpr auto NameOfConfigDirectoryOnLinux="/.i2pchat/";
@@ -63,6 +65,10 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 	QString configPath;
+	QFile styleSheetFile(":qss/Default.qss");
+	
+	
+
 #ifdef ANDROID
     QStringList loc = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     if(loc.size()<=0){
@@ -120,11 +126,12 @@ int main(int argc, char *argv[])
 		int ret;
 		int option_index;
 		// :: = optional_argument ; = no_argument ; : = required_argument
-		const char* short_options_optarg = "hb::w:";
+		const char* short_options_optarg = "hb::w:s:";
 
 		const struct option long_options_optarg[] = {
 			{"help",no_argument,NULL,'h'},
 			{"workdir",required_argument,NULL,'w'},
+			{"stylesheet",required_argument,NULL,'s'},
 			{NULL,0,NULL,0}
 		};
 		while ((ret=getopt_long(argc,argv,short_options_optarg,
@@ -137,6 +144,10 @@ int main(int argc, char *argv[])
 				};
 				case 'w': {
 					configPath=QString(optarg);
+					break;
+				};
+				case 's':{
+					styleSheetFile.setFileName(optarg);
 					break;
 				};
 				case '?': default: {
@@ -163,10 +174,27 @@ int main(int argc, char *argv[])
 		}
 	}
 #endif
+
+
 	enableDebugLogging(configPath);
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    form_MainWindow* mainForm= new form_MainWindow(configPath);
+	
+        form_MainWindow* mainForm= new form_MainWindow(configPath);
+
+	{
+		
+		QSettings settings(configPath+"/application.ini",QSettings::IniFormat);
+		// OKEY, OLD AUTHOR SET CURRENT_STYLE IN GENERAL SECTION. COOL.
+		auto CurrentStyle = settings.value("General/current_Style", "Fusion").toString();
+		auto CustomStyleSheet = settings.value("Style/CustomStyleSheet", "").toString();
+		qDebug() << "Curent style: " << CurrentStyle;
+		mainForm->setStyle( QStyleFactory::create(CurrentStyle) );
+		if ( CustomStyleSheet.size() > 1 )	styleSheetFile.setFileName(CustomStyleSheet);
+	}
+
 	mainForm->show();
+	styleSheetFile.open( QFile::ReadOnly );
+	app.setStyleSheet( styleSheetFile.readAll() );
         app.exec();
 	app.closeAllWindows();
 

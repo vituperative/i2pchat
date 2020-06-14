@@ -153,7 +153,7 @@ form_ChatWidget::form_ChatWidget(CUser& user,CCore& Core,QDialog* parent /* = 0 
 	txtItalic->setChecked(mCurrentFont.italic());
 	txtUnder->setChecked(mCurrentFont.underline());
 
-	resize(650,400);
+	resize(650,400); // maybe too from QSS?
 	centerDialog();
 	
 	changeWindowsTitle();
@@ -171,11 +171,17 @@ form_ChatWidget::form_ChatWidget(CUser& user,CCore& Core,QDialog* parent /* = 0 
 	//timer->start();
 }
 
-void form_ChatWidget::newMessageRecived(){
+void form_ChatWidget::newMessageRecived(){ //TODO: qss add.
 	QTextEdit *chat=this->chat;
 	QScrollBar *sb=chat->verticalScrollBar();
+	//chat->setStyleSheet("#IncomingMessages{color:rgb(100,200,254);}"); // does not works;
 
+	/*QPalette pal = chat->palette(); 
+	pal.setBrush(QPalette::Window,QBrush(textColor));
+	chat->setPalette(pal);*/ // works, but not for text which will be changes though QSS.
+	//text+="<style>span{ background-color: yellow; }</style>"; // Too is NOT WORKS, because it not supportd.
 	
+
 	int oldVerticalScrollBarValue=sb->value();
 	int VerticalScrollBarMax=sb->maximum();
 	bool restoreOldVerticalScrollBarValue=false;
@@ -199,6 +205,7 @@ void form_ChatWidget::newMessageRecived(){
 	else{
 		sb->setValue(sb->maximum());
 	}
+
 	this->raise();
 }
 
@@ -223,7 +230,7 @@ void form_ChatWidget::addAllMessages(){
 
 void form_ChatWidget::addMessage(QString text){
 	QTextBrowser *chat=this->chat;
-    QString& newMessage=text; // UDP(By Voron): DONT NEED, will be deleted!!!
+    //	QString& newMessage=text; // UDP(By Voron): DONT NEED, will be deleted!!!
 	
 
 /* UPD: (by Voron)  temporarly disabled by me, because there is infinite cycle!! is willbe fixed.
@@ -292,8 +299,9 @@ void form_ChatWidget::addMessage(QString text){
 
         //cursor.insertHtml("<a href='http://www.w3schools.com/'>Link!</a>");
         //cursor.insertText("something");
-        qDebug() << "inserting HTML: '" << newMessage << "'\n";
-        cursor.insertHtml(newMessage);
+        qDebug() << "inserting HTML: '" << text << "'\n";
+	
+        cursor.insertHtml(text);
 
         //cursor.endEditBlock();
 
@@ -490,6 +498,7 @@ void form_ChatWidget::getFocus()
 	this->activateWindow();
 	this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
 	this->raise();
+	this->setFocus();
 }
 
 void form_ChatWidget::setUnderline(bool t)
