@@ -44,7 +44,7 @@ namespace Protocol_Info{
 	const QString PROTOCOLVERSION  ="0.6";
 	const double  PROTOCOLVERSION_D= 0.6;
 	const QString FIRSTPAKETCHAT="CHATSYSTEM\t"+PROTOCOLVERSION+"\n";
-	const QString HTTPPAGE="<html><header></header><body>This is not a eepsite,this is a I2P-Messenger Destination<br><br></body></html>\n\n\n";
+	const QString HTTPPAGE="<html><header></header><body>This is not an eepsite,this is a I2PChat Destination<br><br></body></html>\n\n\n";
 };
 
 namespace PROTOCOL_TAGS{
@@ -62,7 +62,7 @@ namespace PROTOCOL_TAGS{
 		//-----------------------
 		//Protocolversion >= 0.6
 		//-----------------------
-		
+
 	};
 	enum MESSAGES_TAGS{
 		CHATMESSAGE,
@@ -85,10 +85,10 @@ namespace PROTOCOL_TAGS{
 		USER_INFO_GENDER,
 		USER_INFO_AGE,
 		USER_INFO_INTERESTS,
-		
+
 		USER_BLOCK_INVISIBLE,
 		USER_BLOCK_NORMAL,
-		
+
 		//Protocolversion >= 0.5
 		  ANSWER_OF_GET_AVATARIMAGE_IMAGE,
 		//-----------------------
@@ -97,7 +97,7 @@ namespace PROTOCOL_TAGS{
 		//-----------------------
 
 	};
-	
+
 
 };
 using namespace Protocol_Info;
@@ -124,11 +124,11 @@ public:
 public slots:
 	void slotInputUnknown(const qint32 ID,const QByteArray Data);
 	void slotInputKnown(const qint32 ID, const QByteArray Data);
-	
+
 private:
 	CCore& mCore;
-	
 
-	
+
+
 };
 #endif

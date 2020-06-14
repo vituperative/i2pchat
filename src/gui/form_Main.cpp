@@ -139,7 +139,8 @@ void form_MainWindow::initToolBars()
 
     toolBar->setContextMenuPolicy(Qt::CustomContextMenu);
     toolBar->addAction(QIcon(ICON_NEWUSER)		,tr("Add User")		,this,SLOT(openAdduserWindow() ) );
-/*
+
+/* User search disabled.. can we re-enable this?
     {
         settings.beginGroup("Usersearch");
         if((settings.value("Enabled",true).toBool()) ==true){
@@ -159,6 +160,9 @@ void form_MainWindow::initToolBars()
         settings.endGroup();
     }
 */
+
+/* Topics appears broken.. disabling for now */
+/*
     {
         settings.beginGroup("Topics");
         if((settings.value("Enabled",true).toBool())){
@@ -167,12 +171,13 @@ void form_MainWindow::initToolBars()
         settings.endGroup();
         settings.sync();
     }
+*/
 
+    toolBar->addAction(QIcon(ICON_MYDESTINATION)	,tr("Your Destination")	,this,SLOT(namingMe()));
     toolBar->addAction(QIcon(ICON_SETTINGS)		,tr("Settings")		,this,SLOT(openConfigWindow() ) );
     toolBar->addAction(QIcon(ICON_DEBUGMESSAGES)	,tr("DebugMessages")	,this,SLOT(openDebugMessagesWindow() ) );
-    toolBar->addAction(QIcon(ICON_MYDESTINATION)	,tr("Your Destination")	,this,SLOT(namingMe()));
-    toolBar->addAction(QIcon(ICON_CLOSE)		,tr("Close")		,this,SLOT(closeApplication()));
     toolBar->addAction(QIcon(ICON_ABOUT)		,tr("About")		,this,SLOT(openAboutDialog()));
+    toolBar->addAction(QIcon(ICON_CLOSE)		,tr("Close")		,this,SLOT(closeApplication()));
 
 }
 
