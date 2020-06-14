@@ -86,7 +86,7 @@ private slots:
 	
 	void clicked_SelectAvatarImage();
 	void clicked_ClearAvatarImage();
-	
+	void setCustomStyleSheet();
 	
 private:
 	CCore& mCore;

@@ -34,7 +34,7 @@
 
 #include "form_Main.h"
 
-#include<iostream>
+
 QString debugLogDir;
 
 void enableDebugLogging(QString configPath);
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 		// OKEY, OLD AUTHOR SET CURRENT_STYLE IN GENERAL SECTION. COOL.
 		auto CurrentStyle = settings.value("General/current_Style", "Fusion").toString();
 		auto CustomStyleSheet = settings.value("Style/CustomStyleSheet", "").toString();
-		std::cout << CurrentStyle.toStdString() << std::endl;
+		qDebug() << "Curent style: " << CurrentStyle;
 		mainForm->setStyle( QStyleFactory::create(CurrentStyle) );
 		if ( CustomStyleSheet.size() > 1 )	styleSheetFile.setFileName(CustomStyleSheet);
 	}

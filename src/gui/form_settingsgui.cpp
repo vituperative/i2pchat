@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
+#include <QFileDialog>
 #include "Core.h"
 #include "UserBlockManager.h"
 #include "form_settingsgui.h"
@@ -34,6 +34,7 @@ form_settingsgui::form_settingsgui(CCore& Core,QWidget *parent, Qt::WindowFlags 
 	styleCombo->addItems(QStyleFactory::keys());
 	loadSettings();
 	showUserBlockList();
+
 
 	connect(ok_Button,SIGNAL(clicked(bool)),
 		this,SLOT(saveSettings()));
@@ -121,6 +122,8 @@ form_settingsgui::form_settingsgui(CCore& Core,QWidget *parent, Qt::WindowFlags 
 		
 	connect(cmd_clearAvatarImage,SIGNAL(clicked()),
 		this,SLOT(clicked_ClearAvatarImage()));
+
+	connect(styleSheetCombo, SIGNAL( clicked(bool) ), this, SLOT( setCustomStyleSheet() ) );
 }
 
 form_settingsgui::~form_settingsgui()
@@ -456,12 +459,13 @@ void form_settingsgui::loadStyleSheet(const QString &sheetName)
 	// 
 	// external Stylesheets
 	QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
+	if( file.exists() ){
+		file.open(QFile::ReadOnly);
+		QString styleSheet = QLatin1String(file.readAll());
 	
-	file.open(QFile::ReadOnly);
-	QString styleSheet = QLatin1String(file.readAll());
 	
-	
-	qApp->setStyleSheet(styleSheet); 
+		qApp->setStyleSheet(styleSheet); 
+	}else qWarning() << "WARNING: stylesheet file is broken";
 }
 
 void form_settingsgui::loadqss()
@@ -810,6 +814,18 @@ void form_settingsgui::clicked_ClearAvatarImage()
 {
       avatarImageByteArray.clear();
       ownavatar_label->clear();
+}
+
+void form_settingsgui::setCustomStyleSheet(void){
+
+    auto fileName = QFileDialog::getOpenFileName(this,
+    tr("open your StyleSheet"), "", tr("StyleSheet(*.css *.qss *.txt)"));
+    loadStyleSheet(fileName);
+    settings->beginGroup("Style");
+	settings->setValue("CustomStyleSheet",fileName);
+    settings->endGroup();
+    settings->sync();
+
 }
 
 
