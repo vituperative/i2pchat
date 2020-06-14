@@ -122,8 +122,8 @@ form_settingsgui::form_settingsgui(CCore& Core,QWidget *parent, Qt::WindowFlags 
 		
 	connect(cmd_clearAvatarImage,SIGNAL(clicked()),
 		this,SLOT(clicked_ClearAvatarImage()));
-
-	connect(styleSheetCombo, SIGNAL( clicked(bool) ), this, SLOT( setCustomStyleSheet() ) );
+	//TODO: Add this button from ui file. (QtCreator, i dont have it)
+	//connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT( setCustomStyleSheet() ) );
 }
 
 form_settingsgui::~form_settingsgui()
