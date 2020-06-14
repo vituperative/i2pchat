@@ -336,6 +336,7 @@ void form_ChatWidget::setFont()
 	user.setTextFont(mCurrentFont);
 	message->setCurrentFont(mCurrentFont);
 	message->setFont(mCurrentFont);
+	message->setFocus();
 }
 
 
