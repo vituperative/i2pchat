@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>form_DebugMessages</class>
- <widget class="QDialog" name="form_DebugMessages">
+ <widget class="QWidget" name="form_DebugMessages">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +12,10 @@
   </property>
   <property name="windowTitle">
    <string>DebugMessages</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resourcen.qrc">
+    <normaloff>:/icons/debug.svg</normaloff>:/icons/debug.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -35,11 +39,11 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Tab_SAM">
       <attribute name="title">
-       <string>Sam</string>
+       <string>SAM</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_1">
        <item row="0" column="0">
@@ -84,7 +88,6 @@
        </item>
       </layout>
      </widget>
-
      <widget class="QWidget" name="Tab_Connection">
       <attribute name="title">
        <string>Connection</string>
@@ -136,6 +139,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resourcen.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -139,7 +139,7 @@ void CSessionController::slotReadFromSocket()
                     msgBox.setIcon(QMessageBox::Critical);
                     msgBox.setText(tr("I2PChat"));
 //                    msgBox.setInformativeText(tr("Session: DUPLICATED_DEST\n\nOnly one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed)\n "));
-                    msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run Messenger\nwith the same destination twice!\nSAM may need to be restarted."));
+                    msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run I2PChat\nwith the same destination twice!\nSAM may need to be restarted."));
                     msgBox.setStandardButtons(QMessageBox::Ok);
                     msgBox.setDefaultButton(QMessageBox::Ok);
                     msgBox.setWindowModality(Qt::NonModal);
@@ -149,7 +149,7 @@ void CSessionController::slotReadFromSocket()
                               <<"Line:\t"<<__LINE__<<endl
                              <<"Function:\t"<<"CStreamController::slotReadFromSocket()"<<endl
                             <<"Message:\t"<<"Session: DUPLICATED_DEST"<<endl
-                           <<"Only one Messenger per Destination,\nor SAMv3 crashed(Tunnel stay if Messenger were closed"<<endl;
+                           <<"Only one Messenger per Destination,\nor SAMv3 crashed (Tunnel will persist if I2PChat was closed)"<<endl;
                 }
 
 

@@ -152,7 +152,7 @@ QString CCore::calcSessionOptionString() const
 
     SessionOptionString.
 		append("inbound.nickname="+settings.
-			value("TunnelName","Messenger").toString()
+			value("TunnelName","I2PChat").toString()
 				.replace(" ","_")
 					+ " ");
     ///FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;

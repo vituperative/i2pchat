@@ -109,7 +109,7 @@ void CI2PStream::slotConnected()
 
 	emit signDebugMessages("• I2P Stream Controller connected to SAM v3 [ID: "+smID+"]");
 	mDoneDisconnect=false;
-	emit signDebugMessages("• Outgoing to Stream [ID: "+smID+"] • Handshake: "+SAM_HANDSHAKE_V3);
+	emit signDebugMessages("• Outgoing to Stream [ID: "+smID+"] ‣ Handshake: "+SAM_HANDSHAKE_V3);
 	try{
 	    if(mTcpSocket.isWritable()){
 		mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -148,7 +148,7 @@ void CI2PStream::slotReadFromSocket()
 	else{
 		return;
 	}
-	emit signDebugMessages("• Incoming from Stream [ID: "+smID+"] -> "+newData);
+	emit signDebugMessages("• Incoming from Stream [ID: "+smID+"] ‣ "+newData);
 
 	if(mHandShakeWasSuccesfullDone==false){
 
@@ -179,7 +179,7 @@ void CI2PStream::slotReadFromSocket()
 			Data.append("STREAM ACCEPT ID="+mStreamBridgeName);
 		}
 		else if(mMode==CONNECT){
-			Data.append("STREAM CONNECT ID="+mStreamBridgeName+" • DESTINATION="+mDestination);
+			Data.append("STREAM CONNECT ID="+mStreamBridgeName+" DESTINATION="+mDestination);
 		}
 
 		if(mSilence==true){
@@ -275,7 +275,7 @@ void CI2PStream::operator <<(const QByteArray Data)
 	QString smID=QString::number(mID,10);
 
 	if(mTcpSocket.state()==QTcpSocket::ConnectedState&& mHandShakeWasSuccesfullDone){
-		emit signDebugMessages("• Outgoing to Stream [ID:  "+smID+"] -> "+Data);
+		emit signDebugMessages("• Outgoing to Stream [ID:  "+smID+"] ‣ "+Data);
 
 		try{
 		   if(mTcpSocket.isWritable()){
