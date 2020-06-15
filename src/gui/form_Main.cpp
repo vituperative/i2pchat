@@ -92,7 +92,7 @@ void form_MainWindow::onlineComboBoxChanged()
         if(Core->getOnlineStatus()!=User::USERONLINE)
             Core->setOnlineStatus(User::USERONLINE);
     }
-    else if(text.contains(tr("WantToChat"),Qt::CaseInsensitive)==true){
+    else if(text.contains(tr(" Want to chat"),Qt::CaseInsensitive)==true){
         if(Core->getOnlineStatus()!=User::USERWANTTOCHAT)
             Core->setOnlineStatus(User::USERWANTTOCHAT);
     }
@@ -100,7 +100,7 @@ void form_MainWindow::onlineComboBoxChanged()
         if(Core->getOnlineStatus()!=User::USERAWAY)
             Core->setOnlineStatus(User::USERAWAY);
     }
-    else if(text.contains(tr("Don't disturb"),Qt::CaseInsensitive)==true){
+    else if(text.contains(tr("Do not disturb"),Qt::CaseInsensitive)==true){
         if(Core->getOnlineStatus()!=User::USERDONT_DISTURB)
             Core->setOnlineStatus(User::USERDONT_DISTURB);
     }
@@ -646,8 +646,8 @@ void form_MainWindow::OnlineStateChanged()
 
     if(onlinestatus==User::USERTRYTOCONNECT){
         comboBox->clear();
-        comboBox->addItem(QIcon(ICON_USER_TRYTOCONNECT)	, tr("Connecting..."));		//index 0
-        comboBox->addItem(QIcon(ICON_USER_OFFLINE)	, tr("Offline"));		//1
+        comboBox->addItem(QIcon(ICON_USER_TRYTOCONNECT)	, tr(" Connecting..."));		//index 0
+        comboBox->addItem(QIcon(ICON_USER_OFFLINE)	, tr(" Offline"));		//1
         comboBox->setCurrentIndex(0);
         trayIcon->setIcon(QIcon(ICON_USER_TRYTOCONNECT));
     }
@@ -655,12 +655,12 @@ void form_MainWindow::OnlineStateChanged()
         if(comboBox->count()<6){
             comboBox->clear();
 
-            comboBox->addItem(QIcon(ICON_USER_ONLINE)	, tr("Online"));	//index 0
-            comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT)	, tr("WantToChat"));	//1
-            comboBox->addItem(QIcon(ICON_USER_AWAY)		, tr("Away"));		//2
-            comboBox->addItem(QIcon(ICON_USER_DONT_DUSTURB)	, tr("Don't disturb"));	//3
-            comboBox->addItem(QIcon(ICON_USER_INVISIBLE)	, tr("Invisible"));	//4
-            comboBox->addItem(QIcon(ICON_USER_OFFLINE)	, tr("Offline"));	//5
+            comboBox->addItem(QIcon(ICON_USER_ONLINE)	, tr(" Online"));	//index 0
+            comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT)	, tr(" Want to chat"));	//1
+            comboBox->addItem(QIcon(ICON_USER_AWAY)		, tr(" Away"));		//2
+            comboBox->addItem(QIcon(ICON_USER_DONT_DUSTURB)	, tr(" Do not disturb"));	//3
+            comboBox->addItem(QIcon(ICON_USER_INVISIBLE)	, tr(" Invisible"));	//4
+            comboBox->addItem(QIcon(ICON_USER_OFFLINE)	, tr(" Offline"));	//5
         }
 
         if(onlinestatus==User::USERONLINE){
@@ -825,7 +825,7 @@ void form_MainWindow::copyDestination()
 
     clipboard->setText(Destination);
     QMessageBox::information(this, "",
-                             tr("The Destination is in the clipboard"),QMessageBox::Close);
+                             tr("The Destination has been copied to the clipboard"),QMessageBox::Close);
 
 }
 

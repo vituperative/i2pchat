@@ -426,7 +426,7 @@ void form_ChatWidget::changeWindowsTitle()
 					}
 			case USERDONT_DISTURB:
 					{
-						OnlineStatus=tr("Don't disturb");
+						OnlineStatus=tr("Do not disturb");
 						this->setWindowIcon(QIcon(ICON_USER_DONT_DUSTURB));
 						break;
 					}

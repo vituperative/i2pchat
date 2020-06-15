@@ -10,3 +10,4 @@ release/
 /Makefile*
 /object_script*
 /src/gui/ui_form_*.h
+NUL
