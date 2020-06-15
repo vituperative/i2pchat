@@ -798,7 +798,14 @@ void form_MainWindow::SendFile()
 
     if(Destination.length()==516){
         if(!FilePath.isEmpty())
-            Core->getFileTransferManager()->addNewFileTransfer(FilePath,Destination);
+	   try{
+            	Core->getFileTransferManager()->addNewFileTransfer(FilePath,Destination);
+	    }catch(std::exception & e){
+       		qWarning()<<"\nform_MainWindow::SendFile()\n"
+                	 <<e.what()
+                	<<"Destination: "<<Destination<<"\n"
+               		<<"\naction aported";			
+	    }
     }
     else{
         qWarning()<<"\nform_MainWindow::SendFile()\n"

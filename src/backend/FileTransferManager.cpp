@@ -35,26 +35,35 @@ CFileTransferManager::~CFileTransferManager()
 
 CFileTransferRecive * CFileTransferManager::getFileTransferReciveByID(qint32 ID)const
 {
-	for(int i=0;i<mFileRecives.size();i++){
+	/*for(int i=0;i<mFileRecives.size();i++){
 		if(mFileRecives.at(i)->getStreamID()==ID){
 			return mFileRecives.at(i);
 		}
-	}
+	}*/
+	for ( auto it : mFileRecives)
+		if(it->getStreamID()==ID) return it;
+
 	return NULL;
 }
 
 CFileTransferSend* CFileTransferManager::getFileTransferSendsByID(qint32 ID)const
 {
-	for(int i=0;i<mFileSends.size();i++){
+	for ( auto it : mFileSends)
+		if(it->getStreamID()==ID) return it;
+	
+	/*for(int i=0;i<mFileSends.size();i++){
 		if(mFileSends.at(i)->getStreamID()==ID){
 			return mFileSends.at(i);
 		}
-	}
+	}*/
 	return NULL;
+	
 }
+
 
 const QList< CFileTransferSend * > CFileTransferManager::getFileTransferSendsList()const
 {
+	
 	return mFileSends;
 }
 
@@ -65,7 +74,7 @@ const QList< CFileTransferRecive * > CFileTransferManager::getFileTransferRecive
 
 void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destination)
 {
-
+	
 	QString Protocolversion;
 	double  ProtoVersionD=0.0;
 
@@ -73,6 +82,15 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destinat
 	if(User!=NULL){
 		Protocolversion=User->getHighestUsableProtocolVersionFiletransfer();
 		ProtoVersionD  =User->getHighestUsableProtocolVersionFiletransfer_D();
+	}else{
+		qCritical() << "Undefined user for file transfer";
+		return;
+	}
+	if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL || 
+		this->getFileTransferReciveByID( User->getI2PStreamID() ) != NULL ) {
+		qCritical() << "Already exists transfer for user";
+		throw new std::runtime_error("Already exists transfer for user");
+		return;
 	}
 
 	CFileTransferSend * t= new CFileTransferSend(mCore,*(mCore.getConnectionManager()),FilePath,Destination,Protocolversion,ProtoVersionD);
@@ -146,6 +164,13 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 				"Highest supported Protocolversion: %2\n" \
 				"Filename: %3").arg(ProtocolVersion).arg(FileTransferProtocol::MAXPROTOCOLVERSION).arg(FileName));
 		}
+
+		if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL || 
+			this->getFileTransferReciveByID( User->getI2PStreamID() ) != NULL ) {
+			qCritical() << "Already exists transfer for user";
+			throw new std::runtime_error("Already exists transfer for user");
+			return;
+		}	
 
 		//abort the Filerecive
 		if(ProtocolVersion=="0.1"||ProtocolVersion=="0.2"){

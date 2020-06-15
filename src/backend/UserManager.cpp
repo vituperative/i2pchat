@@ -117,23 +117,37 @@ void CUserManager::saveUserList()const{
 	file.close();
 }
 
+bool CUserManager::deleteUserByI2P_Destination ( QString Destination ){
+	for(int i=0;i<mUsers.size();i++){
+		if(mUsers.at(i)->getI2PDestination()==Destination){
+			mUsers.removeAt(i);
+			return true;
+		}
+	}
+	return false;
+}
+
 CUser* CUserManager::getUserByI2P_ID(qint32 ID)const{
 
-	for(int i=0;i<mUsers.size();i++){
+	/*for(int i=0;i<mUsers.size();i++){
 		if(mUsers.at(i)->getI2PStreamID()==ID){
 			
 			return mUsers.at(i);
 		}
-	}
+	}*/
+	for( auto it : mUsers )
+		if( it->getI2PStreamID()==ID ) return it; 
 	
 	return NULL;
 }
 CUser* CUserManager::getUserByI2P_Destination(QString Destination)const{
-	for(int i=0;i<mUsers.size();i++){
+	/*for(int i=0;i<mUsers.size();i++){
 		if(mUsers.at(i)->getI2PDestination()==Destination){
 			return mUsers.at(i);
 		}
-	}
+	}*/
+	for( auto it : mUsers )
+		if( it->getI2PDestination()==Destination ) return it; 
 	
 	return NULL;
 }
@@ -224,53 +238,48 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const
       return false;
 }
 
+
 bool CUserManager::addNewUser(QString Name,QString I2PDestination,qint32 I2PStream_ID,bool SaveUserList){
 	CUserBlockManager& UserBlockManager=*(mCore.getUserBlockManager());
 	CProtocol& Protocol=*(mCore.getProtocol());
 	
 	bool isValid=validateI2PDestination(I2PDestination);
-	
-	if(isValid==false){
+
+	auto critical = [&I2PDestination](QString why="undefined") {
 		qCritical()<<"File\t"<<__FILE__<<endl
 			   <<"Line:\t"<<__LINE__<<endl
 			   <<"Function:\t"<<"CUserManager::addNewUser"<<endl
 			   <<"Message:\t"<<"Destination is not valid"<<endl
 			   <<"Destination:\t"<<I2PDestination<<endl
-			   <<"action add new User ignored"<<endl;
-			   
+			   <<why<<endl;
+			   return false;
+	};
+	/*if(	getUserByI2P_Destination(I2PDestination)	!=	NULL	){	
+		return critical("Already exists user"); 	   	
+	}*/
+	if(isValid==false){
+/*		qCritical()<<"File\t"<<__FILE__<<endl
+			   <<"Line:\t"<<__LINE__<<endl
+			   <<"Function:\t"<<"CUserManager::addNewUser"<<endl
+			   <<"Message:\t"<<"Destination is not valid"<<endl
+			   <<"Destination:\t"<<I2PDestination<<endl
+			   <<"action add new User ignored"<<endl;			   
 		return false;	   
+*/
+		return critical("Is not valid user"); 
 	}
       
     
 	if(UserBlockManager.isDestinationInBlockList(I2PDestination)==true){
-		qCritical()<<"File\t"<<__FILE__<<endl
-			   <<"Line:\t"<<__LINE__<<endl
-			   <<"Function:\t"<<"CUserManager::addNewUser"<<endl
-			   <<"Message:\t"<<"The Destination: "<<I2PDestination<<endl
-			   <<"is on the blocklist"<<endl
-			   <<"action add new User ignored"<<endl;
-			   
-		return false;
+		return critical("Is destination in blockList"); 
 	}
 	
 	if(this->checkIfUserExitsByI2PDestination(I2PDestination)==true){
-		qCritical()<<"File\t"<<__FILE__<<endl
-			   <<"Line:\t"<<__LINE__<<endl
-			   <<"Function:\t"<<"CUserManager::addNewUser"<<endl
-			   <<"Message:\t"<<"there is allready a user with this destination"<<endl
-			   <<"action add new User ignored"<<endl;
-
-		return false;
+		return critical("User Exits By I2P Destination Before."); 
 	}
 
 	if(I2PDestination==mCore.getMyDestination()){
-		    	qCritical()<<"File\t"<<__FILE__<<endl
-				   <<"Line:\t"<<__LINE__<<endl
-				   <<"Function:\t"<<"CUserManager::addNewUser"<<endl
-				   <<"Message:\t"<<"It's not allowed to add yourself"<<endl
-				   <<"action add new User ignored"<<endl;
-
-		return false;
+		    	return critical("Own destination."); 
 	}
 	
 
@@ -310,12 +319,12 @@ bool CUserManager::addNewUser(QString Name,QString I2PDestination,qint32 I2PStre
 bool CUserManager::checkIfUserExitsByI2PDestination(const QString I2PDestination)const{
 	if(I2PDestination==mCore.getMyDestination()) return true;
 
-	for(int i=0;i<mUsers.count();i++){
+	/*for(int i=0;i<mUsers.count();i++){
 		if(mUsers.at(i)->getI2PDestination()==I2PDestination){
 			return true;
 		}
-	}
-	
+	}*/
+	if ( this->getUserByI2P_Destination(I2PDestination) != NULL ) return true;
 	return false;
 }
 void CUserManager::changeUserPositionInUserList(int oldPos, int newPos)
@@ -326,7 +335,9 @@ void CUserManager::changeUserPositionInUserList(int oldPos, int newPos)
 }
 
 bool CUserManager::deleteUserByI2PDestination(QString I2PDestination){
-	for(int i=0;i<mUsers.count();i++){
+	auto Him = this->getUserByI2P_Destination(I2PDestination);
+	if ( Him == NULL ) return false;
+	/*for(int i=0;i<mUsers.count();i++){
 		if(mUsers.at(i)->getI2PDestination()==I2PDestination){
 			if(mUsers.at(i)->getConnectionStatus()==ONLINE ||mUsers.at(i)->getConnectionStatus()==TRYTOCONNECT){
 				mCore.deletePacketManagerByID(mUsers.at(i)->getI2PStreamID());
@@ -342,9 +353,25 @@ bool CUserManager::deleteUserByI2PDestination(QString I2PDestination){
 			emit signUserStatusChanged();
 			return true;
 		}
-	}
-	return false;
+	}*/
+	
+			if(Him->getConnectionStatus()==ONLINE ||Him->getConnectionStatus()==TRYTOCONNECT){
+				mCore.deletePacketManagerByID(Him->getI2PStreamID());
+				mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
+			}
+			
+			if(mCore.getConnectionManager()->isComponentStopped()==false){
+				mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
+			}
+			Him->deleteLater();
+			//mUsers.removeAt(i);
+			this->deleteUserByI2P_Destination(I2PDestination);
+			saveUserList();
+			emit signUserStatusChanged();
+			return true;
+	
 }
+
 
 bool CUserManager::renameUserByI2PDestination(const QString Destination, const QString newNickname){
 	for(int i=0;i<mUsers.size();i++){

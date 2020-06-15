@@ -47,7 +47,7 @@ class CUserManager: public QObject
 		bool 		deleteUserByI2PDestination (const QString I2PDestination );
 		void		avatarImageChanged();
 		
-		
+		bool		deleteUserByI2P_Destination ( QString Destination);
 		CUser* 		getUserByI2P_ID ( qint32 ID )const;
 		CUser* 		getUserByI2P_Destination ( QString Destination )const;
 		QString		getUserInfosByI2P_Destination(QString Destination)const;

@@ -38,17 +38,18 @@ class CFileTransferManager: public QObject
 		CFileTransferManager(const CFileTransferManager&)=delete;
 		CFileTransferManager& operator=(const CFileTransferManager&)=delete;
 
-		void 	addNewFileTransfer(QString FilePath,QString Destination);
+		void 	addNewFileTransfer(QString FilePath,QString Destination) ;
 		void 	addNewFileRecive(qint32 ID,QString FileName,QString FileSize,QString Destination,QString ProtocolVersion);
 		
-		void	removeFileTransfer(const qint32 ID);
-		void 	removeFileRecive  (const qint32 ID);
-	  
+		void	removeFileTransfer(const qint32 ID) /*noexcept*/;
+		void 	removeFileRecive  (const qint32 ID) ;
+
 		CFileTransferRecive*		getFileTransferReciveByID(qint32 ID)	const;
 		CFileTransferSend*		getFileTransferSendsByID(qint32 ID)	const;		
 	const 	QList<CFileTransferRecive*> 	getFileTransferReciveList()		const;
 	const 	QList<CFileTransferSend*>	getFileTransferSendsList()		const;
-	
+		//template <typename T, typename where, typename what, typename fun>
+		//	 T* getFileTransferBy(where wh, what wat,fun f);
 		bool isThisID_a_FileSendID(qint32 ID) 	const;
 		bool isThisID_a_FileReciveID(qint32 ID) const;
 		
