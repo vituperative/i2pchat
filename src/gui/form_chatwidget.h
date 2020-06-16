@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,122 +21,116 @@
 #ifndef FORM_CHATWIDGET_h
 #define FORM_CHATWIDGET_h
 
-
-#include "ui_form_chatwidget.h"
-#include "gui_icons.h"
 #include "Core.h"
 #include "TextEmotionChanger.h"
+#include "gui_icons.h"
+#include "ui_form_chatwidget.h"
 
-#include <QtGui>
-#include <Qt>
+#include <QApplication>
 #include <QClipboard>
-#include <QKeyEvent>
+#include <QColorDialog>
+#include <QDesktopWidget>
+#include <QFileDialog>
 #include <QFocusEvent>
-#include <QTextBrowser>
+#include <QFontDialog>
+#include <QKeyEvent>
 #include <QPalette>
 #include <QPushButton>
-#include <QColorDialog>
-#include <QFontDialog>
-#include <QFileDialog>
 #include <QScrollBar>
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QTextBrowser>
+#include <Qt>
+#include <QtGui>
 
-class ChatEventEater : public QObject
-{
-	Q_OBJECT
+class ChatEventEater : public QObject {
+  Q_OBJECT
 
 public:
-	ChatEventEater(QWidget *parent = 0) : QObject(parent){ }
-	
-signals:
-	void sendMessage();
-	void haveFocus(bool b);
-protected:
-	bool eventFilter(QObject *obj, QEvent *event);
+  ChatEventEater(QWidget *parent = 0) : QObject(parent) {}
 
+signals:
+  void sendMessage();
+  void haveFocus(bool b);
+
+protected:
+  bool eventFilter(QObject *obj, QEvent *event);
 };
 
 class CUser;
-class form_ChatWidget : public QMainWindow, public Ui::form_chatwidget
-{
-Q_OBJECT
+class form_ChatWidget : public QMainWindow, public Ui::form_chatwidget {
+  Q_OBJECT
 public:
-	form_ChatWidget(CUser& user,CCore& Core,QDialog* parent = 0);
-	~form_ChatWidget();
+  form_ChatWidget(CUser &user, CCore &Core, QDialog *parent = 0);
+  ~form_ChatWidget();
 
-	//forbid some operators
-	form_ChatWidget(const form_ChatWidget&)=delete;
-	form_ChatWidget& operator=(const form_ChatWidget&)=delete;
+  // forbid some operators
+  form_ChatWidget(const form_ChatWidget &) = delete;
+  form_ChatWidget &operator=(const form_ChatWidget &) = delete;
 
-	void getFocus();
-	
+  void getFocus();
 
 private slots:
-	void sendMessageSignal();
-	void addAllMessages();
-	void addMessage(QString text);
-	void setTextColor();
-	void setTextColor_2();
-	void newMessageRecived();
-	void setBold(bool t);
-	void setBold_2(bool t);
-	void setFont();
-	void setFont_2();
-	void setUnderline(bool t);
-	void setUnderline_2(bool t);
-	void setItalic(bool t);
-	void setItalic_2(bool t);
+  void sendMessageSignal();
+  void addAllMessages();
+  void addMessage(QString text);
+  void setTextColor();
+  void setTextColor_2();
+  void newMessageRecived();
+  void setBold(bool t);
+  void setBold_2(bool t);
+  void setFont();
+  void setFont_2();
+  void setUnderline(bool t);
+  void setUnderline_2(bool t);
+  void setItalic(bool t);
+  void setItalic_2(bool t);
 
-	void changeWindowsTitle();
-	void newFileTransfer();
-	
-	void anchorClicked (const QUrl &);
-	void focusEvent(bool b);
-	void showAvatarFrame(bool show);
-	void remoteAvatarImageChanged();	
-	void messageTextChanged();
-	
-	void tabIndexChanged(int  tabIndex);
-	
-	
-	void saveChangedOfflineMessages();
+  void changeWindowsTitle();
+  void newFileTransfer();
+
+  void anchorClicked(const QUrl &);
+  void focusEvent(bool b);
+  void showAvatarFrame(bool show);
+  void remoteAvatarImageChanged();
+  void messageTextChanged();
+
+  void tabIndexChanged(int tabIndex);
+
+  void saveChangedOfflineMessages();
 
 signals:
-	void sendChatMessage(QString chatMessage);
-	void closingChatWindow(QString);
-	
+  void sendChatMessage(QString chatMessage);
+  void closingChatWindow(QString);
+
 public slots:
-	  void slotLoadOwnAvatarImage();
+  void slotLoadOwnAvatarImage();
 private slots:
-	  void displayOfflineMessages(int index);
-	  void cmd_back();
-	  void cmd_next();
-	  void cmd_delete();
-	  void cmd_new();
-	  void reloadOfflineMessages();
+  void displayOfflineMessages(int index);
+  void cmd_back();
+  void cmd_next();
+  void cmd_delete();
+  void cmd_new();
+  void reloadOfflineMessages();
 
 private:
-	void closeEvent(QCloseEvent *e);
-	void centerDialog();
-  
-	
-	QColor textColor;
-	QColor textColor2;
-	
-	CUser& user;
-	QFont  mCurrentFont;
-	QFont  mCurrentFont2;
-	
-	ChatEventEater *m_event_eater;
-	CCore& Core;
-	bool mHaveFocus;	
-	QTextEdit mControllForChange;
-	void keyPressEvent(QKeyEvent* event);
-	QPixmap mOwnAvatar;
-	QPixmap mUserAvatar;
-	int currentOfflineMessageIndex;
-	int OfflineMessageCount;
-	QStringList offlineMessages;
+  void closeEvent(QCloseEvent *e);
+  void centerDialog();
+
+  QColor textColor;
+  QColor textColor2;
+
+  CUser &user;
+  QFont mCurrentFont;
+  QFont mCurrentFont2;
+
+  ChatEventEater *m_event_eater;
+  CCore &Core;
+  bool mHaveFocus;
+  QTextEdit mControllForChange;
+  void keyPressEvent(QKeyEvent *event);
+  QPixmap mOwnAvatar;
+  QPixmap mUserAvatar;
+  int currentOfflineMessageIndex;
+  int OfflineMessageCount;
+  QStringList offlineMessages;
 };
 #endif

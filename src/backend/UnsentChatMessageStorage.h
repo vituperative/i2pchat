@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,25 +21,26 @@
 #ifndef UNSENTCHATMESSAGESTORAGE
 #define UNSENTCHATMESSAGESTORAGE
 
+#include <QSettings>
 #include <QString>
 #include <QStringList>
-#include <QSettings>
 
-
-class CUnsentChatMessageStorage
-{
+class CUnsentChatMessageStorage {
 public:
   CUnsentChatMessageStorage(const QString FileNameWithPath);
   ~CUnsentChatMessageStorage();
-  
-  //forbid some operators
-  CUnsentChatMessageStorage(const CUnsentChatMessageStorage&)=delete;
-  CUnsentChatMessageStorage& operator=(const CUnsentChatMessageStorage&)=delete;
+
+  // forbid some operators
+  CUnsentChatMessageStorage(const CUnsentChatMessageStorage &) = delete;
+  CUnsentChatMessageStorage &
+  operator=(const CUnsentChatMessageStorage &) = delete;
 
   QStringList getMessagesForDest(const QString I2PDest);
-  void	saveChatMessagesForDest(const QString I2PDest,const QStringList Messages);
+  void saveChatMessagesForDest(const QString I2PDest,
+                               const QStringList Messages);
   void clearStorage();
+
 private:
   const QString mFileNameWithPath;
 };
-#endif 
+#endif

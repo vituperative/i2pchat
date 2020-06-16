@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,27 +20,26 @@
 #ifndef FORM_RENAME_H
 #define FORM_RENAME_H
 
-#include <QtGui>
-#include "ui_form_rename.h"
 #include "Core.h"
+#include "ui_form_rename.h"
+#include <QtGui>
 
+class form_RenameWindow : public QDialog, private Ui::form_renameWindow {
+  Q_OBJECT
+public:
+  form_RenameWindow(CCore &Core, QString OldNickname, QString Destination);
+  ~form_RenameWindow();
 
-class form_RenameWindow : public QDialog, private Ui::form_renameWindow
-{
-	Q_OBJECT
-	public:
-	      form_RenameWindow(CCore& Core,QString OldNickname,QString Destination);	
-	      ~form_RenameWindow();
+  // forbid some operators
+  form_RenameWindow(const form_RenameWindow &) = delete;
+  form_RenameWindow &operator=(const form_RenameWindow &) = delete;
 
-	      //forbid some operators
-	      form_RenameWindow(const form_RenameWindow&)=delete;
-	      form_RenameWindow& operator=(const form_RenameWindow&)=delete;
+private slots:
+  void OK();
 
-	private slots:
-		void OK();
-	private:
-		CCore& Core;
-		QString Destination;
-		void closeEvent(QCloseEvent *e);
+private:
+  CCore &Core;
+  QString Destination;
+  void closeEvent(QCloseEvent *e);
 };
 #endif

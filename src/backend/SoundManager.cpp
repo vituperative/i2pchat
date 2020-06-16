@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,88 +19,85 @@
  ***************************************************************************/
 #include "SoundManager.h"
 
-CSoundManager::CSoundManager(QString ConfigPath)
-:mConfigPath(ConfigPath)
-{
-	mIsMute=false;
-	reInit();
+CSoundManager::CSoundManager(QString ConfigPath) : mConfigPath(ConfigPath) {
+  mIsMute = false;
+  reInit();
 }
 
-void CSoundManager::doMute(bool t)
-{
-	mIsMute=t;
+void CSoundManager::doMute(bool t) { mIsMute = t; }
+
+void CSoundManager::slotUserGoOnline() {
+  if (mIsMute == true)
+    return;
+
+  if (mEnable_eventUser_go_Online)
+    QSound::play(mSoundFileUser_go_Online);
+}
+void CSoundManager::slotUserGoOffline() {
+  if (mIsMute == true)
+    return;
+  if (mEnable_eventUser_go_Offline)
+    QSound::play(mSoundFileUser_go_Offline);
+}
+void CSoundManager::slotFileSendFinished() {
+  if (mIsMute == true)
+    return;
+  if (mEnable_eventFileSend_Finished)
+    QSound::play(mSoundFileFileSend_Finished);
+}
+void CSoundManager::slotFileReciveIncoming() {
+  if (mIsMute == true)
+    return;
+  if (mEnable_eventFileRecive_Incoming)
+    QSound::play(mSoundFileFileRecive_Incoming);
 }
 
-void CSoundManager::slotUserGoOnline()
-{
-	if(mIsMute==true) return;
-		
-		if(mEnable_eventUser_go_Online) 
-			QSound::play(mSoundFileUser_go_Online);
-}
-void CSoundManager::slotUserGoOffline()
-{
-	if(mIsMute==true) return;
-	if(mEnable_eventUser_go_Offline)
-		QSound::play(mSoundFileUser_go_Offline);	
-}
-void CSoundManager::slotFileSendFinished()
-{
-	if(mIsMute==true) return;
-	if(mEnable_eventFileSend_Finished)
-		QSound::play(mSoundFileFileSend_Finished);
-}
-void CSoundManager::slotFileReciveIncoming()
-{
-	if(mIsMute==true) return;
-	if(mEnable_eventFileRecive_Incoming)
-		QSound::play(mSoundFileFileRecive_Incoming);
+void CSoundManager::slotFileReciveFinished() {
+  if (mIsMute == true)
+    return;
+  if (mEnable_eventFileRecive_Finished)
+    QSound::play(mSoundFileFileRecive_Finished);
 }
 
-void CSoundManager::slotFileReciveFinished()
-{
-	if(mIsMute==true) return;
-	if(mEnable_eventFileRecive_Finished)
-		QSound::play(mSoundFileFileRecive_Finished);
+void CSoundManager::slotNewChatMessage() {
+  if (mIsMute == true)
+    return;
+  if (mEnable_eventNewChatMessage) {
+    QSound::play(mSoundFileNewChatMessage);
+  }
 }
 
+void CSoundManager::reInit() {
+  QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("Sound");
+  settings.beginGroup("Enable");
+  mEnable_eventUser_go_Online = settings.value("User_go_Online", true).toBool();
+  mEnable_eventUser_go_Offline =
+      settings.value("User_go_Offline", false).toBool();
+  mEnable_eventFileSend_Finished =
+      settings.value("FileSend_Finished", false).toBool();
+  mEnable_eventFileRecive_Incoming =
+      settings.value("FileRecive_Incoming", true).toBool();
+  mEnable_eventFileRecive_Finished =
+      settings.value("FileRecive_Finished", false).toBool();
+  mEnable_eventNewChatMessage = settings.value("NewChatMessage", true).toBool();
+  settings.endGroup();
 
-void CSoundManager::slotNewChatMessage()
-{
-	if(mIsMute==true) return;
-	if(mEnable_eventNewChatMessage)
-	{
-		QSound::play(mSoundFileNewChatMessage);
-
-	}
+  settings.beginGroup("SoundFilePath");
+  mSoundFileUser_go_Online =
+      settings.value("User_go_Online", "./sounds/Startup.wav").toString();
+  mSoundFileUser_go_Offline = settings.value("User_go_Offline", "").toString();
+  mSoundFileFileSend_Finished =
+      settings.value("FileSend_Finished", "").toString();
+  mSoundFileFileRecive_Incoming =
+      settings.value("FileRecive_Incoming", "./sounds/File.wav").toString();
+  mSoundFileFileRecive_Finished =
+      settings.value("FileRecive_Finished", "").toString();
+  mSoundFileNewChatMessage =
+      settings.value("NewChatMessage", "./sounds/Notify.wav").toString();
+  settings.endGroup();
+  settings.endGroup();
+  settings.sync();
 }
 
-void CSoundManager::reInit()
-{
-	QSettings settings(mConfigPath+"/application.ini",QSettings::IniFormat);
-	settings.beginGroup("Sound");
-		settings.beginGroup("Enable");
-			mEnable_eventUser_go_Online	=settings.value("User_go_Online",true)		.toBool();
-			mEnable_eventUser_go_Offline	=settings.value("User_go_Offline",false)	.toBool();
-			mEnable_eventFileSend_Finished	=settings.value("FileSend_Finished",false)	.toBool();
-			mEnable_eventFileRecive_Incoming=settings.value("FileRecive_Incoming",true)	.toBool();
-			mEnable_eventFileRecive_Finished=settings.value("FileRecive_Finished",false)	.toBool();
-			mEnable_eventNewChatMessage	=settings.value("NewChatMessage",true)		.toBool();
-		settings.endGroup();
-
-		settings.beginGroup("SoundFilePath");
-			mSoundFileUser_go_Online	=settings.value("User_go_Online","./sounds/Startup.wav").toString();
-			mSoundFileUser_go_Offline	=settings.value("User_go_Offline","")			.toString();
-			mSoundFileFileSend_Finished	=settings.value("FileSend_Finished","")			.toString();
-			mSoundFileFileRecive_Incoming	=settings.value("FileRecive_Incoming","./sounds/File.wav").toString();
-			mSoundFileFileRecive_Finished	=settings.value("FileRecive_Finished","")		.toString();
-			mSoundFileNewChatMessage	=settings.value("NewChatMessage","./sounds/Notify.wav")	.toString();
-		settings.endGroup();
-	settings.endGroup();
-	settings.sync();
-}
-
-CSoundManager::~ CSoundManager()
-{
-}
-
+CSoundManager::~CSoundManager() {}

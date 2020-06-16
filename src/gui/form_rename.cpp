@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,35 +21,30 @@
 #include "form_rename.h"
 #include "UserManager.h"
 
-form_RenameWindow::form_RenameWindow(CCore& Core,QString OldNickname,QString Destination)
-:Core(Core)
-{
-	setupUi(this);
+form_RenameWindow::form_RenameWindow(CCore &Core, QString OldNickname,
+                                     QString Destination)
+    : Core(Core) {
+  setupUi(this);
 
-	this->setAttribute(Qt::WA_DeleteOnClose,true);
-	this->Destination=Destination;
-	
-	QLineEdit* lineEdit = this->lineEdit;
-	lineEdit->setText(OldNickname);
+  this->setAttribute(Qt::WA_DeleteOnClose, true);
+  this->Destination = Destination;
 
-	connect(okButton,SIGNAL(clicked()),this,
-		SLOT(OK()));
+  QLineEdit *lineEdit = this->lineEdit;
+  lineEdit->setText(OldNickname);
+
+  connect(okButton, SIGNAL(clicked()), this, SLOT(OK()));
 }
 
-form_RenameWindow::~form_RenameWindow()
-{
+form_RenameWindow::~form_RenameWindow() {}
 
+void form_RenameWindow::OK() {
+  QLineEdit *lineEdit_2 = this->lineEdit_2;
+  Core.getUserManager()->renameUserByI2PDestination(Destination,
+                                                    lineEdit_2->text());
+  this->close();
 }
 
-
-void form_RenameWindow::OK(){
-	QLineEdit* lineEdit_2 = this->lineEdit_2;
-	Core.getUserManager()->renameUserByI2PDestination(Destination,lineEdit_2->text());
-	this->close();
-}
-
-void form_RenameWindow::closeEvent(QCloseEvent* e)
-{
-	e->ignore();
-	this->deleteLater();
+void form_RenameWindow::closeEvent(QCloseEvent *e) {
+  e->ignore();
+  this->deleteLater();
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,33 +24,31 @@
 #include <QtGui>
 
 class CConnectionManager;
-class CPacketManager :public QObject
-{
-		Q_OBJECT
+class CPacketManager : public QObject {
+  Q_OBJECT
 
-	public:
-		CPacketManager (CConnectionManager& ConnectionManager,qint32 ID );
-		~CPacketManager();
+public:
+  CPacketManager(CConnectionManager &ConnectionManager, qint32 ID);
+  ~CPacketManager();
 
-		//forbid some operators
-		CPacketManager(const CPacketManager&)=delete;
-		CPacketManager& operator=(const CPacketManager&)=delete;
+  // forbid some operators
+  CPacketManager(const CPacketManager &) = delete;
+  CPacketManager &operator=(const CPacketManager &) = delete;
 
-		void operator << (const QByteArray t  );
-		qint32 getID()const {return mID;}
-		
-	public slots:
-		void slotDataInput( qint32 ID,QByteArray t);
+  void operator<<(const QByteArray t);
+  qint32 getID() const { return mID; }
 
-	signals:
-		void signAPacketIsCompleate ( const qint32 ID,const QByteArray CurrentPacket );
-	private:
-		CConnectionManager& mConnectionManager;
-		const qint32 mID;
-		QByteArray* mData;
-		
-		void checkifOnePacketIsCompleate();
+public slots:
+  void slotDataInput(qint32 ID, QByteArray t);
 
-		
+signals:
+  void signAPacketIsCompleate(const qint32 ID, const QByteArray CurrentPacket);
+
+private:
+  CConnectionManager &mConnectionManager;
+  const qint32 mID;
+  QByteArray *mData;
+
+  void checkifOnePacketIsCompleate();
 };
 #endif

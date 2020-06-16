@@ -21,51 +21,51 @@
 #ifndef CUSERMANAGER_H
 #define CUSERMANAGER_H
 
-#include <QObject>
-#include "User.h"
 #include "Core.h"
+#include "User.h"
+#include <QObject>
 
 #include "UnsentChatMessageStorage.h"
 
-class CUserManager: public QObject
-{
-	     Q_OBJECT
-      public:
-				CUserManager(CCore& Core,QString UserFileWithPath,CUnsentChatMessageStorage& UnsentChatMessageStorage);
-				~CUserManager();
+class CUserManager : public QObject {
+  Q_OBJECT
+public:
+  CUserManager(CCore &Core, QString UserFileWithPath,
+               CUnsentChatMessageStorage &UnsentChatMessageStorage);
+  ~CUserManager();
 
-				//forbid some operators
-				CUserManager(const CUserManager&)=delete;
-				CUserManager& operator=(const CUserManager&)=delete;
+  // forbid some operators
+  CUserManager(const CUserManager &) = delete;
+  CUserManager &operator=(const CUserManager &) = delete;
 
-		void 		saveUserList()const;
-		void 		loadUserList();
-		bool 		addNewUser (QString Name,QString I2PDestination,qint32 I2PStream_ID=0,bool SaveUserList=true);
-		bool 		checkIfUserExistsByI2PDestination ( QString I2PDestination )const;
-		void 		changeUserPositionInUserList(int oldPos,int newPos);
-		bool 		renameUserByI2PDestination (const QString Destination, const QString newNickname);
-		bool 		deleteUserByI2PDestination (const QString I2PDestination );
-		void		avatarImageChanged();
-		
-		bool		deleteUserByI2P_Destination ( QString Destination);
-		CUser* 		getUserByI2P_ID ( qint32 ID )const;
-		CUser* 		getUserByI2P_Destination ( QString Destination )const;
-		QString		getUserInfosByI2P_Destination(QString Destination)const;
-	const   QList<CUser*> 	getUserList()const;
-		bool 		validateI2PDestination(const QString I2PDestination)const;
+  void saveUserList() const;
+  void loadUserList();
+  bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0,
+                  bool SaveUserList = true);
+  bool checkIfUserExistsByI2PDestination(QString I2PDestination) const;
+  void changeUserPositionInUserList(int oldPos, int newPos);
+  bool renameUserByI2PDestination(const QString Destination,
+                                  const QString newNickname);
+  bool deleteUserByI2PDestination(const QString I2PDestination);
+  void avatarImageChanged();
 
-	
-      signals:
-		void 		signUserStatusChanged();
+  bool deleteUserByI2P_Destination(QString Destination);
+  CUser *getUserByI2P_ID(qint32 ID) const;
+  CUser *getUserByI2P_Destination(QString Destination) const;
+  QString getUserInfosByI2P_Destination(QString Destination) const;
+  const QList<CUser *> getUserList() const;
+  bool validateI2PDestination(const QString I2PDestination) const;
 
-      private slots:
-		void		slotSaveUnsentMessageForDest(QString I2PDest);
-  
-		
-      private:
-		CCore&	      	mCore;
-	const 	QString 	mUserFileWithPath;
-		CUnsentChatMessageStorage& mUnsentMessageStorage;
-		QList<CUser*> 	mUsers;	
+signals:
+  void signUserStatusChanged();
+
+private slots:
+  void slotSaveUnsentMessageForDest(QString I2PDest);
+
+private:
+  CCore &mCore;
+  const QString mUserFileWithPath;
+  CUnsentChatMessageStorage &mUnsentMessageStorage;
+  QList<CUser *> mUsers;
 };
 #endif // CUSERMANAGER_H

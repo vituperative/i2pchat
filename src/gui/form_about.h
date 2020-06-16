@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,42 +20,39 @@
 #ifndef FORM_ABOUT_H
 #define FORM_ABOUT_H
 
-#include <QtGui>
-#include <QtGlobal> 
 #include <QClipboard>
 #include <QMessageBox>
+#include <QtGlobal>
+#include <QtGui>
 
 #include "ui_form_about.h"
 
-class form_About : public QDialog
-{
+class form_About : public QDialog {
 
   Q_OBJECT
 
-	public:
-		form_About(QString ApplicationVersion,
-				QString Protoclversion,
-				QString FiletransferversionMin,
-				QString FiletransferversionMax,
-				QWidget *parent = 0);
-		~form_About();
+public:
+  form_About(QString ApplicationVersion, QString Protoclversion,
+             QString FiletransferversionMin, QString FiletransferversionMax,
+             QWidget *parent = 0);
+  ~form_About();
 
-		//forbid some operators
-		form_About(const form_About&)=delete;
-		form_About& operator=(const form_About&)=delete;
+  // forbid some operators
+  form_About(const form_About &) = delete;
+  form_About &operator=(const form_About &) = delete;
 
-		void getFocus();
-    //private slots:
-    //	void copyDestToClipboard();
-		
-	signals:
-		void closingAboutWindow();
+  void getFocus();
+  // private slots:
+  //	void copyDestToClipboard();
 
-	private:
-		void closeEvent(QCloseEvent * e);
-		void keyPressEvent(QKeyEvent* event); 
+signals:
+  void closingAboutWindow();
 
-	Ui::form_About ui;
-    //QString mBoteDestination;
+private:
+  void closeEvent(QCloseEvent *e);
+  void keyPressEvent(QKeyEvent *event);
+
+  Ui::form_About ui;
+  // QString mBoteDestination;
 };
 #endif

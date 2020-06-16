@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,74 +21,76 @@
 #define FILETRANSFER_H
 
 #include "I2PStream.h"
-#include <QtGui>
-#include <QTimer>
 #include <QTime>
+#include <QTimer>
+#include <QtGui>
 
-#define TIMERCOUNTFORAVERAGETRANSFERSPEED_READ 1000 //1 sec
+#define TIMERCOUNTFORAVERAGETRANSFERSPEED_READ 1000 // 1 sec
 
 class CConnectionManager;
 class CCore;
-class CFileTransferRecive:public QObject
-{
-	
+class CFileTransferRecive : public QObject {
 
-	Q_OBJECT
-	public:
-		CFileTransferRecive(CCore& Core,CI2PStream& Stream,qint32 StreamID,QString FileName,
-				quint64 FileSize,QString Destination,QString Protocolversion,double ProtocolversionD);
-		~CFileTransferRecive();
+  Q_OBJECT
+public:
+  CFileTransferRecive(CCore &Core, CI2PStream &Stream, qint32 StreamID,
+                      QString FileName, quint64 FileSize, QString Destination,
+                      QString Protocolversion, double ProtocolversionD);
+  ~CFileTransferRecive();
 
-		//forbid some operators
-		CFileTransferRecive(const CFileTransferRecive&)=delete;
-		CFileTransferRecive& operator=(const CFileTransferRecive&)=delete;
+  // forbid some operators
+  CFileTransferRecive(const CFileTransferRecive &) = delete;
+  CFileTransferRecive &operator=(const CFileTransferRecive &) = delete;
 
-		void start(QString FilePath,bool Accepted);
-		
-		quint64 getFileSize()	{return mFileSize;};
-		QString getFileName()	{return mFileName;};
-		QString getDestination(){return mDestination;};
-		qint32 	getStreamID()	{return mStreamID;};
-		quint64 getAllreadyRecivedSize() {return mAllreadyRecivedSize;};
-		QString getUsingProtocolVersion(){return mUsingProtocolVersion;};
+  void start(QString FilePath, bool Accepted);
 
-		bool 	checkIfAllreadyAcceptTheRequest(){return mRequestAccepted;};
+  quint64 getFileSize() { return mFileSize; };
+  QString getFileName() { return mFileName; };
+  QString getDestination() { return mDestination; };
+  qint32 getStreamID() { return mStreamID; };
+  quint64 getAllreadyRecivedSize() { return mAllreadyRecivedSize; };
+  QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
 
-		void	doConvertNumberToTransferSize(quint64 inNumber,QString& outNumber,QString& outType,bool addStoOutType=true);
+  bool checkIfAllreadyAcceptTheRequest() { return mRequestAccepted; };
 
-	public slots:
-		void slotAbbortFileRecive();
+  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
+                                     QString &outType,
+                                     bool addStoOutType = true);
 
-	private slots:
-		void slotStreamStatusRecived(const SAM_Message_Types::RESULT result,const qint32 ID,QString Message);
-		void slotDataRecived (const qint32 ID, QByteArray t );
-		void slotCalcAverageTransferSpeed();
+public slots:
+  void slotAbbortFileRecive();
 
-	signals:
-		void signAllreadyRecivedSizeChanged(quint64 Size);
-		void signFileReciveError();
-		void signFileRecivedFinishedOK();
-		void signFileReciveAborted();
-		void signFileNameChanged();
-		void signAverageReciveSpeed(QString SNumber,QString Type);
-		void signETA(QString Value);
+private slots:
+  void slotStreamStatusRecived(const SAM_Message_Types::RESULT result,
+                               const qint32 ID, QString Message);
+  void slotDataRecived(const qint32 ID, QByteArray t);
+  void slotCalcAverageTransferSpeed();
 
-	private:
-			CCore& mCore;
-			CI2PStream& mStream;
-		const 	qint32  mStreamID;
-			QString mFileName;	
-		const 	quint64 mFileSize;	
-		const 	QString mDestination;
-		const	QString	mUsingProtocolVersion;
-		const	double	mUsingProtocolVersionD;	
-			quint64 mAllreadyRecivedSize;
-			QFile 	mFileForRecive;
-			bool 	mRequestAccepted;
-			QTimer	mTimerForActAverageTransferSpeed;
-			QTime	mTimer;
-			CConnectionManager* mConnectionManager;
-			
-		void CalcETA(int speed);
+signals:
+  void signAllreadyRecivedSizeChanged(quint64 Size);
+  void signFileReciveError();
+  void signFileRecivedFinishedOK();
+  void signFileReciveAborted();
+  void signFileNameChanged();
+  void signAverageReciveSpeed(QString SNumber, QString Type);
+  void signETA(QString Value);
+
+private:
+  CCore &mCore;
+  CI2PStream &mStream;
+  const qint32 mStreamID;
+  QString mFileName;
+  const quint64 mFileSize;
+  const QString mDestination;
+  const QString mUsingProtocolVersion;
+  const double mUsingProtocolVersionD;
+  quint64 mAllreadyRecivedSize;
+  QFile mFileForRecive;
+  bool mRequestAccepted;
+  QTimer mTimerForActAverageTransferSpeed;
+  QTime mTimer;
+  CConnectionManager *mConnectionManager;
+
+  void CalcETA(int speed);
 };
 #endif

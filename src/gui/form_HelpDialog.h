@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,23 +25,22 @@
 
 #include "ui_form_HelpDialog.h"
 
-
-class form_HelpDialog : public QDialog 
-{
+class form_HelpDialog : public QDialog {
   Q_OBJECT
 
 public:
-  	form_HelpDialog(QString ProgrammVersion,QString ProtocolVersion,QString ConfigPath,QWidget *parent = 0);
+  form_HelpDialog(QString ProgrammVersion, QString ProtocolVersion,
+                  QString ConfigPath, QWidget *parent = 0);
 
-  	//forbid some operators
-  	form_HelpDialog(const form_HelpDialog&)=delete;
-  	form_HelpDialog& operator=(const form_HelpDialog&)=delete;
+  // forbid some operators
+  form_HelpDialog(const form_HelpDialog &) = delete;
+  form_HelpDialog &operator=(const form_HelpDialog &) = delete;
 
 private slots:
 
 private:
-  	Ui::form_HelpDialog ui;
-const 	QString mConfigPath;
+  Ui::form_HelpDialog ui;
+  const QString mConfigPath;
 };
 
 #endif
