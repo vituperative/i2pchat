@@ -1,5 +1,5 @@
 # I2P Chat AKA I2P Qt Messenger
-[![Build status appveyor MinGW32](https://ci.appveyor.com/api/projects/status/0tanjnojnlpksug6?svg=true)](https://ci.appveyor.com/project/wipedlifepotato/i2pchat)
+[![dev2 Build status](https://ci.appveyor.com/api/projects/status/5483t860xmpvjcpy/branch/dev2?svg=true)](https://ci.appveyor.com/project/nonlinear-chaos-order-etc-etal/i2pchat/branch/dev2)
 [![Build Status travis linux(xenial)](https://travis-ci.org/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.org/wipedlifepotato/i2pchat)
 ## Screenshots
 
