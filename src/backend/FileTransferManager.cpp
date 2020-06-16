@@ -50,20 +50,20 @@ CFileTransferSend* CFileTransferManager::getFileTransferSendsByID(qint32 ID)cons
 {
 	for ( auto it : mFileSends)
 		if(it->getStreamID()==ID) return it;
-	
+
 	/*for(int i=0;i<mFileSends.size();i++){
 		if(mFileSends.at(i)->getStreamID()==ID){
 			return mFileSends.at(i);
 		}
 	}*/
 	return NULL;
-	
+
 }
 
 
 const QList< CFileTransferSend * > CFileTransferManager::getFileTransferSendsList()const
 {
-	
+
 	return mFileSends;
 }
 
@@ -74,7 +74,7 @@ const QList< CFileTransferRecive * > CFileTransferManager::getFileTransferRecive
 
 void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destination)
 {
-	
+
 	QString Protocolversion;
 	double  ProtoVersionD=0.0;
 
@@ -86,7 +86,7 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destinat
 		qCritical() << "Undefined user for file transfer";
 		return;
 	}
-	if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL || 
+	if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL ||
 		this->getFileTransferReciveByID( User->getI2PStreamID() ) != NULL ) {
 		qCritical() << "Already exists transfer for user";
 		throw new std::runtime_error("Already exists transfer for user");
@@ -103,10 +103,10 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destinat
 
 
 void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString FileSize,QString Destination,QString ProtocolVersion)
-{	
+{
 	CI2PStream* Stream=mCore.getConnectionManager()->getStreamObjectByID(ID);
 	FileName=FilterForFileName(FileName);
-	
+
 	double ProtocolVersionD;
 	quint64 Size;
 	bool OK;
@@ -116,7 +116,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 		QMessageBox* msgBox= new QMessageBox(NULL);
 		msgBox->setIcon(QMessageBox::Critical);
 		msgBox->setText(tr("CCore(addNewFileRecive)"));
-		msgBox->setInformativeText(tr("Error convert QString to Quint64\nValue: %1\nFilerecive aborted)").arg(FileSize));
+		msgBox->setInformativeText(tr("Incoming file transfer rejected\nError converting QString to Quint64\nValue: %1").arg(FileSize));
 		msgBox->setStandardButtons(QMessageBox::Ok);
 		msgBox->setDefaultButton(QMessageBox::Ok);
 		msgBox->setWindowModality(Qt::NonModal);
@@ -128,7 +128,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 		}else if(ProtocolVersion=="0.3"){
 		   Stream->operator <<(QString(" 1:\t\n"));//false
 		}
-		
+
 		mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
 		removeFileRecive(ID);
 
@@ -141,36 +141,35 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 			  <<"Function:\t"<<" CFileTransferManager::addNewFileRecive"<<endl
 			  <<"Message:\t"<<"Can't convert QString to double"<<endl
 			  <<"QString:\t"<< ProtocolVersion<<endl;
-		
+
 		//abort the Filerecive
 		if(ProtocolVersion=="0.1"||ProtocolVersion=="0.2"){
 		    Stream->operator <<(QString("1"));//false
 		}else if(ProtocolVersion=="0.3"){
 		   Stream->operator <<(QString(" 1:\t\n"));//false
 		}
-		
+
 		mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
 		removeFileRecive(ID);
 		return;
 	}
 
 	if(ProtocolVersionD > FileTransferProtocol::MAXPROTOCOLVERSION_D){
-		//Show Info Message 
+		//Show Info Message
 		CUser* User=mCore.getUserManager()->getUserByI2P_Destination(Destination);
 		if(User!=NULL){
-			User->slotIncomingMessageFromSystem(tr("Ignore Incoming Filetransfer, " \
-				"not supported Filetransferprotocolversion\n" \
-				"Incoming Protocolversion: %1 \n" \
-				"Highest supported Protocolversion: %2\n" \
+			User->slotIncomingMessageFromSystem(tr("Incoming file transfer rejected: no protocol support\n" \
+				"Incoming protocol version: %1 \n" \
+				"Highest supported version: %2\n" \
 				"Filename: %3").arg(ProtocolVersion).arg(FileTransferProtocol::MAXPROTOCOLVERSION).arg(FileName));
 		}
 
-		if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL || 
+		if( this->getFileTransferSendsByID( User->getI2PStreamID() ) != NULL ||
 			this->getFileTransferReciveByID( User->getI2PStreamID() ) != NULL ) {
-			qCritical() << "Already exists transfer for user";
-			throw new std::runtime_error("Already exists transfer for user");
+			qCritical() << "File is already in the transfer queue";
+			throw new std::runtime_error("File is already in the transfer queue");
 			return;
-		}	
+		}
 
 		//abort the Filerecive
 		if(ProtocolVersion=="0.1"||ProtocolVersion=="0.2"){
@@ -178,7 +177,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 		}else if(ProtocolVersion=="0.3"){
 		   Stream->operator <<(QString(" 1:\t\n"));//false
 		}
-		
+
 		mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
 		removeFileRecive(ID);
 		return;
@@ -186,10 +185,10 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName, QString
 
 
 	mCore.getSoundManager()->slotFileReciveIncoming();
-	
+
 	disconnect(Stream,SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, const QString)),&mCore,
 		SLOT(slotStreamStatusRecived(const SAM_Message_Types::RESULT, const qint32, QString)));
-	
+
 	CFileTransferRecive* t= new CFileTransferRecive(mCore,*Stream,ID,FileName,Size,Destination,ProtocolVersion,ProtocolVersionD);
 	connect(t,SIGNAL(signFileRecivedFinishedOK()),mCore.getSoundManager(),
 		SLOT(slotFileReciveFinished()));
@@ -241,13 +240,13 @@ void CFileTransferManager::removeFileTransfer(const qint32 ID)
 				emit signUserStatusChanged();
 				break;
 			}
-		}	
+		}
 	}
-	
+
 }
 
 void CFileTransferManager::removeFileRecive(const qint32 ID)
-{	
+{
 	if(mFileRecives.count()>0){
 		for(int i=0;i<mFileRecives.count();i++){
 			if(mFileRecives.at(i)->getStreamID()==ID){
@@ -260,7 +259,7 @@ void CFileTransferManager::removeFileRecive(const qint32 ID)
 	}
 
 }
-const QString CFileTransferManager::FilterForFileName(QString FileName)const 
+const QString CFileTransferManager::FilterForFileName(QString FileName)const
 {
     FileName.replace("\\","");
     FileName.replace("/","");
