@@ -266,7 +266,7 @@ bool CUserManager::addNewUser(QString Name,QString I2PDestination,qint32 I2PStre
 			   <<"action add new User ignored"<<endl;
 		return false;
 */
-		return critical("Is not valid user");
+		return critical("Not a valid user");
 	}
 
 
@@ -274,12 +274,12 @@ bool CUserManager::addNewUser(QString Name,QString I2PDestination,qint32 I2PStre
 		return critical("Destination is in blockList");
 	}
 
-	if(this->checkIfUserExitsByI2PDestination(I2PDestination)==true){
-		return critical("User Exits By I2P Destination Before.");
+	if(this->checkIfUserExistsByI2PDestination(I2PDestination)==true){
+		return critical("Destination already exists for user");
 	}
 
 	if(I2PDestination==mCore.getMyDestination()){
-		    	return critical("Own destination");
+		    	return critical("Cannot add our own destination");
 	}
 
 
@@ -316,7 +316,7 @@ bool CUserManager::addNewUser(QString Name,QString I2PDestination,qint32 I2PStre
 	return true;
 }
 
-bool CUserManager::checkIfUserExitsByI2PDestination(const QString I2PDestination)const{
+bool CUserManager::checkIfUserExistsByI2PDestination(const QString I2PDestination)const{
 	if(I2PDestination==mCore.getMyDestination()) return true;
 
 	/*for(int i=0;i<mUsers.count();i++){
