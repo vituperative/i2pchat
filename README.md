@@ -59,7 +59,7 @@ qmake I2P-Messenger.pro "CONFIG += debug"
 ```
  * And after that,
 ```
-make -j\$\{nproc\}
+make -j${nproc}
 ```
 or simply
 ```
