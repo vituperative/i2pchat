@@ -70,7 +70,7 @@ make
  #### Linux:
  [Debian/Ubuntu deb for x86_64(old)](https://github.com/wipedlifepotato/i2pchat/releases/download/alpha0.1/i2p-messenger_amd64.deb)
  #### Windows:
- [WINDOWS32 will works on 64bit too](https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts)
+ [WINDOWS32 will work on 64-bit too](https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts)
 
 ## Running
 
@@ -91,7 +91,7 @@ http://forum.i2p/viewtopic.php?t=2474
 
 я два репа на гитхабе создал
  * один для антиквариата по части и2п массажника https://github.com/hypnosis-i2p/I2PQtMessengerLegacy ;
- * другой для разработки https://github.com/hypnosis-i2p/i2pchat .
+ * другой для разработки https://github.com/i2pchat/i2pchat .
 
 ## Footnotes
 
