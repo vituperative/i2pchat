@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,39 +20,38 @@
 #ifndef FORM_DEBUGMESSAGES_H
 #define FORM_DEBUGMESSAGES_H
 
+#include <QtGlobal>
 #include <QtGui>
-#include <QtGlobal> 
 
-#include "ui_form_DebugMessages.h"
 #include "Core.h"
 #include "DebugMessageManager.h"
+#include "ui_form_DebugMessages.h"
 
-class form_DebugMessages : public QDialog, private Ui::form_DebugMessages
-{
-    	Q_OBJECT
-	public:
-	    form_DebugMessages(CCore& core,QDialog *parent = 0);
-	    ~form_DebugMessages();
+class form_DebugMessages : public QDialog, private Ui::form_DebugMessages {
+  Q_OBJECT
+public:
+  form_DebugMessages(CCore &core, QDialog *parent = 0);
+  ~form_DebugMessages();
 
-	    //forbid some operators
-	    form_DebugMessages(const form_DebugMessages&)=delete;
-	    form_DebugMessages& operator=(const form_DebugMessages&)=delete;
+  // forbid some operators
+  form_DebugMessages(const form_DebugMessages &) = delete;
+  form_DebugMessages &operator=(const form_DebugMessages &) = delete;
 
-	    void getFocus();
-		
-	private slots:
-	    void newDebugMessage();
-	    void clearDebugMessages();
-	    void connectionDump();
+  void getFocus();
 
-	signals: 
-	    void closingDebugWindow();
-	
-	private:
-	    CCore& core;
-	    CDebugMessageManager* DebugMessageManager;
+private slots:
+  void newDebugMessage();
+  void clearDebugMessages();
+  void connectionDump();
 
-	    void closeEvent(QCloseEvent *e);
-	    void keyPressEvent(QKeyEvent* event); 
+signals:
+  void closingDebugWindow();
+
+private:
+  CCore &core;
+  CDebugMessageManager *DebugMessageManager;
+
+  void closeEvent(QCloseEvent *e);
+  void keyPressEvent(QKeyEvent *event);
 };
 #endif

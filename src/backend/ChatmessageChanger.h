@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,29 +20,29 @@
 #ifndef CHATMESSAGECHANGER_H
 #define CHATMESSAGECHANGER_H
 
-#include <QtGui>
 #include <QTextEdit>
+#include <QtGui>
 
 class CCore;
-class CChatMessageChanger{
+class CChatMessageChanger {
 public:
-    static CChatMessageChanger* exemplar(CCore& Core);
+  static CChatMessageChanger *exemplar(CCore &Core);
 
-    ~CChatMessageChanger();
+  ~CChatMessageChanger();
 
-    //forbid some operators
-    CChatMessageChanger& operator = (const CChatMessageChanger&)=delete;
+  // forbid some operators
+  CChatMessageChanger &operator=(const CChatMessageChanger &) = delete;
 
-    QString changeChatMessage(QString Chatmessage);
-    
+  QString changeChatMessage(QString Chatmessage);
+
 private:
-	static CChatMessageChanger* instanz;
-	CChatMessageChanger(QString& ConfigPath);
-	CChatMessageChanger(const CChatMessageChanger&);
+  static CChatMessageChanger *instanz;
+  CChatMessageChanger(QString &ConfigPath);
+  CChatMessageChanger(const CChatMessageChanger &);
 
-	QFont  mFont;
-	QColor mColor;
-	bool   mDoChange;
-	QTextEdit* mControllForChange;
+  QFont mFont;
+  QColor mColor;
+  bool mDoChange;
+  QTextEdit *mControllForChange;
 };
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,29 +20,27 @@
 #ifndef FORM_NEWUSER_H
 #define FORM_NEWUSER_H
 
-#include <QtGui>
-#include "ui_form_newUser.h"
 #include "Core.h"
+#include "ui_form_newUser.h"
+#include <QtGui>
 
-class form_newUserWindow : public QDialog, private Ui::form_newUserWindow
-{
-	Q_OBJECT
-	public:
-	form_newUserWindow(CCore& Core,QDialog *parent = 0);
-	~form_newUserWindow();
+class form_newUserWindow : public QDialog, private Ui::form_newUserWindow {
+  Q_OBJECT
+public:
+  form_newUserWindow(CCore &Core, QDialog *parent = 0);
+  ~form_newUserWindow();
 
-	//forbid some operators
-	form_newUserWindow(const form_newUserWindow&)=delete;
-	form_newUserWindow& operator=(const form_newUserWindow&)=delete;
+  // forbid some operators
+  form_newUserWindow(const form_newUserWindow &) = delete;
+  form_newUserWindow &operator=(const form_newUserWindow &) = delete;
 
-	private slots:
-	void addnewUser();
-	
-	
-	private:
-	CCore& Core;
+private slots:
+  void addnewUser();
 
-	void closeEvent(QCloseEvent *e);
+private:
+  CCore &Core;
+
+  void closeEvent(QCloseEvent *e);
 };
 
 #endif

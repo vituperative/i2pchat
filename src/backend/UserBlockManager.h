@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,56 +21,58 @@
 #ifndef USERBLOCKMANAGER_H
 #define USERBLOCKMANAGER_H
 
-#include <QtGlobal>
-#include <QtDebug>
-#include <QTextStream>
+#include <QDate>
+#include <QFile>
 #include <QMap>
 #include <QMapIterator>
-#include <QDate>
-#include <QTime>
-#include <QFile>
 #include <QStringList>
-
+#include <QTextStream>
+#include <QTime>
+#include <QtDebug>
+#include <QtGlobal>
 
 class CCore;
-class CUserBlockManager :public QObject
-{
-        public: struct CUserBlockEntity{
-		
-		CUserBlockEntity(QString NickName,QString Destination)
-		:mNickName(NickName),mDestination(Destination), mBlockDate(QDate::currentDate().toString("dd.MM.yyyy")){};
-		
-		CUserBlockEntity(QString NickName,QString Destination,QString BlockDate)
-		:mNickName(NickName),mDestination(Destination), mBlockDate(BlockDate){};
+class CUserBlockManager : public QObject {
+public:
+  struct CUserBlockEntity {
 
-	const 	QString mNickName;
-	const 	QString mDestination;
-	const 	QString mBlockDate;
-	};	
+    CUserBlockEntity(QString NickName, QString Destination)
+        : mNickName(NickName), mDestination(Destination),
+          mBlockDate(QDate::currentDate().toString("dd.MM.yyyy")){};
 
+    CUserBlockEntity(QString NickName, QString Destination, QString BlockDate)
+        : mNickName(NickName), mDestination(Destination),
+          mBlockDate(BlockDate){};
 
-	public:
-		CUserBlockManager(CCore& Core,const QString FilePathToBlockFile);
-		~CUserBlockManager();
-		
-		//forbid some operators
-		CUserBlockManager(const CUserBlockManager&)=delete;
-		CUserBlockManager& operator=(const CUserBlockManager&)=delete;
+    const QString mNickName;
+    const QString mDestination;
+    const QString mBlockDate;
+  };
 
-		void addNewBlockEntity(const QString NickName,const QString Destination,QString BlockDate="");
-		void removeBlockEntity(const QString Destination,bool CreateUser=false);
-		bool isDestinationInBlockList(const QString Destination)const;
-		
-		void readBlockListe();
-		
-	const 	QMap<QString,CUserBlockEntity*> getBlockList()const{return mUserBlockMap;};
+public:
+  CUserBlockManager(CCore &Core, const QString FilePathToBlockFile);
+  ~CUserBlockManager();
 
-	private:
-		CCore&	mCore;	
-	const 	QString mFilePathToBlockFile;
-		QMap<QString,CUserBlockEntity*> mUserBlockMap;
-	  
-		
-		void saveBlockListe();
+  // forbid some operators
+  CUserBlockManager(const CUserBlockManager &) = delete;
+  CUserBlockManager &operator=(const CUserBlockManager &) = delete;
+
+  void addNewBlockEntity(const QString NickName, const QString Destination,
+                         QString BlockDate = "");
+  void removeBlockEntity(const QString Destination, bool CreateUser = false);
+  bool isDestinationInBlockList(const QString Destination) const;
+
+  void readBlockListe();
+
+  const QMap<QString, CUserBlockEntity *> getBlockList() const {
+    return mUserBlockMap;
+  };
+
+private:
+  CCore &mCore;
+  const QString mFilePathToBlockFile;
+  QMap<QString, CUserBlockEntity *> mUserBlockMap;
+
+  void saveBlockListe();
 };
 #endif

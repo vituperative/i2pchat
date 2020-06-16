@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,92 +21,91 @@
 #ifndef CONNECTIONMANAGER_H
 #define CONNECTIONMANAGER_H
 
-#include "SessionController.h"
 #include "I2PStream.h"
+#include "SessionController.h"
 #include <QMap>
 #include <QMapIterator>
 #include <QTime>
 
-namespace SESSION_ENUMS
-{
-	enum SESSION_STYLEV3
-	{
-		STREAM,
-		DATAGRAMM//,
-		//RAW
-	};
+namespace SESSION_ENUMS {
+enum SESSION_STYLEV3 {
+  STREAM,
+  DATAGRAMM //,
+            // RAW
+};
 };
 
-class CConnectionManager : public QObject
-{
-	Q_OBJECT
-	public:
- 		CConnectionManager(QString SamHost,QString SamPort,QString ConfigPath);
-		~CConnectionManager();
+class CConnectionManager : public QObject {
+  Q_OBJECT
+public:
+  CConnectionManager(QString SamHost, QString SamPort, QString ConfigPath);
+  ~CConnectionManager();
 
-		//forbid some operators
-		CConnectionManager(const CConnectionManager&)=delete;
-		CConnectionManager& operator=(const CConnectionManager&)=delete;
+  // forbid some operators
+  CConnectionManager(const CConnectionManager &) = delete;
+  CConnectionManager &operator=(const CConnectionManager &) = delete;
 
-		bool 		doCreateSession(
-					SESSION_ENUMS::SESSION_STYLEV3 SessionStyle,
-					QString SamPrivKey,
-					QString SessionOptions);
+  bool doCreateSession(SESSION_ENUMS::SESSION_STYLEV3 SessionStyle,
+                       QString SamPrivKey, QString SessionOptions);
 
-		void 		doStopp();
-		void 		doReStart();
-		void 		doNamingLookUP(QString Name);
-		bool 		doDestroyStreamObjectByID(qint32 ID);
-		CI2PStream*	doCreateNewStreamObject(StreamMode Mode,bool Silence=false,bool dontConnectSendStreamStatus=false);
+  void doStopp();
+  void doReStart();
+  void doNamingLookUP(QString Name);
+  bool doDestroyStreamObjectByID(qint32 ID);
+  CI2PStream *doCreateNewStreamObject(StreamMode Mode, bool Silence = false,
+                                      bool dontConnectSendStreamStatus = false);
 
-		bool 		isComponentStopped()const 
-						{return mComponentStateStopped;}
+  bool isComponentStopped() const { return mComponentStateStopped; }
 
-		QString 	getStreamControllerBridgeName() const;
-		QString 	getSamPrivKey() 		const;
-	 	CI2PStream* 	getStreamObjectByID(qint32 ID) 	const;
-	 	CI2PStream*	getStreamObjectByDestination(QString Destination) const;
-	
-	const 	QMap<qint32,CI2PStream*>* getAllStreamObjects() const 
-						{return &allStreams;}
-						
-	const	QMap<qint32,CI2PStream*>* getAllStreamIncomingListenerObjects()const 
-						{return &StreamIncomingListener;}
+  QString getStreamControllerBridgeName() const;
+  QString getSamPrivKey() const;
+  CI2PStream *getStreamObjectByID(qint32 ID) const;
+  CI2PStream *getStreamObjectByDestination(QString Destination) const;
 
-	public slots:
-		void 		slotSessionStreamStatusOK(bool Status);		
-		void 		slotModeAcceptIncomingStream(qint32 ID);
-	
+  const QMap<qint32, CI2PStream *> *getAllStreamObjects() const {
+    return &allStreams;
+  }
 
+  const QMap<qint32, CI2PStream *> *
+  getAllStreamIncomingListenerObjects() const {
+    return &StreamIncomingListener;
+  }
 
-	signals:
-		void 		signDebugMessages(const QString Message);
-		void 		signStreamControllerStatusOK(bool Status);
-		void 		signStreamStatusRecived(const SAM_Message_Types::RESULT result,const qint32 ID,const QString Message);
-		void 		signNamingReplyRecived(const SAM_Message_Types::RESULT result,QString Name,QString Value="",QString Message="");
-		void 		signIncomingStream(CI2PStream* stream);
-		void 		signNewSamPrivKeyGenerated(const QString SamPrivKey);
+public slots:
+  void slotSessionStreamStatusOK(bool Status);
+  void slotModeAcceptIncomingStream(qint32 ID);
 
-	private:
-		qint32 		nextFreePosID () const;
-		qint32 		nextFreeNegID () const;
-		QString 	generateBridgeName() const;
-		void		stopp();
-		
-		QMap<qint32,CI2PStream*> StreamIncomingListener;
-		CSessionController* 	 StreamController;
+signals:
+  void signDebugMessages(const QString Message);
+  void signStreamControllerStatusOK(bool Status);
+  void signStreamStatusRecived(const SAM_Message_Types::RESULT result,
+                               const qint32 ID, const QString Message);
+  void signNamingReplyRecived(const SAM_Message_Types::RESULT result,
+                              QString Name, QString Value = "",
+                              QString Message = "");
+  void signIncomingStream(CI2PStream *stream);
+  void signNewSamPrivKeyGenerated(const QString SamPrivKey);
 
-		bool 			 mSessionStreamStatusOK;
-		bool 			 mComponentStateStopped;
+private:
+  qint32 nextFreePosID() const;
+  qint32 nextFreeNegID() const;
+  QString generateBridgeName() const;
+  void stopp();
 
-	const 	QString 	mSamHost;
-	const 	QString 	mSamPort;
-	const	QString		mConfigPath;
+  QMap<qint32, CI2PStream *> StreamIncomingListener;
+  CSessionController *StreamController;
 
-		inline void SessionStreamStatusOKCheck(){
-			if(mSessionStreamStatusOK==false)return;
-		}
-		QMap<qint32,CI2PStream*> allStreams;
+  bool mSessionStreamStatusOK;
+  bool mComponentStateStopped;
+
+  const QString mSamHost;
+  const QString mSamPort;
+  const QString mConfigPath;
+
+  inline void SessionStreamStatusOKCheck() {
+    if (mSessionStreamStatusOK == false)
+      return;
+  }
+  QMap<qint32, CI2PStream *> allStreams;
 };
 #endif
-

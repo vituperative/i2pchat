@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,36 +20,34 @@
 #ifndef DEBUGMESSAGEMANAGER_H
 #define DEBUGMESSAGEMANAGER_H
 
-#include <QtGui>
 #include <QSettings>
+#include <QtGui>
 
 #include "ConnectionManager.h"
 
-class CDebugMessageManager:public QObject
-{
-	    Q_OBJECT
+class CDebugMessageManager : public QObject {
+  Q_OBJECT
 
-	public:
-    CDebugMessageManager(QString Group, QString configPath);
-	~CDebugMessageManager();
+public:
+  CDebugMessageManager(QString Group, QString configPath);
+  ~CDebugMessageManager();
 
-	//forbid some operators
-	CDebugMessageManager(const CDebugMessageManager&)=delete;
-	CDebugMessageManager& operator=(const CDebugMessageManager&)=delete;
+  // forbid some operators
+  CDebugMessageManager(const CDebugMessageManager &) = delete;
+  CDebugMessageManager &operator=(const CDebugMessageManager &) = delete;
 
+public slots:
+  void doClearAllMessages();
+  const QStringList getAllMessages() const { return mMessages; }
 
-	public slots:
-		void 	doClearAllMessages();
-		const 	QStringList getAllMessages() const {return mMessages;}
+private slots:
+  void slotNewIncomingDebugMessage(const QString Message);
 
-	private slots:
-		void 	slotNewIncomingDebugMessage(const QString Message);
+signals:
+  void signNewDebugMessage(QString Message);
 
-	signals:
-		void 	signNewDebugMessage(QString Message);
-
-	private:
-		quint32 	mMaxMessageCount;
-		QStringList 	mMessages;
+private:
+  quint32 mMaxMessageCount;
+  QStringList mMessages;
 };
-#endif 
+#endif

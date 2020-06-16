@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,73 +20,65 @@
 #ifndef SESSIONCONTROLLER_H
 #define SESSIONCONTROLLER_H
 
-#include <QtGui>
-#include <QTcpSocket>
 #include <QSocketNotifier>
+#include <QTcpSocket>
+#include <QtGui>
 
 #include "I2PSamMessageAnalyser.h"
 
+class CSessionController : public QObject {
+  Q_OBJECT
+public:
+  CSessionController(QString SamHost, QString SamPort, QString BridgeName,
+                     QString SamPrivKey, QString ConfigPath,
+                     QString SessionOptions = "");
 
+  ~CSessionController();
 
-class CSessionController:public QObject
-{
-	Q_OBJECT
-	public:
-				CSessionController( 
-					QString SamHost,
-					QString SamPort,
-					QString BridgeName,
-					QString SamPrivKey,
-					QString ConfigPath,
-					QString SessionOptions= "");
+  QString getBridgeName() const { return mBridgeName; }
+  QString getSamPrivKey() const { return mSamPrivKey; }
 
-				~CSessionController();
-		
-				QString getBridgeName()const {return mBridgeName;}
-				QString getSamPrivKey()const {return mSamPrivKey;}
-		
-				void doConnect();
-				void doDisconnect();
-				void doNamingLookUP(QString Name);
-				void doDestGenerate(const QString Options="");
-				
-		
-	signals:
-				void signDebugMessages(const QString Message);
-				void signNamingReplyRecived(const SAM_Message_Types::RESULT result,QString Name,QString Value="",QString Message="");
-				void signSessionStreamStatusOK(bool Status);
-				void signNewSamPrivKeyGenerated(const QString SamPrivKey);
+  void doConnect();
+  void doDisconnect();
+  void doNamingLookUP(QString Name);
+  void doDestGenerate(const QString Options = "");
 
+signals:
+  void signDebugMessages(const QString Message);
+  void signNamingReplyRecived(const SAM_Message_Types::RESULT result,
+                              QString Name, QString Value = "",
+                              QString Message = "");
+  void signSessionStreamStatusOK(bool Status);
+  void signNewSamPrivKeyGenerated(const QString SamPrivKey);
 
-	private slots:
-				void slotConnected();
-				void slotDisconnected();
-				void slotReadFromSocket();
+private slots:
+  void slotConnected();
+  void slotDisconnected();
+  void slotReadFromSocket();
 
-	private:
-				void doSessionCreate();
-			
-		const 	QString 	mSamHost;
-		const 	QString 	mSamPort;
-		const 	QString 	mBridgeName;
-			QString 	mSamPrivKey;
-		const 	QString		mConfigPath;
-		const 	QString 	mSessionOptions;	
-		
-			QTcpSocket 	mTcpSocket;
-			CI2PSamMessageAnalyser* mAnalyser;
-			QByteArray* 	mIncomingPackets;
-	
-			bool mHandShakeWasSuccesfullDone;
-			bool mSessionWasSuccesfullCreated;
-			bool mDoneDisconnect;
-		
-			inline void ConnectionReadyCheck()
-			{
-				if(	mHandShakeWasSuccesfullDone==false ||
-					mSessionWasSuccesfullCreated==false||
-					mTcpSocket.state()!=QAbstractSocket::ConnectedState)
-				return;
-			}
+private:
+  void doSessionCreate();
+
+  const QString mSamHost;
+  const QString mSamPort;
+  const QString mBridgeName;
+  QString mSamPrivKey;
+  const QString mConfigPath;
+  const QString mSessionOptions;
+
+  QTcpSocket mTcpSocket;
+  CI2PSamMessageAnalyser *mAnalyser;
+  QByteArray *mIncomingPackets;
+
+  bool mHandShakeWasSuccesfullDone;
+  bool mSessionWasSuccesfullCreated;
+  bool mDoneDisconnect;
+
+  inline void ConnectionReadyCheck() {
+    if (mHandShakeWasSuccesfullDone == false ||
+        mSessionWasSuccesfullCreated == false ||
+        mTcpSocket.state() != QAbstractSocket::ConnectedState)
+      return;
+  }
 };
 #endif
