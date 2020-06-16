@@ -49,12 +49,12 @@ void CProtocol::newConnectionChat(const qint32 ID){
 
 void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data){
 using namespace Protocol_Info;
-	
-	if(Data.length()<4) 
+
+	if(Data.length()<4)
 		return;
 
 	QString ProtocolInfoTag(Data.left(4));
-	
+
 		//COMMANDS
 			if(ProtocolInfoTag=="1000"){//PING:
 				send(ECHO_OF_PING,ID,QString(""));
@@ -87,7 +87,7 @@ using namespace Protocol_Info;
 						{
 							send(USER_ONLINESTATUS_AWAY,ID,QString(""));
 							break;
-							
+
 						}
 						case USERWANTTOCHAT:
 						{
@@ -109,7 +109,7 @@ using namespace Protocol_Info;
 							msgBox->setDefaultButton(QMessageBox::Ok);
 							msgBox->setWindowModality(Qt::NonModal);
 							msgBox->show();
-	
+
 						}
 					}//switch
 				}//else
@@ -120,7 +120,7 @@ using namespace Protocol_Info;
 			}
 			else if(ProtocolInfoTag=="1005"){//GET_MAX_PROTOCOLVERSION_FILETRANSFER
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				
+
 				if(thisUser!=NULL){
 				     if(thisUser->getProtocolVersion()=="0.3"){
 					  //BUG in Messenger_0.2.15 BETA :(
@@ -137,7 +137,7 @@ using namespace Protocol_Info;
 				send(USER_INFO_NICKNAME	,ID,Infos.Nickname);
 				send(USER_INFO_GENDER	,ID,Infos.Gender);
 				send(USER_INFO_INTERESTS,ID,Infos.Interests);
-				
+
 				sAge.setNum(Infos.Age,10);
 				send(USER_INFO_AGE	,ID,sAge);
 			}
@@ -148,74 +148,74 @@ using namespace Protocol_Info;
 				send(ANSWER_OF_GET_AVATARIMAGE_IMAGE,ID, mCore.getUserInfos().AvatarImage);
 			}
 
-			
-			
+
+
 		//end of commands
-		
+
 		//Messages
 			else if(ProtocolInfoTag=="0001"){//ANSWER_OF_GET_CLIENTVERSION
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					QString ClientVersion=Data.mid(4);
 					thisUser->setClientVersion(ClientVersion);
 				}
-			
+
 			}
 			else if(ProtocolInfoTag=="0002"){//ANSWER_OF_GET_CLIENTNAME
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					QString Clientname=Data.mid(4);
 					thisUser->setClientName(Clientname);
 				}
-			
+
 			}
 			else if(ProtocolInfoTag=="0003"){//chatmessage
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					QByteArray temp=Data.mid(4);
 					thisUser->slotIncomingNewChatMessage(temp);
-				}	
+				}
 			}
 			else if(ProtocolInfoTag=="0004"){//USER_ONLINESTATUS_ONLINE
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					thisUser->setOnlineState(USERONLINE);
 				}
 			}
 			else if(ProtocolInfoTag=="0005"){//USER_ONLINESTATUS_OFFLINE || USER_ONLINESTATUS_INVISIBLE
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					thisUser->setOnlineState(USEROFFLINE);
 				}
 			}
 			else if(ProtocolInfoTag=="0006"){//USER_ONLINESTATUS_WANTTOCHAT
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					thisUser->setOnlineState(USERWANTTOCHAT);
 				}
 			}
 			else if(ProtocolInfoTag=="0007"){//USER_ONLINESTATUS_AWAY
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					thisUser->setOnlineState(USERAWAY);
 				}
 			}
 			else if(ProtocolInfoTag=="0008"){//USER_ONLINESTATUS_DONT_DISTURB
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					thisUser->setOnlineState(USERDONT_DISTURB);
 				}
 			}
 			else if(ProtocolInfoTag=="0009"){//ANSWER_OF_GET_PROTOCOLVERSION,
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					QString temp=Data.mid(4);
 					thisUser->setProtocolVersion(temp);
 				}
 			}
 			else if(ProtocolInfoTag=="0010"){//ANSWER_OF_GET_MAX_PROTOCOLVERSION_FILETRANSFER,
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
-				if(thisUser!=NULL){	
+				if(thisUser!=NULL){
 					QString temp=Data.mid(4);
 					thisUser->setMaxProtocolVersionFiletransfer(temp);
 				}
@@ -261,7 +261,7 @@ using namespace Protocol_Info;
 			}
 			else if(ProtocolInfoTag=="0016"){//USER_BLOCK_NORMAL
 				//SHOW USER AS BLOCKED
-				
+
 				CUser* thisUser=mCore.getUserManager()->getUserByI2P_ID(ID);
 				if(thisUser!=NULL){
 				    thisUser->setOnlineState(USERBLOCKEDYOU);
@@ -270,7 +270,7 @@ using namespace Protocol_Info;
 
 				    if( mCore.getConnectionManager()->isComponentStopped()==false){
 					    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-				    } 
+				    }
 				}
 			}
 			else if(ProtocolInfoTag=="0017"){//ANSWER_OF_GET_MIN_PROTOCOLVERSION_FILETRANSFER:
@@ -330,18 +330,18 @@ using namespace Protocol_Info;
 					   <<"Function:\t"<<"CProtocol::slotInputUnknown"<<endl
 					   <<"Message:\t"<<"Can't convert QString to double"<<endl
 					   <<"QString:\t"<<version<<endl;
-				
+
 			}
 
 
 			//dont send the firstpacket if you have connected someone
-			//(the firstpacket is sended from core::StreamStatusRecived)			
+			//(the firstpacket is sended from core::StreamStatusRecived)
 			if(ID < 0){
 				newConnectionChat(ID);//someone connect you
-				
+
 				if(mCore.getUserBlockManager()->isDestinationInBlockList(stream->getDestination())==true){
 				    //is blocked
-				    
+
 				    if(versiond<0.4){
 					  send(CHATMESSAGE,ID,QString("You were blocked,all Packets will be ignored !"));
 					  mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
@@ -349,7 +349,7 @@ using namespace Protocol_Info;
 				    }
 				    else {
 				     	QSettings settings(mCore.getConfigPath()+"/application.ini",QSettings::IniFormat);
-					settings.beginGroup("Security");	
+					settings.beginGroup("Security");
 					      if(settings.value("BlockStyle","Normal").toString()=="Normal"){
 						    send(CHATMESSAGE,ID,QString("You were blocked ,all Packets will be ignored !"));
 						    send(USER_BLOCK_NORMAL,ID,QString(""));
@@ -365,12 +365,12 @@ using namespace Protocol_Info;
 				}
 			}
 
-			
+
 			//remove Firstpacket
 			QByteArray Data2=Data;
 			Data2=Data2.remove(0,Data.indexOf("\n")+1);
-			if(mCore.getUserManager()->checkIfUserExitsByI2PDestination(stream->getDestination())==false){
-				
+			if(mCore.getUserManager()->checkIfUserExistsByI2PDestination(stream->getDestination())==false){
+
 				if(versiond>=0.3){
 					mCore.getUserManager()->addNewUser("Receiving",stream->getDestination(),ID);
 				}
@@ -404,15 +404,15 @@ using namespace Protocol_Info;
 
 			QString ProtovolVersion=Data2.mid(Data.indexOf("\t")+1,Data2.indexOf("\n")-Data2.indexOf("\t")-1);
 				Data2.remove(0,Data2.indexOf("\n")+1);//CHATSYSTEMFILETRANSFER\tPROTOCOLVERSION
-			
+
 			QString FileSize=Data2.mid(0,Data2.indexOf("\n"));
 				Data2.remove(0,Data2.indexOf("\n")+1);
 
 			QString FileName=Data2;
 			QString Destination;
-			
-			Destination=stream->getDestination(); 
-			
+
+			Destination=stream->getDestination();
+
 			if(mCore.getUserBlockManager()->isDestinationInBlockList(stream->getDestination())==true){
 			      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
 			      Data2.clear();
@@ -436,7 +436,7 @@ using namespace Protocol_Info;
 	}
 }
 
-void CProtocol::send(const COMMANDS_TAGS TAG,const qint32 ID)const 
+void CProtocol::send(const COMMANDS_TAGS TAG,const qint32 ID)const
 {
 	using namespace Protocol_Info;
 
@@ -472,7 +472,7 @@ void CProtocol::send(const COMMANDS_TAGS TAG,const qint32 ID)const
 
 
 
-void CProtocol::send(const MESSAGES_TAGS TAG,const qint32 ID,QString Data) const 
+void CProtocol::send(const MESSAGES_TAGS TAG,const qint32 ID,QString Data) const
 {
 	QByteArray t="";
 	t.insert(0,Data);
@@ -484,7 +484,7 @@ void CProtocol::send(const MESSAGES_TAGS TAG,const qint32 ID,QByteArray Data) co
 	QString ProtocolInfoTag;
 
 	CI2PStream* stream=mCore.getI2PStreamObjectByID(ID);
-	
+
 	switch(TAG)
 	{
 		case ECHO_OF_PING:{			ProtocolInfoTag="0000";		break;}
@@ -514,12 +514,12 @@ void CProtocol::send(const MESSAGES_TAGS TAG,const qint32 ID,QByteArray Data) co
 				<<"Line:\t"<<__LINE__<<endl
 				<<"Function:\t"<<"CProtocol::send"<<endl
 				<<"Message:\t"<<"unhandeld Message-TAG"<<"exit"<<endl;
-				
+
 			exit(-1);
-		}	
+		}
 	}
 	QString temp;
-	
+
 	temp.setNum(Data.length()+4,16);//hex
 	QString Paketlength=QString("%1").arg(temp,4,'0');
 

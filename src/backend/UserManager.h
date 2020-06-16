@@ -41,7 +41,7 @@ class CUserManager: public QObject
 		void 		saveUserList()const;
 		void 		loadUserList();
 		bool 		addNewUser (QString Name,QString I2PDestination,qint32 I2PStream_ID=0,bool SaveUserList=true);
-		bool 		checkIfUserExitsByI2PDestination ( QString I2PDestination )const;
+		bool 		checkIfUserExistsByI2PDestination ( QString I2PDestination )const;
 		void 		changeUserPositionInUserList(int oldPos,int newPos);
 		bool 		renameUserByI2PDestination (const QString Destination, const QString newNickname);
 		bool 		deleteUserByI2PDestination (const QString I2PDestination );
