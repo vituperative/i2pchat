@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
+    <normaloff>:/icons/download.svg</normaloff>:/icons/download.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>

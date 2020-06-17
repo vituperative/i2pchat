@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,43 +21,42 @@
 #ifndef FORM_TOPICSUBSCRIBE_H
 #define FORM_TOPICSUBSCRIBE_H
 
-#include <QtGui>
-#include <QtGlobal> 
 #include <QMap>
+#include <QtGlobal>
+#include <QtGui>
 
 #include "ui_form_topicSubscribe.h"
 
 #include "gui_icons.h"
 
 class CCore;
-class form_topicSubscribe : public QDialog,private Ui::form_topicSubscribe
-{
+class form_topicSubscribe : public QDialog, private Ui::form_topicSubscribe {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    form_topicSubscribe(CCore & Core);
-    ~form_topicSubscribe();
+  form_topicSubscribe(CCore &Core);
+  ~form_topicSubscribe();
 
-    //forbid some operators
-    form_topicSubscribe(const form_topicSubscribe&)=delete;
-    form_topicSubscribe& operator=(const form_topicSubscribe&)=delete;
+  // forbid some operators
+  form_topicSubscribe(const form_topicSubscribe &) = delete;
+  form_topicSubscribe &operator=(const form_topicSubscribe &) = delete;
 
-    void requestFocus();
+  void requestFocus();
 
 signals:
-    void signClosingTopicSubscribeWindow();
+  void signClosingTopicSubscribeWindow();
 
 private slots:
-    void slot_cmdSubscribe();
-    void slot_showContextMenu(const QPoint &);
-    void slot_openTopic();
-    void slot_onlineStateChanged();
+  void slot_cmdSubscribe();
+  void slot_showContextMenu(const QPoint &);
+  void slot_openTopic();
+  void slot_onlineStateChanged();
 
 private:
-    CCore            & mCore;
-    void init();
-    void closeEvent(QCloseEvent *e);
-    void keyPressEvent(QKeyEvent* event);
+  CCore &mCore;
+  void init();
+  void closeEvent(QCloseEvent *e);
+  void keyPressEvent(QKeyEvent *event);
 };
 #endif /* of FORM_TOPICSUBSCRIBE_H */

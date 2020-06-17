@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,44 +27,45 @@
 #include "ConnectionManager.h"
 #include "I2PStream.h"
 
-class CHttpOverStreamObject: public QObject{
+class CHttpOverStreamObject : public QObject {
 
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		
-		enum HTTPMODE{
-			GET,
-			POST,
-		};
+public:
+  enum HTTPMODE {
+    GET,
+    POST,
+  };
 
-		CHttpOverStreamObject(CConnectionManager& ConnectionManager);
-		~CHttpOverStreamObject();
+  CHttpOverStreamObject(CConnectionManager &ConnectionManager);
+  ~CHttpOverStreamObject();
 
-		//forbid some operators
-		CHttpOverStreamObject(const CHttpOverStreamObject&)=delete;
-		CHttpOverStreamObject& operator=(const CHttpOverStreamObject&)=delete;
+  // forbid some operators
+  CHttpOverStreamObject(const CHttpOverStreamObject &) = delete;
+  CHttpOverStreamObject &operator=(const CHttpOverStreamObject &) = delete;
 
-		void doHttpRequest(HTTPMODE mode,QString Destination,QStringList HttpHeader);
+  void doHttpRequest(HTTPMODE mode, QString Destination,
+                     QStringList HttpHeader);
 
-	signals: 
-		void signDoneSuccessfully(bool, QByteArray);
+signals:
+  void signDoneSuccessfully(bool, QByteArray);
 
-	private slots:
-		void slotStreamStatus(const SAM_Message_Types::RESULT result,const qint32 ID,QString Message);
-		void slotDataRecived  (const qint32 ID,QByteArray t );
+private slots:
+  void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID,
+                        QString Message);
+  void slotDataRecived(const qint32 ID, QByteArray t);
 
-	private:
-	  	CConnectionManager& 	mConnectionManager;
-		CI2PStream* 		mStream;
-		bool		mFirstStreamStatus;
-		bool 		mIsTimeOutCantReachPeerCLosed;
-		HTTPMODE 	mMode;
-		QString		mDestination;
-		QStringList	mHttpHeader;
-		QByteArray	mDataRecived;
-		qint32		mStreamID;
+private:
+  CConnectionManager &mConnectionManager;
+  CI2PStream *mStream;
+  bool mFirstStreamStatus;
+  bool mIsTimeOutCantReachPeerCLosed;
+  HTTPMODE mMode;
+  QString mDestination;
+  QStringList mHttpHeader;
+  QByteArray mDataRecived;
+  qint32 mStreamID;
 
-		void sendRequest();
+  void sendRequest();
 };
-#endif 
+#endif

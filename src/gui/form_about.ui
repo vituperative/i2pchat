@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>258</height>
+    <height>220</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,19 +22,19 @@
   <property name="minimumSize">
    <size>
     <width>450</width>
-    <height>190</height>
+    <height>220</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>450</width>
-    <height>258</height>
+    <height>220</height>
    </size>
   </property>
   <property name="sizeIncrement">
    <size>
-    <width>450</width>
-    <height>170</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/about.png</normaloff>:/icons/about.png</iconset>
+    <normaloff>:/icons/about.svg</normaloff>:/icons/about.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -89,57 +89,217 @@
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>App version:</string>
+           <string>I2PChat Version:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label_9">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
           <property name="text">
            <string>&lt;app version&gt;</string>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Protocol version:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_6">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>Supported file transfer versions:</string>
+           <string>Supported file transfer:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
          <widget class="QLabel" name="labelGitCommitCount">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
           <property name="text">
            <string>&lt;git c c&gt;</string>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_5">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Git commit count:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QLabel" name="label_supportedVersion">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
           <property name="text">
            <string>&lt;protocol values&gt;</string>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
          <widget class="QLabel" name="label_10">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
           <property name="text">
            <string>&lt;protocol version&gt;</string>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
@@ -148,38 +308,97 @@
           <property name="text">
            <string>&lt;date built&gt;</string>
           </property>
+          <property name="margin">
+           <number>4</number>
+          </property>
          </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_7">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Git commit hash:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Sans Serif</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Date built:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QTextBrowser" name="gitCommitHashTextBrowser">
+         <widget class="QLabel" name="gitCommitHashTextBrowser">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>30</height>
+            <height>24</height>
            </size>
           </property>
-          <property name="inputMethodHints">
-           <set>Qt::ImhNone</set>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QAbstractScrollArea::AdjustToContents</enum>
-          </property>
-          <property name="acceptRichText">
-           <bool>false</bool>
+          <property name="margin">
+           <number>4</number>
           </property>
          </widget>
         </item>
@@ -189,45 +408,9 @@
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="cmd_close">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>220</y>
-     <width>191</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="text">
-    <string>&amp;Close</string>
-   </property>
-  </widget>
  </widget>
  <resources>
   <include location="resourcen.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>cmd_close</sender>
-   <signal>clicked()</signal>
-   <receiver>form_About</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>342</x>
-     <y>144</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>198</x>
-     <y>84</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

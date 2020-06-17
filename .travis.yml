@@ -1,0 +1,94 @@
+language: cpp
+matrix:
+  include:
+  - os: linux
+    dist: xenial
+    before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install devscripts build-essential lintian dh-make
+    - sudo apt-get install qtdeclarative5-dev autoconf
+    - sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+    compiler:
+    - clang
+    - gcc
+    script:
+    - echo $TRAVIS_TAG
+    - qmake I2P-Messenger.pro
+    - make
+    after_script:
+     addons:
+     artifacts: true
+    #ssh-key & deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
+    #deploy:
+    #  provider: releases
+    #  api_key:
+    #    secure: <key>
+    #  file:
+    #  - I2P-Messenger
+    #  skip_cleanup: true
+    #  on:
+    #    repo: wipedlifepotato/i2pchat
+    #    tags: true
+
+# TODO: fix it
+  # works on mac os
+#  - os: osx
+#    osx_image: xcode11.5
+#    before_install:
+#    - brew install qt5
+#    - brew link qt5 --force
+#    compiler: clang
+#    script:
+#    - mkdir -p /Users/travis/build/wipedlifepotato/i2pchat/I2P-Messenger.app
+#    - /usr/libexec/PlistBuddy -c "Set :CFBundleVersion Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2P-Messenger.app/Contents/Info.plist
+#    - /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2P-Messenger.app/Contents/Info.plist
+#    - qmake "CONFIG+=istravis" -spec macx-xcode I2P-Messenger.pro
+#    - xcodebuild -list -project I2P-Messenger.xcodeproj
+#    - xcodebuild -scheme I2P-Messenger build
+#    #ssh-key & deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
+#    #deploy:
+#    #  provider: releases
+#    #  api_key:
+#    #    secure: <key>
+#    #  file:
+#    #  - file.app
+#    #  skip_cleanup: true
+#    #  on:
+#    #    repo: wipedlifepotato/i2pchat
+#    #    tags: true
+
+# Does not works correctly TODO: maybe delete it 😁️ 
+#  - os: windows
+#    before_install:
+#    - dir C:/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/10.0.17134.0/x64
+#    - cmd.exe /C 'cd && "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
+#      x86 && cd && cd "C:/Users/travis/build/wipedlifepotato/i2pchat" && dir'
+#    - curl -vLO http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
+#    - curl -vLO http://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip
+#    - unzip ASIOSDK2.3.2.zip
+#    - mkdir windows/ASIOSDK2
+#    - cp -rvu ASIOSDK2.3.2/* windows/ASIOSDK2
+#    - "./qt-unified-windows-x86-online.exe --verbose --script qt-installer-windows.qs"
+#    - ls -la C:/Qt/5.12.3/msvc2017/bin/qtenv2.bat
+#    script:
+#    - cmd.exe /C 'cd && "C:\Qt\5.12.3\msvc2017\bin\qtenv2.bat" && cd && "C:\Program
+#      Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
+#      x86 && cd "C:\Users\travis\build\wipedlifepotato\i2pchat" && cd && qmake I2P-Messenger.pro
+#      && nmake'
+#    #ssh-key & deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
+#    #deploy:
+#    #  provider: releases
+#    #  api_key:
+#    #    secure: <key>
+#    #  file:
+#    #  - file.exe
+#    #  skip_cleanup: true
+#    #  on:
+#    #    repo: wipedlifepotato/i2pchat
+#    #    tags: true
+
+before_install:
+    - eval "${MATRIX_EVAL}"
+
+
+

@@ -20,169 +20,158 @@
 #ifndef USER_H
 #define USER_H
 
-#include <QtGui>
+#include <QByteArray>
 #include <QStringList>
 #include <QTime>
 #include <QtGlobal>
-#include <QByteArray>
+#include <QtGui>
 
 #include "I2PStream.h"
 
+namespace User {
+enum CONNECTIONTOUSER { OFFLINE, ONLINE, TRYTOCONNECT, CONNECTERROR };
 
-namespace User
-{
-	enum CONNECTIONTOUSER
-	{
-		OFFLINE,
-		ONLINE,
-		TRYTOCONNECT,
-		CONNECTERROR
-	};
+enum ONLINESTATE {
+  USERONLINE,
+  USEROFFLINE,
+  USERINVISIBLE,
+  USERWANTTOCHAT,
+  USERAWAY,
+  USERDONT_DISTURB,
+  USERTRYTOCONNECT,
+  USERBLOCKEDYOU
+};
 
-	enum ONLINESTATE
-	{
-		USERONLINE,
-		USEROFFLINE,
-		USERINVISIBLE,
-		USERWANTTOCHAT,
-		USERAWAY,
-		USERDONT_DISTURB,
-		USERTRYTOCONNECT,
-		USERBLOCKEDYOU
-	};
+enum RECIVEDINFOS { NICKNAME, GENDER, AGE, INTERESTS };
 
-	enum RECIVEDINFOS
-	{
-		NICKNAME,
-		GENDER,
-		AGE,
-		INTERESTS
-	};
+struct CRecivedInfos {
+  QString Nickname;
+  QString Gender;
+  qint32 Age;
+  QString Interests;
+  QByteArray AvatarImage;
+};
 
-	struct CRecivedInfos
-	{
-		QString    Nickname;
-		QString    Gender;
-		qint32     Age;
-		QString    Interests;
-		QByteArray AvatarImage;
-	};
-
-}//namespace user
+} // namespace User
 
 using namespace User;
 class CCore;
 class CProtocol;
 class CChatMessageChanger;
 class CCMessageAckManager;
-class CUser: public QObject
-{
-	Q_OBJECT
-	public:
-		CUser(
-			CCore& Core,
-			CProtocol& Protocol,
-			QString Name,
-			QString I2PDestination,
-			qint32 I2PStream_ID
-		);
-		~CUser();
+class CUser : public QObject {
+  Q_OBJECT
+public:
+  CUser(CCore &Core, CProtocol &Protocol, QString Name, QString I2PDestination,
+        qint32 I2PStream_ID);
+  ~CUser();
 
-		//forbid some operators
-		CUser(const CUser&) = delete;
-		CUser& operator= (const CUser&) = delete;
+  // forbid some operators
+  CUser(const CUser &) = delete;
+  CUser &operator=(const CUser &) = delete;
 
-		const QString       getName()              const{return mName;}
-		const QString       getI2PDestination()    const{return mI2PDestination;}
-		qint32              getI2PStreamID()       const{return mI2PStream_ID;}
-		const QString       getProtocolVersion()   const{return mProtocolVersion;}
-		double              getProtocolVersion_D() const;
-		const QString       getClientName()        const{return mClientName;}
-		const QString       getClientVersion()     const{return mClientVersion;}
-		QColor              getTextColor()         const{return mTextColor;}
-		QFont               getTextFont()          const{return mTextFont;}
-		CONNECTIONTOUSER    getConnectionStatus()  const{return mConnectionStatus;}
-		ONLINESTATE         getOnlineState()       const{return mCurrentOnlineState;}
-		const QStringList&  getAllChatMessages();
-		const QStringList   getNewMessages(bool haveFocus);
-		const CRecivedInfos getRecivedUserInfos()  const{return mRecivedUserInfos;}
+  const QString getName() const { return mName; }
+  const QString getI2PDestination() const { return mI2PDestination; }
+  qint32 getI2PStreamID() const { return mI2PStream_ID; }
+  const QString getProtocolVersion() const { return mProtocolVersion; }
+  double getProtocolVersion_D() const;
+  const QString getClientName() const { return mClientName; }
+  const QString getClientVersion() const { return mClientVersion; }
+  QColor getTextColor() const { return mTextColor; }
+  QFont getTextFont() const { return mTextFont; }
+  CONNECTIONTOUSER getConnectionStatus() const { return mConnectionStatus; }
+  ONLINESTATE getOnlineState() const { return mCurrentOnlineState; }
+  const QStringList &getAllChatMessages();
+  const QStringList getNewMessages(bool haveFocus);
+  const CRecivedInfos getRecivedUserInfos() const { return mRecivedUserInfos; }
 
-		const QString       getHighestUsableProtocolVersionFiletransfer()   const;
-		double              getHighestUsableProtocolVersionFiletransfer_D() const;
-		const QString       getMaxProtocolVersionFiletransfer()             const {return mMaxProtocolVersionFiletransfer;};
-		double              getMaxProtocolVersionFiletransfer_D()           const;
-		const QString       getMinProtocolVersionFiletransfer()             const {return mMinProtocolVersionFiletransfer;};
-		double              getMinProtocolVersionFiletransfer_D()           const;
-		bool                getHaveNewUnreadMessages()                      const {return mHaveNewUnreadMessages;}
-		bool                getHaveNewUnreadChatmessages()                  const {return mHaveNewUnreadChatmessage;}
-		bool                getIsInvisible()                                const {return mInvisible;};
-		bool                getUsedB32Dest()                                const {return mUseB32Dest;};
-		const QStringList   getUnsentedMessages()                           const {return mUnsentedMessages;};
+  const QString getHighestUsableProtocolVersionFiletransfer() const;
+  double getHighestUsableProtocolVersionFiletransfer_D() const;
+  const QString getMaxProtocolVersionFiletransfer() const {
+    return mMaxProtocolVersionFiletransfer;
+  };
+  double getMaxProtocolVersionFiletransfer_D() const;
+  const QString getMinProtocolVersionFiletransfer() const {
+    return mMinProtocolVersionFiletransfer;
+  };
+  double getMinProtocolVersionFiletransfer_D() const;
+  bool getHaveNewUnreadMessages() const { return mHaveNewUnreadMessages; }
+  bool getHaveNewUnreadChatmessages() const {
+    return mHaveNewUnreadChatmessage;
+  }
+  bool getIsInvisible() const { return mInvisible; };
+  bool getUsedB32Dest() const { return mUseB32Dest; };
+  const QStringList getUnsentedMessages() const { return mUnsentedMessages; };
 
-		void setConnectionStatus(CONNECTIONTOUSER Status);
-		void setOnlineState(const ONLINESTATE newState);
-		void setName(QString newName);
-		void setI2PStreamID(qint32 ID);
-		void setProtocolVersion(QString Version);
-		void setClientName(QString Name);
-		void setClientVersion(QString Version);
-		void setTextColor(QColor textColor);
-		void setTextFont(QFont textFont);
-		void setInvisible(bool b);
-		void setMaxProtocolVersionFiletransfer(QString Version){mMaxProtocolVersionFiletransfer=Version;};
-		void setMinProtocolVersionFiletransfer(QString Version){mMinProtocolVersionFiletransfer=Version;};
-		void setRecivedUserInfos(RECIVEDINFOS Tag,QString value);
-		void setRecivedNicknameToUserNickname();
-		void setReplaceB32WithB64(QString b64Dest);
-		void setAvatarImage(QByteArray& avatarImage);
-		void setUnsentedMessages(QStringList& newMessages);
+  void setConnectionStatus(CONNECTIONTOUSER Status);
+  void setOnlineState(const ONLINESTATE newState);
+  void setName(QString newName);
+  void setI2PStreamID(qint32 ID);
+  void setProtocolVersion(QString Version);
+  void setClientName(QString Name);
+  void setClientVersion(QString Version);
+  void setTextColor(QColor textColor);
+  void setTextFont(QFont textFont);
+  void setInvisible(bool b);
+  void setMaxProtocolVersionFiletransfer(QString Version) {
+    mMaxProtocolVersionFiletransfer = Version;
+  };
+  void setMinProtocolVersionFiletransfer(QString Version) {
+    mMinProtocolVersionFiletransfer = Version;
+  };
+  void setRecivedUserInfos(RECIVEDINFOS Tag, QString value);
+  void setRecivedNicknameToUserNickname();
+  void setReplaceB32WithB64(QString b64Dest);
+  void setAvatarImage(QByteArray &avatarImage);
+  void setUnsentedMessages(QStringList &newMessages);
 
-	public slots:
-		void slotSendChatMessage(QString Message);
-		void slotIncomingNewChatMessage(QString newMessage);
-		void slotIncomingMessageFromSystem(QString newMessage,bool indicateWithSoundAndIcon=false);
+public slots:
+  void slotSendChatMessage(QString Message);
+  void slotIncomingNewChatMessage(QString newMessage);
+  void slotIncomingMessageFromSystem(QString newMessage,
+                                     bool indicateWithSoundAndIcon = false);
 
-	signals:
-		void signOnlineStateChanged();
-		void signNewMessageRecived();
-		void signNewMessageSound();
-		void signConnectionOnline();
-		void signConnectionOffline();
-		void signUserDeleted();
-		void signNewAvatarImage();
-		void signSaveUnsentMessages(QString I2PDest);
+signals:
+  void signOnlineStateChanged();
+  void signNewMessageRecived();
+  void signNewMessageSound();
+  void signConnectionOnline();
+  void signConnectionOffline();
+  void signUserDeleted();
+  void signNewAvatarImage();
+  void signSaveUnsentMessages(QString I2PDest);
 
-	private:
-		CCore&      mCore;
-		CProtocol&  mProtocol;
-		QString     mName;
-		const       QString mI2PDestination;
-		qint32      mI2PStream_ID;
+private:
+  CCore &mCore;
+  CProtocol &mProtocol;
+  QString mName;
+  const QString mI2PDestination;
+  qint32 mI2PStream_ID;
 
-		bool             mInvisible;
-		bool             mRecivedNicknameToUserNickname;
-		bool             mHaveNewUnreadMessages;
-		bool             mHaveNewUnreadChatmessage;
-		bool             mLogOnlineStateOfUsers;
-		CONNECTIONTOUSER mConnectionStatus;
-		ONLINESTATE      mCurrentOnlineState;
-		QString          mProtocolVersion;
-		QString          mMaxProtocolVersionFiletransfer;
-		QString          mMinProtocolVersionFiletransfer;
-		QString          mClientName;
-		QString          mClientVersion;
-		QStringList      mAllMessages;
-		QStringList      mNewMessages;
-		QStringList      mUnsentedMessages;
-		
-		CRecivedInfos    mRecivedUserInfos;
-		bool             mUseB32Dest;
+  bool mInvisible;
+  bool mRecivedNicknameToUserNickname;
+  bool mHaveNewUnreadMessages;
+  bool mHaveNewUnreadChatmessage;
+  bool mLogOnlineStateOfUsers;
+  CONNECTIONTOUSER mConnectionStatus;
+  ONLINESTATE mCurrentOnlineState;
+  QString mProtocolVersion;
+  QString mMaxProtocolVersionFiletransfer;
+  QString mMinProtocolVersionFiletransfer;
+  QString mClientName;
+  QString mClientVersion;
+  QStringList mAllMessages;
+  QStringList mNewMessages;
+  QStringList mUnsentedMessages;
 
-	//<Settings for the chatwindow>
-		QColor           mTextColor;
-		QFont            mTextFont;
-		CChatMessageChanger&    mChatMessageChanger;
-	//</Settings for the chatwindow>
-		void             SendAllunsendedMessages();
+  CRecivedInfos mRecivedUserInfos;
+  bool mUseB32Dest;
+
+  //<Settings for the chatwindow>
+  QColor mTextColor;
+  QFont mTextFont;
+  CChatMessageChanger &mChatMessageChanger;
+  //</Settings for the chatwindow>
+  void SendAllunsendedMessages();
 };
 #endif

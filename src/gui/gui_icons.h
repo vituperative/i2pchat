@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger   				   *
- *   Messenger-Dev@I2P-Messenger   					   *
+ *   Copyright (C) 2008 by I2P-Messenger                                   *
+ *   Messenger-Dev@I2P-Messenger                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,37 +21,37 @@
 #define GUI_ICONS_H
 
 /*Icons */
-#define ICON_QUIT              		":/icons/exit.png"
-#define ICON_MINIMIZE          		":/icons/window_nofullscreen.png"
-#define ICON_MAXIMIZE          		":/icons/window_fullscreen.png"
-#define ICON_CHAT            		":/icons/messenger.png"
-#define ICON_CLOSE             		":/icons/exit.png"
-#define ICON_NEWUSER			":/icons/add_user.png"
-#define ICON_USERSEARCH			":/icons/groupevent.png"
-#define ICON_SETTINGS			":/icons/settings.png"
-#define ICON_NEWUNREADMESSAGE   	":/icons/mail_unread_new.png"
-#define ICON_NEWUNREADMESSAGETRAY 	":/icons/mail_get.png"
-#define ICON_USER_TRYTOCONNECT		":/icons/yellow.png"
-#define ICON_USER_OFFLINE		":/icons/red.png"
-#define ICON_USER_ONLINE		":/icons/green.png"
-#define ICON_USER_WANTTOCHAT		":/icons/chatty.png"
-#define ICON_USER_AWAY			":/icons/xa.png"
-#define ICON_USER_DONT_DUSTURB		":/icons/dnd.png"
-#define ICON_USER_INVISIBLE		":/icons/invisible.png"
-#define ICON_USER_BLOCKED_YOU		":/icons/edit-delete.png"
-#define ICON_USER_DELETE		":/icons/edit-delete.png"
-#define ICON_USER_RENAME		":/icons/edit-rename.png"
-#define ICON_DEBUGMESSAGES		":/icons/status_unknown.png"
-#define ICON_MYDESTINATION		":/icons/editcopy.png"
-#define ICON_ABOUT			":/icons/about.png"
-#define ICON_SOUND_ON			":/icons/sound.png"
-#define ICON_SOUND_OFF			":/icons/sound_off.png"
-#define ICON_FILETRANSFER_RECIVE	":/icons/download.png"
-#define ICON_FILETRANSFER_SEND		":/icons/upload.png"
-#define ICON_COPYBASE64           	":/icons/edit-copy22.png"
-#define ICON_BLOCK			":/icons/encrypted24.png"
-#define ICON_SUCCESS			":/icons/success.png"
-#define ICON_RELOAD			":/icons/reload.png"
-#define ICON_NEW			":/icons/new.png"
+#define ICON_ABOUT ":/icons/about.svg"
+#define ICON_BLOCK ":/icons/blocked.svg"
+#define ICON_CHAT ":/icons/avatar.svg"
+#define ICON_CLOSE ":/icons/exit.svg"
+#define ICON_COPYBASE64 ":/icons/editcopy.svg"
+#define ICON_DEBUGMESSAGES ":/icons/debug.svg"
+#define ICON_FILETRANSFER_RECIVE ":/icons/download.svg"
+#define ICON_FILETRANSFER_SEND ":/icons/upload.svg"
+#define ICON_MAXIMIZE ":/icons/window_fullscreen.svg"
+#define ICON_MINIMIZE ":/icons/window_nofullscreen.svg"
+#define ICON_MYDESTINATION ":/icons/editcopy.svg"
+#define ICON_NEW ":/icons/new.svg"
+#define ICON_NEWUNREADMESSAGE ":/icons/newmail.svg"
+#define ICON_NEWUNREADMESSAGETRAY ":/icons/newmail.svg"
+#define ICON_NEWUSER ":/icons/add_user.svg"
+#define ICON_QUIT ":/icons/exit.svg"
+#define ICON_RELOAD ":/icons/reload.svg"
+#define ICON_SETTINGS ":/icons/settings.svg"
+#define ICON_SOUND_OFF ":/icons/sound_off.svg"
+#define ICON_SOUND_ON ":/icons/sound_on.svg"
+#define ICON_SUCCESS ":/icons/tick.svg"
+#define ICON_USER_AWAY ":/icons/status_away.svg"
+#define ICON_USER_BLOCKED_YOU ":/icons/blocked.svg"
+#define ICON_USER_DELETE ":/icons/delete.svg"
+#define ICON_USER_DONT_DUSTURB ":/icons/status_dnd.svg"
+#define ICON_USER_INVISIBLE ":/icons/status_invisible.svg"
+#define ICON_USER_OFFLINE ":/icons/status_offline.svg"
+#define ICON_USER_ONLINE ":/icons/status_online.svg"
+#define ICON_USER_RENAME ":/icons/rename.svg"
+#define ICON_USERSEARCH ":/icons/groupevent.svg"
+#define ICON_USER_TRYTOCONNECT ":/icons/status_connecting.svg"
+#define ICON_USER_WANTTOCHAT ":/icons/status_available.svg"
 
 #endif

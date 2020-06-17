@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/userblue24.png</normaloff>:/icons/userblue24.png</iconset>
+    <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
