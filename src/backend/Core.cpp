@@ -494,16 +494,24 @@ QString CCore::getConnectionDump() const {
       Message += "\tConnectionTrust:\t???\n";
     }
     //------------------------------------------
-    Message += "\tUsed for:\t\t" + Stream->getUsedFor() + "\n";
+    if (Stream->getUsedFor() != nullptr) {
+      Message += "\tUsed for:\t\t" + Stream->getUsedFor() + "\n";
+    }
 
     theUser = mUserManager->getUserByI2P_ID(Stream->getID());
     if (theUser == NULL) {
       Message += "\tUser: \n";
     } else {
       Message += "\tUser:\t\t" + theUser->getName() + "\n";
-      Message += "\tClientName:\t" + theUser->getClientName() + "\n";
-      Message += "\tClientVersion:\t" + theUser->getClientVersion() + "\n";
-      Message += "\tProtocolVersion:\t" + theUser->getProtocolVersion() + "\n";
+      if (theUser->getClientName() != nullptr) {
+        Message += "\tClientName:\t" + theUser->getClientName() + "\n";
+      }
+      if (theUser->getClientVersion() != nullptr) {
+        Message += "\tClientVersion:\t" + theUser->getClientVersion() + "\n";
+      }
+      if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
+        Message += "\tProtocolVersion:\t" + theUser->getProtocolVersion() + "\n";
+      }
     }
   }
 //  Message += "-----------------------------------------------\n\n";
