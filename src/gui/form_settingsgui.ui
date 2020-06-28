@@ -1264,11 +1264,6 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="1">
-	   <widget class="QButton" name="setCustomSheetButton">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-	   </widget>
            <widget class="QComboBox" name="styleSheetCombo">
             <property name="enabled">
              <bool>true</bool>
@@ -3046,11 +3041,14 @@ p, li { white-space: pre-wrap; }
       </item>
       <item>
        <property name="text">
-        <string>Usersearch</string>
+        <string>User Search</string>
        </property>
        <property name="icon">
         <iconset resource="resourcen.qrc">
          <normaloff>:/icons/find.svg</normaloff>:/icons/find.svg</iconset>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
        </property>
       </item>
      </widget>
