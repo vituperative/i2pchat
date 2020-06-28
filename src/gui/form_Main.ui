@@ -45,6 +45,9 @@
     </property>
     <item row="2" column="0">
      <widget class="QListWidget" name="listWidget">
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="mouseTracking">
        <bool>false</bool>
       </property>
@@ -52,7 +55,7 @@
        <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::AllEditTriggers</set>
@@ -65,6 +68,9 @@
         <width>12</width>
         <height>12</height>
        </size>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
       </property>
       <property name="gridSize">
        <size>
