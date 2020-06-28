@@ -148,8 +148,7 @@ CUser *CUserManager::getUserByI2P_Destination(QString Destination) const {
 }
 
 QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
-  QString Infos = "No Informations received";
-
+  QString Infos = "No Information received";
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
       CUser *theUser = mUsers.at(i);
