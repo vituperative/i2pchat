@@ -156,7 +156,7 @@ void CI2PStream::slotReadFromSocket() {
 
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Not the complead Packet received ??? maybe possible ???
       return;
     }
 
@@ -194,7 +194,7 @@ void CI2PStream::slotReadFromSocket() {
   } else if (mStatusReceived == false) {
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Not the complead Packet received ??? maybe possible ???
       return;
     }
 
@@ -226,7 +226,7 @@ void CI2PStream::slotReadFromSocket() {
     // get Destaintion
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Not the complead Packet received ??? maybe possible ???
       return;
     }
 

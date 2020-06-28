@@ -21,7 +21,7 @@
 
 #include "ConnectionManager.h"
 #include "FileTransferManager.h"
-#include "FileTransferRecive.h"
+#include "FileTransferReceive.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
 #include "PacketManager.h"
@@ -615,10 +615,10 @@ QString CCore::getDestinationByID(qint32 ID) const {
     return send->getDestination();
   }
 
-  CFileTransferRecive *recive =
-      mFileTransferManager->getFileTransferReciveByID(ID);
-  if (recive != NULL) {
-    return recive->getDestination();
+  CFileTransferReceive *receive =
+      mFileTransferManager->getFileTransferReceiveByID(ID);
+  if (receive != NULL) {
+    return receive->getDestination();
   }
 
   return "";
@@ -647,13 +647,13 @@ void CCore::createStreamObjectsForAllUsers() {
 }
 
 void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data,
-                                 bool isFileTransfer_Recive) {
+                                 bool isFileTransfer_Receive) {
   CI2PStream *t = mConnectionManager->getStreamObjectByID(ID);
   t->setConnectionType(KNOWN);
   disconnect(t, SIGNAL(signDataReceived(const qint32, const QByteArray)),
              mProtocol, SLOT(slotInputUnknown(const qint32, const QByteArray)));
 
-  if (isFileTransfer_Recive == false) {
+  if (isFileTransfer_Receive == false) {
     CPacketManager *packetManager = new CPacketManager(*mConnectionManager, ID);
     connect(t, SIGNAL(signDataReceived(const qint32, const QByteArray)),
             packetManager, SLOT(slotDataInput(qint32, QByteArray)));
@@ -668,7 +668,7 @@ void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data,
     }
     mDataPacketsManagers.push_back(packetManager);
   }
-  if (isFileTransfer_Recive == true) {
+  if (isFileTransfer_Receive == true) {
   }
 }
 

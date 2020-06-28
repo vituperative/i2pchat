@@ -42,7 +42,7 @@ enum ONLINESTATE {
   USERBLOCKEDYOU
 };
 
-enum RECIVEDINFOS { NICKNAME, GENDER, AGE, INTERESTS };
+enum RECEIVEDINFOS { NICKNAME, GENDER, AGE, INTERESTS };
 
 struct CReceivedInfos {
   QString Nickname;
@@ -119,7 +119,7 @@ public:
   void setMinProtocolVersionFiletransfer(QString Version) {
     mMinProtocolVersionFiletransfer = Version;
   };
-  void setReceivedUserInfos(RECIVEDINFOS Tag, QString value);
+  void setReceivedUserInfos(RECEIVEDINFOS Tag, QString value);
   void setReceivedNicknameToUserNickname();
   void setReplaceB32WithB64(QString b64Dest);
   void setAvatarImage(QByteArray &avatarImage);

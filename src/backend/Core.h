@@ -89,7 +89,7 @@ public:
   void setUserProtocolVersionByStreamID(qint32 ID, QString Version);
   void setOnlineStatus(const ONLINESTATE newStatus);
   void setStreamTypeToKnown(qint32 ID, const QByteArray Data,
-                            bool isFileTransfer_Recive = false);
+                            bool isFileTransfer_Receive = false);
   void setMyDestinationB32(QString B32Dest);
 
   bool useThisChatConnection(const QString Destination, const qint32 ID);

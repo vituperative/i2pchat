@@ -27,7 +27,7 @@
 #define ICON_CLOSE ":/icons/exit.svg"
 #define ICON_COPYBASE64 ":/icons/editcopy.svg"
 #define ICON_DEBUGMESSAGES ":/icons/debug.svg"
-#define ICON_FILETRANSFER_RECIVE ":/icons/download.svg"
+#define ICON_FILETRANSFER_RECEIVE ":/icons/download.svg"
 #define ICON_FILETRANSFER_SEND ":/icons/upload.svg"
 #define ICON_MAXIMIZE ":/icons/window_fullscreen.svg"
 #define ICON_MINIMIZE ":/icons/window_nofullscreen.svg"

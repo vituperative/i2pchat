@@ -22,7 +22,7 @@
 #define FILETRANSFERMANAGER_H
 
 #include "Core.h"
-#include "FileTransferRecive.h"
+#include "FileTransferReceive.h"
 #include "FileTransferSend.h"
 #include <QObject>
 
@@ -38,22 +38,22 @@ public:
   CFileTransferManager &operator=(const CFileTransferManager &) = delete;
 
   void addNewFileTransfer(QString FilePath, QString Destination);
-  void addNewFileRecive(qint32 ID, QString FileName, QString FileSize,
+  void addNewFileReceive(qint32 ID, QString FileName, QString FileSize,
                         QString Destination, QString ProtocolVersion);
 
   void removeFileTransfer(const qint32 ID) /*noexcept*/;
-  void removeFileRecive(const qint32 ID);
+  void removeFileReceive(const qint32 ID);
 
-  CFileTransferRecive *getFileTransferReciveByID(qint32 ID) const;
+  CFileTransferReceive *getFileTransferReceiveByID(qint32 ID) const;
   CFileTransferSend *getFileTransferSendsByID(qint32 ID) const;
-  const QList<CFileTransferRecive *> getFileTransferReciveList() const;
+  const QList<CFileTransferReceive *> getFileTransferReceiveList() const;
   const QList<CFileTransferSend *> getFileTransferSendsList() const;
   // template <typename T, typename where, typename what, typename fun>
   //	 T* getFileTransferBy(where wh, what wat,fun f);
   bool isThisID_a_FileSendID(qint32 ID) const;
-  bool isThisID_a_FileReciveID(qint32 ID) const;
+  bool isThisID_a_FileReceiveID(qint32 ID) const;
 
-  bool checkIfAFileTransferOrReciveisActive() const;
+  bool checkIfAFileTransferOrReceiveisActive() const;
 
 signals:
   void signUserStatusChanged();
@@ -61,7 +61,7 @@ signals:
 private:
   CCore &mCore;
   QList<CFileTransferSend *> mFileSends;
-  QList<CFileTransferRecive *> mFileRecives;
+  QList<CFileTransferReceive *> mFileReceives;
 
   const QString FilterForFileName(QString FileName) const;
 };

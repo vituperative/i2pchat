@@ -148,7 +148,7 @@ CUser *CUserManager::getUserByI2P_Destination(QString Destination) const {
 }
 
 QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
-  QString Infos = "No Informations recived";
+  QString Infos = "No Informations received";
 
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
@@ -162,21 +162,21 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
                theUser->getMaxProtocolVersionFiletransfer() + "\n";
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
-        CReceivedInfos recivedInfos = theUser->getReceivedUserInfos();
+        CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
         QString sAge;
-        sAge.setNum(recivedInfos.Age, 10);
+        sAge.setNum(receivedInfos.Age, 10);
 
-        if (recivedInfos.Gender != nullptr || sAge != "0" || recivedInfos.Interests != nullptr) {
+        if (receivedInfos.Gender != nullptr || sAge != "0" || receivedInfos.Interests != nullptr) {
           Infos += "\nUser Information:\n";
-//          Infos += "Nickname:\t\t" + recivedInfos.Nickname + "\n";
-          if (recivedInfos.Gender != nullptr) {
-            Infos += "Gender:\t\t" + recivedInfos.Gender + "\n";
+//          Infos += "Nickname:\t\t" + receivedInfos.Nickname + "\n";
+          if (receivedInfos.Gender != nullptr) {
+            Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";
           }
           if (sAge != nullptr && sAge != "0") {
             Infos += "Age:\t\t" + sAge + "\n";
           }
-          if (recivedInfos.Interests != nullptr) {
-            Infos += "Interests:\t\t" + recivedInfos.Interests;
+          if (receivedInfos.Interests != nullptr) {
+            Infos += "Interests:\t\t" + receivedInfos.Interests;
           }
         }
       }

@@ -401,7 +401,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       Data2.clear();
       mCore.setStreamTypeToKnown(ID, Data2, true);
       mCore.setUserProtocolVersionByStreamID(ID, ProtovolVersion);
-      mCore.getFileTransferManager()->addNewFileRecive(
+      mCore.getFileTransferManager()->addNewFileReceive(
           ID, FileName, FileSize, Destination, ProtovolVersion);
     } else {
       // not from a other CHATSYSTEM

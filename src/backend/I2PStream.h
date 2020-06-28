@@ -84,7 +84,7 @@ signals:
                                const qint32 ID, const QString Message);
   void signDataReceived(const qint32 ID, const QByteArray Data);
   void signModeAcceptIncomingStream(
-      qint32 ID); // emit if Destination recived (SILENCE=false)
+      qint32 ID); // emit if Destination received (SILENCE=false)
 
 private:
   const QString mSamHost;

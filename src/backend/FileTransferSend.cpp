@@ -217,11 +217,11 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
       mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
     }
   } else if (mUsingProtocolVersionD == 0.3) {
-    mRemoteDataReciveBuffer.append(t);
-    while (mRemoteDataReciveBuffer.contains('\n') == true) {
-      QString CurrentPacket = mRemoteDataReciveBuffer.mid(
-          0, mRemoteDataReciveBuffer.indexOf('\n', 0) + 1);
-      mRemoteDataReciveBuffer.remove(0, CurrentPacket.length());
+    mRemoteDataReceiveBuffer.append(t);
+    while (mRemoteDataReceiveBuffer.contains('\n') == true) {
+      QString CurrentPacket = mRemoteDataReceiveBuffer.mid(
+          0, mRemoteDataReceiveBuffer.indexOf('\n', 0) + 1);
+      mRemoteDataReceiveBuffer.remove(0, CurrentPacket.length());
 
       QString CurrentAction = CurrentPacket.mid(0, 1);
       CurrentPacket.remove(0, 3); // remove {0,1,2}:\t
@@ -243,7 +243,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
       } else if (CurrentAction == "2") {
-        // next block & current size recived remote
+        // next block & current size received remote
         CurrentPacket.remove('\n');
         mRemoteReceivedSize += CurrentPacket.toInt();
         emit signAllreadySendedSizeChanged(mRemoteReceivedSize);

@@ -323,7 +323,7 @@ double CUser::getMinProtocolVersionFiletransfer_D() const {
   return tmp;
 }
 
-void CUser::setReceivedUserInfos(RECIVEDINFOS Tag, QString value) {
+void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, QString value) {
   switch (Tag) {
   case NICKNAME: {
     mReceivedUserInfos.Nickname = value;

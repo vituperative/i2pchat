@@ -27,7 +27,7 @@
 #include <QtGui>
 
 /*
-      Filetransferprotocol 0.3: (sender Recive)
+      Filetransferprotocol 0.3: (sender Receive)
 
       tags:
       0:\t{StartPos}\n  	accpted start from StartPos // at the moment only from
@@ -119,6 +119,6 @@ private:
   QTimer mTimerForActAverageTransferSpeed;
   QTime mTimer;
   int mCurrentPacketSize;
-  QByteArray mRemoteDataReciveBuffer;
+  QByteArray mRemoteDataReceiveBuffer;
 };
 #endif

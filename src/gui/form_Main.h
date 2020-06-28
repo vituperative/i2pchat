@@ -38,7 +38,7 @@
 #include "form_UserSearch.h"
 #include "form_about.h"
 #include "form_chatwidget.h"
-#include "form_fileRecive.h"
+#include "form_fileReceive.h"
 #include "form_fileSend.h"
 #include "form_newUser.h"
 #include "form_rename.h"
@@ -49,7 +49,7 @@
 #include "Core.h"
 #include "User.h"
 
-#include "FileTransferRecive.h"
+#include "FileTransferReceive.h"
 #include "FileTransferSend.h"
 
 class form_MainWindow : public QMainWindow, private Ui::form_MainWindow {
@@ -72,7 +72,7 @@ signals:
 public slots:
   void eventAboutWindowClosed();
   void eventChatWindowClosed(QString Destination);
-  void eventFileReciveWindowClosed(qint32 StreamID);
+  void eventFileReceiveWindowClosed(qint32 StreamID);
   void eventFileSendWindowClosed(qint32 StreamID);
   void eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason);
   void eventUserSearchWindowClosed();
@@ -89,7 +89,7 @@ private slots:
   void openAboutDialog();
   void openUserListeClicked();
   void openChatWindow(QString Destination);
-  void openFileReciveWindow(qint32 StreamID);
+  void openFileReceiveWindow(qint32 StreamID);
   void openFileSendWindow(qint32 StreamID);
   // void openUserSearchWindow();
   void openTopicSubscribeWindow();
@@ -135,7 +135,7 @@ private:
 
   // windows
   QMap<QString, form_ChatWidget *> mAllOpenChatWindows;
-  QMap<qint32, form_fileRecive *> mAllFileReciveWindows;
+  QMap<qint32, form_fileReceive *> mAllFileReceiveWindows;
   QMap<qint32, form_fileSend *> mAllFileSendWindows;
 
   form_userSearch *mUserSearchWindow;

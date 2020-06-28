@@ -316,7 +316,7 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="checkBox_AutoAcceptFileRecive">
+        <widget class="QCheckBox" name="checkBox_AutoAcceptFileReceive">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1831,7 +1831,7 @@ p, li { white-space: pre-wrap; }
           </rect>
          </property>
          <property name="title">
-          <string>FileRecive</string>
+          <string>FileReceive</string>
          </property>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
@@ -3175,7 +3175,7 @@ p, li { white-space: pre-wrap; }
  </resources>
  <connections>
   <connection>
-   <sender>checkBox_AutoAcceptFileRecive</sender>
+   <sender>checkBox_AutoAcceptFileReceive</sender>
    <signal>clicked(bool)</signal>
    <receiver>cmd_IncomingFileFolder</receiver>
    <slot>setEnabled(bool)</slot>
