@@ -45,8 +45,8 @@ signals:
 
 private slots:
   void slot_Button();
-  void slot_allreadyRecivedSizeChanged(quint64 value);
-  void slot_FileRecivedFinishedOK();
+  void slot_allreadyReceivedSizeChanged(quint64 value);
+  void slot_FileReceivedFinishedOK();
   void slot_FileReciveError();
   void slot_SpeedChanged(QString SNumber, QString Type);
 

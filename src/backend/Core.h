@@ -66,7 +66,7 @@ public:
     return mProtocol->getProtocolVersion();
   };
   CI2PStream *getI2PStreamObjectByID(qint32 ID) const;
-  const CRecivedInfos getUserInfos() const;
+  const CReceivedInfos getUserInfos() const;
   QString getConnectionDump() const;
   const QString getConfigPath() const { return mConfigPath; };
 
@@ -109,9 +109,9 @@ public:
 
 private slots:
   // <SIGNALS FROM CONNECTIONMANAGER>
-  void slotStreamStatusRecived(const SAM_Message_Types::RESULT result,
+  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
                                const qint32 ID, QString Message);
-  void slotNamingReplyRecived(const SAM_Message_Types::RESULT result,
+  void slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
                               QString Name, QString Value = "",
                               QString Message = "");
   void slotStreamControllerStatusOK(bool Status);
@@ -135,7 +135,7 @@ private:
   CFileTransferManager *mFileTransferManager;
   CUnsentChatMessageStorage *mUnsentChatMessageStorage;
 
-  CRecivedInfos mUserInfos;
+  CReceivedInfos mUserInfos;
   QString mMyDestination;
   QString mMyDestinationB32;
   QString mConfigPath;

@@ -38,7 +38,7 @@ void CProtocol::newConnectionChat(const qint32 ID) {
 
   // send the ChatSystem\tProtocolVersion
   if (stream->getFIRSTPAKETCHAT_allreadySended() == false) {
-    // sometime StreamStatusRecived is called again with streamstatus Ok
+    // sometime StreamStatusReceived is called again with streamstatus Ok
     stream->setFIRSTPAKETCHAT_allreadySended(true);
     *(stream) << (QString)FIRSTPAKETCHAT;
   }
@@ -116,7 +116,7 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
   } else if (ProtocolInfoTag == "1006") { // GET_USER_INFOS
     using namespace User;
     QString sAge;
-    CRecivedInfos Infos = mCore.getUserInfos();
+    CReceivedInfos Infos = mCore.getUserInfos();
     send(USER_INFO_NICKNAME, ID, Infos.Nickname);
     send(USER_INFO_GENDER, ID, Infos.Gender);
     send(USER_INFO_INTERESTS, ID, Infos.Interests);
@@ -196,25 +196,25 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
     if (thisUser != NULL) {
       QString temp = Data.mid(4);
-      thisUser->setRecivedUserInfos(User::NICKNAME, temp);
+      thisUser->setReceivedUserInfos(User::NICKNAME, temp);
     }
   } else if (ProtocolInfoTag == "0012") { // USER_INFO_GENDER
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
     if (thisUser != NULL) {
       QString temp = Data.mid(4);
-      thisUser->setRecivedUserInfos(User::GENDER, temp);
+      thisUser->setReceivedUserInfos(User::GENDER, temp);
     }
   } else if (ProtocolInfoTag == "0013") { // USER_INFO_AGE
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
     if (thisUser != NULL) {
       QString temp = Data.mid(4);
-      thisUser->setRecivedUserInfos(User::AGE, temp);
+      thisUser->setReceivedUserInfos(User::AGE, temp);
     }
   } else if (ProtocolInfoTag == "0014") { // USER_INFO_INTERESTS
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
     if (thisUser != NULL) {
       QString temp = Data.mid(4);
-      thisUser->setRecivedUserInfos(User::INTERESTS, temp);
+      thisUser->setReceivedUserInfos(User::INTERESTS, temp);
     }
   } else if (ProtocolInfoTag == "0015") { // USER_BLOCK_INVISIBLE
     // SHOW USER AS OFFLINE
@@ -305,7 +305,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       }
 
       // dont send the firstpacket if you have connected someone
-      //(the firstpacket is sended from core::StreamStatusRecived)
+      //(the firstpacket is sended from core::StreamStatusReceived)
       if (ID < 0) {
         newConnectionChat(ID); // someone connect you
 
@@ -359,7 +359,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
         User->setConnectionStatus(ONLINE);
         mCore.setStreamTypeToKnown(ID, Data2, false);
         if (versiond >= 0.3) {
-          User->setRecivedNicknameToUserNickname();
+          User->setReceivedNicknameToUserNickname();
         }
       } else {
         if (mCore.useThisChatConnection(stream->getDestination(), ID) == true) {

@@ -51,10 +51,10 @@ bool CConnectionManager::doCreateSession(
             SIGNAL(signStreamControllerStatusOK(bool)));
 
     connect(StreamController,
-            SIGNAL(signNamingReplyRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT,
                                           QString, QString, QString)),
             this,
-            SIGNAL(signNamingReplyRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT,
                                           QString, QString, QString)));
 
     connect(StreamController, SIGNAL(signNewSamPrivKeyGenerated(const QString)),
@@ -83,10 +83,10 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status) {
           SIGNAL(signDebugMessages(const QString)));
 
   connect(t,
-          SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                          const qint32, const QString)),
           this,
-          SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                          const qint32, const QString)));
 
   t->doAccept();
@@ -134,10 +134,10 @@ bool CConnectionManager::doDestroyStreamObjectByID(qint32 ID) {
   CI2PStream *t = allStreams.take(ID);
 
   disconnect(t,
-             SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                             const qint32, const QString)),
              this,
-             SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                             const qint32, const QString)));
 
   disconnect(t, SIGNAL(signDebugMessages(const QString)), this,
@@ -174,10 +174,10 @@ CConnectionManager::doCreateNewStreamObject(StreamMode Mode, bool Silence,
 
     if (dontConnectSendStreamStatus == false) {
       connect(t,
-              SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+              SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                              const qint32, const QString)),
               this,
-              SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+              SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                              const qint32, const QString)));
     }
 
@@ -237,10 +237,10 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
                SLOT(slotModeAcceptIncomingStream(qint32)));
 
     connect(t,
-            SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                            const qint32, const QString)),
             this,
-            SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                            const qint32, const QString)));
     allStreams.insert(ID, t);
     //----------------------------------------------------
@@ -257,10 +257,10 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
             SLOT(slotModeAcceptIncomingStream(qint32)));
 
     connect(t2,
-            SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                            const qint32, const QString)),
             this,
-            SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+            SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                            const qint32, const QString)));
 
     Message = "• Created new StreamObjectListener [ID: ";

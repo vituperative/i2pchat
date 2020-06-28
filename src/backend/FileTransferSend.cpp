@@ -36,14 +36,14 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   mStream->setUsedFor("FileTransferSend");
 
   connect(mStream,
-          SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                          const qint32, const QString)),
           this,
           SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32,
                                 QString)));
 
-  connect(mStream, SIGNAL(signDataRecived(const qint32, const QByteArray)),
-          this, SLOT(slotDataRecived(const qint32, QByteArray)));
+  connect(mStream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          this, SLOT(slotDataReceived(const qint32, QByteArray)));
 
   connect(&mTimerForActAverageTransferSpeed, SIGNAL(timeout()), this,
           SLOT(slotCalcAverageTransferSpeed()));
@@ -60,7 +60,7 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   mFileSize = mFileForSend.size();
   mAllreadySendedSize = 0;
   mCurrentPacketSize = NORMPAKETSIZE;
-  mRemoteRecivedSize = 0;
+  mRemoteReceivedSize = 0;
 }
 
 void CFileTransferSend::slotAbbortFileSend() {
@@ -184,7 +184,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   }
 }
 
-void CFileTransferSend::slotDataRecived(const qint32 ID, QByteArray t) {
+void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
   if (mUsingProtocolVersionD <= 0.2) {
     if (t.length() == 1) {
 
@@ -245,9 +245,9 @@ void CFileTransferSend::slotDataRecived(const qint32 ID, QByteArray t) {
       } else if (CurrentAction == "2") {
         // next block & current size recived remote
         CurrentPacket.remove('\n');
-        mRemoteRecivedSize += CurrentPacket.toInt();
-        emit signAllreadySendedSizeChanged(mRemoteRecivedSize);
-        if ((mAllreadySendedSize - mRemoteRecivedSize) <= 1024) {
+        mRemoteReceivedSize += CurrentPacket.toInt();
+        emit signAllreadySendedSizeChanged(mRemoteReceivedSize);
+        if ((mAllreadySendedSize - mRemoteReceivedSize) <= 1024) {
           SendFile_v0dot3();
         }
       }
@@ -370,7 +370,7 @@ void CFileTransferSend::slotCalcAverageTransferSpeed() {
   if (mUsingProtocolVersionD <= 0.2) {
     speed = mAllreadySendedSize / departedtime;
   } else {
-    speed = mRemoteRecivedSize / departedtime;
+    speed = mRemoteReceivedSize / departedtime;
   }
 
   mCore.doConvertNumberToTransferSize(speed, speedSize, speedType);
@@ -394,13 +394,13 @@ void CFileTransferSend::CalcETA(int speed) {
     if (mUsingProtocolVersionD <= 0.2) {
       secLeft = (mFileSize - mAllreadySendedSize) / speed;
     } else {
-      secLeft = (mFileSize - mRemoteRecivedSize) / speed;
+      secLeft = (mFileSize - mRemoteReceivedSize) / speed;
     }
   } else {
     if (mUsingProtocolVersionD <= 0.2) {
       secLeft = mFileSize - mAllreadySendedSize;
     } else {
-      secLeft = mFileSize - mRemoteRecivedSize;
+      secLeft = mFileSize - mRemoteReceivedSize;
     }
   }
 

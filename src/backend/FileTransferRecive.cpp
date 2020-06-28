@@ -43,19 +43,19 @@ CFileTransferRecive::CFileTransferRecive(CCore &Core, CI2PStream &Stream,
   mStream.setUsedFor("FileTransferRecive");
 
   connect(&Stream,
-          SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                          const qint32, const QString)),
           this,
-          SLOT(slotStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
                                        const qint32, const QString)));
 
-  connect(&Stream, SIGNAL(signDataRecived(const qint32, const QByteArray)),
-          this, SLOT(slotDataRecived(const qint32, QByteArray)));
+  connect(&Stream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          this, SLOT(slotDataReceived(const qint32, QByteArray)));
 
   connect(&mTimerForActAverageTransferSpeed, SIGNAL(timeout()), this,
           SLOT(slotCalcAverageTransferSpeed()));
 
-  mAllreadyRecivedSize = 0;
+  mAllreadyReceivedSize = 0;
   mRequestAccepted = false;
 
   settings.beginGroup("General");
@@ -104,10 +104,10 @@ CFileTransferRecive::~CFileTransferRecive() {
   mTimerForActAverageTransferSpeed.stop();
 }
 
-void CFileTransferRecive::slotStreamStatusRecived(
+void CFileTransferRecive::slotStreamStatusReceived(
     const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
   if (mStreamID != ID) {
-    qDebug() << "CFileTransferRecive::slotStreamStatusRecived\n"
+    qDebug() << "CFileTransferRecive::slotStreamStatusReceived\n"
              << "mStreamID!=ID WTF";
   }
 
@@ -120,8 +120,8 @@ void CFileTransferRecive::slotStreamStatusRecived(
   case (SAM_Message_Types::TIMEOUT):
   case (SAM_Message_Types::CLOSED): {
     mTimerForActAverageTransferSpeed.stop();
-    if (mAllreadyRecivedSize == mFileSize) {
-      emit signFileRecivedFinishedOK();
+    if (mAllreadyReceivedSize == mFileSize) {
+      emit signFileReceivedFinishedOK();
 
       QString SizeName;
       QString SSize;
@@ -239,18 +239,18 @@ void CFileTransferRecive::slotStreamStatusRecived(
   }
 }
 
-void CFileTransferRecive::slotDataRecived(const qint32 ID, QByteArray t) {
+void CFileTransferRecive::slotDataReceived(const qint32 ID, QByteArray t) {
 
   if (mStreamID != ID) {
-    qDebug() << "CFileTransferRecive::slotDataRecived\n"
+    qDebug() << "CFileTransferRecive::slotDataReceived\n"
              << "mStreamID!=ID WTF";
   }
 
-  mAllreadyRecivedSize += t.length();
+  mAllreadyReceivedSize += t.length();
   mFileForRecive.write(t);
   mFileForRecive.flush();
 
-  emit signAllreadyRecivedSizeChanged(mAllreadyRecivedSize);
+  emit signAllreadyReceivedSizeChanged(mAllreadyReceivedSize);
 
   if (mUsingProtocolVersionD == 0.2) {
     mStream.operator<<(QString("2")); // next block
@@ -260,7 +260,7 @@ void CFileTransferRecive::slotDataRecived(const qint32 ID, QByteArray t) {
         QString("2:\t" + QString::number(t.length(), 10) + '\n'));
   }
 
-  if (mAllreadyRecivedSize == mFileSize) {
+  if (mAllreadyReceivedSize == mFileSize) {
 
     QString SizeName;
     QString SSize;
@@ -310,7 +310,7 @@ void CFileTransferRecive::slotDataRecived(const qint32 ID, QByteArray t) {
     mCore.getFileTransferManager()->removeFileRecive(mStreamID);
     mConnectionManager->doDestroyStreamObjectByID(mStreamID);
 
-    emit signFileRecivedFinishedOK();
+    emit signFileReceivedFinishedOK();
   }
 }
 
@@ -362,7 +362,7 @@ void CFileTransferRecive::slotCalcAverageTransferSpeed() {
   int departedtime = (mTimer.elapsed() / 1000);
   if (departedtime <= 0)
     departedtime = 1;
-  int speed = mAllreadyRecivedSize / departedtime;
+  int speed = mAllreadyReceivedSize / departedtime;
 
   QString speedSize;
   QString speedType;
@@ -386,9 +386,9 @@ void CFileTransferRecive::CalcETA(int speed) {
   int secLeft;
 
   if (speed > 0) {
-    secLeft = (mFileSize - mAllreadyRecivedSize) / speed;
+    secLeft = (mFileSize - mAllreadyReceivedSize) / speed;
   } else {
-    secLeft = mFileSize - mAllreadyRecivedSize;
+    secLeft = mFileSize - mAllreadyReceivedSize;
   }
 
   if (secLeft > 86400) {

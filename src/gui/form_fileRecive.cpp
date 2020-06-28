@@ -24,11 +24,11 @@ form_fileRecive::form_fileRecive(CFileTransferRecive &FileRecive)
     : FileRecive(FileRecive), mStreamID(FileRecive.getStreamID()) {
   setupUi(this);
 
-  connect(&FileRecive, SIGNAL(signFileRecivedFinishedOK()), this,
-          SLOT(slot_FileRecivedFinishedOK()));
+  connect(&FileRecive, SIGNAL(signFileReceivedFinishedOK()), this,
+          SLOT(slot_FileReceivedFinishedOK()));
 
-  connect(&FileRecive, SIGNAL(signAllreadyRecivedSizeChanged(quint64)), this,
-          SLOT(slot_allreadyRecivedSizeChanged(quint64)));
+  connect(&FileRecive, SIGNAL(signAllreadyReceivedSizeChanged(quint64)), this,
+          SLOT(slot_allreadyReceivedSizeChanged(quint64)));
 
   connect(&FileRecive, SIGNAL(signFileReciveError()), this,
           SLOT(slot_FileReciveError()));
@@ -64,7 +64,7 @@ void form_fileRecive::init() {
   checkBox_3->setChecked(true);
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileRecive.getFileSize());
-  progressBar->setValue(FileRecive.getAllreadyRecivedSize());
+  progressBar->setValue(FileRecive.getAllreadyReceivedSize());
   label_10->setText(FileRecive.getUsingProtocolVersion());
   label_11->setText("0");
   label_12->setText("");
@@ -75,11 +75,11 @@ void form_fileRecive::slot_Button() {
   this->close();
 }
 
-void form_fileRecive::slot_allreadyRecivedSizeChanged(quint64 value) {
+void form_fileRecive::slot_allreadyReceivedSizeChanged(quint64 value) {
   progressBar->setValue(value);
 }
 
-void form_fileRecive::slot_FileRecivedFinishedOK() {
+void form_fileRecive::slot_FileReceivedFinishedOK() {
   QCheckBox *checkBox_4 = this->checkBox_4;
   checkBox_4->setChecked(true);
 

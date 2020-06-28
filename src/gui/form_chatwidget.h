@@ -74,7 +74,7 @@ private slots:
   void addMessage(QString text);
   void setTextColor();
   void setTextColor_2();
-  void newMessageRecived();
+  void newMessageReceived();
   void setBold(bool t);
   void setBold_2(bool t);
   void setFont();

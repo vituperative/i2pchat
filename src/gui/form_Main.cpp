@@ -811,7 +811,7 @@ void form_MainWindow::showUserInfos() {
   UserInfos =
       Core->getUserManager()->getUserInfosByI2P_Destination(Destination);
 
-  avatar.loadFromData(user->getRecivedUserInfos().AvatarImage);
+  avatar.loadFromData(user->getReceivedUserInfos().AvatarImage);
 
   QMessageBox msgBox;
   if (avatar.isNull() == true) {

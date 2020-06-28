@@ -52,8 +52,8 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
 
   message->installEventFilter(m_event_eater);
 
-  connect(&user, SIGNAL(signNewMessageRecived()), this,
-          SLOT(newMessageRecived()));
+  connect(&user, SIGNAL(signNewMessageReceived()), this,
+          SLOT(newMessageReceived()));
 
   connect(&user, SIGNAL(signOnlineStateChanged()), this,
           SLOT(changeWindowsTitle()));
@@ -154,7 +154,7 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
   // timer->start();
 }
 
-void form_ChatWidget::newMessageRecived() { // TODO: qss add.
+void form_ChatWidget::newMessageReceived() { // TODO: qss add.
   QTextEdit *chat = this->chat;
   QScrollBar *sb = chat->verticalScrollBar();
   // chat->setStyleSheet("#IncomingMessages{color:rgb(100,200,254);}"); // does
@@ -329,8 +329,8 @@ void form_ChatWidget::setBold(bool t) {
 }
 
 void form_ChatWidget::closeEvent(QCloseEvent *e) {
-  disconnect(&user, SIGNAL(signNewMessageRecived()), this,
-             SLOT(newMessageRecived()));
+  disconnect(&user, SIGNAL(signNewMessageReceived()), this,
+             SLOT(newMessageReceived()));
 
   emit closingChatWindow(user.getI2PDestination());
   e->ignore();
@@ -355,7 +355,7 @@ void form_ChatWidget::sendMessageSignal() {
   if (NewMessage.length() < 65535) {
     user.slotSendChatMessage(NewMessage);
     message->clear();
-    newMessageRecived();
+    newMessageReceived();
   } else {
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Critical);
@@ -452,7 +452,7 @@ void form_ChatWidget::focusEvent(bool b) {
   mHaveFocus = b;
 
   if (user.getHaveNewUnreadMessages() == true) {
-    newMessageRecived();
+    newMessageReceived();
   }
 }
 
@@ -507,8 +507,8 @@ void form_ChatWidget::showAvatarFrame(bool show) {
 }
 
 void form_ChatWidget::remoteAvatarImageChanged() {
-  if (user.getRecivedUserInfos().AvatarImage.size() > 0) {
-    mUserAvatar.loadFromData(user.getRecivedUserInfos().AvatarImage);
+  if (user.getReceivedUserInfos().AvatarImage.size() > 0) {
+    mUserAvatar.loadFromData(user.getReceivedUserInfos().AvatarImage);
     useravatar_label->setPixmap(mUserAvatar);
   }
 }

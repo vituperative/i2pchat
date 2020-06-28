@@ -189,16 +189,16 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
   mCore.getSoundManager()->slotFileReciveIncoming();
 
   disconnect(Stream,
-             SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                             const qint32, const QString)),
              &mCore,
-             SLOT(slotStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
                                           const qint32, QString)));
 
   CFileTransferRecive *t =
       new CFileTransferRecive(mCore, *Stream, ID, FileName, Size, Destination,
                               ProtocolVersion, ProtocolVersionD);
-  connect(t, SIGNAL(signFileRecivedFinishedOK()), mCore.getSoundManager(),
+  connect(t, SIGNAL(signFileReceivedFinishedOK()), mCore.getSoundManager(),
           SLOT(slotFileReciveFinished()));
 
   connect(t, SIGNAL(signFileNameChanged()), this,

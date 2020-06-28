@@ -155,24 +155,30 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       CUser *theUser = mUsers.at(i);
 
       Infos = "Nickname:\t\t" + theUser->getName() + "\n";
-      Infos += "Clientname:\t\t" + theUser->getClientName() + "\n";
-      Infos += "Clientversion:\t\t" + theUser->getClientVersion() + "\n";
-      Infos += "Prot. version:\t\t" + theUser->getProtocolVersion() + "\n";
-      Infos += "Prot. version min (Filetransfer):\t" +
-               theUser->getMinProtocolVersionFiletransfer() + "\n";
-      Infos += "Prot. version max (Filetransfer):\t" +
+      Infos += "Client:\t\t" + theUser->getClientName() + " [" + theUser->getClientVersion() + "]\n";
+      Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
+      Infos += "File transfer support:\t" +
+               theUser->getMinProtocolVersionFiletransfer() + " - " +
                theUser->getMaxProtocolVersionFiletransfer() + "\n";
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
-        CRecivedInfos recivedInfos = theUser->getRecivedUserInfos();
+        CReceivedInfos recivedInfos = theUser->getReceivedUserInfos();
         QString sAge;
         sAge.setNum(recivedInfos.Age, 10);
 
-        Infos += "\nRecived Userinfos:\n";
-        Infos += "Nickname:\t\t" + recivedInfos.Nickname + "\n";
-        Infos += "Gender:\t\t" + recivedInfos.Gender + "\n";
-        Infos += "Age:\t\t" + sAge + "\n";
-        Infos += "Interests:\t\t" + recivedInfos.Interests;
+        if (recivedInfos.Gender != nullptr || sAge != "0" || recivedInfos.Interests != nullptr) {
+          Infos += "\nUser Information:\n";
+//          Infos += "Nickname:\t\t" + recivedInfos.Nickname + "\n";
+          if (recivedInfos.Gender != nullptr) {
+            Infos += "Gender:\t\t" + recivedInfos.Gender + "\n";
+          }
+          if (sAge != nullptr && sAge != "0") {
+            Infos += "Age:\t\t" + sAge + "\n";
+          }
+          if (recivedInfos.Interests != nullptr) {
+            Infos += "Interests:\t\t" + recivedInfos.Interests;
+          }
+        }
       }
     }
   }

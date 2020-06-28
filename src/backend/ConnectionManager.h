@@ -78,9 +78,9 @@ public slots:
 signals:
   void signDebugMessages(const QString Message);
   void signStreamControllerStatusOK(bool Status);
-  void signStreamStatusRecived(const SAM_Message_Types::RESULT result,
+  void signStreamStatusReceived(const SAM_Message_Types::RESULT result,
                                const qint32 ID, const QString Message);
-  void signNamingReplyRecived(const SAM_Message_Types::RESULT result,
+  void signNamingReplyReceived(const SAM_Message_Types::RESULT result,
                               QString Name, QString Value = "",
                               QString Message = "");
   void signIncomingStream(CI2PStream *stream);
