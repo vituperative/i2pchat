@@ -45,6 +45,9 @@
     </property>
     <item row="2" column="0">
      <widget class="QListWidget" name="listWidget">
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
@@ -68,6 +71,9 @@
         <width>0</width>
         <height>20</height>
        </size>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -162,8 +168,11 @@ background: #fff;
          <property name="text">
           <string/>
          </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+         </property>
          <property name="scaledContents">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

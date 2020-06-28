@@ -154,7 +154,12 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       CUser *theUser = mUsers.at(i);
 
       Infos = "Nickname:\t\t" + theUser->getName() + "\n";
-      Infos += "Client:\t\t" + theUser->getClientName() + " [" + theUser->getClientVersion() + "]\n";
+      Infos += "Client:\t\t";
+      if (theUser->getClientName() != nullptr) {
+        Infos += theUser->getClientName() + " " + theUser->getClientVersion() + "\n";
+      } else {
+        Infos += "Unknown (offline)\n";
+      }
       Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
       Infos += "File transfer support:\t" +
                theUser->getMinProtocolVersionFiletransfer() + " - " +
