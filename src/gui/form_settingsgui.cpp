@@ -108,10 +108,10 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
   connect(check_UserSearchEnable, SIGNAL(clicked(bool)), this,
           SLOT(clicked_EnableUserSearch(bool)));
 
-  connect(checkBox_AutoAcceptFileRecive, SIGNAL(clicked(bool)),
+  connect(checkBox_AutoAcceptFileReceive, SIGNAL(clicked(bool)),
           checkBox_IncomingSubFolders, SLOT(setChecked(bool)));
 
-  connect(checkBox_AutoAcceptFileRecive, SIGNAL(toggled(bool)),
+  connect(checkBox_AutoAcceptFileReceive, SIGNAL(toggled(bool)),
           checkBox_IncomingSubFolders, SLOT(setEnabled(bool)));
 
   connect(cmd_selectAvatarImage, SIGNAL(clicked()), this,
@@ -155,9 +155,9 @@ void form_settingsgui::loadSettings() {
     styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
   }
 
-  checkBox_AutoAcceptFileRecive->setChecked(
-      settings->value("AutoAcceptFileRecive", false).toBool());
-  if (checkBox_AutoAcceptFileRecive->isChecked() == true) {
+  checkBox_AutoAcceptFileReceive->setChecked(
+      settings->value("AutoAcceptFileReceive", false).toBool());
+  if (checkBox_AutoAcceptFileReceive->isChecked() == true) {
     cmd_IncomingFileFolder->setEnabled(true);
     checkBox_IncomingSubFolders->setChecked(
         settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
@@ -212,9 +212,9 @@ void form_settingsgui::loadSettings() {
   txt_SoundFile2->setText(settings->value("User_go_Offline", "").toString());
   txt_SoundFile3->setText(settings->value("FileSend_Finished", "").toString());
   txt_SoundFile4->setText(
-      settings->value("FileRecive_Incoming", "./sounds/File.wav").toString());
+      settings->value("FileReceive_Incoming", "./sounds/File.wav").toString());
   txt_SoundFile5->setText(
-      settings->value("FileRecive_Finished", "").toString());
+      settings->value("FileReceive_Finished", "").toString());
   txt_SoundFile6->setText(
       settings->value("NewChatMessage", "./sounds/Notify.wav").toString());
 
@@ -240,9 +240,9 @@ void form_settingsgui::loadSettings() {
   checkBoxSound_3->setChecked(
       settings->value("FileSend_Finished", false).toBool());
   checkBoxSound_4->setChecked(
-      settings->value("FileRecive_Incoming", true).toBool());
+      settings->value("FileReceive_Incoming", true).toBool());
   checkBoxSound_5->setChecked(
-      settings->value("FileRecive_Finished", false).toBool());
+      settings->value("FileReceive_Finished", false).toBool());
   checkBoxSound_6->setChecked(settings->value("NewChatMessage", true).toBool());
   settings->endGroup();
 
@@ -366,8 +366,8 @@ void form_settingsgui::saveSettings() {
       waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox->value() * 1000);
   settings->setValue("current_Style", styleCombo->currentText());
   settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
-  settings->setValue("AutoAcceptFileRecive",
-                     checkBox_AutoAcceptFileRecive->isChecked());
+  settings->setValue("AutoAcceptFileReceive",
+                     checkBox_AutoAcceptFileReceive->isChecked());
   settings->setValue("IncomingFileFolder", txt_IncomingFileFolder->text());
   settings->setValue("UseIncomingSubFolderForEveryUser",
                      checkBox_IncomingSubFolders->isChecked());
@@ -396,16 +396,16 @@ void form_settingsgui::saveSettings() {
   settings->setValue("User_go_Online", checkBoxSound->isChecked());
   settings->setValue("User_go_Offline", checkBoxSound_2->isChecked());
   settings->setValue("FileSend_Finished", checkBoxSound_3->isChecked());
-  settings->setValue("FileRecive_Incoming", checkBoxSound_4->isChecked());
-  settings->setValue("FileRecive_Finished", checkBoxSound_5->isChecked());
+  settings->setValue("FileReceive_Incoming", checkBoxSound_4->isChecked());
+  settings->setValue("FileReceive_Finished", checkBoxSound_5->isChecked());
   settings->setValue("NewChatMessage", checkBoxSound_6->isChecked());
   settings->endGroup();
   settings->beginGroup("SoundFilePath");
   settings->setValue("User_go_Online", txt_SoundFile->text());
   settings->setValue("User_go_Offline", txt_SoundFile2->text());
   settings->setValue("FileSend_Finished", txt_SoundFile3->text());
-  settings->setValue("FileRecive_Incoming", txt_SoundFile4->text());
-  settings->setValue("FileRecive_Finished", txt_SoundFile5->text());
+  settings->setValue("FileReceive_Incoming", txt_SoundFile4->text());
+  settings->setValue("FileReceive_Finished", txt_SoundFile5->text());
   settings->setValue("NewChatMessage", txt_SoundFile6->text());
   settings->endGroup();
   settings->endGroup();
@@ -577,7 +577,7 @@ void form_settingsgui::clicked_IncomingFileFolder() {
       QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks));
 
   if (txt_IncomingFileFolder->text().isEmpty()) {
-    checkBox_AutoAcceptFileRecive->setChecked(false);
+    checkBox_AutoAcceptFileReceive->setChecked(false);
   }
 }
 

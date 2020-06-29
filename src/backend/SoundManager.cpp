@@ -45,18 +45,18 @@ void CSoundManager::slotFileSendFinished() {
   if (mEnable_eventFileSend_Finished)
     QSound::play(mSoundFileFileSend_Finished);
 }
-void CSoundManager::slotFileReciveIncoming() {
+void CSoundManager::slotFileReceiveIncoming() {
   if (mIsMute == true)
     return;
-  if (mEnable_eventFileRecive_Incoming)
-    QSound::play(mSoundFileFileRecive_Incoming);
+  if (mEnable_eventFileReceive_Incoming)
+    QSound::play(mSoundFileFileReceive_Incoming);
 }
 
-void CSoundManager::slotFileReciveFinished() {
+void CSoundManager::slotFileReceiveFinished() {
   if (mIsMute == true)
     return;
-  if (mEnable_eventFileRecive_Finished)
-    QSound::play(mSoundFileFileRecive_Finished);
+  if (mEnable_eventFileReceive_Finished)
+    QSound::play(mSoundFileFileReceive_Finished);
 }
 
 void CSoundManager::slotNewChatMessage() {
@@ -76,10 +76,10 @@ void CSoundManager::reInit() {
       settings.value("User_go_Offline", false).toBool();
   mEnable_eventFileSend_Finished =
       settings.value("FileSend_Finished", false).toBool();
-  mEnable_eventFileRecive_Incoming =
-      settings.value("FileRecive_Incoming", true).toBool();
-  mEnable_eventFileRecive_Finished =
-      settings.value("FileRecive_Finished", false).toBool();
+  mEnable_eventFileReceive_Incoming =
+      settings.value("FileReceive_Incoming", true).toBool();
+  mEnable_eventFileReceive_Finished =
+      settings.value("FileReceive_Finished", false).toBool();
   mEnable_eventNewChatMessage = settings.value("NewChatMessage", true).toBool();
   settings.endGroup();
 
@@ -89,10 +89,10 @@ void CSoundManager::reInit() {
   mSoundFileUser_go_Offline = settings.value("User_go_Offline", "").toString();
   mSoundFileFileSend_Finished =
       settings.value("FileSend_Finished", "").toString();
-  mSoundFileFileRecive_Incoming =
-      settings.value("FileRecive_Incoming", "./sounds/File.wav").toString();
-  mSoundFileFileRecive_Finished =
-      settings.value("FileRecive_Finished", "").toString();
+  mSoundFileFileReceive_Incoming =
+      settings.value("FileReceive_Incoming", "./sounds/File.wav").toString();
+  mSoundFileFileReceive_Finished =
+      settings.value("FileReceive_Finished", "").toString();
   mSoundFileNewChatMessage =
       settings.value("NewChatMessage", "./sounds/Notify.wav").toString();
   settings.endGroup();

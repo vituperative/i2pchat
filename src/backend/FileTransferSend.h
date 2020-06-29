@@ -27,7 +27,7 @@
 #include <QtGui>
 
 /*
-      Filetransferprotocol 0.3: (sender Recive)
+      Filetransferprotocol 0.3: (sender Receive)
 
       tags:
       0:\t{StartPos}\n  	accpted start from StartPos // at the moment only from
@@ -80,7 +80,7 @@ public slots:
 private slots:
   void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID,
                         QString Message);
-  void slotDataRecived(const qint32 ID, QByteArray t);
+  void slotDataReceived(const qint32 ID, QByteArray t);
   void slotCalcAverageTransferSpeed();
 
 signals:
@@ -108,7 +108,7 @@ private:
   CI2PStream *mStream;
   qint64 mFileSize;
   qint64 mAllreadySendedSize;
-  qint64 mRemoteRecivedSize;
+  qint64 mRemoteReceivedSize;
   qint32 mStreamID;
   QFile mFileForSend;
   bool mSendFirstPaket;
@@ -119,6 +119,6 @@ private:
   QTimer mTimerForActAverageTransferSpeed;
   QTime mTimer;
   int mCurrentPacketSize;
-  QByteArray mRemoteDataReciveBuffer;
+  QByteArray mRemoteDataReceiveBuffer;
 };
 #endif

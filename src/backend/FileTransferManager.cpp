@@ -26,14 +26,14 @@ CFileTransferManager::CFileTransferManager(CCore &Core) : mCore(Core) {}
 
 CFileTransferManager::~CFileTransferManager() {}
 
-CFileTransferRecive *
-CFileTransferManager::getFileTransferReciveByID(qint32 ID) const {
-  /*for(int i=0;i<mFileRecives.size();i++){
-          if(mFileRecives.at(i)->getStreamID()==ID){
-                  return mFileRecives.at(i);
+CFileTransferReceive *
+CFileTransferManager::getFileTransferReceiveByID(qint32 ID) const {
+  /*for(int i=0;i<mFileReceives.size();i++){
+          if(mFileReceives.at(i)->getStreamID()==ID){
+                  return mFileReceives.at(i);
           }
   }*/
-  for (auto it : mFileRecives)
+  for (auto it : mFileReceives)
     if (it->getStreamID() == ID)
       return it;
 
@@ -60,9 +60,9 @@ CFileTransferManager::getFileTransferSendsList() const {
   return mFileSends;
 }
 
-const QList<CFileTransferRecive *>
-CFileTransferManager::getFileTransferReciveList() const {
-  return mFileRecives;
+const QList<CFileTransferReceive *>
+CFileTransferManager::getFileTransferReceiveList() const {
+  return mFileReceives;
 }
 
 void CFileTransferManager::addNewFileTransfer(QString FilePath,
@@ -80,7 +80,7 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath,
     return;
   }
   if (this->getFileTransferSendsByID(User->getI2PStreamID()) != NULL ||
-      this->getFileTransferReciveByID(User->getI2PStreamID()) != NULL) {
+      this->getFileTransferReceiveByID(User->getI2PStreamID()) != NULL) {
     qCritical() << "Already exists transfer for user";
     throw new std::runtime_error("Already exists transfer for user");
     return;
@@ -96,7 +96,7 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath,
   emit signUserStatusChanged();
 }
 
-void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
+void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
                                             QString FileSize,
                                             QString Destination,
                                             QString ProtocolVersion) {
@@ -110,7 +110,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
   if (OK == false) {
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Critical);
-    msgBox->setText(tr("CCore(addNewFileRecive)"));
+    msgBox->setText(tr("CCore(addNewFileReceive)"));
     msgBox->setInformativeText(tr("Incoming file transfer rejected\nError "
                                   "converting QString to Quint64\nValue: %1")
                                    .arg(FileSize));
@@ -119,7 +119,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     msgBox->setWindowModality(Qt::NonModal);
     msgBox->show();
 
-    // abort the Filerecive
+    // abort the Filereceive
     if (ProtocolVersion == "0.1" || ProtocolVersion == "0.2") {
       Stream->operator<<(QString("1")); // false
     } else if (ProtocolVersion == "0.3") {
@@ -127,7 +127,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     }
 
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-    removeFileRecive(ID);
+    removeFileReceive(ID);
 
     return;
   }
@@ -136,12 +136,12 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     qWarning() << "File\t" << __FILE__ << endl
                << "Line:\t" << __LINE__ << endl
                << "Function:\t"
-               << " CFileTransferManager::addNewFileRecive" << endl
+               << " CFileTransferManager::addNewFileReceive" << endl
                << "Message:\t"
                << "Can't convert QString to double" << endl
                << "QString:\t" << ProtocolVersion << endl;
 
-    // abort the Filerecive
+    // abort the Filereceive
     if (ProtocolVersion == "0.1" || ProtocolVersion == "0.2") {
       Stream->operator<<(QString("1")); // false
     } else if (ProtocolVersion == "0.3") {
@@ -149,7 +149,7 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     }
 
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-    removeFileRecive(ID);
+    removeFileReceive(ID);
     return;
   }
 
@@ -168,13 +168,13 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     }
 
     if (this->getFileTransferSendsByID(User->getI2PStreamID()) != NULL ||
-        this->getFileTransferReciveByID(User->getI2PStreamID()) != NULL) {
+        this->getFileTransferReceiveByID(User->getI2PStreamID()) != NULL) {
       qCritical() << "File is already in the transfer queue";
       throw new std::runtime_error("File is already in the transfer queue");
       return;
     }
 
-    // abort the Filerecive
+    // abort the Filereceive
     if (ProtocolVersion == "0.1" || ProtocolVersion == "0.2") {
       Stream->operator<<(QString("1")); // false
     } else if (ProtocolVersion == "0.3") {
@@ -182,29 +182,29 @@ void CFileTransferManager::addNewFileRecive(qint32 ID, QString FileName,
     }
 
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-    removeFileRecive(ID);
+    removeFileReceive(ID);
     return;
   }
 
-  mCore.getSoundManager()->slotFileReciveIncoming();
+  mCore.getSoundManager()->slotFileReceiveIncoming();
 
   disconnect(Stream,
-             SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                             const qint32, const QString)),
              &mCore,
-             SLOT(slotStreamStatusRecived(const SAM_Message_Types::RESULT,
+             SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
                                           const qint32, QString)));
 
-  CFileTransferRecive *t =
-      new CFileTransferRecive(mCore, *Stream, ID, FileName, Size, Destination,
+  CFileTransferReceive *t =
+      new CFileTransferReceive(mCore, *Stream, ID, FileName, Size, Destination,
                               ProtocolVersion, ProtocolVersionD);
-  connect(t, SIGNAL(signFileRecivedFinishedOK()), mCore.getSoundManager(),
-          SLOT(slotFileReciveFinished()));
+  connect(t, SIGNAL(signFileReceivedFinishedOK()), mCore.getSoundManager(),
+          SLOT(slotFileReceiveFinished()));
 
   connect(t, SIGNAL(signFileNameChanged()), this,
           SIGNAL(signUserStatusChanged()));
 
-  mFileRecives.append(t);
+  mFileReceives.append(t);
   emit signUserStatusChanged();
 }
 
@@ -217,19 +217,19 @@ bool CFileTransferManager::isThisID_a_FileSendID(qint32 ID) const {
   return false;
 }
 
-bool CFileTransferManager::isThisID_a_FileReciveID(qint32 ID) const {
-  for (int i = 0; i < mFileRecives.size(); i++) {
-    if (mFileRecives.at(i)->getStreamID() == ID) {
+bool CFileTransferManager::isThisID_a_FileReceiveID(qint32 ID) const {
+  for (int i = 0; i < mFileReceives.size(); i++) {
+    if (mFileReceives.at(i)->getStreamID() == ID) {
       return true;
     }
   }
   return false;
 }
 
-bool CFileTransferManager::checkIfAFileTransferOrReciveisActive() const {
+bool CFileTransferManager::checkIfAFileTransferOrReceiveisActive() const {
   if (mFileSends.count() > 0)
     return true;
-  if (mFileRecives.count() > 0)
+  if (mFileReceives.count() > 0)
     return true;
 
   return false;
@@ -248,12 +248,12 @@ void CFileTransferManager::removeFileTransfer(const qint32 ID) {
   }
 }
 
-void CFileTransferManager::removeFileRecive(const qint32 ID) {
-  if (mFileRecives.count() > 0) {
-    for (int i = 0; i < mFileRecives.count(); i++) {
-      if (mFileRecives.at(i)->getStreamID() == ID) {
-        mFileRecives.at(i)->deleteLater();
-        mFileRecives.removeAt(i);
+void CFileTransferManager::removeFileReceive(const qint32 ID) {
+  if (mFileReceives.count() > 0) {
+    for (int i = 0; i < mFileReceives.count(); i++) {
+      if (mFileReceives.at(i)->getStreamID() == ID) {
+        mFileReceives.at(i)->deleteLater();
+        mFileReceives.removeAt(i);
         emit signUserStatusChanged();
         break;
       }

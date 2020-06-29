@@ -42,9 +42,9 @@ enum ONLINESTATE {
   USERBLOCKEDYOU
 };
 
-enum RECIVEDINFOS { NICKNAME, GENDER, AGE, INTERESTS };
+enum RECEIVEDINFOS { NICKNAME, GENDER, AGE, INTERESTS };
 
-struct CRecivedInfos {
+struct CReceivedInfos {
   QString Nickname;
   QString Gender;
   qint32 Age;
@@ -83,7 +83,7 @@ public:
   ONLINESTATE getOnlineState() const { return mCurrentOnlineState; }
   const QStringList &getAllChatMessages();
   const QStringList getNewMessages(bool haveFocus);
-  const CRecivedInfos getRecivedUserInfos() const { return mRecivedUserInfos; }
+  const CReceivedInfos getReceivedUserInfos() const { return mReceivedUserInfos; }
 
   const QString getHighestUsableProtocolVersionFiletransfer() const;
   double getHighestUsableProtocolVersionFiletransfer_D() const;
@@ -119,8 +119,8 @@ public:
   void setMinProtocolVersionFiletransfer(QString Version) {
     mMinProtocolVersionFiletransfer = Version;
   };
-  void setRecivedUserInfos(RECIVEDINFOS Tag, QString value);
-  void setRecivedNicknameToUserNickname();
+  void setReceivedUserInfos(RECEIVEDINFOS Tag, QString value);
+  void setReceivedNicknameToUserNickname();
   void setReplaceB32WithB64(QString b64Dest);
   void setAvatarImage(QByteArray &avatarImage);
   void setUnsentedMessages(QStringList &newMessages);
@@ -133,7 +133,7 @@ public slots:
 
 signals:
   void signOnlineStateChanged();
-  void signNewMessageRecived();
+  void signNewMessageReceived();
   void signNewMessageSound();
   void signConnectionOnline();
   void signConnectionOffline();
@@ -149,7 +149,7 @@ private:
   qint32 mI2PStream_ID;
 
   bool mInvisible;
-  bool mRecivedNicknameToUserNickname;
+  bool mReceivedNicknameToUserNickname;
   bool mHaveNewUnreadMessages;
   bool mHaveNewUnreadChatmessage;
   bool mLogOnlineStateOfUsers;
@@ -164,7 +164,7 @@ private:
   QStringList mNewMessages;
   QStringList mUnsentedMessages;
 
-  CRecivedInfos mRecivedUserInfos;
+  CReceivedInfos mReceivedUserInfos;
   bool mUseB32Dest;
 
   //<Settings for the chatwindow>

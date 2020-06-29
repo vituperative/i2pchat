@@ -32,11 +32,11 @@ CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
   mIncomingPackets = NULL;
   mDoneDisconnect = false;
   mSilence = false;
-  mStatusRecived = false;
+  mStatusReceived = false;
   mHandShakeWasSuccesfullDone = false;
   mConnectionType = UNKNOWN;
   mIncomingPackets = new QByteArray();
-  mDestinationRecived = false;
+  mDestinationReceived = false;
   mFIRSTPAKETCHAT_allreadySended = false;
   mTimer = NULL;
   mUnKnownConnectionTimeout.setInterval(CONNECTIONTIMEOUT);
@@ -127,8 +127,8 @@ void CI2PStream::slotConnected() {
 void CI2PStream::slotDisconnected() {
   QString smID = QString::number(mID, 10);
 
-  mStatusRecived = false;
-  mDestinationRecived = false;
+  mStatusReceived = false;
+  mDestinationReceived = false;
   mDoneDisconnect = false;
   mHandShakeWasSuccesfullDone = false;
   mFIRSTPAKETCHAT_allreadySended = false;
@@ -137,7 +137,7 @@ void CI2PStream::slotDisconnected() {
 
   emit signDebugMessages(
       "• I2P Stream Controller disconnected from SAM [ID: " + smID + "]");
-  emit signStreamStatusRecived(SAM_Message_Types::CLOSED, mID, "");
+  emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, "");
 }
 
 void CI2PStream::slotReadFromSocket() {
@@ -156,7 +156,7 @@ void CI2PStream::slotReadFromSocket() {
 
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Incomplete packet received???
       return;
     }
 
@@ -191,10 +191,10 @@ void CI2PStream::slotReadFromSocket() {
 
     mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
     *(this) << Data;
-  } else if (mStatusRecived == false) {
+  } else if (mStatusReceived == false) {
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Incomplete packet received???
       return;
     }
 
@@ -208,25 +208,25 @@ void CI2PStream::slotReadFromSocket() {
     QString t(CurrentPacket.data());
 
     SAM_MESSAGE sam = mAnalyser->Analyse(t);
-    emit signStreamStatusRecived(sam.result, mID, sam.Message);
+    emit signStreamStatusReceived(sam.result, mID, sam.Message);
 
     delete mAnalyser;
     mAnalyser = NULL;
-    mStatusRecived = true;
+    mStatusReceived = true;
 
     mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
     if (mModeStreamConnect == true) {
       if (mIncomingPackets->length() != 0) {
-        emit signDataRecived(mID, *(mIncomingPackets));
+        emit signDataReceived(mID, *(mIncomingPackets));
       }
     }
 
-  } else if (mStatusRecived == true && mModeStreamAccept == true &&
-             mDestinationRecived == false) {
-    // get Destaintion
+  } else if (mStatusReceived == true && mModeStreamAccept == true &&
+             mDestinationReceived == false) {
+    // get Destination
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Not the complead Packet recived ??? maybe possible ???
+      // Incomplete packet received???
       return;
     }
 
@@ -236,14 +236,14 @@ void CI2PStream::slotReadFromSocket() {
 
     mDestination = QString(CurrentPacket.data());
     mDestination = mDestination.trimmed();
-    mDestinationRecived = true;
+    mDestinationReceived = true;
 
     mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
 
     emit signModeAcceptIncomingStream(mID);
 
     if (mIncomingPackets->length() != 0) {
-      emit signDataRecived(mID, *(mIncomingPackets));
+      emit signDataReceived(mID, *(mIncomingPackets));
     }
 
     // start mUnKnownConnectionTimeout
@@ -252,7 +252,7 @@ void CI2PStream::slotReadFromSocket() {
         "• I2P Stream Controller: UnknownConnectionTimeout [ID: " + smID + "]");
     //--------------------------------
   } else {
-    emit signDataRecived(mID, newData);
+    emit signDataReceived(mID, newData);
   }
 }
 
@@ -329,7 +329,7 @@ void CI2PStream::slotCheckForReconnect() {
 
 void CI2PStream::slotInitConnectionTimeout() {
   QString smID = QString::number(mID, 10);
-  emit signStreamStatusRecived(SAM_Message_Types::CLOSED, mID, QString(""));
+  emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, QString(""));
   emit signDebugMessages("• I2P Stream Controller init connection timeout: "
                          "Closed connection Stream [ID: " +
                          smID + "]");

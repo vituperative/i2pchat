@@ -45,11 +45,17 @@
     </property>
     <item row="2" column="0">
      <widget class="QListWidget" name="listWidget">
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::AllEditTriggers</set>
@@ -63,11 +69,17 @@
         <height>12</height>
        </size>
       </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
       <property name="gridSize">
        <size>
         <width>0</width>
         <height>20</height>
        </size>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -162,8 +174,11 @@ background: #fff;
          <property name="text">
           <string/>
          </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+         </property>
          <property name="scaledContents">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

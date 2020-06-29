@@ -148,31 +148,41 @@ CUser *CUserManager::getUserByI2P_Destination(QString Destination) const {
 }
 
 QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
-  QString Infos = "No Informations recived";
-
+  QString Infos = "No Information received";
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
       CUser *theUser = mUsers.at(i);
 
       Infos = "Nickname:\t\t" + theUser->getName() + "\n";
-      Infos += "Clientname:\t\t" + theUser->getClientName() + "\n";
-      Infos += "Clientversion:\t\t" + theUser->getClientVersion() + "\n";
-      Infos += "Prot. version:\t\t" + theUser->getProtocolVersion() + "\n";
-      Infos += "Prot. version min (Filetransfer):\t" +
-               theUser->getMinProtocolVersionFiletransfer() + "\n";
-      Infos += "Prot. version max (Filetransfer):\t" +
+      Infos += "Client:\t\t";
+      if (theUser->getClientName() != nullptr) {
+        Infos += theUser->getClientName() + " " + theUser->getClientVersion() + "\n";
+      } else {
+        Infos += "Unknown (offline)\n";
+      }
+      Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
+      Infos += "File transfer support:\t" +
+               theUser->getMinProtocolVersionFiletransfer() + " - " +
                theUser->getMaxProtocolVersionFiletransfer() + "\n";
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
-        CRecivedInfos recivedInfos = theUser->getRecivedUserInfos();
+        CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
         QString sAge;
-        sAge.setNum(recivedInfos.Age, 10);
+        sAge.setNum(receivedInfos.Age, 10);
 
-        Infos += "\nRecived Userinfos:\n";
-        Infos += "Nickname:\t\t" + recivedInfos.Nickname + "\n";
-        Infos += "Gender:\t\t" + recivedInfos.Gender + "\n";
-        Infos += "Age:\t\t" + sAge + "\n";
-        Infos += "Interests:\t\t" + recivedInfos.Interests;
+        if (receivedInfos.Gender != nullptr || sAge != "0" || receivedInfos.Interests != nullptr) {
+          Infos += "\nUser Information:\n";
+//          Infos += "Nickname:\t\t" + receivedInfos.Nickname + "\n";
+          if (receivedInfos.Gender != nullptr) {
+            Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";
+          }
+          if (sAge != nullptr && sAge != "0") {
+            Infos += "Age:\t\t" + sAge + "\n";
+          }
+          if (receivedInfos.Interests != nullptr) {
+            Infos += "Interests:\t\t" + receivedInfos.Interests;
+          }
+        }
       }
     }
   }

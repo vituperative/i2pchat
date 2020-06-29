@@ -62,9 +62,9 @@ void CHttpOverStreamObject::slotStreamStatus(
   case (SAM_Message_Types::TIMEOUT): {
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
     mStream = NULL;
-    mDataRecived.clear();
+    mDataReceived.clear();
     mIsTimeOutCantReachPeerCLosed = true;
-    emit signDoneSuccessfully(false, mDataRecived);
+    emit signDoneSuccessfully(false, mDataReceived);
     break;
   }
   case (SAM_Message_Types::CLOSED): {
@@ -73,34 +73,34 @@ void CHttpOverStreamObject::slotStreamStatus(
     mStream = NULL;
 
     if (mIsTimeOutCantReachPeerCLosed == false) {
-      emit signDoneSuccessfully(true, mDataRecived);
+      emit signDoneSuccessfully(true, mDataReceived);
     }
 
-    mDataRecived.clear();
+    mDataReceived.clear();
     break;
   }
   default: {
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
     mStream = NULL;
-    mDataRecived.clear();
+    mDataReceived.clear();
     break;
   }
   }
 }
 
-void CHttpOverStreamObject::slotDataRecived(const qint32 ID, QByteArray t) {
+void CHttpOverStreamObject::slotDataReceived(const qint32 ID, QByteArray t) {
   if (mStreamID != ID) {
     qCritical() << "File\t" << __FILE__ << endl
                 << "Line:\t" << __LINE__ << endl
                 << "Function:\t"
-                << "CHttpOverStreamObject::slotDataRecived" << endl
+                << "CHttpOverStreamObject::slotDataReceived" << endl
                 << "Message:\t"
                 << "mStreamID!=ID WTF" << endl
                 << "mStreamID:\t" << mStreamID << endl
                 << "ID:\t" << ID << endl;
   }
 
-  mDataRecived.append(t);
+  mDataReceived.append(t);
 }
 
 void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination,
@@ -110,20 +110,20 @@ void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination,
   mStreamID = mStream->getID();
 
   connect(mStream,
-          SIGNAL(signStreamStatusRecived(const SAM_Message_Types::RESULT,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                          const qint32, const QString)),
           this,
           SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32,
                                 QString)));
 
-  connect(mStream, SIGNAL(signDataRecived(const qint32, const QByteArray)),
-          this, SLOT(slotDataRecived(const qint32, QByteArray)));
+  connect(mStream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          this, SLOT(slotDataReceived(const qint32, QByteArray)));
 
   mMode = mode;
   mDestination = Destination;
   mHttpHeader = HttpHeader;
   mFirstStreamStatus = true;
-  mDataRecived.clear();
+  mDataReceived.clear();
   mIsTimeOutCantReachPeerCLosed = false;
 
   mStream->doConnect(Destination);

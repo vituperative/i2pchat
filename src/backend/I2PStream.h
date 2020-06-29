@@ -80,11 +80,11 @@ private slots:
 
 signals:
   void signDebugMessages(const QString Message);
-  void signStreamStatusRecived(const SAM_Message_Types::RESULT result,
+  void signStreamStatusReceived(const SAM_Message_Types::RESULT result,
                                const qint32 ID, const QString Message);
-  void signDataRecived(const qint32 ID, const QByteArray Data);
+  void signDataReceived(const qint32 ID, const QByteArray Data);
   void signModeAcceptIncomingStream(
-      qint32 ID); // emit if Destination recived (SILENCE=false)
+      qint32 ID); // emit if Destination received (SILENCE=false)
 
 private:
   const QString mSamHost;
@@ -99,9 +99,9 @@ private:
   bool mDoneDisconnect;
   bool mModeStreamConnect;
   bool mModeStreamAccept;
-  bool mStatusRecived;
+  bool mStatusReceived;
   bool mHandShakeWasSuccesfullDone;
-  bool mDestinationRecived;
+  bool mDestinationReceived;
   bool mFIRSTPAKETCHAT_allreadySended;
   QByteArray *mIncomingPackets;
   QTcpSocket mTcpSocket;
