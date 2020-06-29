@@ -923,7 +923,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../../gitlab/i2pchat/src/gui/resourcen.qrc">
+         <iconset resource="resourcen.qrc">
           <normaloff>:/icons/show_frame.png</normaloff>:/icons/show_frame.png</iconset>
         </property>
         <property name="iconSize">
@@ -1004,7 +1004,7 @@ background: #fff;
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+          <pixmap resource="resourcen.qrc">:/icons/silhouette.svg</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -1097,7 +1097,6 @@ background: #fff;
   </action>
  </widget>
  <resources>
-  <include location="../../../../gitlab/i2pchat/src/gui/resourcen.qrc"/>
   <include location="resourcen.qrc"/>
  </resources>
  <connections/>

@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/">
     <file>icons/editcopy.svg</file>
+    <file>icons/silhouette.svg</file>
     <file>icons/status_connecting.svg</file>
     <file>icons/find.svg</file>
     <file>icons/debug.svg</file>

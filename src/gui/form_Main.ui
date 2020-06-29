@@ -63,6 +63,9 @@
       <property name="alternatingRowColors">
        <bool>false</bool>
       </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
       <property name="iconSize">
        <size>
         <width>12</width>
@@ -134,7 +137,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
          </property>
          <property name="insertPolicy">
           <enum>QComboBox::NoInsert</enum>
@@ -227,6 +230,9 @@ background: #fff;
      <width>0</width>
      <height>0</height>
     </size>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="contextMenuPolicy">
     <enum>Qt::NoContextMenu</enum>
