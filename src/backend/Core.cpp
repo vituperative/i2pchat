@@ -417,106 +417,102 @@ QString CCore::getConnectionDump() const {
   QString StreamControllerBridgeName;
 
   if (mConnectionManager->isComponentStopped() == true) {
-    Message = "The Core is stopped !";
+    Message = "Not connected to network";
     return Message;
-  }
-  StreamControllerBridgeName =
-      mConnectionManager->getStreamControllerBridgeName();
+  } else {
+    StreamControllerBridgeName =
+        mConnectionManager->getStreamControllerBridgeName();
 
-  Message = "< Stream Controller >\n";
-  Message += "\tNetwork:\tI2P\n";
-  Message +=
-      "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
-//  Message += "-----------------------------------------------\n\n";
+    Message = "• Stream Controller\n";
+    Message += "\tNetwork:\t\tI2P\n";
+    Message +=
+        "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
 
-  const QMap<qint32, CI2PStream *> *allListener =
-      mConnectionManager->getAllStreamIncomingListenerObjects();
-  const QList<CI2PStream *> allStreamsListenerList = allListener->values();
-  Message = "• Stream Incoming Listener\n";
-  for (int i = 0; i < allStreamsListenerList.count(); i++) {
-    CI2PStream *Stream = allStreamsListenerList.value(i);
-    Message += "\n\tStreamID:\t\t" + QString::number(Stream->getID()) + "\n";
-    // Print StreamMode
-    if (Stream->getStreamMode() == STREAMS::CONNECT) {
-      Message += "\tStreamMode:\tCONNECT\n";
-    } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
-      Message += "\tStreamMode:\tACCEPT\n";
-    } else {
-      Message += "\tStreamMode:\t???\n";
-    }
-    //---------------------------------------------------
-
-    // Print ConnectionType
-    if (Stream->getConnectionType() == UNKNOWN) {
-      Message += "\tConnectionTrust:\tUNKNOWN\n";
-    } else if (Stream->getConnectionType() == KNOWN) {
-      Message += "\tConnectionTrust:\tKNOWN\n";
-    } else {
-      Message += "\tConnectionTrust:\t???\n";
-    }
-    //---------------------------------------------------
-
-    Message += "\tUsed for:\t\t" + Stream->getUsedFor() + "\n\n";
-  }
-//  Message += "-----------------------------------------------\n\n";
-
-  Message += "• Streams\n";
-  const QMap<qint32, CI2PStream *> *allStreams =
-      mConnectionManager->getAllStreamObjects();
-  const QList<CI2PStream *> allStreamsList = allStreams->values();
-
-  for (int n = 0; n < allStreamsList.size(); n++) {
-
-    CI2PStream *Stream = allStreamsList.value(n);
-    QString StreamID;
-    CUser *theUser = NULL;
-
-    StreamID.setNum(Stream->getID(), 10);
-
-    Message += "\n\tStreamID:\t\t" + StreamID + "\n";
-
-    // Print StreamMode
-    if (Stream->getStreamMode() == STREAMS::CONNECT) {
-      Message += "\tStreamMode:\tCONNECT\n";
-    } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
-      Message += "\tStreamMode:\tACCEPT\n";
-    } else {
-      Message += "\tStreamMode:\t???\n";
-    }
-    //-----------------------------------------
-
-    // Print ConnectionType
-    if (Stream->getConnectionType() == UNKNOWN) {
-      Message += "\tConnectionTrust:\tUNKNOWN\n";
-    } else if (Stream->getConnectionType() == KNOWN) {
-      Message += "\tConnectionTrust:\tKNOWN\n";
-    } else {
-      Message += "\tConnectionTrust:\t???\n";
-    }
-    //------------------------------------------
-    if (Stream->getUsedFor() != nullptr) {
-      Message += "\tUsed for:\t\t" + Stream->getUsedFor() + "\n";
-    }
-
-    theUser = mUserManager->getUserByI2P_ID(Stream->getID());
-    if (theUser == NULL) {
-      Message += "\tUser: \n";
-    } else {
-      Message += "\tUser:\t\t" + theUser->getName() + "\n";
-      if (theUser->getClientName() != nullptr) {
-        Message += "\tClientName:\t" + theUser->getClientName() + "\n";
+    const QMap<qint32, CI2PStream *> *allListener =
+        mConnectionManager->getAllStreamIncomingListenerObjects();
+    const QList<CI2PStream *> allStreamsListenerList = allListener->values();
+    Message = "• Incoming Stream Listener\n";
+    for (int i = 0; i < allStreamsListenerList.count(); i++) {
+      CI2PStream *Stream = allStreamsListenerList.value(i);
+      Message += "\n\tStream ID:\t\t" + QString::number(Stream->getID()) + "\n";
+      // Print StreamMode
+      if (Stream->getStreamMode() == STREAMS::CONNECT) {
+        Message += "\tStream Mode:\tCONNECT\n";
+      } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
+        Message += "\tStream Mode:\tACCEPT\n";
+      } else {
+        Message += "\tStream Mode:\t???\n";
       }
-      if (theUser->getClientVersion() != nullptr) {
-        Message += "\tClientVersion:\t" + theUser->getClientVersion() + "\n";
+
+      // Print ConnectionType
+      if (Stream->getConnectionType() == UNKNOWN) {
+        Message += "\tTrust:\t\tUNKNOWN\n";
+      } else if (Stream->getConnectionType() == KNOWN) {
+        Message += "\tTrust:\t\tKNOWN\n";
+      } else {
+        Message += "\tTrust:\t\t???\n";
       }
-      if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
-        Message += "\tProtocolVersion:\t" + theUser->getProtocolVersion() + "\n";
+      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
+    }
+
+    Message += "• Streams\n\n";
+    const QMap<qint32, CI2PStream *> *allStreams =
+        mConnectionManager->getAllStreamObjects();
+    const QList<CI2PStream *> allStreamsList = allStreams->values();
+
+    for (int n = 0; n < allStreamsList.size(); n++) {
+
+      CI2PStream *Stream = allStreamsList.value(n);
+      QString StreamID;
+      CUser *theUser = NULL;
+
+      theUser = mUserManager->getUserByI2P_ID(Stream->getID());
+
+      if (theUser != NULL) {
+        Message += "\tUser:\t\t" + theUser->getName() + "\n";
+      }
+
+      StreamID.setNum(Stream->getID(), 10);
+
+      Message += "\tStream ID:\t\t" + StreamID + "\n";
+
+      // Print StreamMode
+      if (Stream->getStreamMode() == STREAMS::CONNECT) {
+        Message += "\tStream Mode:\tCONNECT\n";
+      } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
+        Message += "\tStream Mode:\tACCEPT\n";
+      } else {
+        Message += "\tStream Mode:\t???\n";
+      }
+
+      if (Stream->getUsedFor() != nullptr) {
+        Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n";
+      }
+
+      // Print ConnectionType
+      if (Stream->getConnectionType() == UNKNOWN) {
+        Message += "\n";
+      } else if (Stream->getConnectionType() == KNOWN) {
+        Message += "\tTrust:\t\tKNOWN\n";
+      } else {
+        Message += "\tTrust:\t\t???\n";
+      }
+
+      theUser = mUserManager->getUserByI2P_ID(Stream->getID());
+      if (theUser != NULL) {
+        if (theUser->getClientName() != nullptr) {
+          Message += "\tClient:\t\t" + theUser->getClientName();
+        }
+        if (theUser->getClientVersion() != nullptr) {
+          Message += " " + theUser->getClientVersion() + "\n";
+        }
+        if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
+          Message += "\tProtocol:\t\t" + theUser->getProtocolVersion() + "\n\n";
+        }
       }
     }
-  }
-//  Message += "-----------------------------------------------\n\n";
-
   return Message;
+  }
 }
 
 ONLINESTATE CCore::getOnlineStatus() const {
@@ -670,7 +666,7 @@ void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data,
             SIGNAL(signAPacketIsCompleate(const qint32, const QByteArray)),
             mProtocol, SLOT(slotInputKnown(const qint32, const QByteArray)));
 
-    t->setUsedFor("ChatConnection");
+    t->setUsedFor("Chat Connection");
     if (Data.isEmpty() == false) {
       packetManager->slotDataInput(ID, Data);
     }

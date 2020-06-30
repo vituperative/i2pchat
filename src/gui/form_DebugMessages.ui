@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DebugMessages</string>
+   <string>Debug Messages</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
@@ -39,7 +39,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="Tab_SAM">
       <attribute name="title">
@@ -118,7 +118,7 @@
            <item>
             <widget class="QPushButton" name="cmd_Connection_snapshot">
              <property name="text">
-              <string>Do Connection Snapshot</string>
+              <string>&amp;Connection Snapshot</string>
              </property>
             </widget>
            </item>
