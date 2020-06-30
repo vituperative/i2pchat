@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>411</height>
+    <width>272</width>
+    <height>461</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>280</width>
+    <width>272</width>
     <height>16777215</height>
    </size>
   </property>
@@ -51,6 +51,18 @@
     </property>
     <item row="2" column="0">
      <widget class="QListWidget" name="listWidget">
+      <property name="minimumSize">
+       <size>
+        <width>274</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>274</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="cursor" stdset="0">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -63,6 +75,15 @@
       <property name="styleSheet">
        <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
       </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
       <property name="autoScrollMargin">
        <number>0</number>
       </property>
@@ -73,7 +94,7 @@
        <bool>false</bool>
       </property>
       <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectItems</enum>
+       <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="iconSize">
        <size>
@@ -105,13 +126,13 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>280</width>
+        <width>268</width>
         <height>36</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
+        <width>268</width>
         <height>36</height>
        </size>
       </property>
@@ -187,20 +208,20 @@ background: #fff;
        <item row="0" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QComboBox" name="comboBox">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>200</horstretch>
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>132</width>
+           <width>134</width>
            <height>31</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16000</width>
+           <width>134</width>
            <height>31</height>
           </size>
          </property>

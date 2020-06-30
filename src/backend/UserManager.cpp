@@ -153,17 +153,18 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
       CUser *theUser = mUsers.at(i);
 
-      Infos = "Nickname:\t\t" + theUser->getName() + "\n";
-      Infos += "Client:\t\t";
       if (theUser->getClientName() != nullptr) {
-        Infos += theUser->getClientName() + " " + theUser->getClientVersion() + "\n";
+        Infos = "Nickname:\t\t" + theUser->getName() + "\n";
+        Infos += "Client:\t\t" + theUser->getClientName() + " " +
+                 theUser->getClientVersion() + "\n";
+        Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
+        Infos += "File transfer support:\t" +
+                 theUser->getMinProtocolVersionFiletransfer() + " - " +
+                 theUser->getMaxProtocolVersionFiletransfer() + "\n";
       } else {
-        Infos += "Unknown (offline)\n";
+        Infos = "Nickname:\t" + theUser->getName() + "\n";
+        Infos += "Status:\tOffline\n";
       }
-      Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
-      Infos += "File transfer support:\t" +
-               theUser->getMinProtocolVersionFiletransfer() + " - " +
-               theUser->getMaxProtocolVersionFiletransfer() + "\n";
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
         CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
@@ -172,7 +173,6 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
         if (receivedInfos.Gender != nullptr || sAge != "0" || receivedInfos.Interests != nullptr) {
           Infos += "\nUser Information:\n";
-//          Infos += "Nickname:\t\t" + receivedInfos.Nickname + "\n";
           if (receivedInfos.Gender != nullptr) {
             Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";
           }
