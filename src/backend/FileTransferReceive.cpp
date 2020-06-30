@@ -80,7 +80,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Autoaccepted incoming Filetransfer<br>Filename: %1")
+            tr(" Auto-accepted incoming file transfer<br>Filename: %1")
                 .arg(mFileName),
             true);
 
@@ -94,8 +94,8 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Incoming Filetransfer<br>Filename: %1"
-               "<br>please accept or reject it in the user list")
+            tr(" Incoming file transfer<br>Filename: %1"
+               "<br>Accept or reject from the userlist")
                 .arg(mFileName));
   }
 }

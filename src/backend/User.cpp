@@ -117,10 +117,8 @@ void CUser::setProtocolVersion(QString Version) {
 void CUser::slotIncomingNewChatMessage(QString newMessage) {
 
   newMessage = mChatMessageChanger.changeChatMessage(newMessage);
-  auto myMessage = "<span class='Sender' id='IncomingMessages'>" + mName +
-                   "</span> <span class='Time IncomingMessages'>( " +
-                   QTime::currentTime().toString("hh:mm:ss") +
-                   " ):</span> <br/>" + newMessage + "<br>";
+  auto myMessage = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + mName + ":" +
+                   newMessage + "<br>";
 
   // TODO fix this in OOP way
   this->mAllMessages.push_back(myMessage);
@@ -149,9 +147,7 @@ void CUser::slotSendChatMessage(QString Message) {
       Nickname = mCore.getUserInfos().Nickname;
     }
 
-    auto msg = "<span class='Sender' id='SendMessages'>" + Nickname +
-               "</span> <span class='Time SendMessages'>( " +
-               QTime::currentTime().toString("hh:mm:ss") + " ):</span> <br/>" +
+    auto msg = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" +
                Message + "<br>";
 
     this->mAllMessages.push_back(msg);
@@ -232,12 +228,10 @@ void CUser::setTextFont(QFont textFont) { this->mTextFont = textFont; }
 
 void CUser::slotIncomingMessageFromSystem(QString newMessage,
                                           bool indicateWithSoundAndIcon) {
-  this->mAllMessages.push_back(tr("[System] ") + "( " +
-                               QTime::currentTime().toString("hh:mm:ss") +
-                               " ): " + newMessage + "<br><br>");
-  this->mNewMessages.push_back(tr("[System] ") + "( " +
-                               QTime::currentTime().toString("hh:mm:ss") +
-                               " ): " + newMessage + "<br><br>");
+  this->mAllMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
+  newMessage + "<br><br>");
+  this->mNewMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
+  newMessage + "<br><br>");
 
   mHaveNewUnreadMessages = true;
 
