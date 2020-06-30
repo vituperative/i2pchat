@@ -165,7 +165,7 @@ void form_MainWindow::initToolBars() {
                      SLOT(namingMe()));
   toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this,
                      SLOT(openConfigWindow()));
-  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("DebugMessages"), this,
+  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this,
                      SLOT(openDebugMessagesWindow()));
   toolBar->addAction(QIcon(ICON_ABOUT), tr("About"), this,
                      SLOT(openAboutDialog()));
@@ -303,7 +303,7 @@ void form_MainWindow::eventUserChanged() {
         break;
       }
       case USERDONT_DISTURB: {
-        newItem->setIcon(QIcon(ICON_USER_DONT_DUSTURB));
+        newItem->setIcon(QIcon(ICON_USER_DONT_DISTURB));
         break;
       }
       case USERBLOCKEDYOU: {
@@ -621,7 +621,7 @@ void form_MainWindow::OnlineStateChanged() {
       comboBox->addItem(QIcon(ICON_USER_ONLINE), tr(" Online")); // index 0
       comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr(" Want to chat")); // 1
       comboBox->addItem(QIcon(ICON_USER_AWAY), tr(" Away"));               // 2
-      comboBox->addItem(QIcon(ICON_USER_DONT_DUSTURB),
+      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB),
                         tr(" Do not disturb"));                        // 3
       comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr(" Invisible")); // 4
       comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr(" Offline"));     // 5
@@ -638,7 +638,7 @@ void form_MainWindow::OnlineStateChanged() {
       trayIcon->setIcon(QIcon(ICON_USER_AWAY));
     } else if (onlinestatus == User::USERDONT_DISTURB) {
       comboBox->setCurrentIndex(3);
-      trayIcon->setIcon(QIcon(ICON_USER_DONT_DUSTURB));
+      trayIcon->setIcon(QIcon(ICON_USER_DONT_DISTURB));
     } else if (onlinestatus == User::USERINVISIBLE) {
       comboBox->setCurrentIndex(4);
       trayIcon->setIcon(QIcon(ICON_USER_INVISIBLE));

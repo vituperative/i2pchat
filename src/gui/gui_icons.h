@@ -45,7 +45,7 @@
 #define ICON_USER_AWAY ":/icons/status_away.svg"
 #define ICON_USER_BLOCKED_YOU ":/icons/blocked.svg"
 #define ICON_USER_DELETE ":/icons/delete.svg"
-#define ICON_USER_DONT_DUSTURB ":/icons/status_dnd.svg"
+#define ICON_USER_DONT_DISTURB ":/icons/status_dnd.svg"
 #define ICON_USER_INVISIBLE ":/icons/status_invisible.svg"
 #define ICON_USER_OFFLINE ":/icons/status_offline.svg"
 #define ICON_USER_ONLINE ":/icons/status_online.svg"

@@ -75,7 +75,7 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status) {
   CI2PStream *t =
       new CI2PStream(mSamHost, mSamPort, nextFreeNegID(),
                      StreamController->getBridgeName(), ACCEPT, false);
-  t->setUsedFor("Incoming StreamListener");
+  t->setUsedFor("Incoming Stream Listener");
   connect(t, SIGNAL(signModeAcceptIncomingStream(qint32)), this,
           SLOT(slotModeAcceptIncomingStream(qint32)));
 
@@ -249,7 +249,7 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
     CI2PStream *t2 =
         new CI2PStream(mSamHost, mSamPort, nextFreeNegID(),
                        StreamController->getBridgeName(), ACCEPT, false);
-    t2->setUsedFor("Incoming StreamListener");
+    t2->setUsedFor("Incoming Stream Listener");
     connect(t2, SIGNAL(signDebugMessages(const QString)), this,
             SIGNAL(signDebugMessages(const QString)));
 
