@@ -72,6 +72,9 @@
           <property name="cursor" stdset="0">
            <cursorShape>IBeamCursor</cursorShape>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
           </property>
@@ -414,7 +417,7 @@ p, li { white-space: pre-wrap; }
            <cursorShape>IBeamCursor</cursorShape>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::ClickFocus</enum>
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
