@@ -393,7 +393,7 @@ void CFileTransferReceive::CalcETA(int speed) {
 
   if (secLeft > 86400) {
     //> 24h
-    emit signETA(tr("never or (>24 h)"));
+    emit signETA(tr("Over a day..."));
   } else {
     int hours = 0;
     int minutes = 0;
