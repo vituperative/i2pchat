@@ -653,6 +653,9 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_10">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
         <property name="verticalSpacing">
          <number>2</number>
         </property>
@@ -666,13 +669,13 @@ p, li { white-space: pre-wrap; }
          <widget class="QLabel" name="label_12">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
@@ -713,13 +716,13 @@ p, li { white-space: pre-wrap; }
          <widget class="QLabel" name="label_10">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
@@ -741,13 +744,13 @@ p, li { white-space: pre-wrap; }
          <widget class="QLabel" name="label_11">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
@@ -784,23 +787,26 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_22">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
         <item row="0" column="0" alignment="Qt::AlignVCenter">
          <widget class="QLabel" name="label_13">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="baseSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
@@ -851,17 +857,20 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_23">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_9">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
@@ -919,23 +928,26 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="spacing">
+         <number>10</number>
+        </property>
         <item>
          <widget class="QLabel" name="label_17">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="baseSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
@@ -1008,13 +1020,13 @@ p, li { white-space: pre-wrap; }
          <widget class="QLabel" name="label_26">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>16777215</height>
            </size>
           </property>
@@ -1044,19 +1056,6 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
     <widget class="QWidget" name="userdetails_Page">
-     <widget class="QLabel" name="shareiconlabel">
-      <property name="geometry">
-       <rect>
-        <x>1</x>
-        <y>37</y>
-        <width>179</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QWidget" name="layoutWidget_12">
       <property name="geometry">
        <rect>
@@ -1136,28 +1135,6 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QPlainTextEdit" name="txt_Interests">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>194</y>
-        <width>380</width>
-        <height>69</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>380</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>380</width>
-        <height>16777215</height>
-       </size>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="groupBox_21">
       <property name="geometry">
        <rect>
@@ -1185,7 +1162,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QLabel" name="ownavatar_label">
        <property name="geometry">
         <rect>
-         <x>270</x>
+         <x>292</x>
          <y>30</y>
          <width>80</width>
          <height>80</height>
@@ -1283,107 +1260,203 @@ border-radius: 2px;
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="layoutWidget_11">
+     <widget class="QGroupBox" name="groupBox_5">
       <property name="geometry">
        <rect>
-        <x>6</x>
-        <y>58</y>
-        <width>377</width>
-        <height>105</height>
+        <x>3</x>
+        <y>40</y>
+        <width>381</width>
+        <height>123</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_12">
-       <property name="horizontalSpacing">
-        <number>10</number>
+      <property name="title">
+       <string>General</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_11">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>28</y>
+         <width>363</width>
+         <height>88</height>
+        </rect>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Nickname:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="label_21">
-         <property name="text">
-          <string>Age:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QLineEdit" name="txt_Nickname">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="checkGender_Male">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Male</string>
-         </property>
-         <property name="autoRepeat">
-          <bool>false</bool>
-         </property>
-         <property name="autoExclusive">
-          <bool>false</bool>
-         </property>
-         <property name="tristate">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="label_22">
-         <property name="text">
-          <string>Gender:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QSpinBox" name="spinAge">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="checkGender_Female">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Female</string>
-         </property>
-         <property name="autoRepeat">
-          <bool>false</bool>
-         </property>
-         <property name="autoExclusive">
-          <bool>false</bool>
-         </property>
-         <property name="tristate">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <layout class="QGridLayout" name="gridLayout_12">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0" alignment="Qt::AlignRight">
+         <widget class="QLabel" name="label_19">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Nickname:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" alignment="Qt::AlignRight">
+         <widget class="QLabel" name="label_21">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Age:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QLineEdit" name="txt_Nickname">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="checkGender_Male">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Male</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" alignment="Qt::AlignRight">
+         <widget class="QLabel" name="label_22">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Gender:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="checkGender_Female">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Female</string>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QSpinBox" name="spinAge">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QLabel" name="label_20">
+     <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>176</y>
-        <width>62</width>
-        <height>17</height>
+        <y>168</y>
+        <width>380</width>
+        <height>103</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Interests:</string>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Supplementary Info</string>
+      </property>
+      <widget class="QPlainTextEdit" name="txt_Interests">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>29</y>
+         <width>361</width>
+         <height>65</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>368</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
      </widget>
+     <zorder>groupBox_5</zorder>
+     <zorder>layoutWidget_12</zorder>
+     <zorder>groupBox_21</zorder>
+     <zorder>groupBox_9</zorder>
     </widget>
     <widget class="QWidget" name="style_Page">
      <widget class="QGroupBox" name="groupBox_3">
