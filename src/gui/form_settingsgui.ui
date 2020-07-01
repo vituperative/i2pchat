@@ -1204,6 +1204,12 @@ border-radius: 2px;
        <property name="text">
         <string/>
        </property>
+       <property name="pixmap">
+        <pixmap resource="resourcen.qrc">:/icons/silhouette.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
       </widget>
       <widget class="QLabel" name="label">
        <property name="geometry">
@@ -2573,7 +2579,7 @@ p, li { white-space: pre-wrap; }
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2865,7 +2871,7 @@ p, li { white-space: pre-wrap; }
          <set>QTextEdit::AutoNone</set>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -3121,7 +3127,7 @@ p, li { white-space: pre-wrap; }
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>2</x>
@@ -3435,7 +3441,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="itemListWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>2</x>
       <y>0</y>
       <width>129</width>
       <height>398</height>
