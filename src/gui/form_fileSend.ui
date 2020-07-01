@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>292</width>
-    <height>182</height>
+    <height>174</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>292</width>
-    <height>182</height>
+    <height>174</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -118,7 +118,7 @@
      <x>4</x>
      <y>0</y>
      <width>283</width>
-     <height>127</height>
+     <height>119</height>
     </rect>
    </property>
    <property name="font">
@@ -135,12 +135,12 @@
       <x>8</x>
       <y>10</y>
       <width>269</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout" columnstretch="0,10,0">
      <property name="verticalSpacing">
-      <number>4</number>
+      <number>2</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -233,7 +233,7 @@
    <property name="geometry">
     <rect>
      <x>4</x>
-     <y>128</y>
+     <y>120</y>
      <width>283</width>
      <height>49</height>
     </rect>
