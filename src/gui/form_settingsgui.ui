@@ -3441,7 +3441,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="itemListWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>2</x>
       <y>0</y>
       <width>129</width>
       <height>398</height>
