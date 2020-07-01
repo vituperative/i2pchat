@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>176</height>
+    <width>349</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,14 +21,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>374</width>
-    <height>176</height>
+    <width>349</width>
+    <height>168</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>374</width>
-    <height>176</height>
+    <width>349</width>
+    <height>168</height>
    </size>
   </property>
   <property name="sizeIncrement">
@@ -43,7 +43,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>About</string>
+   <string>About I2PChat</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
@@ -60,8 +60,8 @@
     <rect>
      <x>4</x>
      <y>4</y>
-     <width>365</width>
-     <height>169</height>
+     <width>341</width>
+     <height>161</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -75,8 +75,8 @@
      <rect>
       <x>4</x>
       <y>4</y>
-      <width>357</width>
-      <height>161</height>
+      <width>333</width>
+      <height>153</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,10">
@@ -115,7 +115,7 @@
         </font>
        </property>
        <property name="text">
-        <string>I2PChat Version:</string>
+        <string>Version:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -170,7 +170,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Protocol version:</string>
+        <string>Chat Protocol:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -209,7 +209,7 @@
         </font>
        </property>
        <property name="text">
-        <string>File transfer:</string>
+        <string>File Transfer:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -264,7 +264,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Git commit count:</string>
+        <string>Git Commit Count:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -345,7 +345,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Git commit hash:</string>
+        <string>Git Commit Hash:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -384,7 +384,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Date built:</string>
+        <string>Build Date:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
