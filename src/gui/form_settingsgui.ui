@@ -2134,7 +2134,7 @@ p, li { white-space: pre-wrap; }
        </size>
       </property>
       <property name="title">
-       <string>User</string>
+       <string>Connection Status</string>
       </property>
       <widget class="QWidget" name="layoutWidget_15">
        <property name="geometry">
