@@ -161,15 +161,15 @@ void form_MainWindow::initToolBars() {
       }
   */
 
-  toolBar->addAction(QIcon(ICON_MYDESTINATION), tr("Your Destination"), this,
+  toolBar->addAction(QIcon(ICON_MYDESTINATION), tr("Copy Destination to clipboard"), this,
                      SLOT(namingMe()));
   toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this,
                      SLOT(openConfigWindow()));
   toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this,
                      SLOT(openDebugMessagesWindow()));
-  toolBar->addAction(QIcon(ICON_ABOUT), tr("About"), this,
+  toolBar->addAction(QIcon(ICON_ABOUT), tr("About I2PChat"), this,
                      SLOT(openAboutDialog()));
-  toolBar->addAction(QIcon(ICON_CLOSE), tr("Close"), this,
+  toolBar->addAction(QIcon(ICON_CLOSE), tr("Quit I2PChat"), this,
                      SLOT(closeApplication()));
 }
 
