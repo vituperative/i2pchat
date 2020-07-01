@@ -29,7 +29,7 @@ SOURCES += \
 	src/backend/Protocol.cpp \
 	src/backend/PacketManager.cpp \
 	src/backend/FileTransferSend.cpp \
-	src/backend/FileTransferRecive.cpp \
+	src/backend/FileTransferReceive.cpp \
 	src/backend/SoundManager.cpp \
 	src/backend/ConnectionManager.cpp \
 	src/backend/SessionController.cpp \
@@ -44,7 +44,7 @@ SOURCES += \
 	src/gui/form_Main.cpp \
 	src/gui/form_chatwidget.cpp \
 	src/gui/form_DebugMessages.cpp \
-	src/gui/form_fileRecive.cpp \
+	src/gui/form_fileReceive.cpp \
 	src/gui/form_fileSend.cpp \
 	src/gui/form_newUser.cpp \
 	src/gui/form_rename.cpp \
@@ -62,7 +62,7 @@ HEADERS += \
 	src/backend/Protocol.h \
 	src/backend/PacketManager.h \
 	src/backend/FileTransferSend.h \
-	src/backend/FileTransferRecive.h \
+	src/backend/FileTransferReceive.h \
 	src/backend/SoundManager.h \
 	src/backend/ConnectionManager.h \
 	src/backend/SessionController.h \
@@ -77,7 +77,7 @@ HEADERS += \
 	src/gui/form_Main.h \
 	src/gui/form_chatwidget.h \
 	src/gui/form_DebugMessages.h \
-	src/gui/form_fileRecive.h \
+	src/gui/form_fileReceive.h \
 	src/gui/form_fileSend.h \
 	src/gui/form_newUser.h \
 	src/gui/form_rename.h \
@@ -91,7 +91,7 @@ FORMS += \
 	src/gui/form_Main.ui \
 	src/gui/form_chatwidget.ui \
 	src/gui/form_DebugMessages.ui \
-	src/gui/form_fileRecive.ui \
+	src/gui/form_fileReceive.ui \
 	src/gui/form_fileSend.ui \
 	src/gui/form_newUser.ui \
 	src/gui/form_rename.ui \

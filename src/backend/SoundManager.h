@@ -41,8 +41,8 @@ public slots:
   void slotUserGoOnline();
   void slotUserGoOffline();
   void slotFileSendFinished();
-  void slotFileReciveIncoming();
-  void slotFileReciveFinished();
+  void slotFileReceiveIncoming();
+  void slotFileReceiveFinished();
   void slotNewChatMessage();
 
 private:
@@ -50,16 +50,16 @@ private:
   QString mSoundFileUser_go_Online;
   QString mSoundFileUser_go_Offline;
   QString mSoundFileFileSend_Finished;
-  QString mSoundFileFileRecive_Incoming;
-  QString mSoundFileFileRecive_Finished;
+  QString mSoundFileFileReceive_Incoming;
+  QString mSoundFileFileReceive_Finished;
   QString mSoundFileNewChatMessage;
   const QString mConfigPath;
 
   bool mEnable_eventUser_go_Online;
   bool mEnable_eventUser_go_Offline;
   bool mEnable_eventFileSend_Finished;
-  bool mEnable_eventFileRecive_Incoming;
-  bool mEnable_eventFileRecive_Finished;
+  bool mEnable_eventFileReceive_Incoming;
+  bool mEnable_eventFileReceive_Finished;
   bool mEnable_eventNewChatMessage;
 };
 #endif

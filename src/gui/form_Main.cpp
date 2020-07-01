@@ -98,7 +98,7 @@ void form_MainWindow::onlineComboBoxChanged() {
       Core->setOnlineStatus(User::USERINVISIBLE);
   } else if (text.contains(tr("Offline"), Qt::CaseInsensitive) == true) {
     if (Core->getFileTransferManager()
-            ->checkIfAFileTransferOrReciveisActive() == false) {
+            ->checkIfAFileTransferOrReceiveisActive() == false) {
       if (Core->getOnlineStatus() != User::USEROFFLINE)
         Core->setOnlineStatus(User::USEROFFLINE);
     } else {
@@ -165,7 +165,7 @@ void form_MainWindow::initToolBars() {
                      SLOT(namingMe()));
   toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this,
                      SLOT(openConfigWindow()));
-  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("DebugMessages"), this,
+  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this,
                      SLOT(openDebugMessagesWindow()));
   toolBar->addAction(QIcon(ICON_ABOUT), tr("About"), this,
                      SLOT(openAboutDialog()));
@@ -218,7 +218,7 @@ void form_MainWindow::namingMe() {
 }
 void form_MainWindow::closeApplication() {
 
-  if (Core->getFileTransferManager()->checkIfAFileTransferOrReciveisActive() ==
+  if (Core->getFileTransferManager()->checkIfAFileTransferOrReceiveisActive() ==
       false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
@@ -260,8 +260,8 @@ void form_MainWindow::eventUserChanged() {
   mLastDestinationWithUnreadMessages = "";
   bool showUnreadMessageAtTray = false;
   QList<CUser *> users = Core->getUserManager()->getUserList();
-  QList<CFileTransferRecive *> FileRecives =
-      Core->getFileTransferManager()->getFileTransferReciveList();
+  QList<CFileTransferReceive *> FileReceives =
+      Core->getFileTransferManager()->getFileTransferReceiveList();
   QList<CFileTransferSend *> FileSends =
       Core->getFileTransferManager()->getFileTransferSendsList();
 
@@ -303,7 +303,7 @@ void form_MainWindow::eventUserChanged() {
         break;
       }
       case USERDONT_DISTURB: {
-        newItem->setIcon(QIcon(ICON_USER_DONT_DUSTURB));
+        newItem->setIcon(QIcon(ICON_USER_DONT_DISTURB));
         break;
       }
       case USERBLOCKEDYOU: {
@@ -332,19 +332,19 @@ void form_MainWindow::eventUserChanged() {
     ChildWidthTyp->setHidden(true); // DEBUG
   }
 
-  for (int i = 0; i < FileRecives.size(); i++) {
-    // Filerecives
+  for (int i = 0; i < FileReceives.size(); i++) {
+    // Filereceives
     QListWidgetItem *newItem = new QListWidgetItem(listWidget);
     QListWidgetItem *ChildWidthStreamIDAsText = new QListWidgetItem(listWidget);
     QListWidgetItem *ChildWidthTyp = new QListWidgetItem(listWidget);
 
-    newItem->setIcon(QIcon(ICON_FILETRANSFER_RECIVE));
-    newItem->setText(FileRecives.at(i)->getFileName());
+    newItem->setIcon(QIcon(ICON_FILETRANSFER_RECEIVE));
+    newItem->setText(FileReceives.at(i)->getFileName());
     newItem->setTextAlignment(Qt::AlignLeft);
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString t;
-    t.setNum(FileRecives.at(i)->getStreamID(), 10);
+    t.setNum(FileReceives.at(i)->getStreamID(), 10);
 
     ChildWidthStreamIDAsText->setText(t);
     ChildWidthStreamIDAsText->setHidden(true); // DEBUG
@@ -389,7 +389,7 @@ void form_MainWindow::openUserListeClicked() {
 
     openChatWindow(Destination);
   } else if (t->text() == "R") {
-    // openFileReciveWindow
+    // openFileReceiveWindow
     t = listWidget->item(listWidget->currentRow() + 1);
 
     bool OK = false;
@@ -398,13 +398,13 @@ void form_MainWindow::openUserListeClicked() {
     if (OK == false) {
       QMessageBox msgBox;
       msgBox.setIcon(QMessageBox::Critical);
-      msgBox.setText(tr("form_Main(openChat_or_FileRecive_Dialog))"));
+      msgBox.setText(tr("form_Main(openChat_or_FileReceive_Dialog))"));
       msgBox.setInformativeText(tr("can't parse value: %1").arg(t->text()));
       msgBox.setStandardButtons(QMessageBox::Ok);
       msgBox.setDefaultButton(QMessageBox::Ok);
       msgBox.exec();
     }
-    openFileReciveWindow(StreamID);
+    openFileReceiveWindow(StreamID);
   } else if (t->text() == "S") {
     // openFileSendWindow
     t = listWidget->item(listWidget->currentRow() + 1);
@@ -415,7 +415,7 @@ void form_MainWindow::openUserListeClicked() {
     if (OK == false) {
       QMessageBox msgBox;
       msgBox.setIcon(QMessageBox::Critical);
-      msgBox.setText(tr("form_Main(openChat_or_FileRecive_Dialog)"));
+      msgBox.setText(tr("form_Main(openChat_or_FileReceive_Dialog)"));
       msgBox.setInformativeText(tr("can't parse value: %1").arg(t->text()));
       msgBox.setStandardButtons(QMessageBox::Ok);
       msgBox.setDefaultButton(QMessageBox::Ok);
@@ -621,7 +621,7 @@ void form_MainWindow::OnlineStateChanged() {
       comboBox->addItem(QIcon(ICON_USER_ONLINE), tr(" Online")); // index 0
       comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr(" Want to chat")); // 1
       comboBox->addItem(QIcon(ICON_USER_AWAY), tr(" Away"));               // 2
-      comboBox->addItem(QIcon(ICON_USER_DONT_DUSTURB),
+      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB),
                         tr(" Do not disturb"));                        // 3
       comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr(" Invisible")); // 4
       comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr(" Offline"));     // 5
@@ -638,7 +638,7 @@ void form_MainWindow::OnlineStateChanged() {
       trayIcon->setIcon(QIcon(ICON_USER_AWAY));
     } else if (onlinestatus == User::USERDONT_DISTURB) {
       comboBox->setCurrentIndex(3);
-      trayIcon->setIcon(QIcon(ICON_USER_DONT_DUSTURB));
+      trayIcon->setIcon(QIcon(ICON_USER_DONT_DISTURB));
     } else if (onlinestatus == User::USERINVISIBLE) {
       comboBox->setCurrentIndex(4);
       trayIcon->setIcon(QIcon(ICON_USER_INVISIBLE));
@@ -811,7 +811,7 @@ void form_MainWindow::showUserInfos() {
   UserInfos =
       Core->getUserManager()->getUserInfosByI2P_Destination(Destination);
 
-  avatar.loadFromData(user->getRecivedUserInfos().AvatarImage);
+  avatar.loadFromData(user->getReceivedUserInfos().AvatarImage);
 
   QMessageBox msgBox;
   if (avatar.isNull() == true) {
@@ -900,13 +900,13 @@ void form_MainWindow::openChatWindow(QString Destination) {
   }
 }
 
-void form_MainWindow::eventFileReciveWindowClosed(qint32 StreamID) {
-  if (mAllFileReciveWindows.contains(StreamID) == true) {
-    delete (mAllFileReciveWindows.value(StreamID));
-    mAllFileReciveWindows.remove(StreamID);
+void form_MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
+  if (mAllFileReceiveWindows.contains(StreamID) == true) {
+    delete (mAllFileReceiveWindows.value(StreamID));
+    mAllFileReceiveWindows.remove(StreamID);
   } else {
-    qCritical() << "form_MainWindow::eventFileReciveWindowClose\n"
-                << "Closing a unknown FileReciveWindow";
+    qCritical() << "form_MainWindow::eventFileReceiveWindowClose\n"
+                << "Closing a unknown FileReceiveWindow";
   }
 }
 
@@ -945,30 +945,30 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
   }
 }
 
-void form_MainWindow::openFileReciveWindow(qint32 StreamID) {
-  CFileTransferRecive *recive =
-      Core->getFileTransferManager()->getFileTransferReciveByID(StreamID);
-  if (recive == NULL) {
-    qCritical() << "form_MainWindow::openFileReciveWindow\n"
-                << "Can't find FileRecive Object with ID: " << StreamID
+void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
+  CFileTransferReceive *receive =
+      Core->getFileTransferManager()->getFileTransferReceiveByID(StreamID);
+  if (receive == NULL) {
+    qCritical() << "form_MainWindow::openFileReceiveWindow\n"
+                << "Can't find FileReceive Object with ID: " << StreamID
                 << "\nAction Ignored";
     return;
   }
 
-  if (mAllFileReciveWindows.contains(StreamID) == false) {
-    // create new FileReciveWindow
-    form_fileRecive *Dialog = new form_fileRecive(*recive);
+  if (mAllFileReceiveWindows.contains(StreamID) == false) {
+    // create new FileReceiveWindow
+    form_fileReceive *Dialog = new form_fileReceive(*receive);
 
-    connect(Dialog, SIGNAL(closingFileReciveWindow(qint32)), this,
-            SLOT(eventFileReciveWindowClosed(qint32)));
+    connect(Dialog, SIGNAL(closingFileReceiveWindow(qint32)), this,
+            SLOT(eventFileReceiveWindowClosed(qint32)));
 
-    mAllFileReciveWindows.insert(StreamID, Dialog);
+    mAllFileReceiveWindows.insert(StreamID, Dialog);
     Dialog->show();
     Dialog->start();
 
   } else {
-    // open the existing FileReciveWindow
-    mAllFileReciveWindows.value(StreamID)->getFocus();
+    // open the existing FileReceiveWindow
+    mAllFileReceiveWindows.value(StreamID)->getFocus();
   }
 }
 

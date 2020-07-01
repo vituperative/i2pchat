@@ -45,7 +45,7 @@ public:
 
 signals:
   void signDebugMessages(const QString Message);
-  void signNamingReplyRecived(const SAM_Message_Types::RESULT result,
+  void signNamingReplyReceived(const SAM_Message_Types::RESULT result,
                               QString Name, QString Value = "",
                               QString Message = "");
   void signSessionStreamStatusOK(bool Status);

@@ -50,11 +50,11 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
   settings.endGroup();
   settings.sync();
   this->mInvisible = false;
-  this->mRecivedNicknameToUserNickname = false;
+  this->mReceivedNicknameToUserNickname = false;
   this->mProtocolVersion = "0.2";
   this->mMaxProtocolVersionFiletransfer = "0.1";
   this->mMinProtocolVersionFiletransfer = "0.1";
-  this->mRecivedUserInfos.Age = 0;
+  this->mReceivedUserInfos.Age = 0;
 
   if (mI2PDestination.length() == 60) {
     mUseB32Dest = true;
@@ -92,7 +92,7 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status) {
       mProtocol.send(GET_MIN_PROTOCOLVERSION_FILETRANSFER, mI2PStream_ID);
     }
     if (getProtocolVersion_D() >= 0.5) {
-      if (mRecivedUserInfos.AvatarImage.isEmpty() == true) {
+      if (mReceivedUserInfos.AvatarImage.isEmpty() == true) {
         mProtocol.send(GET_AVATARIMAGE, mI2PStream_ID);
       }
     }
@@ -117,10 +117,8 @@ void CUser::setProtocolVersion(QString Version) {
 void CUser::slotIncomingNewChatMessage(QString newMessage) {
 
   newMessage = mChatMessageChanger.changeChatMessage(newMessage);
-  auto myMessage = "<span class='Sender' id='IncomingMessages'>" + mName +
-                   "</span> <span class='Time IncomingMessages'>( " +
-                   QTime::currentTime().toString("hh:mm:ss") +
-                   " ):</span> <br/>" + newMessage + "<br>";
+  auto myMessage = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + mName + ":" +
+                   newMessage + "<br>";
 
   // TODO fix this in OOP way
   this->mAllMessages.push_back(myMessage);
@@ -129,7 +127,7 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
   mHaveNewUnreadMessages = true;
   mHaveNewUnreadChatmessage = true;
 
-  emit signNewMessageRecived();
+  emit signNewMessageReceived();
   emit signNewMessageSound();
   emit signOnlineStateChanged();
 }
@@ -149,16 +147,14 @@ void CUser::slotSendChatMessage(QString Message) {
       Nickname = mCore.getUserInfos().Nickname;
     }
 
-    auto msg = "<span class='Sender' id='SendMessages'>" + Nickname +
-               "</span> <span class='Time SendMessages'>( " +
-               QTime::currentTime().toString("hh:mm:ss") + " ):</span> <br/>" +
+    auto msg = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" +
                Message + "<br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);
 
     mHaveNewUnreadMessages = true;
-    emit signNewMessageRecived();
+    emit signNewMessageReceived();
   } else {
     mUnsentedMessages.push_back(Message + "<br>");
     slotIncomingMessageFromSystem(
@@ -232,21 +228,19 @@ void CUser::setTextFont(QFont textFont) { this->mTextFont = textFont; }
 
 void CUser::slotIncomingMessageFromSystem(QString newMessage,
                                           bool indicateWithSoundAndIcon) {
-  this->mAllMessages.push_back(tr("[System] ") + "( " +
-                               QTime::currentTime().toString("hh:mm:ss") +
-                               " ): " + newMessage + "<br><br>");
-  this->mNewMessages.push_back(tr("[System] ") + "( " +
-                               QTime::currentTime().toString("hh:mm:ss") +
-                               " ): " + newMessage + "<br><br>");
+  this->mAllMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
+  newMessage + "<br><br>");
+  this->mNewMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
+  newMessage + "<br><br>");
 
   mHaveNewUnreadMessages = true;
 
-  emit signNewMessageRecived();
+  emit signNewMessageReceived();
 
   if (indicateWithSoundAndIcon == true) {
     emit signNewMessageSound();
     mHaveNewUnreadChatmessage = true;
-    emit signNewMessageRecived();
+    emit signNewMessageReceived();
   }
 
   emit signOnlineStateChanged();
@@ -323,28 +317,28 @@ double CUser::getMinProtocolVersionFiletransfer_D() const {
   return tmp;
 }
 
-void CUser::setRecivedUserInfos(RECIVEDINFOS Tag, QString value) {
+void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, QString value) {
   switch (Tag) {
   case NICKNAME: {
-    mRecivedUserInfos.Nickname = value;
-    if (mRecivedNicknameToUserNickname == true) {
+    mReceivedUserInfos.Nickname = value;
+    if (mReceivedNicknameToUserNickname == true) {
       if (value.isEmpty() == true) {
         setName(tr("No Nickname"));
       } else {
         setName(value);
       }
-      mRecivedNicknameToUserNickname = false;
+      mReceivedNicknameToUserNickname = false;
       emit signOnlineStateChanged();
     }
     break;
   }
   case GENDER: {
-    mRecivedUserInfos.Gender = value;
+    mReceivedUserInfos.Gender = value;
     break;
   }
   case AGE: {
     bool OK = false;
-    mRecivedUserInfos.Age = value.toInt(&OK);
+    mReceivedUserInfos.Age = value.toInt(&OK);
     if (OK == false) {
       qCritical() << "File\t" << __FILE__ << endl
                   << "Line:\t" << __LINE__ << endl
@@ -355,14 +349,14 @@ void CUser::setRecivedUserInfos(RECIVEDINFOS Tag, QString value) {
     break;
   }
   case INTERESTS: {
-    mRecivedUserInfos.Interests = value;
+    mReceivedUserInfos.Interests = value;
     break;
   }
   default: {
     qWarning() << "File\t" << __FILE__ << endl
                << "Line:\t" << __LINE__ << endl
                << "Function:\t"
-               << "CUser::setRecivedUserInfos" << endl
+               << "CUser::setReceivedUserInfos" << endl
                << "Message:\t"
                << "unknown Tag" << endl;
     break;
@@ -370,14 +364,14 @@ void CUser::setRecivedUserInfos(RECIVEDINFOS Tag, QString value) {
   }
 }
 
-void CUser::setRecivedNicknameToUserNickname() {
+void CUser::setReceivedNicknameToUserNickname() {
   if (getProtocolVersion_D() >= 0.3) {
-    mRecivedNicknameToUserNickname = true;
+    mReceivedNicknameToUserNickname = true;
   } else {
     qWarning() << "File\t" << __FILE__ << endl
                << "Line:\t" << __LINE__ << endl
                << "Function:\t"
-               << "setRecivedNicknameToUserNickname" << endl
+               << "setReceivedNicknameToUserNickname" << endl
                << "Message:\t"
                << "Protocolversion <0.3, action ignored" << endl;
   }
@@ -411,13 +405,13 @@ void CUser::setReplaceB32WithB64(QString b64Dest) {
 }
 
 void CUser::setAvatarImage(QByteArray &avatarImage) {
-  mRecivedUserInfos.AvatarImage.clear();
+  mReceivedUserInfos.AvatarImage.clear();
 
   QPixmap tmpPixmap;
   tmpPixmap.loadFromData(avatarImage);
   tmpPixmap = tmpPixmap.scaled(90, 90, Qt::KeepAspectRatio);
 
-  QBuffer buffer(&mRecivedUserInfos.AvatarImage);
+  QBuffer buffer(&mReceivedUserInfos.AvatarImage);
   buffer.open(QIODevice::WriteOnly);
   tmpPixmap.save(&buffer, "PNG");
 

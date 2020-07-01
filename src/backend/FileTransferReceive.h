@@ -29,18 +29,18 @@
 
 class CConnectionManager;
 class CCore;
-class CFileTransferRecive : public QObject {
+class CFileTransferReceive : public QObject {
 
   Q_OBJECT
 public:
-  CFileTransferRecive(CCore &Core, CI2PStream &Stream, qint32 StreamID,
+  CFileTransferReceive(CCore &Core, CI2PStream &Stream, qint32 StreamID,
                       QString FileName, quint64 FileSize, QString Destination,
                       QString Protocolversion, double ProtocolversionD);
-  ~CFileTransferRecive();
+  ~CFileTransferReceive();
 
   // forbid some operators
-  CFileTransferRecive(const CFileTransferRecive &) = delete;
-  CFileTransferRecive &operator=(const CFileTransferRecive &) = delete;
+  CFileTransferReceive(const CFileTransferReceive &) = delete;
+  CFileTransferReceive &operator=(const CFileTransferReceive &) = delete;
 
   void start(QString FilePath, bool Accepted);
 
@@ -48,7 +48,7 @@ public:
   QString getFileName() { return mFileName; };
   QString getDestination() { return mDestination; };
   qint32 getStreamID() { return mStreamID; };
-  quint64 getAllreadyRecivedSize() { return mAllreadyRecivedSize; };
+  quint64 getAllreadyReceivedSize() { return mAllreadyReceivedSize; };
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
 
   bool checkIfAllreadyAcceptTheRequest() { return mRequestAccepted; };
@@ -58,21 +58,21 @@ public:
                                      bool addStoOutType = true);
 
 public slots:
-  void slotAbbortFileRecive();
+  void slotAbbortFileReceive();
 
 private slots:
-  void slotStreamStatusRecived(const SAM_Message_Types::RESULT result,
+  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
                                const qint32 ID, QString Message);
-  void slotDataRecived(const qint32 ID, QByteArray t);
+  void slotDataReceived(const qint32 ID, QByteArray t);
   void slotCalcAverageTransferSpeed();
 
 signals:
-  void signAllreadyRecivedSizeChanged(quint64 Size);
-  void signFileReciveError();
-  void signFileRecivedFinishedOK();
-  void signFileReciveAborted();
+  void signAllreadyReceivedSizeChanged(quint64 Size);
+  void signFileReceiveError();
+  void signFileReceivedFinishedOK();
+  void signFileReceiveAborted();
   void signFileNameChanged();
-  void signAverageReciveSpeed(QString SNumber, QString Type);
+  void signAverageReceiveSpeed(QString SNumber, QString Type);
   void signETA(QString Value);
 
 private:
@@ -84,8 +84,8 @@ private:
   const QString mDestination;
   const QString mUsingProtocolVersion;
   const double mUsingProtocolVersionD;
-  quint64 mAllreadyRecivedSize;
-  QFile mFileForRecive;
+  quint64 mAllreadyReceivedSize;
+  QFile mFileForReceive;
   bool mRequestAccepted;
   QTimer mTimerForActAverageTransferSpeed;
   QTime mTimer;

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>447</height>
+    <width>272</width>
+    <height>461</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>272</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>I2PChat</string>
@@ -45,11 +51,41 @@
     </property>
     <item row="2" column="0">
      <widget class="QListWidget" name="listWidget">
+      <property name="minimumSize">
+       <size>
+        <width>274</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>274</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="autoScrollMargin">
+       <number>0</number>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::AllEditTriggers</set>
@@ -57,25 +93,52 @@
       <property name="alternatingRowColors">
        <bool>false</bool>
       </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <property name="iconSize">
        <size>
         <width>12</width>
         <height>12</height>
        </size>
       </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
       <property name="gridSize">
        <size>
         <width>0</width>
-        <height>20</height>
+        <height>18</height>
        </size>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <widget class="QFrame" name="frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
-        <width>280</width>
+        <width>268</width>
+        <height>36</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>268</width>
+        <height>36</height>
+       </size>
+      </property>
+      <property name="sizeIncrement">
+       <size>
+        <width>0</width>
         <height>0</height>
        </size>
       </property>
@@ -89,52 +152,24 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinAndMaxSize</enum>
+       </property>
        <property name="leftMargin">
-        <number>6</number>
+        <number>3</number>
        </property>
        <property name="topMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
-        <number>6</number>
+        <number>3</number>
        </property>
        <property name="bottomMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
-       <item row="0" column="3" alignment="Qt::AlignLeft|Qt::AlignVCenter">
-        <widget class="QComboBox" name="comboBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>200</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>140</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16000</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::NoInsert</enum>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>14</width>
-           <height>14</height>
-          </size>
-         </property>
-        </widget>
-       </item>
+       <property name="verticalSpacing">
+        <number>4</number>
+       </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="avatarlabel">
          <property name="minimumSize">
@@ -162,22 +197,65 @@ background: #fff;
          <property name="text">
           <string/>
          </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+         </property>
          <property name="scaledContents">
-          <bool>false</bool>
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QComboBox" name="comboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>134</width>
+           <height>31</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>134</width>
+           <height>31</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QListView::item:hover {color: #000; background: rgba(200,200,200,.4)}</string>
+         </property>
+         <property name="insertPolicy">
+          <enum>QComboBox::NoInsert</enum>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>14</width>
+           <height>14</height>
+          </size>
          </property>
         </widget>
        </item>
        <item row="0" column="1" colspan="2">
         <widget class="QLabel" name="nicknamelabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>84</width>
+           <width>90</width>
            <height>32</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>90</width>
            <height>32</height>
           </size>
          </property>
@@ -189,20 +267,38 @@ background: #fff;
          <property name="text">
           <string>TextLabel</string>
          </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="margin">
           <number>0</number>
          </property>
+         <property name="textElideMode" stdset="0">
+          <string>ElideRight</string>
+         </property>
         </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>2000</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">
     <bool>true</bool>
@@ -212,6 +308,9 @@ background: #fff;
      <width>0</width>
      <height>0</height>
     </size>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="contextMenuPolicy">
     <enum>Qt::NoContextMenu</enum>
@@ -243,4 +342,21 @@ background: #fff;
   <include location="resourcen.qrc"/>
  </resources>
  <connections/>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>4</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>2</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
 </ui>

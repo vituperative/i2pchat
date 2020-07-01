@@ -53,7 +53,7 @@ signals:
 private slots:
   void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID,
                         QString Message);
-  void slotDataRecived(const qint32 ID, QByteArray t);
+  void slotDataReceived(const qint32 ID, QByteArray t);
 
 private:
   CConnectionManager &mConnectionManager;
@@ -63,7 +63,7 @@ private:
   HTTPMODE mMode;
   QString mDestination;
   QStringList mHttpHeader;
-  QByteArray mDataRecived;
+  QByteArray mDataReceived;
   qint32 mStreamID;
 
   void sendRequest();

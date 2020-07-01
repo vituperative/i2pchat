@@ -17,36 +17,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "form_fileRecive.h"
-#include "FileTransferRecive.h"
+#include "form_fileReceive.h"
+#include "FileTransferReceive.h"
 
-form_fileRecive::form_fileRecive(CFileTransferRecive &FileRecive)
-    : FileRecive(FileRecive), mStreamID(FileRecive.getStreamID()) {
+form_fileReceive::form_fileReceive(CFileTransferReceive &FileReceive)
+    : FileReceive(FileReceive), mStreamID(FileReceive.getStreamID()) {
   setupUi(this);
 
-  connect(&FileRecive, SIGNAL(signFileRecivedFinishedOK()), this,
-          SLOT(slot_FileRecivedFinishedOK()));
+  connect(&FileReceive, SIGNAL(signFileReceivedFinishedOK()), this,
+          SLOT(slot_FileReceivedFinishedOK()));
 
-  connect(&FileRecive, SIGNAL(signAllreadyRecivedSizeChanged(quint64)), this,
-          SLOT(slot_allreadyRecivedSizeChanged(quint64)));
+  connect(&FileReceive, SIGNAL(signAllreadyReceivedSizeChanged(quint64)), this,
+          SLOT(slot_allreadyReceivedSizeChanged(quint64)));
 
-  connect(&FileRecive, SIGNAL(signFileReciveError()), this,
-          SLOT(slot_FileReciveError()));
+  connect(&FileReceive, SIGNAL(signFileReceiveError()), this,
+          SLOT(slot_FileReceiveError()));
 
-  connect(&FileRecive, SIGNAL(signFileReciveAborted()), this, SLOT(close()));
+  connect(&FileReceive, SIGNAL(signFileReceiveAborted()), this, SLOT(close()));
 
   connect(pushButton, SIGNAL(pressed()), this, SLOT(slot_Button()));
 
-  connect(&FileRecive, SIGNAL(signAverageReciveSpeed(QString, QString)), this,
+  connect(&FileReceive, SIGNAL(signAverageReceiveSpeed(QString, QString)), this,
           SLOT(slot_SpeedChanged(QString, QString)));
 
-  connect(&FileRecive, SIGNAL(signETA(QString)), label_15,
+  connect(&FileReceive, SIGNAL(signETA(QString)), label_15,
           SLOT(setText(QString)));
 
   init();
 }
 
-void form_fileRecive::init() {
+void form_fileReceive::init() {
   QString SSize;
   QString SType;
   QLabel *label_4 = this->label_4;
@@ -54,49 +54,49 @@ void form_fileRecive::init() {
   QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
 
-  label_4->setText(FileRecive.getFileName());
-  quint64 FileSize = FileRecive.getFileSize();
+  label_4->setText(FileReceive.getFileName());
+  quint64 FileSize = FileReceive.getFileSize();
 
-  FileRecive.doConvertNumberToTransferSize(FileSize, SSize, SType, false);
+  FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SType, false);
   label_6->setText(SSize);
   label_7->setText(SType);
 
   checkBox_3->setChecked(true);
   progressBar->setMinimum(0);
-  progressBar->setMaximum(FileRecive.getFileSize());
-  progressBar->setValue(FileRecive.getAllreadyRecivedSize());
-  label_10->setText(FileRecive.getUsingProtocolVersion());
+  progressBar->setMaximum(FileReceive.getFileSize());
+  progressBar->setValue(FileReceive.getAllreadyReceivedSize());
+  label_10->setText(FileReceive.getUsingProtocolVersion());
   label_11->setText("0");
   label_12->setText("");
 }
 
-void form_fileRecive::slot_Button() {
-  FileRecive.slotAbbortFileRecive();
+void form_fileReceive::slot_Button() {
+  FileReceive.slotAbbortFileReceive();
   this->close();
 }
 
-void form_fileRecive::slot_allreadyRecivedSizeChanged(quint64 value) {
+void form_fileReceive::slot_allreadyReceivedSizeChanged(quint64 value) {
   progressBar->setValue(value);
 }
 
-void form_fileRecive::slot_FileRecivedFinishedOK() {
+void form_fileReceive::slot_FileReceivedFinishedOK() {
   QCheckBox *checkBox_4 = this->checkBox_4;
   checkBox_4->setChecked(true);
 
   this->close();
 }
 
-void form_fileRecive::slot_FileReciveError() { this->close(); }
+void form_fileReceive::slot_FileReceiveError() { this->close(); }
 
-form_fileRecive::~form_fileRecive() {}
+form_fileReceive::~form_fileReceive() {}
 
-void form_fileRecive::askTheUser() {
-  quint64 FileSize = FileRecive.getFileSize();
-  QString FileName = FileRecive.getFileName();
+void form_fileReceive::askTheUser() {
+  quint64 FileSize = FileReceive.getFileSize();
+  QString FileName = FileReceive.getFileName();
   QString SizeName;
   QString SSize;
 
-  FileRecive.doConvertNumberToTransferSize(FileSize, SSize, SizeName, false);
+  FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SizeName, false);
 
   QMessageBox *msgBox = new QMessageBox(NULL);
   msgBox->setText(tr("Incoming FileTransfer"));
@@ -117,41 +117,41 @@ void form_fileRecive::askTheUser() {
         QFileDialog::getSaveFileName(NULL, tr("File Save"), FileName);
 
     if (!FilePath.isEmpty()) {
-      FileRecive.start(FilePath, true);
-      label_4->setText(FileRecive.getFileName());
+      FileReceive.start(FilePath, true);
+      label_4->setText(FileReceive.getFileName());
     } else {
-      FileRecive.start("", false);
+      FileReceive.start("", false);
       this->close();
     }
   } else {
-    FileRecive.start("", false);
+    FileReceive.start("", false);
     this->close();
   }
 }
 
-void form_fileRecive::getFocus() {
+void form_fileReceive::getFocus() {
   this->activateWindow();
   this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
                        Qt::WindowActive);
   this->raise();
 }
 
-void form_fileRecive::closeEvent(QCloseEvent *e) {
-  emit closingFileReciveWindow(mStreamID);
+void form_fileReceive::closeEvent(QCloseEvent *e) {
+  emit closingFileReceiveWindow(mStreamID);
   e->ignore();
 }
 
-void form_fileRecive::slot_SpeedChanged(QString SNumber, QString Type) {
+void form_fileReceive::slot_SpeedChanged(QString SNumber, QString Type) {
   label_11->setText(SNumber);
   label_12->setText(Type);
 }
 
-void form_fileRecive::start() {
-  if (FileRecive.checkIfAllreadyAcceptTheRequest() == false) {
+void form_fileReceive::start() {
+  if (FileReceive.checkIfAllreadyAcceptTheRequest() == false) {
     askTheUser();
   }
 }
-void form_fileRecive::keyPressEvent(QKeyEvent *event) {
+void form_fileReceive::keyPressEvent(QKeyEvent *event) {
   if (event->key() != Qt::Key_Escape) {
     QDialog::keyPressEvent(event);
   } else {

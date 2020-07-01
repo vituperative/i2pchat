@@ -6,18 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>411</height>
+    <width>441</width>
+    <height>290</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>400</width>
+    <width>441</width>
     <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>User Chat</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QToolButton { padding: 4px; }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -31,6 +34,12 @@
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>320</width>
+        <height>0</height>
+       </size>
       </property>
       <property name="sizeIncrement">
        <size>
@@ -62,6 +71,9 @@
           </property>
           <property name="cursor" stdset="0">
            <cursorShape>IBeamCursor</cursorShape>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
           </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
@@ -133,6 +145,9 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="toolTip">
               <string>Sendfile</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
              </property>
              <property name="text">
               <string/>
@@ -401,6 +416,9 @@ p, li { white-space: pre-wrap; }
           <property name="cursor" stdset="0">
            <cursorShape>IBeamCursor</cursorShape>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
           <property name="locale">
            <locale language="English" country="UnitedStates"/>
           </property>
@@ -471,429 +489,440 @@ p, li { white-space: pre-wrap; }
         <item alignment="Qt::AlignVCenter">
          <widget class="QFrame" name="chattoolsframe_2">
           <layout class="QHBoxLayout" name="horizontalLayout">
-           <property name="spacing">
-            <number>4</number>
-           </property>
            <property name="leftMargin">
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>0</number>
+            <number>9</number>
            </property>
            <property name="rightMargin">
             <number>0</number>
            </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
            <item>
-            <widget class="QSplitter" name="splitter">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+            <widget class="QToolButton" name="cmd_Reaload">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
              </property>
-             <widget class="QToolButton" name="cmd_Reaload">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <property name="toolTip">
-               <string>reload message</string>
-              </property>
-              <property name="text">
-               <string>reload message</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/reload.svg</normaloff>:/icons/reload.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>false</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="cmd_new">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>new message</string>
-              </property>
-              <property name="text">
-               <string>new message</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="cmd_delete">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>delete message</string>
-              </property>
-              <property name="text">
-               <string>delete message</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/delete.svg</normaloff>:/icons/delete.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="cmd_Save">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <property name="toolTip">
-               <string>save change</string>
-              </property>
-              <property name="text">
-               <string>save change</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/tick.svg</normaloff>:/icons/tick.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>false</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QPushButton" name="cmd_back">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>8</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>&lt;</string>
-              </property>
-             </widget>
-             <widget class="QLabel" name="label_currentMessageCount">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>32</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>0 / 0</string>
-              </property>
-              <property name="scaledContents">
-               <bool>false</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-             <widget class="QPushButton" name="cmd_next">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>8</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>&gt;</string>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="txtBold_2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Bold</string>
-              </property>
-              <property name="text">
-               <string>B</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="txtUnder_2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Underline</string>
-              </property>
-              <property name="text">
-               <string>U</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="txtItalic_2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Italic</string>
-              </property>
-              <property name="text">
-               <string>I</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="txtColor_2">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Color</string>
-              </property>
-              <property name="text">
-               <string>C</string>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="txtFont_2">
-              <property name="minimumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Font</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="resourcen.qrc">
-                <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="autoRaise">
-               <bool>true</bool>
-              </property>
-             </widget>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
+             <property name="toolTip">
+              <string>reload message</string>
+             </property>
+             <property name="text">
+              <string>reload message</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/reload.svg</normaloff>:/icons/reload.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="cmd_new">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>new message</string>
+             </property>
+             <property name="text">
+              <string>new message</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="cmd_delete">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>delete message</string>
+             </property>
+             <property name="text">
+              <string>delete message</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/delete.svg</normaloff>:/icons/delete.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="cmd_Save">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
+             <property name="toolTip">
+              <string>save change</string>
+             </property>
+             <property name="text">
+              <string>save change</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/tick.svg</normaloff>:/icons/tick.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="cmd_back">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>&lt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_currentMessageCount">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>38</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>4</width>
+               <height>4</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>0 / 0</string>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="cmd_next">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="txtBold_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Bold</string>
+             </property>
+             <property name="text">
+              <string>B</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="txtUnder_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Underline</string>
+             </property>
+             <property name="text">
+              <string>U</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="txtItalic_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Italic</string>
+             </property>
+             <property name="text">
+              <string>I</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="txtColor_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Color</string>
+             </property>
+             <property name="text">
+              <string>C</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="txtFont_2">
+             <property name="minimumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Font</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -923,7 +952,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../../gitlab/i2pchat/src/gui/resourcen.qrc">
+         <iconset resource="resourcen.qrc">
           <normaloff>:/icons/show_frame.png</normaloff>:/icons/show_frame.png</iconset>
         </property>
         <property name="iconSize">
@@ -1003,6 +1032,12 @@ background: #fff;
          <property name="text">
           <string/>
          </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/silhouette.svg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -1048,6 +1083,12 @@ background: #fff;
          <property name="text">
           <string/>
          </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/avatar.svg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -1085,7 +1126,6 @@ background: #fff;
   </action>
  </widget>
  <resources>
-  <include location="../../../../gitlab/i2pchat/src/gui/resourcen.qrc"/>
   <include location="resourcen.qrc"/>
  </resources>
  <connections/>

@@ -167,12 +167,12 @@ void CSessionController::slotReadFromSocket() {
     }
     case STREAM_STATUS: {
       emit signDebugMessages(t);
-      // emit StreamStatusRecived(sam.result,sam.ID,sam.Message);
+      // emit StreamStatusReceived(sam.result,sam.ID,sam.Message);
       break;
     }
     case NAMING_REPLY: {
       emit signDebugMessages(t);
-      emit signNamingReplyRecived(sam.result, sam.Name, sam.Value, sam.Message);
+      emit signNamingReplyReceived(sam.result, sam.Name, sam.Value, sam.Message);
       break;
     }
     case DEST_REPLY: {
