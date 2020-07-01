@@ -11,3 +11,7 @@ release/
 /object_script*
 /src/gui/ui_form_*.h
 NUL
+UserBlockList.dat
+application.ini
+roster.conf
+users.config
