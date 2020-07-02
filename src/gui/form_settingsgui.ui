@@ -104,7 +104,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="general_page">
      <widget class="QGroupBox" name="groupBox_6">
