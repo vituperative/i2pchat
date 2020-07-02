@@ -104,7 +104,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="general_page">
      <widget class="QGroupBox" name="groupBox_6">
@@ -2625,7 +2625,7 @@ p, li { white-space: pre-wrap; }
          <x>2</x>
          <y>20</y>
          <width>380</width>
-         <height>97</height>
+         <height>98</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -2896,7 +2896,7 @@ p, li { white-space: pre-wrap; }
          <x>2</x>
          <y>130</y>
          <width>380</width>
-         <height>123</height>
+         <height>124</height>
         </rect>
        </property>
        <property name="minimumSize">
