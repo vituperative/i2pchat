@@ -28,6 +28,11 @@
     <height>452</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Settings</string>
   </property>
@@ -1644,6 +1649,7 @@ border-radius: 2px;
           </property>
           <property name="font">
            <font>
+            <pointsize>9</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -1821,7 +1827,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>52</y>
+        <y>150</y>
         <width>380</width>
         <height>89</height>
        </rect>
@@ -1923,7 +1929,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>160</y>
+        <y>52</y>
         <width>380</width>
         <height>89</height>
        </rect>
@@ -2636,6 +2642,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -2912,6 +2919,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -3267,6 +3275,7 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="font">
          <font>
+          <pointsize>9</pointsize>
           <weight>50</weight>
           <bold>false</bold>
          </font>
@@ -3585,7 +3594,7 @@ p, li { white-space: pre-wrap; }
     <property name="font">
      <font>
       <family>SansSerif</family>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>50</weight>
       <bold>false</bold>
      </font>

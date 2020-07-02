@@ -123,6 +123,7 @@ void form_MainWindow::initToolBars() {
                      QSettings::IniFormat);
   QToolBar *toolBar = this->toolBar;
 
+  toolBar->setFixedHeight(32);
   toolBar->setContextMenuPolicy(Qt::CustomContextMenu);
   toolBar->addAction(QIcon(ICON_NEWUSER), tr("Add User"), this,
                      SLOT(openAdduserWindow()));
