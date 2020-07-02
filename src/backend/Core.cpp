@@ -452,7 +452,7 @@ QString CCore::getConnectionDump() const {
       } else {
         Message += "\tTrust:\t\t???\n";
       }
-      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
+//      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
     }
 
     Message += "• Streams\n\n";
