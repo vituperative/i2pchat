@@ -270,6 +270,8 @@ void form_settingsgui::loadSettings() {
   tmpPixmap.loadFromData(avatarImageByteArray);
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label_2->setAlignment(Qt::AlignCenter);
+  ownavatar_label_2->setPixmap(tmpPixmap);
 
   settings->endGroup();
 
