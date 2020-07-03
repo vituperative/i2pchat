@@ -90,7 +90,7 @@ void form_MainWindow::onlineComboBoxChanged() {
   } else if (text.contains(tr("Away"), Qt::CaseInsensitive) == true) {
     if (Core->getOnlineStatus() != User::USERAWAY)
       Core->setOnlineStatus(User::USERAWAY);
-  } else if (text.contains(tr("Do not disturb"), Qt::CaseInsensitive) == true) {
+  } else if (text.contains(tr("disturb"), Qt::CaseInsensitive) == true) {
     if (Core->getOnlineStatus() != User::USERDONT_DISTURB)
       Core->setOnlineStatus(User::USERDONT_DISTURB);
   } else if (text.contains(tr("Invisible"), Qt::CaseInsensitive) == true) {

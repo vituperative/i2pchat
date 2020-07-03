@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
+    <width>248</width>
     <height>461</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>256</width>
+    <width>248</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>256</width>
+    <width>248</width>
     <height>16777215</height>
    </size>
   </property>
@@ -56,13 +56,13 @@
      <widget class="QListWidget" name="listWidget">
       <property name="minimumSize">
        <size>
-        <width>256</width>
+        <width>248</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>256</width>
+        <width>248</width>
         <height>16777215</height>
        </size>
       </property>
@@ -144,13 +144,13 @@ QListView{padding:1px;}</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>256</width>
+        <width>248</width>
         <height>31</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>256</width>
+        <width>248</width>
         <height>31</height>
        </size>
       </property>
@@ -244,19 +244,19 @@ background: #fff;
          </property>
          <property name="minimumSize">
           <size>
-           <width>120</width>
+           <width>112</width>
            <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>120</width>
+           <width>112</width>
            <height>27</height>
           </size>
          </property>
          <property name="font">
           <font>
-           <pointsize>9</pointsize>
+           <pointsize>8</pointsize>
           </font>
          </property>
          <property name="styleSheet">
@@ -338,7 +338,7 @@ background: #fff;
    </property>
    <property name="maximumSize">
     <size>
-     <width>256</width>
+     <width>248</width>
      <height>16635</height>
     </size>
    </property>
