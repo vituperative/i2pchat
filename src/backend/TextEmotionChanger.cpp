@@ -146,6 +146,14 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
                   tmp = QPixmap(dirPath + "/" + fileName.at(0));
                 QString text = emoticonString.text().toHtmlEscaped();
                 m_urls.insert(text,
+
+                              QString("<img src=\"%1\" width=\"22\" "
+                                      "height=\"22\" alt=\"%1\" title=\"%1\"/>")
+                                  .arg(dirPath + "/" + fileName.at(0))
+                                  .arg(text.replace("\"", "&quot;"))
+                );
+
+/*
                               QString("<img src=\"%1\" width=\"%2\" "
                                       "height=\"%3\" alt=\"%4\" title=\"%4\"/>")
                                   .arg(dirPath + "/" + fileName.at(0))
@@ -153,7 +161,7 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
                                   .arg(tmp.size().height())
                               //.arg(text.replace("\"", "&quot;"))
                 );
-
+*/
                 strings.append(emoticonString.text());
               }
 
