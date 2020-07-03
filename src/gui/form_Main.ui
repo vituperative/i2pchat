@@ -134,7 +134,7 @@ QListView{padding:1px;}</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="1" column="0" alignment="Qt::AlignVCenter">
      <widget class="QFrame" name="frame">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
