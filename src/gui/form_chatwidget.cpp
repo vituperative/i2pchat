@@ -400,7 +400,7 @@ void form_ChatWidget::changeWindowsTitle() {
     break;
   }
   case USERBLOCKEDYOU: {
-    OnlineStatus = tr("You were blocked");
+    OnlineStatus = tr("You have been blocked");
     this->setWindowIcon(QIcon(ICON_USER_BLOCKED_YOU));
     break;
   }
