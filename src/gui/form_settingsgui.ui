@@ -273,9 +273,9 @@
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
            <weight>75</weight>
-           <italic>true</italic>
+           <italic>false</italic>
            <bold>true</bold>
-           <underline>true</underline>
+           <underline>false</underline>
            <strikeout>false</strikeout>
           </font>
          </property>
@@ -622,9 +622,9 @@ p, li { white-space: pre-wrap; }
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
            <weight>75</weight>
-           <italic>true</italic>
+           <italic>false</italic>
            <bold>true</bold>
-           <underline>true</underline>
+           <underline>false</underline>
            <strikeout>false</strikeout>
           </font>
          </property>
@@ -1105,10 +1105,11 @@ p, li { white-space: pre-wrap; }
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
            <weight>75</weight>
-           <italic>true</italic>
+           <italic>false</italic>
            <bold>true</bold>
-           <underline>true</underline>
+           <underline>false</underline>
            <strikeout>false</strikeout>
+           <kerning>true</kerning>
           </font>
          </property>
          <property name="text">
@@ -1162,9 +1163,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>276</y>
+        <y>275</y>
         <width>380</width>
-        <height>119</height>
+        <height>120</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1255,7 +1256,7 @@ border-radius: 2px;
        <property name="geometry">
         <rect>
          <x>150</x>
-         <y>84</y>
+         <y>86</y>
          <width>96</width>
          <height>25</height>
         </rect>
@@ -1274,7 +1275,7 @@ border-radius: 2px;
        <property name="geometry">
         <rect>
          <x>46</x>
-         <y>84</y>
+         <y>86</y>
          <width>96</width>
          <height>25</height>
         </rect>
@@ -1294,7 +1295,7 @@ border-radius: 2px;
       <property name="geometry">
        <rect>
         <x>3</x>
-        <y>48</y>
+        <y>46</y>
         <width>381</width>
         <height>108</height>
        </rect>
@@ -1307,7 +1308,7 @@ border-radius: 2px;
         <rect>
          <x>104</x>
          <y>12</y>
-         <width>267</width>
+         <width>268</width>
          <height>88</height>
         </rect>
        </property>
@@ -1513,9 +1514,9 @@ border-radius: 2px;
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>164</y>
+        <y>162</y>
         <width>380</width>
-        <height>103</height>
+        <height>104</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1782,6 +1783,13 @@ border-radius: 2px;
       <layout class="QGridLayout" name="gridLayout_6">
        <item row="0" column="1">
         <widget class="QLabel" name="label_30">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -1914,6 +1922,13 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2021,6 +2036,13 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_25">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2581,6 +2603,13 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_34">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3312,6 +3341,13 @@ p, li { white-space: pre-wrap; }
            <height>32</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3466,6 +3502,13 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_28">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
