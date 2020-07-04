@@ -701,7 +701,7 @@ void form_settingsgui::showUserBlockList() {
 
   UserBlockTreeWidget->setColumnCount(2);
   UserBlockTreeWidget->setHeaderLabels(QStringList()
-                                       << tr("User") << tr("Block Date"));
+                                       << tr("User") << tr(""));
 
   UserBlockTreeWidget->clear();
 
@@ -710,15 +710,23 @@ void form_settingsgui::showUserBlockList() {
     CUserBlockManager::CUserBlockEntity *currentEntity = i.value();
 
     QTreeWidgetItem *itemTopLevel = new QTreeWidgetItem();
+    QTreeWidgetItem *itemNickname = new QTreeWidgetItem();
     QTreeWidgetItem *itemBlockDate = new QTreeWidgetItem();
     QTreeWidgetItem *itemDestination = new QTreeWidgetItem();
 
     itemTopLevel->setText(0, currentEntity->mNickName);
-    itemTopLevel->setText(1, currentEntity->mBlockDate);
+
+    itemNickname->setText(0, tr("Nickname"));
+    itemNickname->setText(1, currentEntity->mNickName);
+
+    itemBlockDate->setText(0, tr("Blocked on"));
+    itemBlockDate->setText(1, currentEntity->mBlockDate);
 
     itemDestination->setText(0, tr("Destination"));
     itemDestination->setText(1, currentEntity->mDestination);
 
+    itemTopLevel->addChild(itemNickname);
+    itemTopLevel->addChild(itemBlockDate);
     itemTopLevel->addChild(itemDestination);
 
     UserBlockTreeWidget->addTopLevelItem(itemTopLevel);
