@@ -145,13 +145,13 @@ QListView{padding:1px;}</string>
       <property name="minimumSize">
        <size>
         <width>248</width>
-        <height>31</height>
+        <height>30</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>248</width>
-        <height>31</height>
+        <height>30</height>
        </size>
       </property>
       <property name="sizeIncrement">
@@ -185,7 +185,7 @@ QListView{padding:1px;}</string>
         <number>1</number>
        </property>
        <property name="rightMargin">
-        <number>2</number>
+        <number>3</number>
        </property>
        <property name="bottomMargin">
         <number>1</number>
