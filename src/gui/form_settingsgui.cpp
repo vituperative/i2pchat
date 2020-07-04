@@ -270,6 +270,8 @@ void form_settingsgui::loadSettings() {
   tmpPixmap.loadFromData(avatarImageByteArray);
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label_2->setAlignment(Qt::AlignCenter);
+  ownavatar_label_2->setPixmap(tmpPixmap);
 
   settings->endGroup();
 
@@ -699,7 +701,7 @@ void form_settingsgui::showUserBlockList() {
 
   UserBlockTreeWidget->setColumnCount(2);
   UserBlockTreeWidget->setHeaderLabels(QStringList()
-                                       << tr("Nicknames") << tr("values"));
+                                       << tr("User") << tr(""));
 
   UserBlockTreeWidget->clear();
 
@@ -717,7 +719,7 @@ void form_settingsgui::showUserBlockList() {
     itemNickname->setText(0, tr("Nickname"));
     itemNickname->setText(1, currentEntity->mNickName);
 
-    itemBlockDate->setText(0, tr("BlockDate"));
+    itemBlockDate->setText(0, tr("Blocked on"));
     itemBlockDate->setText(1, currentEntity->mBlockDate);
 
     itemDestination->setText(0, tr("Destination"));

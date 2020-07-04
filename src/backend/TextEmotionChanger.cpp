@@ -138,22 +138,24 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
           if (!fileName.isEmpty()) {
             QStringList strings;
             QPixmap tmp;
+            QImage image = tmp.toImage();
+            image.fill(Qt::transparent);
             int stringCount = emoticon.childNodes().count();
             QDomElement emoticonString = emoticon.firstChild().toElement();
             for (int j = 0; j < stringCount; j++) {
               if (emoticonString.tagName() == "string") {
-                if (tmp.isNull())
+                if (image.isNull())
                   tmp = QPixmap(dirPath + "/" + fileName.at(0));
+                int width = 16;
+                int height = width;
+                image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                 QString text = emoticonString.text().toHtmlEscaped();
                 m_urls.insert(text,
                               QString("<img src=\"%1\" width=\"%2\" "
-                                      "height=\"%3\" alt=\"%4\" title=\"%4\"/>")
+                                      "height=\"%2\" alt=\"%1\" title=\"%1\"/>")
                                   .arg(dirPath + "/" + fileName.at(0))
-                                  .arg(tmp.size().width())
-                                  .arg(tmp.size().height())
-                              //.arg(text.replace("\"", "&quot;"))
-                );
-
+                                  .arg(width)
+                                  .arg(text.replace("\"", "&quot;")));
                 strings.append(emoticonString.text());
               }
 

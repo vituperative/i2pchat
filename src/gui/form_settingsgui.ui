@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>534</width>
-    <height>455</height>
+    <height>452</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,14 +19,19 @@
   <property name="minimumSize">
    <size>
     <width>534</width>
-    <height>455</height>
+    <height>452</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>534</width>
-    <height>455</height>
+    <height>452</height>
    </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
@@ -158,7 +163,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Time (seconds):</string>
+           <string>Update (seconds)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -469,7 +474,7 @@ p, li { white-space: pre-wrap; }
        </size>
       </property>
       <property name="title">
-       <string>Save debug info to DebugLog.txt </string>
+       <string>Persistent Logs</string>
       </property>
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
@@ -487,7 +492,7 @@ p, li { white-space: pre-wrap; }
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Enable persistent logs</string>
+           <string>Save debug info to DebugLog.txt </string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -970,7 +975,7 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
           <property name="text">
-           <string>Sam Host IP:</string>
+           <string>SAM Host IP:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1175,12 +1180,12 @@ p, li { white-space: pre-wrap; }
        </size>
       </property>
       <property name="title">
-       <string>Avatar (stored in your application.ini file)</string>
+       <string>Select Avatar</string>
       </property>
       <widget class="QLabel" name="ownavatar_label">
        <property name="geometry">
         <rect>
-         <x>292</x>
+         <x>288</x>
          <y>30</y>
          <width>80</width>
          <height>80</height>
@@ -1232,14 +1237,15 @@ border-radius: 2px;
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>48</y>
+         <x>38</x>
+         <y>44</y>
          <width>219</width>
-         <height>17</height>
+         <height>29</height>
         </rect>
        </property>
        <property name="text">
-        <string>Image will be scaled to 80 x 80</string>
+        <string>Image will be scaled to 80 x 80
+(stored in your application.ini file)</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1248,8 +1254,8 @@ border-radius: 2px;
       <widget class="QPushButton" name="cmd_selectAvatarImage">
        <property name="geometry">
         <rect>
-         <x>142</x>
-         <y>86</y>
+         <x>150</x>
+         <y>84</y>
          <width>96</width>
          <height>25</height>
         </rect>
@@ -1267,8 +1273,8 @@ border-radius: 2px;
       <widget class="QPushButton" name="cmd_clearAvatarImage">
        <property name="geometry">
         <rect>
-         <x>38</x>
-         <y>86</y>
+         <x>46</x>
+         <y>84</y>
          <width>96</width>
          <height>25</height>
         </rect>
@@ -1288,9 +1294,9 @@ border-radius: 2px;
       <property name="geometry">
        <rect>
         <x>3</x>
-        <y>50</y>
+        <y>48</y>
         <width>381</width>
-        <height>113</height>
+        <height>108</height>
        </rect>
       </property>
       <property name="title">
@@ -1299,39 +1305,17 @@ border-radius: 2px;
       <widget class="QWidget" name="layoutWidget_11">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>104</x>
          <y>12</y>
-         <width>363</width>
-         <height>93</height>
+         <width>267</width>
+         <height>88</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_12">
+       <layout class="QGridLayout" name="gridLayout_12" columnstretch="10,0,0">
         <property name="horizontalSpacing">
-         <number>10</number>
+         <number>20</number>
         </property>
-        <item row="0" column="0" alignment="Qt::AlignRight">
-         <widget class="QLabel" name="label_19">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>80</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Nickname:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" alignment="Qt::AlignRight">
+        <item row="1" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
          <widget class="QLabel" name="label_21">
           <property name="minimumSize">
            <size>
@@ -1353,20 +1337,35 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="txt_Nickname">
-          <property name="enabled">
-           <bool>true</bool>
+        <item row="0" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+         <widget class="QLabel" name="label_19">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Nickname:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="checkGender_Male">
+        <item row="2" column="2" alignment="Qt::AlignVCenter">
+         <widget class="QCheckBox" name="checkGender_Female">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Male</string>
+           <string>Female</string>
           </property>
           <property name="autoRepeat">
            <bool>false</bool>
@@ -1379,7 +1378,45 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="2" column="0" alignment="Qt::AlignRight">
+        <item row="0" column="1" colspan="2" alignment="Qt::AlignRight|Qt::AlignVCenter">
+         <widget class="QLineEdit" name="txt_Nickname">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>160</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2" alignment="Qt::AlignRight|Qt::AlignVCenter">
+         <widget class="QSpinBox" name="spinAge">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>160</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
          <widget class="QLabel" name="label_22">
           <property name="minimumSize">
            <size>
@@ -1401,13 +1438,13 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QCheckBox" name="checkGender_Female">
+        <item row="2" column="1" alignment="Qt::AlignVCenter">
+         <widget class="QCheckBox" name="checkGender_Male">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Female</string>
+           <string>Male</string>
           </property>
           <property name="autoRepeat">
            <bool>false</bool>
@@ -1420,21 +1457,63 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QSpinBox" name="spinAge">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
+      </widget>
+      <widget class="QLabel" name="ownavatar_label_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>12</y>
+         <width>88</width>
+         <height>88</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>88</width>
+         <height>88</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>88</width>
+         <height>88</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>80</width>
+         <height>80</height>
+        </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{border: 1px solid #999}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="resourcen.qrc">:/icons/silhouette.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
       </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>168</y>
+        <y>164</y>
         <width>380</width>
         <height>103</height>
        </rect>
@@ -1570,8 +1649,9 @@ border-radius: 2px;
           </property>
           <property name="font">
            <font>
-            <weight>75</weight>
-            <bold>true</bold>
+            <pointsize>9</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="autoFillBackground">
@@ -1747,7 +1827,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>52</y>
+        <y>150</y>
         <width>380</width>
         <height>89</height>
        </rect>
@@ -1849,7 +1929,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>160</y>
+        <y>52</y>
         <width>380</width>
         <height>89</height>
        </rect>
@@ -2517,19 +2597,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>2</x>
         <y>40</y>
-        <width>380</width>
-        <height>353</height>
+        <width>384</width>
+        <height>357</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>384</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>384</width>
         <height>16777215</height>
        </size>
       </property>
@@ -2543,25 +2623,26 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>12</y>
-         <width>378</width>
-         <height>97</height>
+         <y>20</y>
+         <width>380</width>
+         <height>98</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>378</width>
+         <width>380</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>378</width>
+         <width>380</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -2577,7 +2658,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>62</y>
-          <width>359</width>
+          <width>361</width>
           <height>27</height>
          </rect>
         </property>
@@ -2602,7 +2683,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>28</y>
-          <width>357</width>
+          <width>359</width>
           <height>30</height>
          </rect>
         </property>
@@ -2813,20 +2894,20 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>122</y>
-         <width>378</width>
-         <height>123</height>
+         <y>130</y>
+         <width>380</width>
+         <height>124</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>378</width>
+         <width>380</width>
          <height>120</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>378</width>
+         <width>380</width>
          <height>16777215</height>
         </size>
        </property>
@@ -2838,6 +2919,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -2849,7 +2931,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>24</y>
+          <y>26</y>
           <width>389</width>
           <height>23</height>
          </rect>
@@ -2866,7 +2948,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>88</y>
-          <width>359</width>
+          <width>361</width>
           <height>27</height>
          </rect>
         </property>
@@ -2894,7 +2976,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>10</x>
           <y>54</y>
-          <width>357</width>
+          <width>359</width>
           <height>30</height>
          </rect>
         </property>
@@ -3101,30 +3183,11 @@ p, li { white-space: pre-wrap; }
         </layout>
        </widget>
       </widget>
-      <widget class="QCheckBox" name="LogOnlineStatusBox">
-       <property name="geometry">
-        <rect>
-         <x>4</x>
-         <y>280</y>
-         <width>253</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Log Online/Offline events from Users</string>
-       </property>
-      </widget>
       <widget class="Line" name="line_3">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>258</y>
+         <x>2</x>
+         <y>270</y>
          <width>380</width>
          <height>16</height>
         </rect>
@@ -3145,14 +3208,20 @@ p, li { white-space: pre-wrap; }
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QFrame" name="frame">
        <property name="geometry">
         <rect>
          <x>2</x>
          <y>316</y>
-         <width>371</width>
-         <height>28</height>
+         <width>0</width>
+         <height>0</height>
         </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
        <layout class="QGridLayout" name="gridLayout_28">
         <property name="spacing">
@@ -3176,6 +3245,45 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_10">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>292</y>
+         <width>380</width>
+         <height>63</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>380</width>
+         <height>68</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>User Events</string>
+       </property>
+       <widget class="QCheckBox" name="LogOnlineStatusBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>361</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Display online/offline events in chat</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -3486,7 +3594,7 @@ p, li { white-space: pre-wrap; }
     <property name="font">
      <font>
       <family>SansSerif</family>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
       <weight>50</weight>
       <bold>false</bold>
      </font>
@@ -3632,7 +3740,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>2</x>
-      <y>400</y>
+      <y>396</y>
       <width>519</width>
       <height>16</height>
      </rect>
@@ -3660,7 +3768,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>352</x>
-      <y>404</y>
+      <y>400</y>
       <width>179</width>
       <height>43</height>
      </rect>
@@ -3794,10 +3902,10 @@ p, li { white-space: pre-wrap; }
    <number>2</number>
   </property>
   <property name="gridSnapX">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="gridSnapY">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="gridVisible">
    <bool>true</bool>

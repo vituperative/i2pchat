@@ -1,101 +1,117 @@
 <RCC>
   <qresource prefix="/">
-    <file>icons/editcopy.svg</file>
-    <file>icons/silhouette.svg</file>
-    <file>icons/status_connecting.svg</file>
-    <file>icons/find.svg</file>
-    <file>icons/debug.svg</file>
+    <file>emoticons/alien.svg</file>
+    <file>emoticons/angel.svg</file>
+    <file>emoticons/angry.svg</file>
+    <file>emoticons/banana.svg</file>
+    <file>emoticons/beer.svg</file>
+    <file>emoticons/bomb.svg</file>
+    <file>emoticons/burger.svg</file>
+    <file>emoticons/bye.svg</file>
+    <file>emoticons/cheers.svg</file>
+    <file>emoticons/cheese.svg</file>
+    <file>emoticons/chilli.svg</file>
+    <file>emoticons/clown.svg</file>
+    <file>emoticons/cocktail.svg</file>
+    <file>emoticons/concerned.svg</file>
+    <file>emoticons/confused.svg</file>
+    <file>emoticons/cowboy.svg</file>
+    <file>emoticons/crying.svg</file>
+    <file>emoticons/cupcake.svg</file>
+    <file>emoticons/cute.svg</file>
+    <file>emoticons/dance.svg</file>
+    <file>emoticons/devil.svg</file>
+    <file>emoticons/disappointed.svg</file>
+    <file>emoticons/dont-know.svg</file>
+    <file>emoticons/donut.svg</file>
+    <file>emoticons/embarrassed.svg</file>
+    <file>emoticons/emoticons.xml</file>
+    <file>emoticons/fingers-crossed.png</file>
+    <file>emoticons/freaked-out.svg</file>
+    <file>emoticons/glasses-cool.svg</file>
+    <file>emoticons/good.svg</file>
+    <file>emoticons/handshake.svg</file>
+    <file>emoticons/hotdog.svg</file>
+    <file>emoticons/hourglass.svg</file>
+    <file>emoticons/inlove.svg</file>
+    <file>emoticons/kiss.svg</file>
+    <file>emoticons/laugh.svg</file>
+    <file>emoticons/love.svg</file>
+    <file>emoticons/middlefinger.svg</file>
+    <file>emoticons/mushroom.svg</file>
+    <file>emoticons/musical-note.svg</file>
+    <file>emoticons/nonplussed.svg</file>
+    <file>emoticons/parrot.svg</file>
+    <file>emoticons/party.svg</file>
+    <file>emoticons/pizza.svg</file>
+    <file>emoticons/poo.svg</file>
+    <file>emoticons/popcorn.svg</file>
+    <file>emoticons/question.svg</file>
+    <file>emoticons/radioactive.svg</file>
+    <file>emoticons/rofl.svg</file>
+    <file>emoticons/rose.svg</file>
+    <file>emoticons/sad.svg</file>
+    <file>emoticons/sarcastic.svg</file>
+    <file>emoticons/shout.svg</file>
+    <file>emoticons/shut-mouth.svg</file>
+    <file>emoticons/sick.svg</file>
+    <file>emoticons/silly.svg</file>
+    <file>emoticons/skull.svg</file>
+    <file>emoticons/sleepy.svg</file>
+    <file>emoticons/smile.svg</file>
+    <file>emoticons/smoking.svg</file>
+    <file>emoticons/snowman.svg</file>
+    <file>emoticons/spaghetti.svg</file>
+    <file>emoticons/tongue.svg</file>
+    <file>emoticons/whiteflag.svg</file>
+    <file>emoticons/wine.svg</file>
+    <file>emoticons/yawn.svg</file>
     <file>icons/about.svg</file>
-    <file>icons/add_user.svg</file>
-    <file>icons/font.svg</file>
-    <file>icons/avatar.svg</file>
-    <file>icons/download.svg</file>
-    <file>icons/blocked.svg</file>
-    <file>icons/copy.svg</file>
-    <file>icons/delete.svg</file>
-    <file>icons/rename.svg</file>
-    <file>icons/security.svg</file>
-    <file>icons/exit.svg</file>
     <file>icons/addimage.svg</file>
-    <file>icons/palette.svg</file>
-    <file>icons/status_online.svg</file>
+    <file>icons/add_user.svg</file>
+    <file>icons/avatar.svg</file>
+    <file>icons/blocked.svg</file>
+    <file>icons/bold.svg</file>
+    <file>icons/copy.svg</file>
+    <file>icons/debug.svg</file>
+    <file>icons/delete.svg</file>
+    <file>icons/download.svg</file>
+    <file>icons/editcopy.svg</file>
+    <file>icons/exit.svg</file>
+    <file>icons/find.svg</file>
+    <file>icons/font.svg</file>
     <file>icons/groupevent.svg</file>
     <file>icons/hide_frame.png</file>
     <file>icons/insert-image.png</file>
-    <file>icons/theme.svg</file>
+    <file>icons/italic.svg</file>
     <file>icons/mail_get.png</file>
+    <file>icons/network.svg</file>
     <file>icons/newmail.svg</file>
     <file>icons/new.png</file>
+    <file>icons/palette.svg</file>
     <file>icons/quick_restart.png</file>
     <file>icons/reload.svg</file>
+    <file>icons/rename.svg</file>
+    <file>icons/security.svg</file>
     <file>icons/send.svg</file>
     <file>icons/settings.svg</file>
     <file>icons/show_frame.png</file>
-    <file>icons/network.svg</file>
+    <file>icons/silhouette.svg</file>
     <file>icons/sound_off.svg</file>
     <file>icons/sound_on.svg</file>
     <file>icons/status_available.svg</file>
+    <file>icons/status_away.svg</file>
+    <file>icons/status_connecting.svg</file>
     <file>icons/status_dnd.svg</file>
     <file>icons/status_invisible.svg</file>
     <file>icons/status_offline.svg</file>
+    <file>icons/status_online.svg</file>
+    <file>icons/theme.svg</file>
     <file>icons/tick.svg</file>
-    <file>icons/bold.svg</file>
-    <file>icons/italic.svg</file>
-    <file>icons/underline.svg</file>
     <file>icons/Tools.gif</file>
+    <file>icons/underline.svg</file>
     <file>icons/upload.svg</file>
     <file>icons/window_fullscreen.png</file>
     <file>icons/window_nofullscreen.png</file>
-    <file>icons/status_away.svg</file>
-    <file>emoticons/alien.png</file>
-    <file>emoticons/angel.png</file>
-    <file>emoticons/arrogant.png</file>
-    <file>emoticons/beer.png</file>
-    <file>emoticons/bomb.png</file>
-    <file>emoticons/clap.png</file>
-    <file>emoticons/confused.png</file>
-    <file>emoticons/cowboy.png</file>
-    <file>emoticons/crying.png</file>
-    <file>emoticons/curl-lip.png</file>
-    <file>emoticons/cute.png</file>
-    <file>emoticons/dance.png</file>
-    <file>emoticons/devil.png</file>
-    <file>emoticons/disapointed.png</file>
-    <file>emoticons/doh.png</file>
-    <file>emoticons/dont-know.png</file>
-    <file>emoticons/embarrassed.png</file>
-    <file>emoticons/fingers-crossed.png</file>
-    <file>emoticons/freaked-out.png</file>
-    <file>emoticons/giggle.png</file>
-    <file>emoticons/glasses-cool.png</file>
-    <file>emoticons/go-away.png</file>
-    <file>emoticons/good.png</file>
-    <file>emoticons/handshake.png</file>
-    <file>emoticons/hypnotized.png</file>
-    <file>emoticons/kiss.png</file>
-    <file>emoticons/laugh.png</file>
-    <file>emoticons/love.png</file>
-    <file>emoticons/mail.png</file>
-    <file>emoticons/musical-note.png</file>
-    <file>emoticons/party.png</file>
-    <file>emoticons/pissed-off.png</file>
-    <file>emoticons/question.png</file>
-    <file>emoticons/rose.png</file>
-    <file>emoticons/rotfl.png</file>
-    <file>emoticons/sad.png</file>
-    <file>emoticons/sarcastic.png</file>
-    <file>emoticons/shout.png</file>
-    <file>emoticons/shut-mouth.png</file>
-    <file>emoticons/sick.png</file>
-    <file>emoticons/silly.png</file>
-    <file>emoticons/sleepy.png</file>
-    <file>emoticons/smirk.png</file>
-    <file>emoticons/terror.png</file>
-    <file>emoticons/thinking.png</file>
-    <file>emoticons/tongue.png</file>
-    <file>emoticons/tremble.png</file>
-    <file>emoticons/victory.png</file>
-    <file>emoticons/wink.png</file>
-    <file>emoticons/emoticons.xml</file>
   </qresource>
 </RCC>

@@ -138,11 +138,11 @@
       <height>101</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,10,0">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,10">
      <property name="verticalSpacing">
       <number>2</number>
      </property>
-     <item row="1" column="0">
+     <item row="1" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Size:</string>
@@ -154,6 +154,9 @@
        <property name="text">
         <string>Size</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -163,7 +166,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="3" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_12">
        <property name="text">
         <string>Speed:</string>
@@ -175,6 +178,9 @@
        <property name="text">
         <string>Size</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="3" column="2">
@@ -184,14 +190,14 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="4" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_14">
        <property name="text">
         <string>ETA:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="2" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>Protocol:</string>

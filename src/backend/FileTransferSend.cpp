@@ -198,7 +198,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("File transfer not acceped, cancelling...<br>Filename: %1")
+                tr("File transfer declined<br>Filename: %1")
                     .arg(mFileName));
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
@@ -211,7 +211,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
       mCore.getUserManager()
           ->getUserByI2P_Destination(mDestination)
           ->slotIncomingMessageFromSystem(
-              tr("File transfer not acceped, cancelling...<br>Filename: %1")
+              tr("File transfer declined<br>Filename: %1")
                   .arg(mFileName));
       mConnectionManager.doDestroyStreamObjectByID(ID);
       mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
@@ -233,7 +233,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         mFileTransferAccepted = true;
         StartFileTransfer(from);
       } else if (CurrentAction == "1") {
-        // Filetransfer don't Accepted
+        // File transfer declined
         emit signFileTransferAccepted(false);
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)

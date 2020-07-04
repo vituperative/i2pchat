@@ -73,28 +73,28 @@ void CSoundManager::reInit() {
   settings.beginGroup("Enable");
   mEnable_eventUser_go_Online = settings.value("User_go_Online", true).toBool();
   mEnable_eventUser_go_Offline =
-      settings.value("User_go_Offline", false).toBool();
+      settings.value("User_go_Offline", true).toBool();
   mEnable_eventFileSend_Finished =
-      settings.value("FileSend_Finished", false).toBool();
+      settings.value("FileSend_Finished", true).toBool();
   mEnable_eventFileReceive_Incoming =
       settings.value("FileReceive_Incoming", true).toBool();
   mEnable_eventFileReceive_Finished =
-      settings.value("FileReceive_Finished", false).toBool();
+      settings.value("FileReceive_Finished", true).toBool();
   mEnable_eventNewChatMessage = settings.value("NewChatMessage", true).toBool();
   settings.endGroup();
 
   settings.beginGroup("SoundFilePath");
   mSoundFileUser_go_Online =
-      settings.value("User_go_Online", "./sounds/Startup.wav").toString();
-  mSoundFileUser_go_Offline = settings.value("User_go_Offline", "").toString();
+      settings.value("User_go_Online", "./sounds/online.wav").toString();
+  mSoundFileUser_go_Offline = settings.value("User_go_Offline", "./sounds/offline.wav").toString();
   mSoundFileFileSend_Finished =
-      settings.value("FileSend_Finished", "").toString();
+      settings.value("FileSend_Finished", "./sounds/complete.wav").toString();
   mSoundFileFileReceive_Incoming =
-      settings.value("FileReceive_Incoming", "./sounds/File.wav").toString();
+      settings.value("FileReceive_Incoming", "./sounds/fileincoming.wav").toString();
   mSoundFileFileReceive_Finished =
-      settings.value("FileReceive_Finished", "").toString();
+      settings.value("FileReceive_Finished", "./sounds/complete.wav").toString();
   mSoundFileNewChatMessage =
-      settings.value("NewChatMessage", "./sounds/Notify.wav").toString();
+      settings.value("NewChatMessage", "./sounds/newmessage.wav").toString();
   settings.endGroup();
   settings.endGroup();
   settings.sync();

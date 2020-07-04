@@ -43,8 +43,11 @@ const QString PROTOCOLVERSION = "0.6";
 const double PROTOCOLVERSION_D = 0.6;
 const QString FIRSTPAKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
 const QString HTTPPAGE =
-    "<html><header></header><body>This is not an eepsite,this is a I2PChat "
-    "Destination<br><br></body></html>\n\n\n";
+    "<html><header></header><body style=margin:10%;text-align:center;font-family:sans-serif;font-size:13pt;color:#000;background:#000;>"
+    "<div style=\"margin:auto;padding:30px;width:564px;color:#eee;border:1px solid #333;box-shadow:inset 0 0 0 1px #300;background:#111;\">"
+    "<img style=\"padding:3px;border:2px solid #322;border-radius:50%;background:#000;\" height=96 width=96 src=data:image/svg+xml;base64,PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MDguNjA5IDUwOC42MDkiIHZpZXdCb3g9IjAgMCA1MDguNjA5IDUwOC42MDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTUwLjg4NyIgY3k9IjIwMC4wNTMiIGZpbGw9IiNlZWI0OTAiIHI9IjM5LjY3MiIvPjxjaXJjbGUgY3g9IjM1Ny43MjIiIGN5PSIyMDAuMDUzIiBmaWxsPSIjZWViNDkwIiByPSIzOS42NzIiLz48cGF0aCBkPSJtNDYzLjUxMyA1MDguNjA5aC00MTguNDE2di03NC45MzVjMC0zNC45MjUgMjYuMTA5LTY0LjA4NSA2MC4zNTUtNjguNDkzbDkyLjIyOC0zNi42MmgxMTMuMjVsOTIuMjI4IDM2LjYyYzM0LjU4NSA0LjA2OSA2MC4zNTUgMzMuNTY4IDYwLjM1NSA2OC40OTN6IiBmaWxsPSIjOWQ5MGM1Ii8+PHBhdGggZD0ibTE3OC4wMTMgMzQ4LjU2N3YzMy41NjhjMCA0Mi43MjMgMzQuOTI0IDc4LjY2NSA3Ny42NDggNzcuOTg3IDQxLjM2Ny0uNjc4IDc0LjU5Ni0zNC41ODUgNzQuNTk2LTc2LjI5MXYtMzUuMjY0YzAtMTIuMjA3LTkuODMzLTIyLjA0LTIyLjA0LTIyLjA0aC0xMDguNTAzYy0xMS44NjguMzM5LTIxLjcwMSAxMC4xNzItMjEuNzAxIDIyLjA0eiIgZmlsbD0iIzgwNzVhZiIvPjxwYXRoIGQ9Im0yMDIuMDg3IDMwMC40MTl2NTUuNjA4YzAgMjguODIxIDIzLjM5NiA1Mi4yMTcgNTIuMjE3IDUyLjIxN3M1Mi4yMTctMjMuMzk2IDUyLjIxNy01Mi4yMTd2LTU1LjYwOHoiIGZpbGw9IiNlZWI0OTAiLz48cGF0aCBkPSJtMzA2Ljg2MSA5NC42MDFoLTEwNS4xMTNjLTI0Ljc1MiAwLTQ0Ljc1OCAyMC4wMDUtNDQuNzU4IDQ0Ljc1OHYxMDAuNzA1YzAgNTMuOTEzIDQzLjc0IDk3LjMxNCA5Ny4zMTQgOTcuMzE0IDUzLjkxMyAwIDk3LjMxNC00My43NCA5Ny4zMTQtOTcuMzE0di0xMDAuNzA1Yy4wMDEtMjQuNzUyLTIwLjAwNS00NC43NTgtNDQuNzU3LTQ0Ljc1OHoiIGZpbGw9IiNmYWNjYjQiLz48ZyBmaWxsPSIjNTY1NDVmIj48cGF0aCBkPSJtMzUxLjYxOSA1Mi44OTVzNzQuOTM1IDkuODMzIDAgMTUxLjIyNnYtNTcuOTgxcy01LjQyNS00MS43MDYtMzAuODU2LTQ0LjA3OXoiLz48cGF0aCBkPSJtMzAwLjc1OCAwaC05Mi45MDZjLTMuNzMgMC03LjQ2LjMzOS0xMC44NSAxLjAxNy0xNDAuMzc2IDAtNDAuMDExIDIxMC4yMjUtNDAuMDExIDIxMC4yMjUgMC04MS4wMzggNTAuODYxLTgxLjM3NyA1MC44NjEtODEuMzc3aDkzLjI0NWMzNS45NDIgMCA2NC43NjMtMjkuMTYgNjQuNzYzLTY0Ljc2MyAwLTM1Ljk0Mi0yOS4xNjEtNjUuMTAyLTY1LjEwMi02NS4xMDJ6Ii8+PC9nPjwvc3ZnPg==>"
+    "<h3>You have reached the I2PChat Destination for [USERNAME]</h3><br>For more info visit <a "
+    "href=https://vituperative.github.io/i2pchat/>https://vituperative.github.io/i2pchat/</a></div></body></html>\n\n\n";
 }; // namespace Protocol_Info
 
 namespace PROTOCOL_TAGS {

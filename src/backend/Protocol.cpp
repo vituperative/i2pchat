@@ -409,7 +409,9 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
               stream->getDestination()) == true) {
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       } else {
-        *(stream) << (QString)HTTPPAGE;
+        QString TEMPHTTPPAGE = HTTPPAGE;
+        TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
+        *(stream) << (QString)TEMPHTTPPAGE;
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       }
     }
