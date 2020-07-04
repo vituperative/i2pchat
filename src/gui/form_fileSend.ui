@@ -142,7 +142,7 @@
      <property name="verticalSpacing">
       <number>2</number>
      </property>
-     <item row="1" column="0">
+     <item row="1" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Size:</string>
@@ -155,7 +155,7 @@
         <string>Size</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -166,7 +166,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="3" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_12">
        <property name="text">
         <string>Speed:</string>
@@ -179,7 +179,7 @@
         <string>Size</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -190,14 +190,14 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="4" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_14">
        <property name="text">
         <string>ETA:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="2" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>Protocol:</string>
