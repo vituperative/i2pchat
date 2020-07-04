@@ -125,7 +125,7 @@
     <string>*ROSE*</string>
   </emoticon>
 
-  <emoticon file="rose">
+  <emoticon file="whiteflag">
     <string>*SURRENDER*</string>
   </emoticon>
 
@@ -192,7 +192,7 @@
     <string>*SILLY*</string>
   </emoticon>
 
-  <emoticon file="doh">
+  <emoticon file="question">
     <string>*HMM*</string>
   </emoticon>
 
@@ -202,11 +202,6 @@
 
   <emoticon file="bye">
     <string>*BYE*</string>
-  </emoticon>
-
-  <emoticon file="wink">
-    <string>;)</string>
-    <string>;-)</string>
   </emoticon>
 
   <emoticon file="sarcastic">
@@ -229,10 +224,6 @@
 
   <emoticon file="angry">
     <string>*ANGRY*</string>
-  </emoticon>
-
-  <emoticon file="lips">
-    <string>*LIPS*</string>
   </emoticon>
 
   <emoticon file="freakedout">
@@ -290,6 +281,10 @@
 
   <emoticon file="cheese">
     <string>*CHEESE*</string>
+  </emoticon>
+
+  <emoticon file="donut">
+    <string>*DONUT*</string>
   </emoticon>
 
   <emoticon file="cupcake">
