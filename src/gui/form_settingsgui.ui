@@ -1185,7 +1185,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QLabel" name="ownavatar_label">
        <property name="geometry">
         <rect>
-         <x>290</x>
+         <x>288</x>
          <y>30</y>
          <width>80</width>
          <height>80</height>
@@ -1650,8 +1650,8 @@ border-radius: 2px;
           <property name="font">
            <font>
             <pointsize>9</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="autoFillBackground">
