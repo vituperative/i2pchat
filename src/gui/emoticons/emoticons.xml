@@ -33,6 +33,11 @@
   </emoticon>
 
   <emoticon file="glasses-cool">
+    <string>B-)</string>
+    <string>B)</string>
+  </emoticon>
+
+  <emoticon file="glasses">
     <string>8-)</string>
     <string>8)</string>
   </emoticon>
@@ -338,6 +343,10 @@
     <string>*PIZZA*</string>
   </emoticon>
 
+  <emoticon file="egg">
+    <string>*EGG*</string>
+  </emoticon>
+
   <emoticon file="mushroom">
     <string>*MUSHROOM*</string>
   </emoticon>
@@ -368,6 +377,18 @@
 
   <emoticon file="banana">
     <string>*BANANA*</string>
+  </emoticon>
+
+  <emoticon file="strawberry">
+    <string>*STRAWBERRY*</string>
+  </emoticon>
+
+  <emoticon file="peach">
+    <string>*PEACH*</string>
+  </emoticon>
+
+  <emoticon file="cherries">
+    <string>*CHERRIES*</string>
   </emoticon>
 
   <emoticon file="poo">
