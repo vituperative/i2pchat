@@ -59,10 +59,6 @@
     <string>:*</string>
   </emoticon>
 
-  <emoticon file="crying">
-    <string>:'(</string>
-  </emoticon>
-
   <emoticon file="shut-mouth">
     <string>:-X</string>
     <string>:X</string>
@@ -94,6 +90,7 @@
     <string>:'‑(</string>
     <string>:'(</string>
     <string>-.-;</string>
+    <string>-_-;</string>
   </emoticon>
 
   <emoticon file="musical-note">
@@ -109,6 +106,7 @@
   <emoticon file="sick">
     <string>:-!</string>
     <string>:!</string>
+    <string>*SICK*</string>
   </emoticon>
 
   <emoticon file="eye">
@@ -170,6 +168,10 @@
   <emoticon file="bomb">
     <string>@=</string>
     <string>*BOMB*</string>
+  </emoticon>
+
+  <emoticon file="fire">
+    <string>*FIRE*</string>
   </emoticon>
 
   <emoticon file="question">
