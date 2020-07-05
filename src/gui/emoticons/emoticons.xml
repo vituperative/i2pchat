@@ -90,14 +90,20 @@
     <string>]:></string>
   </emoticon>
 
+  <emoticon file="crying">
+    <string>:'‑(</string>
+    <string>:'(</string>
+    <string>-.-;</string>
+  </emoticon>
+
   <emoticon file="musical-note">
     <string>[:-}</string>
     <string>[:}</string>
   </emoticon>
 
   <emoticon file="inspect">
-    <string>oO</string>
-    <string>Oo</string>
+    <string>*oO*</string>
+    <string>*Oo*</string>
   </emoticon>
 
   <emoticon file="sick">
