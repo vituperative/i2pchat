@@ -291,7 +291,7 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <item row="0" column="2" alignment="Qt::AlignLeft">
+       <item row="0" column="2" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="basicLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -329,7 +329,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -624,7 +624,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="networkLabel">
          <property name="minimumSize">
           <size>
@@ -1522,7 +1522,7 @@ border-radius: 2px;
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -1566,7 +1566,7 @@ border-radius: 2px;
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="1" alignment="Qt::AlignVCenter">
         <widget class="QLabel" name="shareLabel">
          <property name="minimumSize">
           <size>
@@ -1605,8 +1605,8 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <zorder>layoutWidget</zorder>
      <zorder>groupBox_5</zorder>
-     <zorder>layoutWidget_12</zorder>
      <zorder>groupBox_21</zorder>
      <zorder>groupBox_9</zorder>
     </widget>

@@ -345,8 +345,13 @@ background: #fff;
    <property name="sizeIncrement">
     <size>
      <width>0</width>
-     <height>2</height>
+     <height>1</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
    </property>
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
@@ -360,13 +365,16 @@ background: #fff;
    <property name="movable">
     <bool>false</bool>
    </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
    <property name="iconSize">
     <size>
-     <width>20</width>
-     <height>20</height>
+     <width>18</width>
+     <height>18</height>
     </size>
    </property>
    <property name="floatable">
