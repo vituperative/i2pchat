@@ -111,21 +111,21 @@
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>164</y>
+        <y>168</y>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </size>
       </property>
       <property name="title">
@@ -135,7 +135,7 @@
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>30</y>
+         <y>28</y>
          <width>356</width>
          <height>26</height>
         </rect>
@@ -195,21 +195,21 @@
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>246</y>
+        <y>252</y>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>64</height>
        </size>
       </property>
       <property name="title">
@@ -218,10 +218,10 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>14</x>
-         <y>30</y>
-         <width>354</width>
-         <height>28</height>
+         <x>13</x>
+         <y>28</y>
+         <width>355</width>
+         <height>26</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_7">
@@ -424,7 +424,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>14</x>
+         <x>12</x>
          <y>12</y>
          <width>351</width>
          <height>23</height>
@@ -513,22 +513,22 @@ p, li { white-space: pre-wrap; }
      <widget class="QGroupBox" name="groupBox_22">
       <property name="geometry">
        <rect>
-        <x>4</x>
-        <y>328</y>
+        <x>3</x>
+        <y>336</y>
         <width>380</width>
-        <height>68</height>
+        <height>60</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>60</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>60</height>
        </size>
       </property>
       <property name="title">
@@ -537,10 +537,10 @@ p, li { white-space: pre-wrap; }
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>14</x>
-         <y>30</y>
-         <width>354</width>
-         <height>29</height>
+         <x>12</x>
+         <y>28</y>
+         <width>356</width>
+         <height>23</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_21">
@@ -1939,7 +1939,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>16</x>
+         <x>14</x>
          <y>56</y>
          <width>405</width>
          <height>21</height>
@@ -1955,7 +1955,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>16</x>
+         <x>14</x>
          <y>31</y>
          <width>405</width>
          <height>21</height>
@@ -2069,7 +2069,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>16</x>
+         <x>14</x>
          <y>56</y>
          <width>405</width>
          <height>21</height>
@@ -2088,7 +2088,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>16</x>
+         <x>14</x>
          <y>31</y>
          <width>405</width>
          <height>21</height>
@@ -2180,7 +2180,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>332</y>
+        <y>331</y>
         <width>380</width>
         <height>64</height>
        </rect>
@@ -2388,19 +2388,19 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>52</y>
         <width>380</width>
-        <height>97</height>
+        <height>96</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>0</height>
+        <height>96</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>16777215</height>
+        <height>96</height>
        </size>
       </property>
       <property name="title">
@@ -2410,7 +2410,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>62</y>
+         <y>60</y>
          <width>360</width>
          <height>27</height>
         </rect>
@@ -2569,19 +2569,19 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>228</y>
         <width>380</width>
-        <height>98</height>
+        <height>96</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>0</height>
+        <height>96</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>16777215</height>
+        <height>96</height>
        </size>
       </property>
       <property name="title">
@@ -2591,7 +2591,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>62</y>
+         <y>60</y>
          <width>361</width>
          <height>27</height>
         </rect>
@@ -3786,7 +3786,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>14</x>
+         <x>12</x>
          <y>12</y>
          <width>385</width>
          <height>23</height>
