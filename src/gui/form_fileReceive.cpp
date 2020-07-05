@@ -65,7 +65,7 @@ void form_fileReceive::init() {
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileReceive.getFileSize());
   progressBar->setValue(FileReceive.getAllreadyReceivedSize());
-  label_10->setText(FileReceive.getUsingProtocolVersion());
+//  label_10->setText(FileReceive.getUsingProtocolVersion());
   label_11->setText("0");
   label_12->setText("");
 }

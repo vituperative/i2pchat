@@ -74,7 +74,7 @@ void form_fileSend::init() {
   progressBar->setMaximum(FileTransfer.getFileSize());
   progressBar->setValue(FileTransfer.getAllreadySendedSize());
 
-  label_10->setText(FileTransfer.getUsingProtocolVersion());
+//  label_10->setText(FileTransfer.getUsingProtocolVersion());
 
   slot_FileTransferAccepted(FileTransfer.getAllreadyTransferAccepted());
 
