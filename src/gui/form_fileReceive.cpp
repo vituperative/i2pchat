@@ -66,7 +66,7 @@ void form_fileReceive::init() {
   progressBar->setMaximum(FileReceive.getFileSize());
   progressBar->setValue(FileReceive.getAllreadyReceivedSize());
 //  label_10->setText(FileReceive.getUsingProtocolVersion());
-  label_11->setText("0");
+  label_11->setText("waiting...");
   label_12->setText("");
 }
 
@@ -100,10 +100,8 @@ void form_fileReceive::askTheUser() {
 
   QMessageBox *msgBox = new QMessageBox(NULL);
   msgBox->setText(tr("Incoming FileTransfer"));
-  // msgBox->setInformativeText("Do you want to accept it ?\nFileName:
-  // "+FileName+"\nFileSize: " +SSize+" "+SizeName);
   msgBox->setInformativeText(
-      tr("Do you want to accept it ?\nFileName: %1 \nFileSize: %2 %3")
+      tr("Accept file transfer?\n%1 [%2%3]")
           .arg(FileName)
           .arg(SSize)
           .arg(SizeName));

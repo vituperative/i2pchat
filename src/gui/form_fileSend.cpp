@@ -82,7 +82,7 @@ void form_fileSend::init() {
     slot_FileTransferFinishedOK();
   }
 
-  label_13->setText("0");
+  label_13->setText("waiting...");
   label_11->setText("");
   label_15->setText("");
 }
