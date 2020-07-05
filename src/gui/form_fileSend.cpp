@@ -84,7 +84,7 @@ void form_fileSend::init() {
 
   label_13->setText("waiting...");
   label_11->setText("");
-  label_15->setText("");
+  label_15->setText("n/a");
 }
 
 void form_fileSend::slot_allreadySendedSizeChanged(quint64 value) {
@@ -102,6 +102,9 @@ void form_fileSend::slot_FileTransferAccepted(bool t) {
   if (t == true) {
     checkBox_2->setChecked(true);
     checkBox_3->setChecked(true);
+    label_12->setText("Speed:");
+  } else {
+    label_12->setText("Status:");
   }
 }
 

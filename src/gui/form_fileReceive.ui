@@ -122,7 +122,7 @@
      <item row="3" column="1" colspan="2">
       <widget class="QLabel" name="label_15">
        <property name="text">
-        <string>value</string>
+        <string>n/a</string>
        </property>
       </widget>
      </item>

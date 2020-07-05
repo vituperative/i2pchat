@@ -99,12 +99,12 @@ void form_fileReceive::askTheUser() {
   FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SizeName, false);
 
   QMessageBox *msgBox = new QMessageBox(NULL);
-  msgBox->setText(tr("Incoming FileTransfer"));
+  msgBox->setText(tr("Incoming File Transfer: %1 [%2%3]    ")
+                       .arg(FileName)
+                       .arg(SSize)
+                       .arg(SizeName));
   msgBox->setInformativeText(
-      tr("Accept file transfer?\n%1 [%2%3]")
-          .arg(FileName)
-          .arg(SSize)
-          .arg(SizeName));
+      tr("Do you wish to download this file?"));
   msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox->setDefaultButton(QMessageBox::Yes);
   msgBox->setWindowModality(Qt::WindowModal);
