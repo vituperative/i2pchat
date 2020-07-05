@@ -59,10 +59,6 @@
     <string>:*</string>
   </emoticon>
 
-  <emoticon file="crying">
-    <string>:'(</string>
-  </emoticon>
-
   <emoticon file="shut-mouth">
     <string>:-X</string>
     <string>:X</string>
@@ -90,14 +86,31 @@
     <string>]:></string>
   </emoticon>
 
+  <emoticon file="crying">
+    <string>:'‑(</string>
+    <string>:'(</string>
+    <string>-.-;</string>
+    <string>-_-;</string>
+  </emoticon>
+
   <emoticon file="musical-note">
     <string>[:-}</string>
     <string>[:}</string>
   </emoticon>
 
+  <emoticon file="inspect">
+    <string>*oO*</string>
+    <string>*Oo*</string>
+  </emoticon>
+
   <emoticon file="sick">
     <string>:-!</string>
     <string>:!</string>
+    <string>*SICK*</string>
+  </emoticon>
+
+  <emoticon file="eye">
+    <string>*EYE*</string>
   </emoticon>
 
   <emoticon file="kiss">
@@ -134,6 +147,15 @@
     <string>*OK*</string>
   </emoticon>
 
+  <emoticon file="thumbsdown">
+    <string>*THUMBS DOWN*</string>
+    <string>*FAIL*</string>
+  </emoticon>
+
+  <emoticon file="peace">
+    <string>*PEACE*</string>
+  </emoticon>
+
   <emoticon file="middlefinger">
     <string>*FUCK OFF*</string>
   </emoticon>
@@ -146,6 +168,10 @@
   <emoticon file="bomb">
     <string>@=</string>
     <string>*BOMB*</string>
+  </emoticon>
+
+  <emoticon file="fire">
+    <string>*FIRE*</string>
   </emoticon>
 
   <emoticon file="question">
@@ -168,8 +194,33 @@
     <string>*SNOWMAN*</string>
   </emoticon>
 
-  <emoticon file="parrot">
-    <string>*PARROT*</string>
+  <emoticon file="cat">
+    <string>:3</string>
+    <string>*CAT*</string>
+  </emoticon>
+
+  <emoticon file="mouse">
+    <string>*MOUSE*</string>
+  </emoticon>
+
+  <emoticon file="cow">
+    <string>*COW*</string>
+  </emoticon>
+
+  <emoticon file="fox">
+    <string>*FOX*</string>
+  </emoticon>
+
+  <emoticon file="hippo">
+    <string>*HIPPO*</string>
+  </emoticon>
+
+  <emoticon file="gorilla">
+    <string>*GORILLA*</string>
+  </emoticon>
+
+  <emoticon file="lion">
+    <string>*LION*</string>
   </emoticon>
 
   <emoticon file="disapointed">
@@ -218,6 +269,18 @@
     <string>:-p</string>
   </emoticon>
 
+  <emoticon file="dont-know">
+    <string>*:/*</string>
+    <string>:-/</string>
+  </emoticon>
+
+  <emoticon file="uhoh">
+    <string>:s</string>
+    <string>:S</string>
+    <string>:-s</string>
+    <string>:-S</string>
+  </emoticon>
+
   <emoticon file="inlove">
     <string>*IN LOVE*</string>
   </emoticon>
@@ -255,6 +318,10 @@
     <string>*CHILLI*</string>
   </emoticon>
 
+  <emoticon file="garlic">
+    <string>*GARLIC*</string>
+  </emoticon>
+
   <emoticon file="popcorn">
     <string>*POPCORN*</string>
   </emoticon>
@@ -269,10 +336,6 @@
 
   <emoticon file="pizza">
     <string>*PIZZA*</string>
-  </emoticon>
-
-  <emoticon file="spaghetti">
-    <string>*SPAGHETTI*</string>
   </emoticon>
 
   <emoticon file="mushroom">
@@ -291,12 +354,33 @@
     <string>*CUPCAKE*</string>
   </emoticon>
 
+  <emoticon file="cake">
+    <string>*CAKE*</string>
+  </emoticon>
+
+  <emoticon file="cookie">
+    <string>*COOKIE*</string>
+  </emoticon>
+
+  <emoticon file="chocolate">
+    <string>*CHOCOLATE*</string>
+  </emoticon>
+
   <emoticon file="banana">
     <string>*BANANA*</string>
   </emoticon>
 
   <emoticon file="poo">
     <string>*POO*</string>
+  </emoticon>
+
+  <emoticon file="ufo">
+    <string>*UFO*</string>
+  </emoticon>
+
+  <emoticon file="spaceinvader">
+    <string>*SPACE INVADER*</string>
+    <string>*INVADER*</string>
   </emoticon>
 
 </messaging-emoticon-map>
