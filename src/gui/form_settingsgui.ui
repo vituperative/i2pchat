@@ -271,7 +271,7 @@
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>119</width>
+        <width>116</width>
         <height>30</height>
        </rect>
       </property>
@@ -288,7 +288,10 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <property name="spacing">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing">
         <number>6</number>
        </property>
        <item row="0" column="2" alignment="Qt::AlignLeft|Qt::AlignVCenter">
@@ -564,7 +567,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>125</width>
+        <width>122</width>
         <height>30</height>
        </rect>
       </property>
@@ -581,7 +584,10 @@ p, li { white-space: pre-wrap; }
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <property name="spacing">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing">
         <number>6</number>
        </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
@@ -1532,6 +1538,9 @@ border-radius: 2px;
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_13">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label_5">
          <property name="minimumSize">
@@ -1824,11 +1833,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>89</width>
+        <width>86</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="1" alignment="Qt::AlignLeft">
         <widget class="QLabel" name="label_30">
          <property name="minimumSize">
@@ -1959,11 +1971,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>123</width>
+        <width>120</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="label_23">
          <property name="minimumSize">
@@ -2094,11 +2109,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>103</width>
+        <width>100</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="label_24">
          <property name="maximumSize">
@@ -2733,11 +2751,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>86</width>
+        <width>83</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="label_33">
          <property name="sizePolicy">
@@ -3507,11 +3528,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>124</width>
+        <width>121</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_9">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="1" alignment="Qt::AlignLeft">
         <widget class="QLabel" name="label_36">
          <property name="minimumSize">
@@ -3655,11 +3679,14 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>154</width>
+        <width>151</width>
         <height>30</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
         <widget class="QLabel" name="label_27">
          <property name="minimumSize">
