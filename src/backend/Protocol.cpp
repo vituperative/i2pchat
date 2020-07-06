@@ -26,6 +26,7 @@
 #include "Protocol.h"
 #include "User.h"
 #include "UserManager.h"
+#include "LoadHTML.cpp"
 
 #include <iostream>
 using namespace std;
@@ -43,6 +44,8 @@ void CProtocol::newConnectionChat(const qint32 ID) {
     *(stream) << (QString)FIRSTPAKETCHAT;
   }
 }
+
+
 
 void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
   using namespace Protocol_Info;
@@ -409,9 +412,13 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
               stream->getDestination()) == true) {
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       } else {
-        QString TEMPHTTPPAGE = HTTPPAGE;
-        TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
-        *(stream) << (QString)TEMPHTTPPAGE;
+        QString TEMPHTTPPAGE = loadfile(mCore.getConfigPath() + "/www/index.html");
+        if (TEMPHTTPPAGE.isEmpty()) {
+		TEMPHTTPPAGE = HTTPPAGE;
+	}
+	TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
+	TEMPHTTPPAGE.replace("[AVATARIMAGE]", mCore.getUserInfos().AvatarImage.toBase64());
+	*(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       }
     }
