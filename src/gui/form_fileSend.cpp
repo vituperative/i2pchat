@@ -74,7 +74,7 @@ void form_fileSend::init() {
   progressBar->setMaximum(FileTransfer.getFileSize());
   progressBar->setValue(FileTransfer.getAllreadySendedSize());
 
-  label_10->setText(FileTransfer.getUsingProtocolVersion());
+//  label_10->setText(FileTransfer.getUsingProtocolVersion());
 
   slot_FileTransferAccepted(FileTransfer.getAllreadyTransferAccepted());
 
@@ -82,9 +82,9 @@ void form_fileSend::init() {
     slot_FileTransferFinishedOK();
   }
 
-  label_13->setText("0");
+  label_13->setText("waiting...");
   label_11->setText("");
-  label_15->setText("");
+  label_15->setText("n/a");
 }
 
 void form_fileSend::slot_allreadySendedSizeChanged(quint64 value) {
@@ -102,6 +102,9 @@ void form_fileSend::slot_FileTransferAccepted(bool t) {
   if (t == true) {
     checkBox_2->setChecked(true);
     checkBox_3->setChecked(true);
+    label_12->setText("Speed:");
+  } else {
+    label_12->setText("Status:");
   }
 }
 

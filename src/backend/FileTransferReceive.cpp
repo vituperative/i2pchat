@@ -94,7 +94,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Incoming file transfer<br>Filename: %1"
+            tr(" Incoming file transfer: %1"
                "<br>Accept or reject from the userlist")
                 .arg(mFileName));
   }

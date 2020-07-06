@@ -8,41 +8,65 @@
     <file>emoticons/bomb.svg</file>
     <file>emoticons/burger.svg</file>
     <file>emoticons/bye.svg</file>
+    <file>emoticons/cake.svg</file>
+    <file>emoticons/cat.svg</file>
     <file>emoticons/cheers.svg</file>
     <file>emoticons/cheese.svg</file>
+    <file>emoticons/cherries.svg</file>
     <file>emoticons/chilli.svg</file>
+    <file>emoticons/chocolate.svg</file>
     <file>emoticons/clown.svg</file>
     <file>emoticons/cocktail.svg</file>
+    <file>emoticons/coffee.svg</file>
     <file>emoticons/concerned.svg</file>
     <file>emoticons/confused.svg</file>
+    <file>emoticons/cookie.svg</file>
+    <file>emoticons/cow.svg</file>
     <file>emoticons/cowboy.svg</file>
     <file>emoticons/crying.svg</file>
+    <file>emoticons/crylaugh.svg</file>
     <file>emoticons/cupcake.svg</file>
     <file>emoticons/cute.svg</file>
     <file>emoticons/dance.svg</file>
     <file>emoticons/devil.svg</file>
     <file>emoticons/disappointed.svg</file>
     <file>emoticons/dont-know.svg</file>
+    <file>emoticons/dog.svg</file>
     <file>emoticons/donut.svg</file>
     <file>emoticons/embarrassed.svg</file>
+    <file>emoticons/egg.svg</file>
+    <file>emoticons/eye.svg</file>
     <file>emoticons/emoticons.xml</file>
-    <file>emoticons/fingers-crossed.png</file>
+    <file>emoticons/fire.svg</file>
+    <file>emoticons/fox.svg</file>
     <file>emoticons/freaked-out.svg</file>
+    <file>emoticons/frog.svg</file>
+    <file>emoticons/garlic.svg</file>
+    <file>emoticons/giggle.svg</file>
+    <file>emoticons/glasses.svg</file>
     <file>emoticons/glasses-cool.svg</file>
     <file>emoticons/good.svg</file>
+    <file>emoticons/gorilla.svg</file>
     <file>emoticons/handshake.svg</file>
+    <file>emoticons/hippo.svg</file>
     <file>emoticons/hotdog.svg</file>
     <file>emoticons/hourglass.svg</file>
     <file>emoticons/inlove.svg</file>
+    <file>emoticons/inspect.svg</file>
     <file>emoticons/kiss.svg</file>
     <file>emoticons/laugh.svg</file>
+    <file>emoticons/lion.svg</file>
     <file>emoticons/love.svg</file>
     <file>emoticons/middlefinger.svg</file>
+    <file>emoticons/mouse.svg</file>
+    <file>emoticons/monkey.svg</file>
     <file>emoticons/mushroom.svg</file>
     <file>emoticons/musical-note.svg</file>
     <file>emoticons/nonplussed.svg</file>
     <file>emoticons/parrot.svg</file>
     <file>emoticons/party.svg</file>
+    <file>emoticons/peace.svg</file>
+    <file>emoticons/peach.svg</file>
     <file>emoticons/pizza.svg</file>
     <file>emoticons/poo.svg</file>
     <file>emoticons/popcorn.svg</file>
@@ -61,10 +85,15 @@
     <file>emoticons/smile.svg</file>
     <file>emoticons/smoking.svg</file>
     <file>emoticons/snowman.svg</file>
-    <file>emoticons/spaghetti.svg</file>
+    <file>emoticons/spaceinvader.svg</file>
+    <file>emoticons/strawberry.svg</file>
+    <file>emoticons/thumbsdown.svg</file>
     <file>emoticons/tongue.svg</file>
+    <file>emoticons/ufo.svg</file>
+    <file>emoticons/uhoh.svg</file>
     <file>emoticons/whiteflag.svg</file>
     <file>emoticons/wine.svg</file>
+    <file>emoticons/wink.svg</file>
     <file>emoticons/yawn.svg</file>
     <file>icons/about.svg</file>
     <file>icons/addimage.svg</file>
