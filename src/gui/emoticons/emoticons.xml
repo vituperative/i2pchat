@@ -23,8 +23,9 @@
   </emoticon>
 
   <emoticon file="wink">
-    <string>;)</string>
+    <string>*WINK*</string>
     <string>;-)</string>
+    <string>;)</string>
   </emoticon>
 
   <emoticon file="tongue">
@@ -228,6 +229,18 @@
     <string>*LION*</string>
   </emoticon>
 
+  <emoticon file="dog">
+    <string>*DOG*</string>
+  </emoticon>
+
+  <emoticon file="frog">
+    <string>*FROG*</string>
+  </emoticon>
+
+  <emoticon file="monkey">
+    <string>*MONKEY*</string>
+  </emoticon>
+
   <emoticon file="disapointed">
     <string>*SORRY*</string>
   </emoticon>
@@ -316,6 +329,14 @@
 
   <emoticon file="wine">
     <string>*WINE*</string>
+  </emoticon>
+
+  <emoticon file="cocktail">
+    <string>*COCKTAIL*</string>
+  </emoticon>
+
+  <emoticon file="coffee">
+    <string>*COFFEE*</string>
   </emoticon>
 
   <emoticon file="chilli">
