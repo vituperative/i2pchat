@@ -23,8 +23,9 @@
   </emoticon>
 
   <emoticon file="wink">
-    <string>;)</string>
+    <string>*WINK*</string>
     <string>;-)</string>
+    <string>;)</string>
   </emoticon>
 
   <emoticon file="tongue">
@@ -33,6 +34,11 @@
   </emoticon>
 
   <emoticon file="glasses-cool">
+    <string>B-)</string>
+    <string>B)</string>
+  </emoticon>
+
+  <emoticon file="glasses">
     <string>8-)</string>
     <string>8)</string>
   </emoticon>
@@ -223,6 +229,18 @@
     <string>*LION*</string>
   </emoticon>
 
+  <emoticon file="dog">
+    <string>*DOG*</string>
+  </emoticon>
+
+  <emoticon file="frog">
+    <string>*FROG*</string>
+  </emoticon>
+
+  <emoticon file="monkey">
+    <string>*MONKEY*</string>
+  </emoticon>
+
   <emoticon file="disapointed">
     <string>*SORRY*</string>
   </emoticon>
@@ -313,6 +331,14 @@
     <string>*WINE*</string>
   </emoticon>
 
+  <emoticon file="cocktail">
+    <string>*COCKTAIL*</string>
+  </emoticon>
+
+  <emoticon file="coffee">
+    <string>*COFFEE*</string>
+  </emoticon>
+
   <emoticon file="chilli">
     <string>*HOT*</string>
     <string>*CHILLI*</string>
@@ -336,6 +362,10 @@
 
   <emoticon file="pizza">
     <string>*PIZZA*</string>
+  </emoticon>
+
+  <emoticon file="egg">
+    <string>*EGG*</string>
   </emoticon>
 
   <emoticon file="mushroom">
@@ -368,6 +398,18 @@
 
   <emoticon file="banana">
     <string>*BANANA*</string>
+  </emoticon>
+
+  <emoticon file="strawberry">
+    <string>*STRAWBERRY*</string>
+  </emoticon>
+
+  <emoticon file="peach">
+    <string>*PEACH*</string>
+  </emoticon>
+
+  <emoticon file="cherries">
+    <string>*CHERRIES*</string>
   </emoticon>
 
   <emoticon file="poo">

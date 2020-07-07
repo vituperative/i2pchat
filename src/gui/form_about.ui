@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>168</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>349</width>
-    <height>168</height>
+    <height>170</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>349</width>
-    <height>168</height>
+    <height>170</height>
    </size>
   </property>
   <property name="sizeIncrement">
@@ -61,7 +61,7 @@
      <x>4</x>
      <y>4</y>
      <width>341</width>
-     <height>161</height>
+     <height>162</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -76,27 +76,27 @@
       <x>4</x>
       <y>4</y>
       <width>333</width>
-      <height>153</height>
+      <height>157</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,10">
      <property name="sizeConstraint">
       <enum>QLayout::SetMaximumSize</enum>
      </property>
-     <property name="verticalSpacing">
+     <property name="spacing">
       <number>2</number>
      </property>
      <item row="0" column="0" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label">
        <property name="minimumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -113,6 +113,15 @@
          <weight>75</weight>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string>Version:</string>
@@ -133,6 +142,15 @@
          <height>24</height>
         </size>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>&lt;app version&gt;</string>
        </property>
@@ -145,13 +163,13 @@
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -169,6 +187,15 @@
          <bold>true</bold>
         </font>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>Chat Protocol:</string>
        </property>
@@ -184,13 +211,13 @@
       <widget class="QLabel" name="label_6">
        <property name="minimumSize">
         <size>
-         <width>128</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -207,6 +234,15 @@
          <weight>75</weight>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string>File Transfer:</string>
@@ -227,6 +263,15 @@
          <height>24</height>
         </size>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>&lt;git c c&gt;</string>
        </property>
@@ -239,13 +284,13 @@
       <widget class="QLabel" name="label_5">
        <property name="minimumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -262,6 +307,15 @@
          <weight>75</weight>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string>Git Commit Count:</string>
@@ -282,6 +336,15 @@
          <height>24</height>
         </size>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>&lt;protocol values&gt;</string>
        </property>
@@ -298,6 +361,15 @@
          <height>24</height>
         </size>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>&lt;protocol version&gt;</string>
        </property>
@@ -308,6 +380,15 @@
      </item>
      <item row="5" column="1">
       <widget class="QLabel" name="label_dateCompile">
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
        <property name="text">
         <string>&lt;date built&gt;</string>
        </property>
@@ -320,13 +401,13 @@
       <widget class="QLabel" name="label_7">
        <property name="minimumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -343,6 +424,15 @@
          <weight>75</weight>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string>Git Commit Hash:</string>
@@ -359,13 +449,13 @@
       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>134</width>
+         <width>138</width>
          <height>24</height>
         </size>
        </property>
@@ -382,6 +472,15 @@
          <weight>75</weight>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string>Build Date:</string>
@@ -401,6 +500,15 @@
          <width>16777215</width>
          <height>24</height>
         </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
         <string/>

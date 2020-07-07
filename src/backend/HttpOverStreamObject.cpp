@@ -111,7 +111,7 @@ void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination,
 
   connect(mStream,
           SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                         const qint32, const QString)),
+                                          const qint32, const QString)),
           this,
           SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32,
                                 QString)));

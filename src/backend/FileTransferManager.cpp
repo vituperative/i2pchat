@@ -97,9 +97,9 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath,
 }
 
 void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
-                                            QString FileSize,
-                                            QString Destination,
-                                            QString ProtocolVersion) {
+                                             QString FileSize,
+                                             QString Destination,
+                                             QString ProtocolVersion) {
   CI2PStream *Stream = mCore.getConnectionManager()->getStreamObjectByID(ID);
   FileName = FilterForFileName(FileName);
 
@@ -190,14 +190,14 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
 
   disconnect(Stream,
              SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                            const qint32, const QString)),
+                                             const qint32, const QString)),
              &mCore,
              SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                          const qint32, QString)));
+                                           const qint32, QString)));
 
   CFileTransferReceive *t =
       new CFileTransferReceive(mCore, *Stream, ID, FileName, Size, Destination,
-                              ProtocolVersion, ProtocolVersionD);
+                               ProtocolVersion, ProtocolVersionD);
   connect(t, SIGNAL(signFileReceivedFinishedOK()), mCore.getSoundManager(),
           SLOT(slotFileReceiveFinished()));
 

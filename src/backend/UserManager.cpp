@@ -171,7 +171,8 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
         QString sAge;
         sAge.setNum(receivedInfos.Age, 10);
 
-        if (receivedInfos.Gender != nullptr || sAge != "0" || receivedInfos.Interests != nullptr) {
+        if (receivedInfos.Gender != nullptr || sAge != "0" ||
+            receivedInfos.Interests != nullptr) {
           Infos += "\nUser Information:\n";
           if (receivedInfos.Gender != nullptr) {
             Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";

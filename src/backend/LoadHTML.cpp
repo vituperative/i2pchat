@@ -31,29 +31,28 @@
 using namespace std;
 
 QString gethttpheader(QString pagedata) {
-	QString header;
-	header  = "HTTP/1.0 200\r\nContent-Length: " + QString::number(pagedata.size()) + "\r\n\r\n";
-	return header;
+  QString header;
+  header =
+      "HTTP/1.0 200\r\nContent-Length: " + QString::number(pagedata.size()) +
+      "\r\n\r\n";
+  return header;
 }
 
-QString pngtobase64(QByteArray pngdata) {
-	return pngdata.toBase64();
-}
+QString pngtobase64(QByteArray pngdata) { return pngdata.toBase64(); }
 
-//QString processtags(QString htmldata) {
+// QString processtags(QString htmldata) {
 //	htmldata.
 //}
 
 QString loadfile(QString filename) {
 
-	QString filecontents;
-	QFile f(filename);
-	if (!f.open(QFile::ReadOnly | QFile::Text)){
-		return "";
-	}
-	QTextStream in(&f);
-	filecontents = in.readAll();
-	f.close();
-	return filecontents;
+  QString filecontents;
+  QFile f(filename);
+  if (!f.open(QFile::ReadOnly | QFile::Text)) {
+    return "";
+  }
+  QTextStream in(&f);
+  filecontents = in.readAll();
+  f.close();
+  return filecontents;
 }
-

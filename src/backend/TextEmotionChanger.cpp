@@ -148,7 +148,8 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
                   tmp = QPixmap(dirPath + "/" + fileName.at(0));
                 int width = 16;
                 int height = width;
-                image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                image = image.scaled(width, height, Qt::IgnoreAspectRatio,
+                                     Qt::SmoothTransformation);
                 QString text = emoticonString.text().toHtmlEscaped();
                 m_urls.insert(text,
                               QString("<img src=\"%1\" width=\"%2\" "
