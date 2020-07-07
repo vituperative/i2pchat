@@ -2106,7 +2106,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>250</y>
+        <y>248</y>
         <width>380</width>
         <height>98</height>
        </rect>
@@ -2145,7 +2145,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QPlainTextEdit" name="b32address">
        <property name="enabled">
         <bool>false</bool>
        </property>
