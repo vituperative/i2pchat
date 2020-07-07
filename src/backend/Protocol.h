@@ -43,13 +43,22 @@ const QString PROTOCOLVERSION = "0.6";
 const double PROTOCOLVERSION_D = 0.6;
 const QString FIRSTPAKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
 const QString HTTPPAGE =
-    "<!DOCTYPE HTML><html><body "
-    "style=\"margin:10%;text-align:center;font-family:sans-serif;font-size:"
-    "13pt;color:#000;background:#000;\">"
-    "<div style=\"margin:auto;padding:30px;width:564px;color:#eee;border:1px "
-    "solid #333;box-shadow:inset 0 0 0 1px #300;background:#111;\">"
-    "<img style=\"padding:3px;border:2px solid "
-    "#322;border-radius:50%;background:#000;\" height=96 width=96 "
+    "<!DOCTYPE HTML><html><head><title>[USERNAME] | I2PChat "
+    "Destination</title><meta http-equiv=\"Content-Type\" content=\"text/html; "
+    "charset=UTF-8\"><style type=\"text/css\">body, html{margin: 0; "
+    "background: #000} body{text-align: center; font-family: Open Sans, Segoe "
+    "UI, sans-serif; font-size: 13pt; color: #ddd} a, a:visited{color: #900; "
+    "text-decoration: none; outline: none} a:hover{color: #b00} "
+    "#container{position: absolute; top: 0; height: 100%; width: 100%; "
+    "display: table} #box, #moreinfo{box-shadow: inset 0 0 0 1px #300} "
+    "#main{display: table-cell; position: relative; vertical-align: middle; "
+    "text-align: center} #box{margin: 2% auto 5%; padding: 30px; width: 50%; "
+    "min-width: 400px; max-width: 600px; border: 1px solid #333; background: "
+    "#111} #avatar{padding: 3px; width: 96px; height: 96px; border: 2px solid "
+    "#322; border-radius: 50%; background: #000} #moreinfo{margin: 50px -30px "
+    "-30px; padding: 5px 0; font-size: 75%; font-weight: 600; border-top: 1px "
+    "solid #333} </style></head><body><div id=\"container\"><div "
+    "id=\"main\"><div id=\"box\"><img id=\"avatar\" "
     "src=\"data:image/"
     "svg+xml;base64,"
     "PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MDguNjA5IDUwOC42MDkiIHZpZXdCb3"
@@ -78,10 +87,10 @@ const QString HTTPPAGE =
     "LTgxLjM3NyA1MC44NjEtODEuMzc3aDkzLjI0NWMzNS45NDIgMCA2NC43NjMtMjkuMTYgNjQuNz"
     "YzLTY0Ljc2MyAwLTM1Ljk0Mi0yOS4xNjEtNjUuMTAyLTY1LjEwMi02NS4xMDJ6Ii8+"
     "PC9nPjwvc3ZnPg==\">"
-    "<h3>You have reached the I2PChat Destination for [USERNAME]</h3><br>For "
-    "more info visit <a "
+    "<h3>You have reached the I2PChat Destination for [USERNAME]</h3><div "
+    "id=\"moreinfo\">More information: <a "
     "href=\"https://vituperative.github.io/i2pchat/\">https://"
-    "vituperative.github.io/i2pchat/</a></div></body></html>";
+    "vituperative.github.io/i2pchat/</a></div></div></div></div></body></html>";
 }; // namespace Protocol_Info
 
 namespace PROTOCOL_TAGS {
