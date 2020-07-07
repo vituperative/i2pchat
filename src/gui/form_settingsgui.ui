@@ -2108,7 +2108,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>248</y>
         <width>380</width>
-        <height>98</height>
+        <height>147</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -2152,16 +2152,38 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>57</y>
+         <y>88</y>
          <width>356</width>
-         <height>31</height>
+         <height>48</height>
         </rect>
        </property>
        <property name="inputMethodHints">
         <set>Qt::ImhNone</set>
        </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
        <property name="plainText">
         <string>http://b32.i2p</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="blockallcheckBox_3">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>56</y>
+         <width>405</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Hide page when status is invisible for any contact</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>
