@@ -23,10 +23,10 @@
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
+#include "LoadHTML.cpp"
 #include "Protocol.h"
 #include "User.h"
 #include "UserManager.h"
-#include "LoadHTML.cpp"
 
 #include <iostream>
 using namespace std;
@@ -44,8 +44,6 @@ void CProtocol::newConnectionChat(const qint32 ID) {
     *(stream) << (QString)FIRSTPAKETCHAT;
   }
 }
-
-
 
 void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
   using namespace Protocol_Info;
@@ -103,7 +101,8 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
 
   } else if (ProtocolInfoTag == "1004") { // GET_PROTOCOLVERSION,
     send(ANSWER_OF_GET_PROTOCOLVERSION, ID, mCore.getProtocolVersion());
-  } else if (ProtocolInfoTag == "1005") { // GET_MAX_PROTOCOLVERSION_FILETRANSFER
+  } else if (ProtocolInfoTag ==
+             "1005") { // GET_MAX_PROTOCOLVERSION_FILETRANSFER
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
 
     if (thisUser != NULL) {
@@ -126,7 +125,8 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
 
     sAge.setNum(Infos.Age, 10);
     send(USER_INFO_AGE, ID, sAge);
-  } else if (ProtocolInfoTag == "1007") { // GET_MIN_PROTOCOLVERSION_FILETRANSFER
+  } else if (ProtocolInfoTag ==
+             "1007") { // GET_MIN_PROTOCOLVERSION_FILETRANSFER
     send(ANSWER_OF_GET_MIN_PROTOCOLVERSION_FILETRANSFER, ID,
          FileTransferProtocol::MINPROTOCOLVERSION);
   } else if (ProtocolInfoTag == "1008") { // GET_AVATARIMAGE
@@ -412,13 +412,15 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
               stream->getDestination()) == true) {
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       } else {
-        QString TEMPHTTPPAGE = loadfile(mCore.getConfigPath() + "/www/index.html");
+        QString TEMPHTTPPAGE =
+            loadfile(mCore.getConfigPath() + "/www/index.html");
         if (TEMPHTTPPAGE.isEmpty()) {
-		TEMPHTTPPAGE = HTTPPAGE;
-	}
-	TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
-	TEMPHTTPPAGE.replace("[AVATARIMAGE]", mCore.getUserInfos().AvatarImage.toBase64());
-	*(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
+          TEMPHTTPPAGE = HTTPPAGE;
+        }
+        TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
+        TEMPHTTPPAGE.replace("[AVATARIMAGE]",
+                             mCore.getUserInfos().AvatarImage.toBase64());
+        *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       }
     }

@@ -79,10 +79,10 @@ signals:
   void signDebugMessages(const QString Message);
   void signStreamControllerStatusOK(bool Status);
   void signStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                               const qint32 ID, const QString Message);
+                                const qint32 ID, const QString Message);
   void signNamingReplyReceived(const SAM_Message_Types::RESULT result,
-                              QString Name, QString Value = "",
-                              QString Message = "");
+                               QString Name, QString Value = "",
+                               QString Message = "");
   void signIncomingStream(CI2PStream *stream);
   void signNewSamPrivKeyGenerated(const QString SamPrivKey);
 

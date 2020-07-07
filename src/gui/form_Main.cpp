@@ -162,7 +162,8 @@ void form_MainWindow::initToolBars() {
       }
   */
 
-  toolBar->addAction(QIcon(ICON_MYDESTINATION), tr("Copy Destination to clipboard"), this,
+  toolBar->addAction(QIcon(ICON_MYDESTINATION),
+                     tr("Copy Destination to clipboard"), this,
                      SLOT(namingMe()));
   toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this,
                      SLOT(openConfigWindow()));
@@ -623,7 +624,7 @@ void form_MainWindow::OnlineStateChanged() {
       comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr("Want to chat")); // 1
       comboBox->addItem(QIcon(ICON_USER_AWAY), tr("Away"));               // 2
       comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB),
-                        tr("No disturbo"));                        // 3
+                        tr("No disturbo"));                           // 3
       comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr("Invisible")); // 4
       comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline"));     // 5
     }

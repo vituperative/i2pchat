@@ -81,7 +81,7 @@ private slots:
 signals:
   void signDebugMessages(const QString Message);
   void signStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                               const qint32 ID, const QString Message);
+                                const qint32 ID, const QString Message);
   void signDataReceived(const qint32 ID, const QByteArray Data);
   void signModeAcceptIncomingStream(
       qint32 ID); // emit if Destination received (SILENCE=false)

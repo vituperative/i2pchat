@@ -83,7 +83,9 @@ public:
   ONLINESTATE getOnlineState() const { return mCurrentOnlineState; }
   const QStringList &getAllChatMessages();
   const QStringList getNewMessages(bool haveFocus);
-  const CReceivedInfos getReceivedUserInfos() const { return mReceivedUserInfos; }
+  const CReceivedInfos getReceivedUserInfos() const {
+    return mReceivedUserInfos;
+  }
 
   const QString getHighestUsableProtocolVersionFiletransfer() const;
   double getHighestUsableProtocolVersionFiletransfer_D() const;

@@ -700,8 +700,7 @@ void form_settingsgui::showUserBlockList() {
   QMapIterator<QString, CUserBlockManager::CUserBlockEntity *> i(UserBlockMap);
 
   UserBlockTreeWidget->setColumnCount(2);
-  UserBlockTreeWidget->setHeaderLabels(QStringList()
-                                       << tr("User") << tr(""));
+  UserBlockTreeWidget->setHeaderLabels(QStringList() << tr("User") << tr(""));
 
   UserBlockTreeWidget->clear();
 

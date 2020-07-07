@@ -39,7 +39,7 @@ public:
 
   void addNewFileTransfer(QString FilePath, QString Destination);
   void addNewFileReceive(qint32 ID, QString FileName, QString FileSize,
-                        QString Destination, QString ProtocolVersion);
+                         QString Destination, QString ProtocolVersion);
 
   void removeFileTransfer(const qint32 ID) /*noexcept*/;
   void removeFileReceive(const qint32 ID);

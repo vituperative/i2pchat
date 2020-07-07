@@ -117,8 +117,8 @@ void CUser::setProtocolVersion(QString Version) {
 void CUser::slotIncomingNewChatMessage(QString newMessage) {
 
   newMessage = mChatMessageChanger.changeChatMessage(newMessage);
-  auto myMessage = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + mName + ":" +
-                   newMessage + "<br>";
+  auto myMessage = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + mName +
+                   ":" + newMessage + "<br>";
 
   // TODO fix this in OOP way
   this->mAllMessages.push_back(myMessage);
@@ -147,8 +147,8 @@ void CUser::slotSendChatMessage(QString Message) {
       Nickname = mCore.getUserInfos().Nickname;
     }
 
-    auto msg = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" +
-               Message + "<br>";
+    auto msg = QTime::currentTime().toString("hh:mm:ss") + " ‣ " + Nickname +
+               ":" + Message + "<br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);
@@ -228,10 +228,10 @@ void CUser::setTextFont(QFont textFont) { this->mTextFont = textFont; }
 
 void CUser::slotIncomingMessageFromSystem(QString newMessage,
                                           bool indicateWithSoundAndIcon) {
-  this->mAllMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
-  newMessage + "<br><br>");
-  this->mNewMessages.push_back(QTime::currentTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
-  newMessage + "<br><br>");
+  this->mAllMessages.push_back(QTime::currentTime().toString("hh:mm:ss") +
+                               tr(" ‣ [System] ") + newMessage + "<br><br>");
+  this->mNewMessages.push_back(QTime::currentTime().toString("hh:mm:ss") +
+                               tr(" ‣ [System] ") + newMessage + "<br><br>");
 
   mHaveNewUnreadMessages = true;
 
