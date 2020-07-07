@@ -49,6 +49,11 @@
       text-align: center;
     }
 
+    #box, #dest {
+      min-width: 400px;
+      max-width: 600px;
+    }
+
     #box {
       margin: 2% auto 5%;
       padding: 30px;
@@ -68,6 +73,32 @@
       background: #000;
     }
 
+    #dest {
+      margin: 0 0 -30px;
+      padding: 25px 30px 0;
+      font-size: 70%;
+      font-weight: 600;
+      color: #393;
+      border-top: 1px solid #333;
+      user-select: all;
+    }
+
+    #b64 {
+      margin: auto;
+      width: 90%;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid #393;
+      background: #000;
+    }
+
+    #b64::selection {
+      color: #fff;
+      background: #393;
+    }
+
     #moreinfo {
       margin: 50px -30px -30px;
       padding: 5px 0;
@@ -84,6 +115,7 @@
       <div id="box">
         <img id="avatar" src="data:image/svg+xml;base64,[AVATARIMAGE]">
         <h3>You have reached the I2PChat Destination for [USERNAME]</h3>
+        <div id="dest"><span id="b64">[MYDEST]</span></div>
         <div id="moreinfo">More information: <a
             href="https://vituperative.github.io/i2pchat/">https://vituperative.github.io/i2pchat/</a>
         </div>

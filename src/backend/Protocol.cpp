@@ -307,7 +307,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
                     << "QString:\t" << version << endl;
       }
 
-      // dont send the firstpacket if you have connected someone
+      // don't send the first packet if you have connected someone
       //(the firstpacket is sended from core::StreamStatusReceived)
       if (ID < 0) {
         newConnectionChat(ID); // someone connect you
@@ -318,7 +318,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
 
           if (versiond < 0.4) {
             send(CHATMESSAGE, ID,
-                 QString("You were blocked,all Packets will be ignored !"));
+                 QString("You have been blocked, all packets will be ignored!"));
             mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
             return;
           } else {
@@ -327,7 +327,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
             settings.beginGroup("Security");
             if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
               send(CHATMESSAGE, ID,
-                   QString("You were blocked ,all Packets will be ignored !"));
+                   QString("You have been blocked, all packets will be ignored!"));
               send(USER_BLOCK_NORMAL, ID, QString(""));
             } else {
               // Block-Style Invisible
@@ -420,6 +420,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
         TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
         TEMPHTTPPAGE.replace("[AVATARIMAGE]",
                              mCore.getUserInfos().AvatarImage.toBase64());
+        TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
         *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       }
@@ -483,7 +484,7 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
   }
   }
   Data.insert(0, ProtocolInfoTag);
-  Data.insert(0, "0004"); // No PaketData
+  Data.insert(0, "0004"); // No packet data
   *(stream) << Data;
 }
 
