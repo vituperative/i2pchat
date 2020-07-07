@@ -80,18 +80,30 @@
       font-weight: 600;
       color: #393;
       border-top: 1px solid #333;
+      opacity: .7;
       user-select: all;
+    }
+
+    #dest:hover {
+      opacity: 1;
     }
 
     #b64 {
       margin: auto;
+      padding: 3px 5px;
       width: 90%;
       display: inline-block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       border: 1px solid #393;
+      border-radius: 15px;
+      box-shadow: 0 0 2px 2px rgba(0,0,0,.6);
       background: #000;
+    }
+
+    #b64:hover {
+      text-overflow: clip;
     }
 
     #b64::selection {
@@ -115,7 +127,7 @@
       <div id="box">
         <img id="avatar" src="data:image/svg+xml;base64,[AVATARIMAGE]">
         <h3>You have reached the I2PChat Destination for [USERNAME]</h3>
-        <div id="dest"><span id="b64">[MYDEST]</span></div>
+        <div id="dest" title="Copy and add in I2PChat as new user destination to add this contact"><span id="b64">[MYDEST]</span></div>
         <div id="moreinfo">More information: <a
             href="https://vituperative.github.io/i2pchat/">https://vituperative.github.io/i2pchat/</a>
         </div>
