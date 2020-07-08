@@ -6,7 +6,7 @@
 
 ## Downloads (pre-built binaries)
 
-* <a href="https://ci.appveyor.com/api/buildjobs/9k0rap1q13bu9qm1/artifacts/release.zip">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a> (Win32/64)
+* Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
 
 ## Features
 
@@ -14,7 +14,7 @@
 
 ## How to run it
 
-You need to enable SAM in your router on <a href="http://127.0.0.1:7657/configclients">java i2p configclients page</a> or i2pd's i2pd.conf [sam] section to make I2P Chat work over your I2P router.
+You need to enable the SAM application bridge in your router on <a href="http://127.0.0.1:7657/configclients">Java I2P configclients page</a> or i2pd's i2pd.conf [SAM] section to make I2P Chat work over your I2P router.
 
 ## Project status, news and history
 
@@ -44,7 +44,7 @@ Original developer of this messenger went away.
 
 ## License
 
-The license of this software is GPLv2.
+Licensed under GPLv2.
 
 ### Build instructions
 
@@ -71,4 +71,8 @@ make
 
 ## Running
 
-On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`. When ran, switch yourself to online. It will generate your Destination address (a key) on first connect to SAM.
+On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
+
+* Before going online, check the network settings, and for best results, set the Signature Type to ECDSA_SHA512_P521
+* Select 'Online' from the drodown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
+* Your settings and contacts will be stored in ~/.i2pchat/ on Linux-based systems, or %APPDATA%\Roaming\I2P-Messenger\ on Windows
