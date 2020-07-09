@@ -65,7 +65,7 @@ void form_fileReceive::init() {
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileReceive.getFileSize());
   progressBar->setValue(FileReceive.getAllreadyReceivedSize());
-//  label_10->setText(FileReceive.getUsingProtocolVersion());
+  //  label_10->setText(FileReceive.getUsingProtocolVersion());
   label_11->setText("waiting...");
   label_12->setText("");
 }
@@ -100,11 +100,10 @@ void form_fileReceive::askTheUser() {
 
   QMessageBox *msgBox = new QMessageBox(NULL);
   msgBox->setText(tr("Incoming File Transfer: %1 [%2%3]    ")
-                       .arg(FileName)
-                       .arg(SSize)
-                       .arg(SizeName));
-  msgBox->setInformativeText(
-      tr("Do you wish to download this file?"));
+                      .arg(FileName)
+                      .arg(SSize)
+                      .arg(SizeName));
+  msgBox->setInformativeText(tr("Do you wish to download this file?"));
   msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox->setDefaultButton(QMessageBox::Yes);
   msgBox->setWindowModality(Qt::WindowModal);

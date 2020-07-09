@@ -23,6 +23,7 @@
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
+#include "LoadHTML.cpp"
 #include "Protocol.h"
 #include "User.h"
 #include "UserManager.h"
@@ -100,7 +101,8 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
 
   } else if (ProtocolInfoTag == "1004") { // GET_PROTOCOLVERSION,
     send(ANSWER_OF_GET_PROTOCOLVERSION, ID, mCore.getProtocolVersion());
-  } else if (ProtocolInfoTag == "1005") { // GET_MAX_PROTOCOLVERSION_FILETRANSFER
+  } else if (ProtocolInfoTag ==
+             "1005") { // GET_MAX_PROTOCOLVERSION_FILETRANSFER
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
 
     if (thisUser != NULL) {
@@ -123,7 +125,8 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
 
     sAge.setNum(Infos.Age, 10);
     send(USER_INFO_AGE, ID, sAge);
-  } else if (ProtocolInfoTag == "1007") { // GET_MIN_PROTOCOLVERSION_FILETRANSFER
+  } else if (ProtocolInfoTag ==
+             "1007") { // GET_MIN_PROTOCOLVERSION_FILETRANSFER
     send(ANSWER_OF_GET_MIN_PROTOCOLVERSION_FILETRANSFER, ID,
          FileTransferProtocol::MINPROTOCOLVERSION);
   } else if (ProtocolInfoTag == "1008") { // GET_AVATARIMAGE
@@ -304,7 +307,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
                     << "QString:\t" << version << endl;
       }
 
-      // dont send the firstpacket if you have connected someone
+      // don't send the first packet if you have connected someone
       //(the firstpacket is sended from core::StreamStatusReceived)
       if (ID < 0) {
         newConnectionChat(ID); // someone connect you
@@ -315,7 +318,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
 
           if (versiond < 0.4) {
             send(CHATMESSAGE, ID,
-                 QString("You were blocked,all Packets will be ignored !"));
+                 QString("You have been blocked, all packets will be ignored!"));
             mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
             return;
           } else {
@@ -324,7 +327,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
             settings.beginGroup("Security");
             if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
               send(CHATMESSAGE, ID,
-                   QString("You were blocked ,all Packets will be ignored !"));
+                   QString("You have been blocked, all packets will be ignored!"));
               send(USER_BLOCK_NORMAL, ID, QString(""));
             } else {
               // Block-Style Invisible
@@ -409,9 +412,16 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
               stream->getDestination()) == true) {
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       } else {
-        QString TEMPHTTPPAGE = HTTPPAGE;
+        QString TEMPHTTPPAGE =
+            loadfile(mCore.getConfigPath() + "/www/index.html");
+        if (TEMPHTTPPAGE.isEmpty()) {
+          TEMPHTTPPAGE = HTTPPAGE;
+        }
         TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
-        *(stream) << (QString)TEMPHTTPPAGE;
+        TEMPHTTPPAGE.replace("[AVATARIMAGE]",
+                             mCore.getUserInfos().AvatarImage.toBase64());
+        TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
+        *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
         mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       }
     }
@@ -474,7 +484,7 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
   }
   }
   Data.insert(0, ProtocolInfoTag);
-  Data.insert(0, "0004"); // No PaketData
+  Data.insert(0, "0004"); // No packet data
   *(stream) << Data;
 }
 

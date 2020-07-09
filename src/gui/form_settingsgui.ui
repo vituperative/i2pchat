@@ -2102,6 +2102,91 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="groupBox_11">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>248</y>
+        <width>380</width>
+        <height>147</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Destination Web Page</string>
+      </property>
+      <widget class="QCheckBox" name="blockallcheckBox_2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>31</y>
+         <width>405</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Enable profile web page</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPlainTextEdit" name="b32address">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>88</y>
+         <width>356</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="inputMethodHints">
+        <set>Qt::ImhNone</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="plainText">
+        <string>http://b32.i2p</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="blockallcheckBox_3">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>56</y>
+         <width>405</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Hide page when status is invisible for any contact</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="sound_Page">
      <widget class="QWidget" name="layoutWidget_2">

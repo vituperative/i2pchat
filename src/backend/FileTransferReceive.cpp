@@ -23,10 +23,11 @@
 #include "UserManager.h"
 
 CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
-                                         qint32 StreamID, QString FileName,
-                                         quint64 FileSize, QString Destination,
-                                         QString Protocolversion,
-                                         double ProtocolversionD)
+                                           qint32 StreamID, QString FileName,
+                                           quint64 FileSize,
+                                           QString Destination,
+                                           QString Protocolversion,
+                                           double ProtocolversionD)
 
     : mCore(Core), mStream(Stream), mStreamID(StreamID), mFileSize(FileSize),
       mDestination(Destination), mUsingProtocolVersion(Protocolversion),
@@ -44,10 +45,10 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
 
   connect(&Stream,
           SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                         const qint32, const QString)),
+                                          const qint32, const QString)),
           this,
           SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                       const qint32, const QString)));
+                                        const qint32, const QString)));
 
   connect(&Stream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
           this, SLOT(slotDataReceived(const qint32, QByteArray)));
@@ -374,9 +375,9 @@ void CFileTransferReceive::slotCalcAverageTransferSpeed() {
 }
 
 void CFileTransferReceive::doConvertNumberToTransferSize(quint64 inNumber,
-                                                        QString &outNumber,
-                                                        QString &outType,
-                                                        bool addStoOutType) {
+                                                         QString &outNumber,
+                                                         QString &outType,
+                                                         bool addStoOutType) {
   return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType,
                                              addStoOutType);
 }

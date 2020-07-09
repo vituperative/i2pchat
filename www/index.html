@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>[USERNAME] | I2PChat Destination</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style type="text/css">
+    body,
+    html {
+      margin: 0;
+      background: #000;
+    }
+
+    body {
+      text-align: center;
+      font-family: Open Sans, Segoe UI, sans-serif;
+      font-size: 13pt;
+      color: #ddd;
+    }
+
+    hr {
+      margin: 0 auto;
+      height: 1px;
+      color: none;
+      border: none;
+      background: linear-gradient(to right, rgba(0,0,0,0) 10%, #333, rgba(0,0,0,0) 90%);
+    }
+
+    a,
+    a:visited {
+      color: #900;
+      text-decoration: none;
+      outline: none;
+    }
+
+    a:hover {
+      color: #b00;
+    }
+
+    #container {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      display: table;
+    }
+
+    #box,
+    #moreinfo {
+      box-shadow: inset 0 0 0 1px #300;
+    }
+
+    #main {
+      display: table-cell;
+      position: relative;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    #box, #dest {
+      min-width: 400px;
+      max-width: 600px;
+    }
+
+    #box {
+      margin: 2% auto 5%;
+      padding: 30px;
+      width: 50%;
+      min-width: 400px;
+      max-width: 600px;
+      border: 1px solid #333;
+      background: #111;
+    }
+
+    #avatar {
+      padding: 3px;
+      width: 96px;
+      height: 96px;
+      border: 2px solid #322;
+      border-radius: 50%;
+      background: #000;
+    }
+
+    #dest {
+      margin: 0 0 -30px;
+      padding: 25px 30px 0;
+      font-size: 70%;
+      font-weight: 600;
+      color: #393;
+      opacity: .7;
+      user-select: all;
+    }
+
+    #dest:hover {
+      opacity: 1;
+    }
+
+    #b64 {
+      margin: auto;
+      padding: 3px 5px;
+      width: 90%;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid #393;
+      border-radius: 15px;
+      box-shadow: 0 0 2px 2px rgba(0,0,0,.6);
+      background: #000;
+    }
+
+    #b64:hover {
+      text-overflow: clip;
+    }
+
+    #b64::selection {
+      color: #fff;
+      background: #393;
+    }
+
+    #moreinfo {
+      margin: 50px -30px -30px;
+      padding: 5px 0;
+      font-size: 75%;
+      font-weight: 600;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="main">
+      <div id="box">
+        <img id="avatar" src="data:image/png;base64,[AVATARIMAGE]">
+        <h3>You have reached the I2PChat Destination for [USERNAME]</h3>
+        <hr>
+        <div id="dest" title="Copy and add to I2PChat as new user destination to add [USERNAME] to your contacts"><span id="b64">[MYDEST]</span></div>
+        <div id="moreinfo">More information: <a
+            href="https://vituperative.github.io/i2pchat/">https://vituperative.github.io/i2pchat/</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

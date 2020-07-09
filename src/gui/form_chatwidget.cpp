@@ -211,7 +211,7 @@ void form_ChatWidget::addAllMessages() {
 void form_ChatWidget::addMessage(QString text) {
   QTextBrowser *chat = this->chat;
   //	QString& newMessage=text; // UDP(By Voron): DONT NEED, will be
-  //deleted!!!
+  // deleted!!!
 
   /* UPD: (by Voron)  temporarly disabled by me, because there is infinite
   cycle!! is willbe fixed.
