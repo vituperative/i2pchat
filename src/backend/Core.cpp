@@ -445,13 +445,14 @@ QString CCore::getConnectionDump() const {
       }
 
       // Print ConnectionType
-      if (Stream->getConnectionType() == UNKNOWN) {
-        Message += "\tTrust:\t\tUNKNOWN\n";
-      } else if (Stream->getConnectionType() == KNOWN) {
-        Message += "\tTrust:\t\tKNOWN\n";
-      } else {
-        Message += "\tTrust:\t\t???\n";
-      }
+
+//      if (Stream->getConnectionType() == UNKNOWN) {
+//        Message += "\tTrust:\t\tUNKNOWN\n";
+//      } else if (Stream->getConnectionType() == KNOWN) {
+//        Message += "\tTrust:\t\tKNOWN\n";
+//      } else {
+//        Message += "\tTrust:\t\t???\n";
+//      }
       //      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
     }
 
