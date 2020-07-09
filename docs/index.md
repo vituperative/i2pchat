@@ -1,3 +1,5 @@
+# I2PChat - Instant Messenger
+
 ### Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
