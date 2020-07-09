@@ -37,9 +37,11 @@ You will need to enable the SAM application bridge in your router: for Java I2P 
 ### Build instructions
 
  * Install prerequisites:
+
 ```
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
+
 
  * To prepare for compilation, run qmake:
    - Release: `qmake I2P-Messenger.pro "CONFIG += release"`
