@@ -12,10 +12,6 @@
  * File transfer between contacts
  * Control online visibility on a per-contact basis
 
-### How to run it
-
-You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
-
 ### Current news
 
 * June, 2020:
@@ -40,7 +36,6 @@ You will need to enable the SAM application bridge in your router: for Java I2P 
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
 
-
  * To prepare for compilation, run qmake:
    - Release: `qmake I2P-Messenger.pro "CONFIG += release"`
    - Debug: `qmake I2P-Messenger.pro "CONFIG += debug"`
@@ -53,6 +48,7 @@ sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtm
 
 On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
 
+* You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
 * Before going online, check the network settings, and for best results, set the Signature Type to `ECDSA_SHA512_P521`
 * Select 'Online' from the drodown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
 * Your settings and contacts will be stored in `~/.i2pchat/` on Linux-based systems, or `%APPDATA%\Roaming\I2P-Messenger\` on Windows
