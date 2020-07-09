@@ -268,7 +268,7 @@ header ul a strong {
 
 section {
   padding: 15px 20px;
-  font-size: 15px;
+  font-size: 12pt;
   border-top: 1px solid #fff;
   background: linear_gradient(#fafafa, #DEDEDE 700px);
   border-radius: 0 0 8px 8px;
@@ -374,7 +374,8 @@ footer {
   margin: 0 auto;
   padding: 20px 0 0;
   color: #ccc;
-  overflow: hidden
+  overflow: hidden;
+  display: none;
 }
 
 footer a {
