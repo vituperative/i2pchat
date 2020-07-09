@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=OpenSans:300italic,700italic,300,700");
+@import url("https://fonts.googleapis.com/css?family=Open Sans:300italic,700italic,300,700");
 .highlight table td {
   padding: 5px
 }
@@ -114,7 +114,7 @@ html {
 body {
   padding: 50px 0;
   margin: 0;
-  font: 14px/1.5 OpenSans, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 14px/1.5 Open Sans, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #555;
   font-weight: 300;
   background: url("../images/checker.png") fixed;
@@ -380,11 +380,8 @@ footer a {
 }
 
 footer p {
-  float: left
-}
-
-footer p+p {
-  float: right
+  width: 100%;
+  text-align: center;
 }
 
 @media print, screen and (max-width: 740px) {
@@ -395,18 +392,6 @@ footer p+p {
     border-radius: 0;
     box-shadow: none;
     width: 100%
-  }
-  footer {
-    border-radius: 0;
-    padding: 20px;
-    width: auto
-  }
-  footer p {
-    float: none;
-    margin: 0
-  }
-  footer p+p {
-    float: none
   }
 }
 
