@@ -899,7 +899,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <item>
            <property name="text">
-            <string extracomment="Default">DSA_SHA1</string>
+            <string>DSA_SHA1</string>
            </property>
           </item>
           <item>
@@ -915,6 +915,16 @@ p, li { white-space: pre-wrap; }
           <item>
            <property name="text">
             <string>ECDSA_SHA512_P521</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Default">ED25519_SHA_512</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>RED25519_SHA_512</string>
            </property>
           </item>
          </widget>
