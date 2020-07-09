@@ -1,26 +1,22 @@
 # I2P Chat AKA I2P Qt Messenger
 
-## Screenshots
+### Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
-## Downloads (pre-built binaries)
+### Downloads (pre-built binaries)
 
 * Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
 
-## Features
+### Features
 
- * The communication goes «directly over i2p» from client to client, no server is required.[1] Note: The connections to the so-called «seedless» servers were removed from this project ; see : https://github.com/hypnosis-i2p/i2pchat/issues/40 . —hypn.
+ * Direct peer-to-peer communications without server requirements
+ * File transfer between contacts
+ * Control online visibility on a per-contact basis
 
-## How to run it
+### How to run it
 
-You need to enable the SAM application bridge in your router on <a href="http://127.0.0.1:7657/configclients">Java I2P configclients page</a> or i2pd's i2pd.conf [SAM] section to make I2P Chat work over your I2P router.
-
-## Project status, news and history
-
-### Project status
-
-Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks as testers &amp; bugs+issues reporters.
+You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
 
 ### Current news
 
@@ -37,14 +33,6 @@ Now the development was resumed by Hypnosis-i2p and R4SAS, with a lot more folks
    * Fix offline message crash
 * June, 2020: dr\|z3d starts work on renovating the user interface.
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here.
-
-### History
-
-Original developer of this messenger went away.
-
-## License
-
-Licensed under GPLv2.
 
 ### Build instructions
 
@@ -69,10 +57,14 @@ or simply
 make
 ```
 
-## Running
+### Running
 
 On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
 
 * Before going online, check the network settings, and for best results, set the Signature Type to ECDSA_SHA512_P521
 * Select 'Online' from the drodown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
 * Your settings and contacts will be stored in ~/.i2pchat/ on Linux-based systems, or %APPDATA%\Roaming\I2P-Messenger\ on Windows
+
+### License
+
+Licensed under GPLv2.
