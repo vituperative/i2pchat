@@ -323,6 +323,12 @@
     <string>*SMOKING*</string>
   </emoticon>
 
+  <emoticon file="weed">
+    <string>*WEED*</string>
+    <string>*MJ*</string>
+    <string>*CANNABIS*</string>
+  </emoticon>
+
   <emoticon file="beer">
     <string>*BEER*</string>
   </emoticon>
