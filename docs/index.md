@@ -37,7 +37,9 @@ You will need to enable the SAM application bridge in your router: for Java I2P 
 ### Build instructions
 
  * Install prerequisites:
-   - `sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev`
+```
+sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+```
 
  * To prepare for compilation, run qmake:
    - Release: `qmake I2P-Messenger.pro "CONFIG += release"`
@@ -45,15 +47,15 @@ You will need to enable the SAM application bridge in your router: for Java I2P 
 
  * To complile:
    - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
-   - or `make' to compile single-threaded
+   - or `make` to compile single-threaded
 
 ### Running
 
 On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
 
-* Before going online, check the network settings, and for best results, set the Signature Type to ECDSA_SHA512_P521
+* Before going online, check the network settings, and for best results, set the Signature Type to `ECDSA_SHA512_P521`
 * Select 'Online' from the drodown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
-* Your settings and contacts will be stored in ~/.i2pchat/ on Linux-based systems, or %APPDATA%\Roaming\I2P-Messenger\ on Windows
+* Your settings and contacts will be stored in `~/.i2pchat/` on Linux-based systems, or `%APPDATA%\Roaming\I2P-Messenger\` on Windows
 
 ### License
 
