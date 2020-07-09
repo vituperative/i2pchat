@@ -1,5 +1,3 @@
-# I2P Chat AKA I2P Qt Messenger
-
 ### Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
