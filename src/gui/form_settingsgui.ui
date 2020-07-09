@@ -899,11 +899,6 @@ p, li { white-space: pre-wrap; }
           </property>
           <item>
            <property name="text">
-            <string>DSA_SHA1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>ECDSA_SHA256_P256</string>
            </property>
           </item>
