@@ -190,7 +190,7 @@ QString CCore::calcSessionOptionString() const {
 
   {
     // TODO: get from ui_form_settingsgui.h
-    QStringList AllowSignTypes = {"DSA_SHA1", "ECDSA_SHA256_P256",
+    QStringList AllowSignTypes = {"ECDSA_SHA256_P256",
                                   "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "ED25519_SHA_512", "RED25519_SHA_512"};
     auto sign_type = settings.value("Signature_Type", "ED25519_SHA_512").toString();
     auto notfound = true;
