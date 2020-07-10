@@ -42,12 +42,11 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
                       const QString &msg);
 
 void help(void) {
-
-  printf("%s \r\n"
-         "COMPILED:" __DATE__ "-" __TIME__ "\r\n"
+  printf("%s "
+         "(Compiled: " __DATE__ "-" __TIME__ ")\r\n"
          "-h help\r\n"
-         "-w --workdir=<own path to work dir>\r\n"
-         "-s --stylesheet=<path to qss file> optional stylesheet\r\n"
+         "-w --workdir=<path to profile dir>\r\n"
+         "-s --stylesheet=<path to qss file>\r\n"
          "\r\n",
          "I2PChat");
   exit(0);
