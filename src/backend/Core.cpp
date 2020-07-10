@@ -186,6 +186,12 @@ QString CCore::calcSessionOptionString() const {
       "outbound.length=" + settings.value("outbound.length", "3").toString() +
       " ");
 
+  // throttle per client dest to max 60 connections/min to mitigate denial of service
+  SessionOptionString.append(
+      "i2p.streaming.maxConnsPerMinute=" +
+      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() +
+      " ");
+
   // SIGNATURE_TYPE
 
   {

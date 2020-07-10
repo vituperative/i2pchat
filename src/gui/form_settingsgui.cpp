@@ -18,10 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "form_settingsgui.h"
+#include "Base.cpp"
 #include "Core.h"
 #include "UserBlockManager.h"
 #include <QFileDialog>
-#include "Base.cpp"
 
 form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
                                    Qt::WindowFlags flags)
@@ -352,25 +352,31 @@ void form_settingsgui::loadSettings() {
   }
 
   if (!mCore.getMyDestination().isEmpty()) {
-	  size_t buffersize = 2048;
-	  uint8_t *outputbuffer = (uint8_t*)malloc(buffersize);
-	  char* b32buffer = (char*)malloc(buffersize);
-	  QByteArray sha256hash;
-	  int outputcount = i2p::data::Base64ToByteStream(mCore.getMyDestination().toUtf8().constData(), mCore.getMyDestination().size(), outputbuffer, buffersize);
-	  QByteArray qarraysha256hash = QByteArray((char*)outputbuffer, outputcount);
-	  while (outputcount > qarraysha256hash.size()) {
-	  	qarraysha256hash.append((char)0);
-	  }
-	  sha256hash = QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256); 
-	  outputcount = i2p::data::ByteStreamToBase32((uint8_t*)sha256hash.data(), sha256hash.size(), b32buffer, 52);
-	  b32buffer[52]= '\0';
-	  QString strb32address = QString(b32buffer) + ".b32.i2p";
-	  b32address->setPlainText(QApplication::translate("form_settingsgui", strb32address.toUtf8().constData(), Q_NULLPTR));
-	  free(outputbuffer);
-	  free(b32buffer);
-  }
-  else {
-  	b32address->setPlainText(QApplication::translate("form_settingsgui", "b32 address not available. Your Client Must be Online to get the B32 address", Q_NULLPTR));
+    size_t buffersize = 2048;
+    uint8_t *outputbuffer = (uint8_t *)malloc(buffersize);
+    char *b32buffer = (char *)malloc(buffersize);
+    QByteArray sha256hash;
+    int outputcount = i2p::data::Base64ToByteStream(
+        mCore.getMyDestination().toUtf8().constData(),
+        mCore.getMyDestination().size(), outputbuffer, buffersize);
+    QByteArray qarraysha256hash = QByteArray((char *)outputbuffer, outputcount);
+    while (outputcount > qarraysha256hash.size()) {
+      qarraysha256hash.append((char)0);
+    }
+    sha256hash =
+        QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256);
+    outputcount = i2p::data::ByteStreamToBase32(
+        (uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
+    b32buffer[52] = '\0';
+    QString strb32address = "http://" + QString(b32buffer) + ".b32.i2p";
+    b32address->setPlainText(QApplication::translate(
+        "form_settingsgui", strb32address.toUtf8().constData(), Q_NULLPTR));
+    free(outputbuffer);
+    free(b32buffer);
+  } else {
+    b32address->setPlainText(QApplication::translate(
+        "form_settingsgui", "b32 address will be displayed when online",
+        Q_NULLPTR));
   }
   spinBox_MaxLogMessagesUserSearch->setMinimum(0);
   spinBox_MaxLogMessagesUserSearch->setMaximum(200);
