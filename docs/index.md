@@ -51,7 +51,7 @@ sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtm
 On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`.
 
 * You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
-* Before going online, check the network settings, and for best results, set the Signature Type to `ECDSA_SHA512_P521`
+* As of version 0.2.31, the DSA_SHA1 Signature type is no longer available. The recommended (and default) Signature Type is now: ED25519_SHA512
 * Select 'Online' from the drodown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
 * Your settings and contacts will be stored in `~/.i2pchat/` on Linux-based systems, or `%APPDATA%\Roaming\I2P-Messenger\` on Windows
 
