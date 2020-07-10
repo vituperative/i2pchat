@@ -2138,7 +2138,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <widget class="QCheckBox" name="blockallcheckBox_2">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -2190,7 +2190,7 @@ p, li { white-space: pre-wrap; }
       </widget>
       <widget class="QCheckBox" name="blockallcheckBox_3">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
