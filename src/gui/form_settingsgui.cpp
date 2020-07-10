@@ -18,10 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "form_settingsgui.h"
-#include "Base.cpp"
 #include "Core.h"
 #include "UserBlockManager.h"
 #include <QFileDialog>
+#include "Base.cpp"
 
 form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
                                    Qt::WindowFlags flags)
@@ -341,15 +341,18 @@ void form_settingsgui::loadSettings() {
 
     check_BlockInvisible->setChecked(true);
   }
-  settings->endGroup();
 
-  settings->beginGroup("Usersearch");
-  if (txt_Nickname->text().isEmpty() == false &&
-      (settings->value("Enabled", true).toBool()) == true) {
-    check_UserSearchEnable->setChecked(true);
+  if (settings->value("WebProfile", "Enabled").toString() == "Enabled") {
+  	blockallcheckBox_2->setChecked(true);
   } else {
-    check_UserSearchEnable->setChecked(false);
+  	blockallcheckBox_2->setChecked(false);
   }
+  if (settings->value("HideWebProfileWhenInvisible", "True").toString() == "True") {
+        blockallcheckBox_3->setChecked(true);
+  } else {
+        blockallcheckBox_3->setChecked(false);
+  }
+
 
   if (!mCore.getMyDestination().isEmpty()) {
     size_t buffersize = 2048;
@@ -374,10 +377,20 @@ void form_settingsgui::loadSettings() {
     free(outputbuffer);
     free(b32buffer);
   } else {
-    b32address->setPlainText(QApplication::translate(
-        "form_settingsgui", "b32 address will be displayed when online",
-        Q_NULLPTR));
+  b32address->setPlainText(QApplication::translate(
+      "form_settingsgui", "b32 address will be displayed when online",
+      Q_NULLPTR));
   }
+  settings->endGroup();
+
+  settings->beginGroup("Usersearch");
+  if (txt_Nickname->text().isEmpty() == false &&
+      (settings->value("Enabled", true).toBool()) == true) {
+    check_UserSearchEnable->setChecked(true);
+  } else {
+    check_UserSearchEnable->setChecked(false);
+  }
+
   spinBox_MaxLogMessagesUserSearch->setMinimum(0);
   spinBox_MaxLogMessagesUserSearch->setMaximum(200);
   spinBox_MaxLogMessagesUserSearch->setValue(
@@ -482,6 +495,17 @@ void form_settingsgui::saveSettings() {
   } else {
     settings->setValue("BlockStyle", "Normal");
   }
+  if (blockallcheckBox_2->isChecked() == true) {
+  	settings->setValue("WebProfile", "Enabled");
+  } else {
+  	settings->setValue("WebProfile", "Disabled");
+  }
+  if (blockallcheckBox_3->isChecked() == true) {
+        settings->setValue("HideWebProfileWhenInvisible", "True");
+  } else {
+        settings->setValue("HideWebProfileWhenInvisible", "False");
+  }
+
   settings->endGroup();
 
   settings->beginGroup("Usersearch");
