@@ -186,6 +186,12 @@ QString CCore::calcSessionOptionString() const {
       "outbound.length=" + settings.value("outbound.length", "3").toString() +
       " ");
 
+  // throttle per client dest to max 60 connections/min to mitigate denial of service
+  SessionOptionString.append(
+      "i2p.streaming.maxConnsPerMinute=" +
+      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() +
+      " ");
+
   // SIGNATURE_TYPE
 
   {
@@ -770,6 +776,8 @@ void CCore::loadUserInfos() {
 
   if (mUserInfos.Nickname.isEmpty() == true) {
     // generate random Nickname (8 Chars)
+
+/*
     const QString possibleCharacters(
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     const int randomStringLength = 8;
@@ -780,7 +788,8 @@ void CCore::loadUserInfos() {
       QChar nextChar = possibleCharacters.at(index);
       randomString.append(nextChar);
     }
-    mUserInfos.Nickname = randomString;
+*/
+    mUserInfos.Nickname = "Undefined";
 
     settings.setValue("Nickname", mUserInfos.Nickname);
     emit signNicknameChanged();
@@ -788,9 +797,11 @@ void CCore::loadUserInfos() {
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Information);
     msgBox->setInformativeText(
-        tr("No username...\ngenerating one: %1\n\nplease change your "
-           "userprofile in the settings")
-            .arg(randomString));
+        tr("No username configured\nUsing \'%1\'  \n\nChange in "
+           "Settings -> User Details")
+//            .arg(randomString));
+            .arg(mUserInfos.Nickname));
+
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
