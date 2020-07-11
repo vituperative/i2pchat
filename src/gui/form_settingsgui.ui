@@ -2068,14 +2068,14 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>User Blocking</string>
       </property>
-      <widget class="QCheckBox" name="check_BlockNormal">
+      <widget class="QRadioButton" name="check_BlockNormal">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
          <x>14</x>
-         <y>56</y>
+         <y>32</y>
          <width>405</width>
          <height>21</height>
         </rect>
@@ -2087,14 +2087,14 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QCheckBox" name="check_BlockInvisible">
+      <widget class="QRadioButton" name="check_BlockInvisible">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
          <x>14</x>
-         <y>31</y>
+         <y>56</y>
          <width>405</width>
          <height>21</height>
         </rect>
