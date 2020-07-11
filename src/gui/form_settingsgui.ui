@@ -549,6 +549,9 @@ p, li { white-space: pre-wrap; }
           <property name="enabled">
            <bool>true</bool>
           </property>
+          <property name="toolTip">
+           <string>File will be written to your profile folder</string>
+          </property>
           <property name="text">
            <string>Save debug info to DebugLog.txt </string>
           </property>
@@ -1081,6 +1084,9 @@ p, li { white-space: pre-wrap; }
         <width>380</width>
         <height>68</height>
        </size>
+      </property>
+      <property name="toolTip">
+       <string>Your existing destination will be deleted</string>
       </property>
       <property name="title">
        <string/>
@@ -2080,6 +2086,12 @@ p, li { white-space: pre-wrap; }
          <height>21</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Contact will be informed that they have been blocked</string>
+       </property>
+       <property name="statusTip">
+        <string/>
+       </property>
        <property name="text">
         <string>Normal</string>
        </property>
@@ -2098,6 +2110,12 @@ p, li { white-space: pre-wrap; }
          <width>405</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Contact will view your status as Offline</string>
+       </property>
+       <property name="statusTip">
+        <string/>
        </property>
        <property name="text">
         <string>Invisible</string>
@@ -2166,6 +2184,9 @@ p, li { white-space: pre-wrap; }
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Share this address with new contacts to facilitate adding you to their contact list</string>
        </property>
        <property name="inputMethodHints">
         <set>Qt::ImhNone</set>
