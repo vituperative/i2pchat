@@ -284,8 +284,8 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
   if (stream == 0) {
     auto msg = "Protocol.cpp : stream object is null, ignoring incoming data\n";
     qDebug() << msg;
-    QErrorMessage *box = new QErrorMessage();
-    box->showMessage(msg);
+//    QErrorMessage *box = new QErrorMessage();
+//    box->showMessage(msg);
     return;
   }
 
@@ -422,7 +422,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
 	    webprofileenabled = false;
         }
 	if (settings.value("HideWebProfileWhenInvisible", "True").toString() == "True") {
-	    QList<CUser *> users = mCore.getUserManager()->getUserList(); 
+	    QList<CUser *> users = mCore.getUserManager()->getUserList();
 	    for (int i = 0;i < users.size();i++) {
 	         if(users.at(i)->getIsInvisible() == true) {
 		     webprofileenabled = false;
