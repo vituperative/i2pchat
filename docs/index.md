@@ -13,8 +13,13 @@
  * Direct peer-to-peer communications without server requirements
  * File transfer between contacts
  * Control online visibility on a per-contact basis
+ * Optional, customizable b32.i2p web page to display profile
+ * Emoticon support
 
 ### Current news
+
+* July, 2020
+  * Add support for optional web page to display user profile at .b32 address
 
 * June, 2020:
    * Fixed crash of close chat window
