@@ -186,18 +186,21 @@ QString CCore::calcSessionOptionString() const {
       "outbound.length=" + settings.value("outbound.length", "3").toString() +
       " ");
 
-  // throttle per client dest to max 60 connections/min to mitigate denial of service
+  // throttle per client dest to max 60 connections/min to mitigate denial of
+  // service
   SessionOptionString.append(
       "i2p.streaming.maxConnsPerMinute=" +
-      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() +
-      " ");
+      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + " ");
 
   // SIGNATURE_TYPE
 
   {
     // TODO: get from ui_form_settingsgui.h
-    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "ED25519_SHA512", "RED25519_SHA512"};
-    auto sign_type = settings.value("Signature_Type", "ED25519_SHA512").toString();
+    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
+                                  "ECDSA_SHA512_P521", "ED25519_SHA512",
+                                  "RED25519_SHA512"};
+    auto sign_type =
+        settings.value("Signature_Type", "ED25519_SHA512").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -207,7 +210,8 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      SessionOptionString.append("SIGNATURE_TYPE=" + QString("ED25519_SHA512") + " ");
+      SessionOptionString.append("SIGNATURE_TYPE=" + QString("ED25519_SHA512") +
+                                 " ");
   }
 
   /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
@@ -451,13 +455,13 @@ QString CCore::getConnectionDump() const {
 
       // Print ConnectionType
 
-//      if (Stream->getConnectionType() == UNKNOWN) {
-//        Message += "\tTrust:\t\tUNKNOWN\n";
-//      } else if (Stream->getConnectionType() == KNOWN) {
-//        Message += "\tTrust:\t\tKNOWN\n";
-//      } else {
-//        Message += "\tTrust:\t\t???\n";
-//      }
+      //      if (Stream->getConnectionType() == UNKNOWN) {
+      //        Message += "\tTrust:\t\tUNKNOWN\n";
+      //      } else if (Stream->getConnectionType() == KNOWN) {
+      //        Message += "\tTrust:\t\tKNOWN\n";
+      //      } else {
+      //        Message += "\tTrust:\t\t???\n";
+      //      }
       //      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
     }
 
@@ -777,18 +781,18 @@ void CCore::loadUserInfos() {
   if (mUserInfos.Nickname.isEmpty() == true) {
     // generate random Nickname (8 Chars)
 
-/*
-    const QString possibleCharacters(
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-    const int randomStringLength = 8;
+    /*
+        const QString possibleCharacters(
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        const int randomStringLength = 8;
 
-    QString randomString;
-    for (int i = 0; i < randomStringLength; ++i) {
-      int index = qrand() % possibleCharacters.length();
-      QChar nextChar = possibleCharacters.at(index);
-      randomString.append(nextChar);
-    }
-*/
+        QString randomString;
+        for (int i = 0; i < randomStringLength; ++i) {
+          int index = qrand() % possibleCharacters.length();
+          QChar nextChar = possibleCharacters.at(index);
+          randomString.append(nextChar);
+        }
+    */
     mUserInfos.Nickname = "Undefined";
 
     settings.setValue("Nickname", mUserInfos.Nickname);
@@ -799,7 +803,7 @@ void CCore::loadUserInfos() {
     msgBox->setInformativeText(
         tr("No username configured\nUsing \'%1\'  \n\nChange in "
            "Settings -> User Details")
-//            .arg(randomString));
+            //            .arg(randomString));
             .arg(mUserInfos.Nickname));
 
     msgBox->setStandardButtons(QMessageBox::Ok);

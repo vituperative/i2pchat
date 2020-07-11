@@ -284,8 +284,8 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
   if (stream == 0) {
     auto msg = "Protocol.cpp : stream object is null, ignoring incoming data\n";
     qDebug() << msg;
-//    QErrorMessage *box = new QErrorMessage();
-//    box->showMessage(msg);
+    //    QErrorMessage *box = new QErrorMessage();
+    //    box->showMessage(msg);
     return;
   }
 
@@ -317,8 +317,9 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
           // is blocked
 
           if (versiond < 0.4) {
-            send(CHATMESSAGE, ID,
-                 QString("You have been blocked, all packets will be ignored!"));
+            send(
+                CHATMESSAGE, ID,
+                QString("You have been blocked, all packets will be ignored!"));
             mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
             return;
           } else {
@@ -327,7 +328,8 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
             settings.beginGroup("Security");
             if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
               send(CHATMESSAGE, ID,
-                   QString("You have been blocked, all packets will be ignored!"));
+                   QString(
+                       "You have been blocked, all packets will be ignored!"));
               send(USER_BLOCK_NORMAL, ID, QString(""));
             } else {
               // Block-Style Invisible
@@ -408,50 +410,50 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
           ID, FileName, FileSize, Destination, ProtovolVersion);
     } else {
       // not from a other CHATSYSTEM
-        bool webprofileenabled = false;
-        if (mCore.getUserBlockManager()->isDestinationInBlockList(
+      bool webprofileenabled = false;
+      if (mCore.getUserBlockManager()->isDestinationInBlockList(
               stream->getDestination()) == true) {
-            mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-        } else {
-	QSettings settings(mCore.getConfigPath() + "/application.ini",
-			 QSettings::IniFormat);
+        mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+      } else {
+        QSettings settings(mCore.getConfigPath() + "/application.ini",
+                           QSettings::IniFormat);
         settings.beginGroup("Security");
         if (settings.value("WebProfile", "Enabled").toString() == "Enabled") {
-            webprofileenabled = true;
+          webprofileenabled = true;
         } else {
-	    webprofileenabled = false;
+          webprofileenabled = false;
         }
-	if (settings.value("HideWebProfileWhenInvisible", "True").toString() == "True") {
-	    QList<CUser *> users = mCore.getUserManager()->getUserList();
-	    for (int i = 0;i < users.size();i++) {
-	         if(users.at(i)->getIsInvisible() == true) {
-		     webprofileenabled = false;
-		     break;
-		 }
-	    }
-	    if (mCore.getOnlineStatus() == USERINVISIBLE) {
-	    	webprofileenabled = false;
-	    }
-	}
+        if (settings.value("HideWebProfileWhenInvisible", "True").toString() ==
+            "True") {
+          QList<CUser *> users = mCore.getUserManager()->getUserList();
+          for (int i = 0; i < users.size(); i++) {
+            if (users.at(i)->getIsInvisible() == true) {
+              webprofileenabled = false;
+              break;
+            }
+          }
+          if (mCore.getOnlineStatus() == USERINVISIBLE) {
+            webprofileenabled = false;
+          }
+        }
         settings.endGroup();
         settings.sync();
 
-	if (webprofileenabled == true) {
-            printf("Web Profile enabled\n");
-            QString TEMPHTTPPAGE =
-                loadfile(mCore.getConfigPath() + "/www/index.html");
-            if (TEMPHTTPPAGE.isEmpty()) {
+        if (webprofileenabled == true) {
+          printf("Web Profile enabled\n");
+          QString TEMPHTTPPAGE =
+              loadfile(mCore.getConfigPath() + "/www/index.html");
+          if (TEMPHTTPPAGE.isEmpty()) {
             TEMPHTTPPAGE = HTTPPAGE;
-       	    }
-            TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
-            TEMPHTTPPAGE.replace("[AVATARIMAGE]",
-                mCore.getUserInfos().AvatarImage.toBase64());
-            TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
-            *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
-            mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-	} else { // what to do if the webprofile is disabled?
-
-	}
+          }
+          TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
+          TEMPHTTPPAGE.replace("[AVATARIMAGE]",
+                               mCore.getUserInfos().AvatarImage.toBase64());
+          TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
+          *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
+          mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+        } else { // what to do if the webprofile is disabled?
+        }
       }
     }
   }
