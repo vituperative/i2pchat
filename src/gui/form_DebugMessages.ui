@@ -55,6 +55,9 @@
              <pointsize>9</pointsize>
             </font>
            </property>
+           <property name="styleSheet">
+            <string notr="true">*{word-break:break-all;}</string>
+           </property>
           </widget>
          </item>
          <item>

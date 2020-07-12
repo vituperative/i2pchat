@@ -110,11 +110,11 @@ bool CI2PStream::doAccept() {
 void CI2PStream::slotConnected() {
   QString smID = QString::number(mID, 10);
 
-  emit signDebugMessages(
-      "• I2P Stream Controller connected to SAM v3 [ID: " + smID + "]");
+  emit signDebugMessages("• [Stream ID: " + smID +
+                         "] Controller ‣ Connected to SAM v3");
   mDoneDisconnect = false;
-  emit signDebugMessages("• Outgoing to Stream [ID: " + smID +
-                         "] ‣ Handshake: " + SAM_HANDSHAKE_V3);
+  emit signDebugMessages("• [Stream ID: " + smID +
+                         "] Outgoing ‣ Handshake: " + SAM_HANDSHAKE_V3);
   try {
     if (mTcpSocket.isWritable()) {
       mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -135,8 +135,8 @@ void CI2PStream::slotDisconnected() {
 
   mUnKnownConnectionTimeout.stop();
 
-  emit signDebugMessages(
-      "• I2P Stream Controller disconnected from SAM [ID: " + smID + "]");
+  emit signDebugMessages("• [Stream ID: " + smID +
+                         "] Controller ‣ Disconnected from SAM");
   emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, "");
 }
 
@@ -149,8 +149,7 @@ void CI2PStream::slotReadFromSocket() {
   } else {
     return;
   }
-  emit signDebugMessages("• Incoming from Stream [ID: " + smID + "] ‣ " +
-                         newData);
+  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + newData);
 
   if (mHandShakeWasSuccesfullDone == false) {
 
@@ -248,8 +247,8 @@ void CI2PStream::slotReadFromSocket() {
 
     // start mUnKnownConnectionTimeout
     mUnKnownConnectionTimeout.start();
-    emit signDebugMessages(
-        "• I2P Stream Controller: UnknownConnectionTimeout [ID: " + smID + "]");
+    emit signDebugMessages("• [Stream ID: " + smID +
+                           "] Controller ‣ UnknownConnectionTimeout");
     //--------------------------------
   } else {
     emit signDataReceived(mID, newData);
@@ -269,7 +268,7 @@ void CI2PStream::operator<<(const QByteArray Data) {
 
   if (mTcpSocket.state() == QTcpSocket::ConnectedState &&
       mHandShakeWasSuccesfullDone) {
-    emit signDebugMessages("• Outgoing to Stream [ID: " + smID + "] ‣ " + Data);
+    emit signDebugMessages("• [Stream ID: " + smID + "] Outgoing ‣ " + Data);
 
     try {
       if (mTcpSocket.isWritable()) {
@@ -279,9 +278,9 @@ void CI2PStream::operator<<(const QByteArray Data) {
     } catch (...) {
     }
   } else {
-    QByteArray Message =
-        "• I2P Stream Controller not connected - can't sent Data stream [ID: ";
-    Message += smID + "]";
+    QByteArray Message = "• [Stream ID: ";
+    Message += smID;
+    Message += "] Controller ‣ Not connected - cannot send data";
     emit signDebugMessages(Message);
   }
 }
@@ -298,9 +297,8 @@ void CI2PStream::setConnectionType(const Type newTyp) {
   mConnectionType = newTyp;
   if (newTyp == KNOWN) {
     mUnKnownConnectionTimeout.stop();
-    emit signDebugMessages("• I2P Stream Controller: UnknownConnectionTimeout: "
-                           "ConnectionType changed to KNOWN [ID: " +
-                           smID + "]");
+    emit signDebugMessages("• [Stream ID: " + smID +
+                           "] Controller ‣ ConnectionType changed to KNOWN");
   }
 }
 
@@ -330,9 +328,9 @@ void CI2PStream::slotCheckForReconnect() {
 void CI2PStream::slotInitConnectionTimeout() {
   QString smID = QString::number(mID, 10);
   emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, QString(""));
-  emit signDebugMessages("• I2P Stream Controller init connection timeout: "
-                         "Closed connection Stream [ID: " +
-                         smID + "]");
+  emit signDebugMessages(
+      "• [Stream ID: " + smID +
+      "] Controller ‣ Disconnected after Initialization Timeout");
   doDisconnect();
 }
 
