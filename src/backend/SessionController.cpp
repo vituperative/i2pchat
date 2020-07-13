@@ -56,7 +56,7 @@ CSessionController::~CSessionController() {
 }
 
 void CSessionController::slotConnected() {
-  emit signDebugMessages("• I2P Stream Controller Connected");
+  emit signDebugMessages("• I2P Stream Controller connected");
   emit signDebugMessages(SAM_HANDSHAKE_V3);
   if (mTcpSocket.state() == QAbstractSocket::ConnectedState) {
     mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -67,9 +67,8 @@ void CSessionController::slotConnected() {
 void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
-    emit signDebugMessages("• I2P Stream Controller can't connect\n SAM or I2P "
-                           "crashed\nSAM Host: " +
-                           mSamHost + " • SAM Port: " + mSamPort);
+    emit signDebugMessages("• I2P Stream Controller can't connect ‣ SAM or I2P "
+                           "crashed [SAM Host: " + mSamHost + ":" + mSamPort + "]");
     emit signSessionStreamStatusOK(false);
 
     QMessageBox msgBox(NULL);
@@ -237,7 +236,6 @@ void CSessionController::doSessionCreate() {
 
   Message += "\n";
   emit signDebugMessages(Message);
-
   mTcpSocket.write(Message);
   mTcpSocket.flush();
 }

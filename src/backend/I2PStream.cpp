@@ -152,7 +152,7 @@ void CI2PStream::slotReadFromSocket() {
 
   QString debugData = newData.replace("STREAM STATUS RESULT=", "STATUS: ")
                              .replace("CANT_REACH_PEER MESSAGE=", "")
-                             .replace("\"Connection timed out\"", "No Response");
+                             .replace("\"Connection timed out\"\n", "No Response");
 
   emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + debugData);
 
