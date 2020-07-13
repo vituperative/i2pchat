@@ -114,7 +114,7 @@ void CI2PStream::slotConnected() {
                          "] Controller ‣ Connected to SAM v3");
   mDoneDisconnect = false;
   emit signDebugMessages("• [Stream ID: " + smID +
-                         "] Outgoing ‣ Handshake: " + SAM_HANDSHAKE_V3);
+                         "] Outgoing ‣ " + SAM_HANDSHAKE_V3);
   try {
     if (mTcpSocket.isWritable()) {
       mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -149,7 +149,12 @@ void CI2PStream::slotReadFromSocket() {
   } else {
     return;
   }
-  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + newData);
+
+  QString debugData = newData.replace("STREAM STATUS RESULT=", "STATUS: ")
+                             .replace("CANT_REACH_PEER MESSAGE=", "")
+                             .replace("\"Connection timed out\"", "No Response");
+
+  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + debugData);
 
   if (mHandShakeWasSuccesfullDone == false) {
 
@@ -248,7 +253,7 @@ void CI2PStream::slotReadFromSocket() {
     // start mUnKnownConnectionTimeout
     mUnKnownConnectionTimeout.start();
     emit signDebugMessages("• [Stream ID: " + smID +
-                           "] Controller ‣ UnknownConnectionTimeout");
+                           "] Controller ‣ Unknown Connection Timeout");
     //--------------------------------
   } else {
     emit signDataReceived(mID, newData);
@@ -298,7 +303,7 @@ void CI2PStream::setConnectionType(const Type newTyp) {
   if (newTyp == KNOWN) {
     mUnKnownConnectionTimeout.stop();
     emit signDebugMessages("• [Stream ID: " + smID +
-                           "] Controller ‣ ConnectionType changed to KNOWN");
+                           "] Controller ‣ Connection Type changed to KNOWN");
   }
 }
 

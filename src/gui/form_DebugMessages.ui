@@ -56,7 +56,7 @@
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">*{word-break:break-all;}</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
