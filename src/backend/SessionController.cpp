@@ -112,7 +112,8 @@ void CSessionController::slotReadFromSocket() {
           settings.beginGroup("Network");
           Signature.replace(
               "%s",
-              settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
+//              settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
+              settings.value("Signature_Type", "ED25519_SHA512").toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
           settings.sync();
@@ -135,11 +136,6 @@ void CSessionController::slotReadFromSocket() {
         if (sam.result == DUPLICATED_DEST) {
           QMessageBox msgBox(NULL);
           msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setText(tr("I2PChat"));
-          //                    msgBox.setInformativeText(tr("Session:
-          //                    DUPLICATED_DEST\n\nOnly one Messenger per
-          //                    Destination,\nor SAMv3 crashed(Tunnel stay if
-          //                    Messenger were closed)\n "));
           msgBox.setInformativeText(
               tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run "
                  "I2PChat\nwith the same destination twice!\nSAM may need to "
