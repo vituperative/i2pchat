@@ -196,11 +196,19 @@ QString CCore::calcSessionOptionString() const {
 
   {
     // TODO: get from ui_form_settingsgui.h
+
+/*
     QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
                                   "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519",
                                   "RedDSA_SHA512_Ed25519"};
+*/
+
+    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
+                                  "ECDSA_SHA512_P521"};
+
     auto sign_type =
-        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
+//        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString(); // invalid dest?!
+        settings.value("Signature_Type", "ECDSA_SHA512_P521").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -210,8 +218,8 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") +
-                                 " ");
+//      SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
+      SessionOptionString.append("SIGNATURE_TYPE=" + QString("ECDSA_SHA512_P521") + " ");
   }
 
   /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
@@ -222,7 +230,7 @@ QString CCore::calcSessionOptionString() const {
   // TODO: Add to UI
   SessionOptionString.append(
       "i2cp.leaseSetEncType=" +
-      settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
+      settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
 
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();

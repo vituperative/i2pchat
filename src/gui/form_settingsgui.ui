@@ -912,9 +912,10 @@ p, li { white-space: pre-wrap; }
           </item>
           <item>
            <property name="text">
-            <string>ECDSA_SHA512_P521</string>
+            <string extracomment="Default">ECDSA_SHA512_P521</string>
            </property>
           </item>
+<!--
           <item>
            <property name="text">
             <string extracomment="Default">EdDSA_SHA512_Ed25519</string>
@@ -925,6 +926,7 @@ p, li { white-space: pre-wrap; }
             <string>REdDSA_SHA512_Ed25519</string>
            </property>
           </item>
+ -->
          </widget>
         </item>
        </layout>
