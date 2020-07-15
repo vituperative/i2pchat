@@ -112,7 +112,7 @@ void CSessionController::slotReadFromSocket() {
           Signature.replace(
               "%s",
 //              settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
-              settings.value("Signature_Type", "ED25519_SHA512").toString());
+              settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
           settings.sync();

@@ -197,10 +197,10 @@ QString CCore::calcSessionOptionString() const {
   {
     // TODO: get from ui_form_settingsgui.h
     QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
-                                  "ECDSA_SHA512_P521", "ED25519_SHA512",
-                                  "RED25519_SHA512"};
+                                  "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519",
+                                  "RedDSA_SHA512_Ed25519"};
     auto sign_type =
-        settings.value("Signature_Type", "ED25519_SHA512").toString();
+        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -210,7 +210,7 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      SessionOptionString.append("SIGNATURE_TYPE=" + QString("ED25519_SHA512") +
+      SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") +
                                  " ");
   }
 
@@ -221,8 +221,8 @@ QString CCore::calcSessionOptionString() const {
   // Encryption
   // TODO: Add to UI
   SessionOptionString.append(
-//        "i2cp.leaseSetEncType=4,0 "); // legacy support for ElG
-        "i2cp.leaseSetEncType=4 ");
+      "i2cp.leaseSetEncType=" +
+      settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
 
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
