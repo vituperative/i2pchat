@@ -221,8 +221,8 @@ QString CCore::calcSessionOptionString() const {
   // Encryption
   // TODO: Add to UI
   SessionOptionString.append(
-      "leaseSetEncType=" + settings.value("leaseSetEncType", "4,0").toString() +
-      " ");
+//        "i2cp.leaseSetEncType=4,0 "); // legacy support for ElG
+        "i2cp.leaseSetEncType=4 ");
 
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
