@@ -36,7 +36,7 @@
 #include "User.h"
 #include "UserBlockManager.h"
 
-#define CLIENTVERSION "0.2.31"
+#define CLIENTVERSION "0.2.32"
 #define CLIENTNAME "I2PChat"
 
 using namespace SAM_Message_Types;
