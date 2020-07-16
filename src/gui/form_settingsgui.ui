@@ -676,9 +676,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>163</y>
+        <y>164</y>
         <width>380</width>
-        <height>232</height>
+        <height>231</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -702,7 +702,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>50</y>
          <width>356</width>
-         <height>104</height>
+         <height>103</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_10">
@@ -858,7 +858,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>164</y>
+         <y>162</y>
          <width>356</width>
          <height>27</height>
         </rect>
@@ -969,7 +969,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>200</y>
+         <y>198</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -1002,7 +1002,7 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
           <property name="text">
-           <string>Encryption:</string>
+           <string>Encryption Type:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1041,13 +1041,13 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>150</width>
             <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>150</width>
             <height>20</height>
            </size>
           </property>
@@ -1086,20 +1086,20 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget_9">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>13</x>
          <y>14</y>
          <width>356</width>
-         <height>27</height>
+         <height>26</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <property name="spacing">
+       <layout class="QGridLayout" name="gridLayout_30">
+        <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item>
+        <item row="0" column="0">
          <widget class="QLabel" name="label_17">
           <property name="minimumSize">
            <size>
@@ -1127,10 +1127,10 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="1">
          <widget class="QLineEdit" name="lineEdit_3"/>
         </item>
-        <item>
+        <item row="0" column="2">
          <widget class="QLabel" name="label_18">
           <property name="minimumSize">
            <size>
@@ -1149,7 +1149,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="3">
          <widget class="QSpinBox" name="spinBox_10">
           <property name="maximum">
            <number>65000</number>
@@ -1166,9 +1166,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>106</y>
+        <y>108</y>
         <width>380</width>
-        <height>51</height>
+        <height>49</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1189,17 +1189,20 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget_10">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>13</x>
          <y>14</y>
          <width>356</width>
-         <height>27</height>
+         <height>25</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_29">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
          <widget class="QLabel" name="label_26">
           <property name="minimumSize">
            <size>
@@ -1227,7 +1230,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="1">
          <widget class="QPushButton" name="cmd_DestinationGenerate">
           <property name="text">
            <string>Generate</string>
