@@ -676,9 +676,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>174</y>
+        <y>163</y>
         <width>380</width>
-        <height>221</height>
+        <height>232</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -700,9 +700,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>56</y>
+         <y>50</y>
          <width>356</width>
-         <height>111</height>
+         <height>104</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_10">
@@ -723,13 +723,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -751,13 +751,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>22</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>22</height>
+            <height>20</height>
            </size>
           </property>
           <property name="text">
@@ -782,13 +782,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -810,13 +810,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -838,13 +838,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>22</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>22</height>
+            <height>20</height>
            </size>
           </property>
           <property name="text">
@@ -858,7 +858,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>182</y>
+         <y>164</y>
          <width>356</width>
          <height>27</height>
         </rect>
@@ -872,13 +872,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -915,18 +915,6 @@ p, li { white-space: pre-wrap; }
             <string extracomment="Default">ECDSA_SHA512_P521</string>
            </property>
           </item>
-<!--
-          <item>
-           <property name="text">
-            <string extracomment="Default">EdDSA_SHA512_Ed25519</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>REdDSA_SHA512_Ed25519</string>
-           </property>
-          </item>
- -->
          </widget>
         </item>
        </layout>
@@ -949,13 +937,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -977,6 +965,102 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>200</y>
+         <width>356</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="Encryption">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="Encryption_label">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Encryption:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="ECIES">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>ECIES</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QRadioButton" name="ECIES_ELG">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>ECIES + ElGamal</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_7">
       <property name="geometry">
@@ -984,7 +1068,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>50</y>
         <width>380</width>
-        <height>53</height>
+        <height>51</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1008,7 +1092,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>14</y>
          <width>356</width>
-         <height>29</height>
+         <height>27</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1020,13 +1104,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -1048,6 +1132,18 @@ p, li { white-space: pre-wrap; }
         </item>
         <item>
          <widget class="QLabel" name="label_18">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
           <property name="text">
            <string>Port:</string>
           </property>
@@ -1070,9 +1166,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>112</y>
+        <y>106</y>
         <width>380</width>
-        <height>53</height>
+        <height>51</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1099,7 +1195,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>14</y>
          <width>356</width>
-         <height>29</height>
+         <height>27</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -1108,13 +1204,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>16777215</height>
+            <height>20</height>
            </size>
           </property>
           <property name="baseSize">
@@ -4297,21 +4393,4 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
  </connections>
- <designerdata>
-  <property name="gridDeltaX">
-   <number>2</number>
-  </property>
-  <property name="gridDeltaY">
-   <number>2</number>
-  </property>
-  <property name="gridSnapX">
-   <bool>false</bool>
-  </property>
-  <property name="gridSnapY">
-   <bool>false</bool>
-  </property>
-  <property name="gridVisible">
-   <bool>true</bool>
-  </property>
- </designerdata>
 </ui>
