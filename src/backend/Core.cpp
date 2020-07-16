@@ -228,10 +228,26 @@ QString CCore::calcSessionOptionString() const {
 
   // Encryption
   // TODO: Add to UI
-  SessionOptionString.append(
-      "i2cp.leaseSetEncType=" +
-      settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
 
+
+  {
+    QStringList AllowEncTypes = {"4", "4,0"};
+
+    auto enc_type =
+        settings.value("i2cp.leaseSetEncType=", "4,0").toString();
+    auto encnotfound = true;
+    for (int i = 0; i < AllowEncTypes.size(); ++i) {
+      if (enc_type.contains(AllowEncTypes.at(i))) {
+        SessionOptionString.append("i2cp.leaseSetEncType=" + enc_type + " ");
+        encnotfound = false;
+        break;
+      }
+    }
+    if (encnotfound)
+    SessionOptionString.append(
+        "i2cp.leaseSetEncType=" +
+        settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
+  }
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
   settings.sync();
