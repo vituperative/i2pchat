@@ -676,9 +676,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>237</y>
+        <y>234</y>
         <width>380</width>
-        <height>158</height>
+        <height>161</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -700,7 +700,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>48</y>
+         <y>52</y>
          <width>356</width>
          <height>99</height>
         </rect>
@@ -907,7 +907,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>50</y>
         <width>380</width>
-        <height>49</height>
+        <height>44</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -929,7 +929,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>24</height>
         </rect>
@@ -1007,7 +1007,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>184</y>
         <width>380</width>
-        <height>49</height>
+        <height>45</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1032,7 +1032,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>25</height>
         </rect>
@@ -1083,16 +1083,16 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>102</y>
+        <y>99</y>
         <width>380</width>
-        <height>79</height>
+        <height>80</height>
        </rect>
       </property>
       <widget class="QWidget" name="layoutWidget_9">
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>46</y>
+         <y>48</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -4406,4 +4406,21 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
  </connections>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>2</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>2</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>false</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>false</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>false</bool>
+  </property>
+ </designerdata>
 </ui>
