@@ -181,7 +181,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Update (seconds)</string>
+           <string>Update (seconds):</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -672,13 +672,13 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QGroupBox" name="groupBox_8">
+     <widget class="QGroupBox" name="TunnelConfig">
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>164</y>
+        <y>237</y>
         <width>380</width>
-        <height>231</height>
+        <height>158</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -700,9 +700,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>50</y>
+         <y>48</y>
          <width>356</width>
-         <height>103</height>
+         <height>99</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_10">
@@ -858,74 +858,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>162</y>
-         <width>356</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_22">
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
-        <item row="0" column="0" alignment="Qt::AlignVCenter">
-         <widget class="QLabel" name="label_13">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Signature Type:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="comboBox_Signature">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <item>
-           <property name="text">
-            <string>ECDSA_SHA256_P256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ECDSA_SHA384_P384</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string extracomment="Default">ECDSA_SHA512_P521</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>13</x>
          <y>14</y>
          <width>356</width>
-         <height>27</height>
+         <height>25</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_23">
@@ -965,11 +900,199 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+     </widget>
+     <widget class="QGroupBox" name="SAM">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>50</y>
+        <width>380</width>
+        <height>49</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>68</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
       <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>198</y>
+         <y>14</y>
+         <width>356</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_30">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_17">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>SAM Host IP:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_3"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_18">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Port:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QSpinBox" name="spinBox_10">
+          <property name="maximum">
+           <number>65000</number>
+          </property>
+          <property name="value">
+           <number>7656</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="NewDest">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>184</y>
+        <width>380</width>
+        <height>49</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>68</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Your existing destination will be deleted</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>14</y>
+         <width>356</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_29">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_26">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>New Destination:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="cmd_DestinationGenerate">
+          <property name="text">
+           <string>Generate</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="Crypto">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>102</y>
+        <width>380</width>
+        <height>79</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="layoutWidget_9">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>46</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -1061,135 +1184,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_7">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>50</y>
-        <width>380</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>380</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>380</width>
-        <height>68</height>
-       </size>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <widget class="QWidget" name="">
-       <property name="geometry">
-        <rect>
-         <x>13</x>
-         <y>14</y>
-         <width>356</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_30">
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>SAM Host IP:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_3"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_18">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Port:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QSpinBox" name="spinBox_10">
-          <property name="maximum">
-           <number>65000</number>
-          </property>
-          <property name="value">
-           <number>7656</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_17">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>108</y>
-        <width>380</width>
-        <height>49</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>380</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>380</width>
-        <height>68</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Your existing destination will be deleted</string>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget_10">
        <property name="geometry">
         <rect>
          <x>13</x>
@@ -1198,12 +1193,12 @@ p, li { white-space: pre-wrap; }
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_29">
+       <layout class="QGridLayout" name="Signature">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_26">
+        <item row="0" column="0" alignment="Qt::AlignVCenter">
+         <widget class="QLabel" name="label_13">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -1218,12 +1213,12 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="baseSize">
            <size>
-            <width>160</width>
+            <width>120</width>
             <height>0</height>
            </size>
           </property>
           <property name="text">
-           <string>New Destination:</string>
+           <string>Signature Type:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1231,10 +1226,25 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QPushButton" name="cmd_DestinationGenerate">
-          <property name="text">
-           <string>Generate</string>
+         <widget class="QComboBox" name="comboBox_Signature">
+          <property name="enabled">
+           <bool>true</bool>
           </property>
+          <item>
+           <property name="text">
+            <string>ECDSA_SHA256_P256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ECDSA_SHA384_P384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="Default">ECDSA_SHA512_P521</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
