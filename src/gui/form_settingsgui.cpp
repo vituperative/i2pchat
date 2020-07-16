@@ -179,7 +179,7 @@ void form_settingsgui::loadSettings() {
 
   spinBox_4->setMinimum(1);
   spinBox_4->setValue(settings->value("inbound.length", "3").toInt());
-  spinBox_4->setMaximum(3);
+  spinBox_4->setMaximum(7);
 
   spinBox_5->setMinimum(0);
   spinBox_5->setValue(settings->value("inbound.quantity", "1").toInt());
@@ -195,7 +195,7 @@ void form_settingsgui::loadSettings() {
 
   spinBox_8->setMinimum(1);
   spinBox_8->setValue(settings->value("outbound.length", "3").toInt());
-  spinBox_8->setMaximum(3);
+  spinBox_8->setMaximum(7);
 
   spinBox_9->setMinimum(0);
   spinBox_9->setValue(settings->value("outbound.quantity", "1").toInt());
