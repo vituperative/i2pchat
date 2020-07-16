@@ -124,7 +124,7 @@ body {
 .wrapper {
   width: 740px;
   margin: 0 auto;
-  background: #DEDEDE;
+  background: #dbdbdf;
   border-radius: 3px;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px, rgba(0, 0, 0, 0.45) 0 3px 10px
 }
@@ -207,7 +207,6 @@ header ul {
   padding: 1px 0;
   background: #5198DF;
   background: linear_gradient(#77B9FB, #3782CD);
-  border-radius: 5px;
   box-shadow: inset rgba(255, 255, 255, 0.45) 0 1px 0, inset rgba(0, 0, 0, 0.2) 0 -1px 0;
   width: auto
 }
@@ -221,7 +220,6 @@ header ul:before {
   right: -5px;
   bottom: -6px;
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0, inset rgba(255, 255, 255, 0.7) 0 -1px 0
 }
 

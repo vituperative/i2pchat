@@ -90,9 +90,9 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status) {
                                           const qint32, const QString)));
 
   t->doAccept();
-  Message = "• Created new StreamObjectListener [ID: ";
+  Message = "• [Stream ID: ";
   Message += QString::number(t->getID(), 10);
-  Message += "]";
+  Message += "] Created new StreamObjectListener";
 
   emit signDebugMessages(Message);
   StreamIncomingListener.insert(t->getID(), t);
@@ -181,9 +181,9 @@ CConnectionManager::doCreateNewStreamObject(StreamMode Mode, bool Silence,
                                               const qint32, const QString)));
     }
 
-    Message = "• Created new StreamObject [ID: ";
+    Message = "• [Stream ID: ";
     Message += QString::number(t->getID(), 10);
-    Message += "]";
+    Message += "] Created new StreamObject";
 
     emit signDebugMessages(Message);
     allStreams.insert(IDforNewObject, t);
@@ -263,9 +263,9 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
                                             const qint32, const QString)));
 
-    Message = "• Created new StreamObjectListener [ID: ";
+    Message = "• [Stream ID: ";
     Message += QString::number(t2->getID(), 10);
-    Message += "]";
+    Message += "] Created new StreamObjectListener";
 
     emit signDebugMessages(Message);
     t2->doAccept();

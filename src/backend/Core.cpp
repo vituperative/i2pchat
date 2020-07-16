@@ -186,13 +186,29 @@ QString CCore::calcSessionOptionString() const {
       "outbound.length=" + settings.value("outbound.length", "3").toString() +
       " ");
 
+  // throttle per client dest to max 60 connections/min to mitigate denial of
+  // service
+  SessionOptionString.append(
+      "i2p.streaming.maxConnsPerMinute=" +
+      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + " ");
+
   // SIGNATURE_TYPE
 
   {
     // TODO: get from ui_form_settingsgui.h
-    QStringList AllowSignTypes = {"DSA_SHA1", "ECDSA_SHA256_P256",
-                                  "ECDSA_SHA384_P384", "ECDSA_SHA512_P521"};
-    auto sign_type = settings.value("Signature_Type", "DSA_SHA1").toString();
+
+/*
+    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
+                                  "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519",
+                                  "RedDSA_SHA512_Ed25519"};
+*/
+
+    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
+                                  "ECDSA_SHA512_P521"};
+
+    auto sign_type =
+//        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString(); // invalid dest?!
+        settings.value("Signature_Type", "ECDSA_SHA512_P521").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -202,7 +218,8 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      SessionOptionString.append("SIGNATURE_TYPE=" + QString("DSA_SHA1") + " ");
+//      SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
+      SessionOptionString.append("SIGNATURE_TYPE=" + QString("ECDSA_SHA512_P521") + " ");
   }
 
   /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
@@ -212,8 +229,8 @@ QString CCore::calcSessionOptionString() const {
   // Encryption
   // TODO: Add to UI
   SessionOptionString.append(
-      "leaseSetEncType=" + settings.value("leaseSetEncType", "4,0").toString() +
-      " ");
+      "i2cp.leaseSetEncType=" +
+      settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
 
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
@@ -446,13 +463,13 @@ QString CCore::getConnectionDump() const {
 
       // Print ConnectionType
 
-//      if (Stream->getConnectionType() == UNKNOWN) {
-//        Message += "\tTrust:\t\tUNKNOWN\n";
-//      } else if (Stream->getConnectionType() == KNOWN) {
-//        Message += "\tTrust:\t\tKNOWN\n";
-//      } else {
-//        Message += "\tTrust:\t\t???\n";
-//      }
+      //      if (Stream->getConnectionType() == UNKNOWN) {
+      //        Message += "\tTrust:\t\tUNKNOWN\n";
+      //      } else if (Stream->getConnectionType() == KNOWN) {
+      //        Message += "\tTrust:\t\tKNOWN\n";
+      //      } else {
+      //        Message += "\tTrust:\t\t???\n";
+      //      }
       //      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
     }
 
@@ -771,17 +788,20 @@ void CCore::loadUserInfos() {
 
   if (mUserInfos.Nickname.isEmpty() == true) {
     // generate random Nickname (8 Chars)
-    const QString possibleCharacters(
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-    const int randomStringLength = 8;
 
-    QString randomString;
-    for (int i = 0; i < randomStringLength; ++i) {
-      int index = qrand() % possibleCharacters.length();
-      QChar nextChar = possibleCharacters.at(index);
-      randomString.append(nextChar);
-    }
-    mUserInfos.Nickname = randomString;
+    /*
+        const QString possibleCharacters(
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        const int randomStringLength = 8;
+
+        QString randomString;
+        for (int i = 0; i < randomStringLength; ++i) {
+          int index = qrand() % possibleCharacters.length();
+          QChar nextChar = possibleCharacters.at(index);
+          randomString.append(nextChar);
+        }
+    */
+    mUserInfos.Nickname = "Undefined";
 
     settings.setValue("Nickname", mUserInfos.Nickname);
     emit signNicknameChanged();
@@ -789,9 +809,11 @@ void CCore::loadUserInfos() {
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Information);
     msgBox->setInformativeText(
-        tr("No username...\ngenerating one: %1\n\nplease change your "
-           "userprofile in the settings")
-            .arg(randomString));
+        tr("No username configured\nUsing \'%1\'  \n\nChange in "
+           "Settings -> User Details")
+            //            .arg(randomString));
+            .arg(mUserInfos.Nickname));
+
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);

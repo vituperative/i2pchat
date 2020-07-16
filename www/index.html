@@ -4,11 +4,12 @@
 <head>
   <title>[USERNAME] | I2PChat Destination</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MDguNjA5IDUwOC42MDkiIHZpZXdCb3g9IjAgMCA1MDguNjA5IDUwOC42MDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTUwLjg4NyIgY3k9IjIwMC4wNTMiIGZpbGw9IiNlZWI0OTAiIHI9IjM5LjY3MiIvPjxjaXJjbGUgY3g9IjM1Ny43MjIiIGN5PSIyMDAuMDUzIiBmaWxsPSIjZWViNDkwIiByPSIzOS42NzIiLz48cGF0aCBkPSJtNDYzLjUxMyA1MDguNjA5aC00MTguNDE2di03NC45MzVjMC0zNC45MjUgMjYuMTA5LTY0LjA4NSA2MC4zNTUtNjguNDkzbDkyLjIyOC0zNi42MmgxMTMuMjVsOTIuMjI4IDM2LjYyYzM0LjU4NSA0LjA2OSA2MC4zNTUgMzMuNTY4IDYwLjM1NSA2OC40OTN6IiBmaWxsPSIjOWQ5MGM1Ii8+PHBhdGggZD0ibTE3OC4wMTMgMzQ4LjU2N3YzMy41NjhjMCA0Mi43MjMgMzQuOTI0IDc4LjY2NSA3Ny42NDggNzcuOTg3IDQxLjM2Ny0uNjc4IDc0LjU5Ni0zNC41ODUgNzQuNTk2LTc2LjI5MXYtMzUuMjY0YzAtMTIuMjA3LTkuODMzLTIyLjA0LTIyLjA0LTIyLjA0aC0xMDguNTAzYy0xMS44NjguMzM5LTIxLjcwMSAxMC4xNzItMjEuNzAxIDIyLjA0eiIgZmlsbD0iIzgwNzVhZiIvPjxwYXRoIGQ9Im0yMDIuMDg3IDMwMC40MTl2NTUuNjA4YzAgMjguODIxIDIzLjM5NiA1Mi4yMTcgNTIuMjE3IDUyLjIxN3M1Mi4yMTctMjMuMzk2IDUyLjIxNy01Mi4yMTd2LTU1LjYwOHoiIGZpbGw9IiNlZWI0OTAiLz48cGF0aCBkPSJtMzA2Ljg2MSA5NC42MDFoLTEwNS4xMTNjLTI0Ljc1MiAwLTQ0Ljc1OCAyMC4wMDUtNDQuNzU4IDQ0Ljc1OHYxMDAuNzA1YzAgNTMuOTEzIDQzLjc0IDk3LjMxNCA5Ny4zMTQgOTcuMzE0IDUzLjkxMyAwIDk3LjMxNC00My43NCA5Ny4zMTQtOTcuMzE0di0xMDAuNzA1Yy4wMDEtMjQuNzUyLTIwLjAwNS00NC43NTgtNDQuNzU3LTQ0Ljc1OHoiIGZpbGw9IiNmYWNjYjQiLz48ZyBmaWxsPSIjNTY1NDVmIj48cGF0aCBkPSJtMzUxLjYxOSA1Mi44OTVzNzQuOTM1IDkuODMzIDAgMTUxLjIyNnYtNTcuOTgxcy01LjQyNS00MS43MDYtMzAuODU2LTQ0LjA3OXoiLz48cGF0aCBkPSJtMzAwLjc1OCAwaC05Mi45MDZjLTMuNzMgMC03LjQ2LjMzOS0xMC44NSAxLjAxNy0xNDAuMzc2IDAtNDAuMDExIDIxMC4yMjUtNDAuMDExIDIxMC4yMjUgMC04MS4wMzggNTAuODYxLTgxLjM3NyA1MC44NjEtODEuMzc3aDkzLjI0NWMzNS45NDIgMCA2NC43NjMtMjkuMTYgNjQuNzYzLTY0Ljc2MyAwLTM1Ljk0Mi0yOS4xNjEtNjUuMTAyLTY1LjEwMi02NS4xMDJ6Ii8+PC9nPjwvc3ZnPg==">
   <style type="text/css">
     body,
     html {
       margin: 0;
-      background: #000;
+      background: #0a0808;
     }
 
     body {
@@ -23,18 +24,23 @@
       height: 1px;
       color: none;
       border: none;
-      background: linear-gradient(to right, rgba(0,0,0,0) 10%, #333, rgba(0,0,0,0) 90%);
+      background: linear-gradient(to right, rgba(0,0,0,0) 10%, #383434, rgba(0,0,0,0) 90%);
+    }
+
+    h3 {
+      margin: 10px 0 15px;
+      text-shadow: 0 1px 1px #000;
     }
 
     a,
     a:visited {
-      color: #900;
+      color: #995;
       text-decoration: none;
       outline: none;
     }
 
     a:hover {
-      color: #b00;
+      color: #ff9;
     }
 
     #container {
@@ -45,9 +51,12 @@
       display: table;
     }
 
-    #box,
     #moreinfo {
-      box-shadow: inset 0 0 0 1px #300;
+      box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #300;
+    }
+
+    #moreinfo a {
+      margin-left: 2px;
     }
 
     #main {
@@ -55,6 +64,7 @@
       position: relative;
       vertical-align: middle;
       text-align: center;
+      background: linear-gradient(to bottom, #000, #180808 46%, #000);
     }
 
     #box, #dest {
@@ -68,22 +78,39 @@
       width: 50%;
       min-width: 400px;
       max-width: 600px;
-      border: 1px solid #333;
-      background: #111;
+      border: 5px solid #383434;
+      box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #300, inset 0 0 5px 5px rgba(0,0,0,.6), 0 0 0 1px #282424, 0 0 2px 2px rgba(0,0,0,.7);
+      background: #121010;
+      background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.4)), repeating-linear-gradient(to right, rgba(64,48,16,.3) 2px, rgba(16,8,8,.3) 2px, rgba(64,48,16,.3) 4px), repeating-linear-gradient(to bottom, #241818 2px, #080404 2px, #241818 4px);
+      background-blend-mode: normal, difference;
+      animation: ease zoom .4s forwards;
+    }
+
+    #box, #avatar {
+      transform: scale(0);
+      will-change: transform;
+      filter: opacity(0) blur(10px);
+    }
+
+    @keyframes zoom {
+      to {transform: scale(1); filter: opacity(1) blur(0)}
     }
 
     #avatar {
-      padding: 3px;
+      padding: 4px;
       width: 96px;
       height: 96px;
-      border: 2px solid #322;
+      border: 2px solid #584444;
+      box-shadow: inset 0 0 0 2px #300, 0 0 0 1px #000, 0 0 2px 2px rgba(0,0,0,.7);
       border-radius: 50%;
       background: #000;
+      animation: ease zoom .4s .2s forwards;
     }
 
     #dest {
-      margin: 0 0 -30px;
+      margin: -5px 0 -35px;
       padding: 25px 30px 0;
+      min-width: 0;
       font-size: 70%;
       font-weight: 600;
       color: #393;
@@ -120,10 +147,24 @@
 
     #moreinfo {
       margin: 50px -30px -30px;
-      padding: 5px 0;
+      padding: 8px 0;
+      position: relative;
       font-size: 75%;
       font-weight: 600;
-      border-top: 1px solid #333;
+      border-top: 5px solid #383434;
+      background: radial-gradient(at center bottom, rgba(96, 0, 0, .25), rgba(32, 0, 0, .15) 60%, rgba(0, 0, 0, 0));
+    }
+
+    #moreinfo::before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: -7px;
+      left: 1px;
+      width: calc(100% - 2px);
+      height: 1px;
+      background: #300;
+      border-bottom: 1px solid #000;
     }
   </style>
 </head>

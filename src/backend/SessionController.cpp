@@ -56,7 +56,7 @@ CSessionController::~CSessionController() {
 }
 
 void CSessionController::slotConnected() {
-  emit signDebugMessages("• I2P Stream Controller Connected");
+  emit signDebugMessages("• I2P Stream Controller connected");
   emit signDebugMessages(SAM_HANDSHAKE_V3);
   if (mTcpSocket.state() == QAbstractSocket::ConnectedState) {
     mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -67,9 +67,8 @@ void CSessionController::slotConnected() {
 void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
-    emit signDebugMessages("• I2P Stream Controller can't connect\n SAM or I2P "
-                           "crashed\nSAM Host: " +
-                           mSamHost + " • SAM Port: " + mSamPort);
+    emit signDebugMessages("• I2P Stream Controller can't connect ‣ SAM or I2P "
+                           "crashed [SAM Host: " + mSamHost + ":" + mSamPort + "]");
     emit signSessionStreamStatusOK(false);
 
     QMessageBox msgBox(NULL);
@@ -112,6 +111,7 @@ void CSessionController::slotReadFromSocket() {
           settings.beginGroup("Network");
           Signature.replace(
               "%s",
+//              settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString());
               settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
@@ -135,11 +135,6 @@ void CSessionController::slotReadFromSocket() {
         if (sam.result == DUPLICATED_DEST) {
           QMessageBox msgBox(NULL);
           msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setText(tr("I2PChat"));
-          //                    msgBox.setInformativeText(tr("Session:
-          //                    DUPLICATED_DEST\n\nOnly one Messenger per
-          //                    Destination,\nor SAMv3 crashed(Tunnel stay if
-          //                    Messenger were closed)\n "));
           msgBox.setInformativeText(
               tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run "
                  "I2PChat\nwith the same destination twice!\nSAM may need to "
@@ -241,7 +236,6 @@ void CSessionController::doSessionCreate() {
 
   Message += "\n";
   emit signDebugMessages(Message);
-
   mTcpSocket.write(Message);
   mTcpSocket.flush();
 }

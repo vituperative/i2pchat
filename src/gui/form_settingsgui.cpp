@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "form_settingsgui.h"
+#include "Base.cpp"
 #include "Core.h"
 #include "UserBlockManager.h"
 #include <QFileDialog>
@@ -178,7 +179,7 @@ void form_settingsgui::loadSettings() {
 
   spinBox_4->setMinimum(1);
   spinBox_4->setValue(settings->value("inbound.length", "3").toInt());
-  spinBox_4->setMaximum(3);
+  spinBox_4->setMaximum(7);
 
   spinBox_5->setMinimum(0);
   spinBox_5->setValue(settings->value("inbound.quantity", "1").toInt());
@@ -194,7 +195,7 @@ void form_settingsgui::loadSettings() {
 
   spinBox_8->setMinimum(1);
   spinBox_8->setValue(settings->value("outbound.length", "3").toInt());
-  spinBox_8->setMaximum(3);
+  spinBox_8->setMaximum(7);
 
   spinBox_9->setMinimum(0);
   spinBox_9->setValue(settings->value("outbound.quantity", "1").toInt());
@@ -202,7 +203,8 @@ void form_settingsgui::loadSettings() {
 
   comboBox_Signature->setEditable(false);
   comboBox_Signature->setCurrentIndex(comboBox_Signature->findText(
-      settings->value("SIGNATURE_TYPE", "DSA_SHA1").toString()));
+//      settings->value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString()));
+      settings->value("SIGNATURE_TYPE", "ECDSA_SHA512_P521").toString()));
   settings->endGroup();
 
   settings->beginGroup("Sound");
@@ -340,6 +342,46 @@ void form_settingsgui::loadSettings() {
 
     check_BlockInvisible->setChecked(true);
   }
+
+  if (settings->value("WebProfile", "Enabled").toString() == "Enabled") {
+    blockallcheckBox_2->setChecked(true);
+  } else {
+    blockallcheckBox_2->setChecked(false);
+  }
+  if (settings->value("HideWebProfileWhenInvisible", "True").toString() ==
+      "True") {
+    blockallcheckBox_3->setChecked(true);
+  } else {
+    blockallcheckBox_3->setChecked(false);
+  }
+
+  if (!mCore.getMyDestination().isEmpty()) {
+    size_t buffersize = 2048;
+    uint8_t *outputbuffer = (uint8_t *)malloc(buffersize);
+    char *b32buffer = (char *)malloc(buffersize);
+    QByteArray sha256hash;
+    int outputcount = i2p::data::Base64ToByteStream(
+        mCore.getMyDestination().toUtf8().constData(),
+        mCore.getMyDestination().size(), outputbuffer, buffersize);
+    QByteArray qarraysha256hash = QByteArray((char *)outputbuffer, outputcount);
+    while (outputcount > qarraysha256hash.size()) {
+      qarraysha256hash.append((char)0);
+    }
+    sha256hash =
+        QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256);
+    outputcount = i2p::data::ByteStreamToBase32(
+        (uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
+    b32buffer[52] = '\0';
+    QString strb32address = "http://" + QString(b32buffer) + ".b32.i2p";
+    b32address->setPlainText(QApplication::translate(
+        "form_settingsgui", strb32address.toUtf8().constData(), Q_NULLPTR));
+    free(outputbuffer);
+    free(b32buffer);
+  } else {
+    b32address->setPlainText(QApplication::translate(
+        "form_settingsgui", "b32 address will be displayed when online",
+        Q_NULLPTR));
+  }
   settings->endGroup();
 
   settings->beginGroup("Usersearch");
@@ -349,6 +391,7 @@ void form_settingsgui::loadSettings() {
   } else {
     check_UserSearchEnable->setChecked(false);
   }
+
   spinBox_MaxLogMessagesUserSearch->setMinimum(0);
   spinBox_MaxLogMessagesUserSearch->setMaximum(200);
   spinBox_MaxLogMessagesUserSearch->setValue(
@@ -453,6 +496,17 @@ void form_settingsgui::saveSettings() {
   } else {
     settings->setValue("BlockStyle", "Normal");
   }
+  if (blockallcheckBox_2->isChecked() == true) {
+    settings->setValue("WebProfile", "Enabled");
+  } else {
+    settings->setValue("WebProfile", "Disabled");
+  }
+  if (blockallcheckBox_3->isChecked() == true) {
+    settings->setValue("HideWebProfileWhenInvisible", "True");
+  } else {
+    settings->setValue("HideWebProfileWhenInvisible", "False");
+  }
+
   settings->endGroup();
 
   settings->beginGroup("Usersearch");
