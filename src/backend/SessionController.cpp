@@ -68,7 +68,8 @@ void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
     emit signDebugMessages("• I2P Stream Controller can't connect ‣ SAM or I2P "
-                           "crashed [SAM Host: " + mSamHost + ":" + mSamPort + "]");
+                           "crashed [SAM Host: " +
+                           mSamHost + ":" + mSamPort + "]");
     emit signSessionStreamStatusOK(false);
 
     QMessageBox msgBox(NULL);
@@ -111,7 +112,8 @@ void CSessionController::slotReadFromSocket() {
           settings.beginGroup("Network");
           Signature.replace(
               "%s",
-//              settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString());
+              //              settings.value("Signature_Type",
+              //              "EdDSA_SHA512_Ed25519").toString());
               settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
