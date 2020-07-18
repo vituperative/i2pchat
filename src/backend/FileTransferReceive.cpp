@@ -81,7 +81,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Auto-accepted incoming file transfer<br>Filename: %1")
+            tr(" Auto-accepted download [%1]")
                 .arg(mFileName),
             true);
 
@@ -95,7 +95,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Incoming file transfer: %1"
+            tr(" Incoming file transfer [%1]"
                "<br>Accept or reject from the userlist")
                 .arg(mFileName));
   }
@@ -159,7 +159,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
       }
       mCore.getUserManager()
           ->getUserByI2P_Destination(mDestination)
-          ->slotIncomingMessageFromSystem(tr("Transfer of %1 complete [%2 %3]")
+          ->slotIncomingMessageFromSystem(tr("Download complete [%1 %2 %3]")
                                               .arg(mFileName)
                                               .arg(SSize)
                                               .arg(SizeName));
@@ -170,16 +170,14 @@ void CFileTransferReceive::slotStreamStatusReceived(
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("Sender cancelled file transfer of %1 ‣ Incomplete file "
-                   "deleted")
+                tr("Sender aborted file transfer [%1]")
                     .arg(mFileName));
 
       } else {
         mFileForReceive.remove();
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(tr("You cancelled file transfer of "
-                                               "%1 ‣ Incomplete file deleted")
+            ->slotIncomingMessageFromSystem(tr("Download aborted [%1]")
                                                 .arg(mFileName));
       }
     }
@@ -195,7 +193,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error while receiving %1<br>%2")
+            tr("I2P Stream Error: Download failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
     mFileForReceive.close();
@@ -209,7 +207,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error while receiving %1 [INVALID_KEY]<br>%2")
+            tr("I2P Stream Error (Invalid Key) ‣ Download failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 
@@ -224,7 +222,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error while receiving %1 [INVALID_ID]<br>%2")
+            tr("I2P Stream Error (Invalid ID) ‣ Download failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 
@@ -303,8 +301,7 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
     }
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem("<br>File transfer of " + mFileName +
-                                        " complete [" + SSize + " " + SizeName +
+        ->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName + " " + SSize + " " + SizeName +
                                         "]");
 
     mFileForReceive.close();

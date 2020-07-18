@@ -285,7 +285,7 @@ void CI2PStream::operator<<(const QByteArray Data) {
   } else {
     QByteArray Message = "• [Stream ID: ";
     Message += smID;
-    Message += "] Controller ‣ Not connected - cannot send data";
+    Message += "] Controller ‣ Not connected";
     emit signDebugMessages(Message);
   }
 }
