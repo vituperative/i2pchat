@@ -207,7 +207,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error (Invalid Key) ‣ Download failed [%1]<br>%2")
+            tr("I2P Stream Error (Invalid Key): Download failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 
@@ -222,7 +222,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error (Invalid ID) ‣ Download failed [%1]<br>%2")
+            tr("I2P Stream Error (Invalid ID): Download failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 

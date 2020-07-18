@@ -120,13 +120,13 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
       if (mAllreadySendedSize == 0) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(tr("Cannot connect: upload failed [%1]")
+            ->slotIncomingMessageFromSystem(tr("Cannot connect: Upload failed [%1]")
                                                 .arg(mFileName));
       } else {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("Recipient cancelled upload [%1]")
+                tr("Recipient aborted transfer [%1]")
                     .arg(mFileName));
       }
     }
