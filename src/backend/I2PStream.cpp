@@ -113,8 +113,8 @@ void CI2PStream::slotConnected() {
   emit signDebugMessages("• [Stream ID: " + smID +
                          "] Controller ‣ Connected to SAM v3");
   mDoneDisconnect = false;
-  emit signDebugMessages("• [Stream ID: " + smID +
-                         "] Outgoing ‣ " + SAM_HANDSHAKE_V3);
+  emit signDebugMessages("• [Stream ID: " + smID + "] Outgoing ‣ " +
+                         SAM_HANDSHAKE_V3);
   try {
     if (mTcpSocket.isWritable()) {
       mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -151,8 +151,8 @@ void CI2PStream::slotReadFromSocket() {
   }
 
   QString debugData = newData.replace("STREAM STATUS RESULT=", "STATUS: ")
-                             .replace("CANT_REACH_PEER MESSAGE=", "")
-                             .replace("\"Connection timed out\"\n", "No Response");
+                          .replace("CANT_REACH_PEER MESSAGE=", "")
+                          .replace("\"Connection timed out\"\n", "No Response");
 
   emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + debugData);
 
@@ -285,7 +285,7 @@ void CI2PStream::operator<<(const QByteArray Data) {
   } else {
     QByteArray Message = "• [Stream ID: ";
     Message += smID;
-    Message += "] Controller ‣ Not connected - cannot send data";
+    Message += "] Controller ‣ Not connected";
     emit signDebugMessages(Message);
   }
 }

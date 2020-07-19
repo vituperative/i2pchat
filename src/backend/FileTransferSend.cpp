@@ -111,7 +111,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("File transfer complete<br>FileName: %1<br>")
+                tr("Upload complete [%1]")
                     .arg(mFileName));
         mAllreadyFinished = true;
       }
@@ -120,14 +120,13 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
       if (mAllreadySendedSize == 0) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(tr("Can't connect to the user for "
-                                               "file transfer<br>Filename: %1")
+            ->slotIncomingMessageFromSystem(tr("Cannot connect: Upload failed [%1]")
                                                 .arg(mFileName));
       } else {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("The recipient cancelled the file transfer<br>Filename: %1")
+                tr("Recipient aborted transfer [%1]")
                     .arg(mFileName));
       }
     }
@@ -142,7 +141,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("File transfer: %1 I2P stream error:<br>%2")
+            tr("I2P Stream Error: Upload failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 
@@ -156,7 +155,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("File transfer: %1 Stream got an INVALID_KEY ERROR:<br>%2")
+            tr("I2P Stream Error (Invalid Key): Upload failed [%1]<br>%2")
                 .arg(mFileName)
                 .arg(Message));
 
@@ -169,9 +168,8 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
     emit signFileTransferAborted();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem("File transfer: " + mFileName +
-                                        "Stream got an INVALID_ID ERROR:<br>" +
-                                        Message);
+        ->slotIncomingMessageFromSystem("I2P Stream Error (Invalid ID): Upload failed [" + mFileName +
+                                        "]<br>" + Message);
 
     mFileForSend.close();
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
@@ -198,7 +196,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("File transfer declined<br>Filename: %1").arg(mFileName));
+                tr("Upload declined [%1]").arg(mFileName));
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
 
@@ -210,7 +208,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
       mCore.getUserManager()
           ->getUserByI2P_Destination(mDestination)
           ->slotIncomingMessageFromSystem(
-              tr("File transfer declined<br>Filename: %1").arg(mFileName));
+              tr("Upload declined [%1]").arg(mFileName));
       mConnectionManager.doDestroyStreamObjectByID(ID);
       mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
     }
@@ -236,7 +234,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("File transfer not acceped, cancelling...<br>Filename: %1")
+                tr("Upload declined [%1]")
                     .arg(mFileName));
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
@@ -298,7 +296,7 @@ void CFileTransferSend::SendFile_v0dot3() {
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("File transfer completed<br>FileName: %1<br>").arg(mFileName));
+            tr("Upload completed [%1]").arg(mFileName));
     mAllreadyFinished = true;
   }
 }
@@ -318,7 +316,7 @@ void CFileTransferSend::SendFile_v0dot2() {
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("File transfer completed<br>FileName: %1<br>").arg(mFileName));
+            tr("Upload completed [%1]").arg(mFileName));
     mAllreadyFinished = true;
   }
 }
@@ -339,7 +337,7 @@ void CFileTransferSend::SendFile_v0dot1() {
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
-            tr("File transfer completed<br>FileName: %1<br>").arg(mFileName));
+            tr("Upload completed [%1]").arg(mFileName));
     mAllreadyFinished = true;
   }
 }
