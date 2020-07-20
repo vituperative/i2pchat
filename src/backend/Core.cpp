@@ -38,6 +38,8 @@ CCore::CCore(QString configPath) {
   mSoundManager = new CSoundManager(mConfigPath);
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  m_access_anyone_incoming =
+      settings.value("Users/allow_incoming_new_users", true).toBool();
   settings.beginGroup("Network");
   mMyDestinationB32 = settings.value("MyDestinationB32", "").toString(),
 
@@ -853,6 +855,11 @@ void CCore::loadUserInfos() {
   }
   settings.endGroup();
   settings.sync();
+
+  if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
+    mUserInfos.Nickname = "Unallowed nickname";
+    emit signNicknameChanged();
+  }
 }
 
 const CReceivedInfos CCore::getUserInfos() const { return mUserInfos; }
@@ -918,3 +925,5 @@ QString CCore::canonicalizeTopicId(QString topicIdNonCanonicalized) {
   // FIXME canonicalizeTopicId(topicIdNonCanonicalized);
   return topicIdNonCanonicalized;
 }
+
+void CCore::changeAccessIncomingUsers(bool m) { m_access_anyone_incoming = m; }

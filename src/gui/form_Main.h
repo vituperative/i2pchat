@@ -115,6 +115,9 @@ private slots:
   void toggleVisibility(QSystemTrayIcon::ActivationReason e);
   void toggleVisibilitycontextmenu();
   void OnlineStateChanged();
+  //
+signals:
+  void changeAllowIncoming(bool);
 
 private:
   void initStyle();

@@ -449,9 +449,11 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
           QString myNick = mCore.getUserInfos().Nickname;
           myNick = myNick.replace("<", "").replace(">", "");
           TEMPHTTPPAGE.replace("[USERNAME]", myNick);
+
           TEMPHTTPPAGE.replace("[AVATARIMAGE]",
                                mCore.getUserInfos().AvatarImage.toBase64());
           TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
+
           *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
           mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
         } else { // what to do if the webprofile is disabled?

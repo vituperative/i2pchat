@@ -257,6 +257,10 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
                               qint32 I2PStream_ID, bool SaveUserList) {
   CUserBlockManager &UserBlockManager = *(mCore.getUserBlockManager());
   CProtocol &Protocol = *(mCore.getProtocol());
+  if (!mCore.getAccessAnyoneIncoming())
+    return false;
+  if (!nicknameRegExp.exactMatch(Name))
+    Name = "Unallowed nickname";
 
   bool isValid = validateI2PDestination(I2PDestination);
 

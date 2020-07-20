@@ -22,10 +22,11 @@
 #define CUSERMANAGER_H
 
 #include "Core.h"
+#include "UnsentChatMessageStorage.h"
 #include "User.h"
 #include <QObject>
-
-#include "UnsentChatMessageStorage.h"
+#include <QRegExp>
+static const QRegExp nicknameRegExp("^([a-zA-Z0-9_ ]){1,256}$");
 
 class CUserManager : public QObject {
   Q_OBJECT
@@ -67,5 +68,7 @@ private:
   const QString mUserFileWithPath;
   CUnsentChatMessageStorage &mUnsentMessageStorage;
   QList<CUser *> mUsers;
+
+private:
 };
 #endif // CUSERMANAGER_H
