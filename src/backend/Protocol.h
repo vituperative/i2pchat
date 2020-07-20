@@ -45,7 +45,10 @@ const QString FIRSTPAKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
 const QString HTTPPAGE =
     "<!DOCTYPE HTML><html><head><title>[USERNAME] | I2PChat "
     "Destination</title><meta http-equiv=\"Content-Type\" content=\"text/html; "
-    "charset=UTF-8\"><style type=\"text/css\">body, html{margin: 0; "
+    "charset=UTF-8\"><meta http-equiv=\"Content-Security-Policy\" "
+    "content=\"default-src \'none\'; img-src data:; style-src "
+    "\'unsafe-inline\';\" /><style type=\"text/css\">body, "
+    "html{margin: 0; "
     "background: #000} body{text-align: center; font-family: Open Sans, Segoe "
     "UI, sans-serif; font-size: 13pt; color: #ddd} a, a:visited{color: #900; "
     "text-decoration: none; outline: none} a:hover{color: #b00} "

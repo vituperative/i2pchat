@@ -446,7 +446,9 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
           if (TEMPHTTPPAGE.isEmpty()) {
             TEMPHTTPPAGE = HTTPPAGE;
           }
-          TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname);
+          TEMPHTTPPAGE.replace("[USERNAME]", mCore.getUserInfos().Nickname)
+              .replace("<", "")
+              .replace(">", "");
           TEMPHTTPPAGE.replace("[AVATARIMAGE]",
                                mCore.getUserInfos().AvatarImage.toBase64());
           TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
