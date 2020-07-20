@@ -26,7 +26,7 @@
 #include "User.h"
 #include <QObject>
 #include <QRegExp>
-static const QRegExp nicknameRegExp("^([a-zA-Z0-9_ ]){1,256}$");
+static const QRegExp nicknameRegExp("^([a-zA-Z0-9_ |]){1,256}$");
 
 class CUserManager : public QObject {
   Q_OBJECT
