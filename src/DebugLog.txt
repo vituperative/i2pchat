@@ -1,0 +1,16 @@
+22:07:37 Debug: Curent style:  "Fusion" (src/backend/Main.cpp:190, int main(int, char**))
+
+22:07:37 Warning: QIODevice::read (QFile, ":qss/Default.qss"): device not open (:0, )
+
+22:08:27 Debug: Curent style:  "Fusion" (src/backend/Main.cpp:190, int main(int, char**))
+
+22:08:27 Warning: QIODevice::read (QFile, ":qss/Default.qss"): device not open (:0, )
+
+22:08:36 Debug: Curent style:  "Fusion" (src/backend/Main.cpp:190, int main(int, char**))
+
+22:08:36 Warning: QIODevice::read (QFile, ":qss/Default.qss"): device not open (:0, )
+
+22:21:50 Debug: Curent style:  "Fusion" (src/backend/Main.cpp:190, int main(int, char**))
+
+22:21:51 Warning: QIODevice::read (QFile, ":qss/Default.qss"): device not open (:0, )
+
