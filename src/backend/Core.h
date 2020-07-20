@@ -148,11 +148,11 @@ private:
   void restartCore();
   void closeAllActiveConnections();
 public slots:
-	void changeAccessIncomingUsers( bool );
+  void changeAccessIncomingUsers(bool);
+
 protected:
   bool m_access_anyone_incoming; // new users.
 public:
-  bool getAccessAnyoneIncoming(){ return m_access_anyone_incoming; }
-
+  bool getAccessAnyoneIncoming() { return m_access_anyone_incoming; }
 };
 #endif

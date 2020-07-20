@@ -81,9 +81,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
     mCore.getUserManager()
         ->getUserByI2P_Destination(Destination)
         ->slotIncomingMessageFromSystem(
-            tr(" Auto-accepted download [%1]")
-                .arg(mFileName),
-            true);
+            tr(" Auto-accepted download [%1]").arg(mFileName), true);
 
     QDir dir(AutoAcceptedFilePath);
     if (dir.exists() == false) {
@@ -170,15 +168,14 @@ void CFileTransferReceive::slotStreamStatusReceived(
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
-                tr("Sender aborted file transfer [%1]")
-                    .arg(mFileName));
+                tr("Sender aborted file transfer [%1]").arg(mFileName));
 
       } else {
         mFileForReceive.remove();
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(tr("Download aborted [%1]")
-                                                .arg(mFileName));
+            ->slotIncomingMessageFromSystem(
+                tr("Download aborted [%1]").arg(mFileName));
       }
     }
 
@@ -301,8 +298,8 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
     }
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName + " " + SSize + " " + SizeName +
-                                        "]");
+        ->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName +
+                                        " " + SSize + " " + SizeName + "]");
 
     mFileForReceive.close();
     mCore.getFileTransferManager()->removeFileReceive(mStreamID);

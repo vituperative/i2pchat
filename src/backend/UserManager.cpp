@@ -24,7 +24,6 @@
 #include "Protocol.h"
 #include "UserBlockManager.h"
 
-
 CUserManager::CUserManager(CCore &Core, QString UserFileWithPath,
                            CUnsentChatMessageStorage &UnsentChatMessageStorage)
     : mCore(Core), mUserFileWithPath(UserFileWithPath),
@@ -254,15 +253,14 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
     return false;
 }
 
-
-
 bool CUserManager::addNewUser(QString Name, QString I2PDestination,
                               qint32 I2PStream_ID, bool SaveUserList) {
   CUserBlockManager &UserBlockManager = *(mCore.getUserBlockManager());
   CProtocol &Protocol = *(mCore.getProtocol());
-  if( !mCore.getAccessAnyoneIncoming() ) return false;
-  if(	!nicknameRegExp.exactMatch(Name) )
-	 Name="Unallowed nickname";
+  if (!mCore.getAccessAnyoneIncoming())
+    return false;
+  if (!nicknameRegExp.exactMatch(Name))
+    Name = "Unallowed nickname";
 
   bool isValid = validateI2PDestination(I2PDestination);
 

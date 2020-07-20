@@ -31,7 +31,8 @@ form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
   Core = new CCore(configDir);
   connect(Core, SIGNAL(signUserStatusChanged()), this,
           SLOT(eventUserChanged()));
-  connect( this, SIGNAL(changeAllowIncoming(bool)), Core, SLOT(changeAccessIncomingUsers(bool) ) );
+  connect(this, SIGNAL(changeAllowIncoming(bool)), Core,
+          SLOT(changeAccessIncomingUsers(bool)));
   connect(Core, SIGNAL(signOnlineStatusChanged()), this,
           SLOT(OnlineStateChanged()));
 
