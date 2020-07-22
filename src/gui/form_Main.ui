@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
+    <width>244</width>
     <height>461</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>248</width>
+    <width>244</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>248</width>
+    <width>244</width>
     <height>16777215</height>
    </size>
   </property>
@@ -56,13 +56,13 @@
      <widget class="QListWidget" name="listWidget">
       <property name="minimumSize">
        <size>
-        <width>248</width>
+        <width>244</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>248</width>
+        <width>244</width>
         <height>16777215</height>
        </size>
       </property>
@@ -144,14 +144,14 @@ QListView{padding:1px;}</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>248</width>
-        <height>30</height>
+        <width>244</width>
+        <height>31</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>248</width>
-        <height>30</height>
+        <width>244</width>
+        <height>31</height>
        </size>
       </property>
       <property name="sizeIncrement">
@@ -188,7 +188,7 @@ QListView{padding:1px;}</string>
         <number>3</number>
        </property>
        <property name="bottomMargin">
-        <number>1</number>
+        <number>2</number>
        </property>
        <property name="horizontalSpacing">
         <number>6</number>
@@ -200,14 +200,14 @@ QListView{padding:1px;}</string>
         <widget class="QLabel" name="avatarlabel">
          <property name="minimumSize">
           <size>
-           <width>27</width>
-           <height>27</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>27</width>
-           <height>27</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -244,14 +244,14 @@ background: #fff;
          </property>
          <property name="minimumSize">
           <size>
-           <width>112</width>
-           <height>25</height>
+           <width>110</width>
+           <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>112</width>
-           <height>25</height>
+           <width>110</width>
+           <height>24</height>
           </size>
          </property>
          <property name="font">
@@ -273,7 +273,7 @@ background: #fff;
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
+       <item row="0" column="1" colspan="2" alignment="Qt::AlignVCenter">
         <widget class="QLabel" name="nicknamelabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -283,14 +283,14 @@ background: #fff;
          </property>
          <property name="minimumSize">
           <size>
-           <width>91</width>
-           <height>28</height>
+           <width>94</width>
+           <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>91</width>
-           <height>28</height>
+           <width>94</width>
+           <height>24</height>
           </size>
          </property>
          <property name="font">
@@ -299,7 +299,7 @@ background: #fff;
           </font>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Nickname</string>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -338,7 +338,7 @@ background: #fff;
    </property>
    <property name="maximumSize">
     <size>
-     <width>248</width>
+     <width>244</width>
      <height>16635</height>
     </size>
    </property>
