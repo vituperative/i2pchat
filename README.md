@@ -1,4 +1,4 @@
-# I2P Chat AKA I2P Qt Messenger
+# I2PChat (formerly I2P-Messenger)
 [![Build status appveyor MinGW32](https://ci.appveyor.com/api/projects/status/0tanjnojnlpksug6?svg=true)](https://ci.appveyor.com/project/wipedlifepotato/i2pchat)
 [![Build Status travis linux(xenial)](https://travis-ci.org/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.org/wipedlifepotato/i2pchat)
 ## Screenshots
@@ -51,11 +51,11 @@ sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtm
 ```
  * Run qmake for either release:
 ```
-qmake I2P-Messenger.pro "CONFIG += release"
+qmake I2PChat.pro "CONFIG += release"
 ```
 or for debug:
 ```
-qmake I2P-Messenger.pro "CONFIG += debug"
+qmake I2PChat.pro "CONFIG += debug"
 ```
  * And after that,
 ```
@@ -73,25 +73,5 @@ make
 
 ## Running
 
-On Linux, `make` creates `I2P-Messenger` executable in the current folder. Run it with `./I2P-Messenger`. When ran, switch yourself to online. It will generate your Destination address (a key) on first connect to SAM.
+On Linux, `make` creates `I2PChat` executable in the current folder. Run it with `./I2PChat`. When ran, switch yourself to online. It will generate your Destination address (a key) on first connect to SAM.
 
-## Old files and sites
-
- * http://echelon.i2p/qti2pmessenger/macos → Mac OS X versions, not tested;
- * http://echelon.i2p/qti2pmessenger/ → old eche|on's site for I2P Chat (versions up to 0.2.24);
- * https://launchpad.net/~i2p.packages/+archive/ubuntu/i2p/+sourcepub/4824794/+listing-archive-extra → Kill Your TV's PPA (v.0.2.25).
- * http://git.repo.i2p/w/I2P-Messenger-QT.git/shortlog → original repo (fully merged into this /i2pchat)
-
-## Forum thread (English)
-
-http://forum.i2p/viewtopic.php?t=2474
-
-## List of relevant repositories (in Russian)
-
-я два репа на гитхабе создал
- * один для антиквариата по части и2п массажника https://github.com/hypnosis-i2p/I2PQtMessengerLegacy ;
- * другой для разработки https://github.com/hypnosis-i2p/i2pchat .
-
-## Footnotes
-
-[1] http://forum.i2p/viewtopic.php?p=11071#11071
