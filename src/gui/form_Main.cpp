@@ -25,6 +25,7 @@
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
     : QMainWindow(parent) {
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this); // this sets up GUI
 
   QApplication::setQuitOnLastWindowClosed(false);
@@ -216,7 +217,7 @@ void form_MainWindow::namingMe() {
         QMessageBox::Close);
   } else
     QMessageBox::information(this, "",
-                             tr("Your Client must be Online for that"),
+                             tr("You must be online to copy Destination"),
                              QMessageBox::Close);
 }
 void form_MainWindow::closeApplication() {
