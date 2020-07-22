@@ -34,10 +34,6 @@
 * June, 2020: dr\|z3d starts work on renovating the user interface
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
-## License
-
-The license of this software is GPLv2.
-
 ### Build instructions
 
  * Install prerequisites:
