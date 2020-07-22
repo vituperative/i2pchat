@@ -350,7 +350,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
               stream->getDestination()) == false) {
 
         if (versiond >= 0.3) {
-          mCore.getUserManager()->addNewUser("Receiving",
+          mCore.getUserManager()->addNewUser("...identifying...",
                                              stream->getDestination(), ID);
         } else {
           mCore.getUserManager()->addNewUser("Unknown",
@@ -440,7 +440,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
         settings.sync();
 
         if (webprofileenabled == true) {
-          printf("Web Profile enabled\n");
+//          printf("Web Profile enabled\n"); // Debug
           QString TEMPHTTPPAGE =
               loadfile(mCore.getConfigPath() + "/www/index.html");
           if (TEMPHTTPPAGE.isEmpty()) {
