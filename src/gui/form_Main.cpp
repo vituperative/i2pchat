@@ -792,7 +792,7 @@ void form_MainWindow::copyDestination() {
 
   clipboard->setText(Destination);
   QMessageBox::information(
-      this, "", tr("\nDestination copied to clipboard!"),
+      this, "", tr("\nContact's Destination copied to clipboard"),
       QMessageBox::Close);
 }
 
