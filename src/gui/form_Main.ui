@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>238</width>
+    <width>234</width>
     <height>461</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>238</width>
+    <width>234</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>238</width>
+    <width>234</width>
     <height>16777215</height>
    </size>
   </property>
@@ -56,13 +56,13 @@
      <widget class="QListWidget" name="listWidget">
       <property name="minimumSize">
        <size>
-        <width>238</width>
+        <width>234</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>238</width>
+        <width>234</width>
         <height>16777215</height>
        </size>
       </property>
@@ -144,13 +144,13 @@ QListView{padding:1px;}</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>238</width>
+        <width>234</width>
         <height>31</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>238</width>
+        <width>234</width>
         <height>31</height>
        </size>
       </property>
@@ -190,7 +190,10 @@ QListView{padding:1px;}</string>
        <property name="bottomMargin">
         <number>2</number>
        </property>
-       <property name="spacing">
+       <property name="horizontalSpacing">
+        <number>2</number>
+       </property>
+       <property name="verticalSpacing">
         <number>4</number>
        </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
@@ -338,7 +341,7 @@ background: #fff;
    </property>
    <property name="maximumSize">
     <size>
-     <width>238</width>
+     <width>234</width>
      <height>16635</height>
     </size>
    </property>
