@@ -827,11 +827,10 @@ void CCore::loadUserInfos() {
 
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Information);
-    msgBox->setInformativeText(
-        tr("No username configured\nUsing \'%1\'  \n\nChange in "
-           "Settings -> User Details")
-            //            .arg(randomString));
-            .arg(mUserInfos.Nickname));
+    msgBox->setText(tr("\nNo username configured\nUsing \'%1\'  \n\nChange in "
+                       "Settings -> User Details")
+                        //            .arg(randomString));
+                        .arg(mUserInfos.Nickname));
 
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);

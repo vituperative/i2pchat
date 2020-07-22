@@ -279,14 +279,15 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
           return critical("Already exists user");
   }*/
   if (isValid == false) {
-    /*		qCritical()<<"File\t"<<__FILE__<<endl
-                               <<"Line:\t"<<__LINE__<<endl
-                               <<"Function:\t"<<"CUserManager::addNewUser"<<endl
-                               <<"Message:\t"<<"Destination is not valid"<<endl
-                               <<"Destination:\t"<<I2PDestination<<endl
-                               <<"action add new User ignored"<<endl;
-                    return false;
-    */
+    qCritical() << "File\t" << __FILE__ << endl
+                << "Line:\t" << __LINE__ << endl
+                << "Function:\t"
+                << "CUserManager::addNewUser" << endl
+                << "Message:\t"
+                << "Destination is not valid" << endl
+                << "Destination:\t" << I2PDestination << endl
+                << "Action:\tAdd New User ignored" << endl;
+    return false;
     return critical("Not a valid user");
   }
 

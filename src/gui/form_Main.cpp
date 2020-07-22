@@ -26,7 +26,8 @@
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
     : QMainWindow(parent) {
-  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
+                 Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this); // this sets up GUI
 
   QApplication::setQuitOnLastWindowClosed(false);
@@ -253,7 +254,8 @@ void form_MainWindow::closeApplication() {
   } else {
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(tr("\nFile transfer in progress...\nCancel transfer first!"));
+    msgBox->setText(
+        tr("\nFile transfer in progress...\nCancel transfer first!"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -387,8 +389,8 @@ void form_MainWindow::eventUserChanged() {
 
 void form_MainWindow::openUserListeClicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
-    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-    setWindowIcon(QIcon(pixmap));
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  setWindowIcon(QIcon(pixmap));
 
   if (t->text() == "U") {
     // open Chatwindow
@@ -791,9 +793,9 @@ void form_MainWindow::copyDestination() {
   QClipboard *clipboard = QApplication::clipboard();
 
   clipboard->setText(Destination);
-  QMessageBox::information(
-      this, "", tr("\nContact's Destination copied to clipboard"),
-      QMessageBox::Close);
+  QMessageBox::information(this, "",
+                           tr("\nContact's Destination copied to clipboard"),
+                           QMessageBox::Close);
 }
 
 void form_MainWindow::muteSound() {

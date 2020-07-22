@@ -440,7 +440,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
         settings.sync();
 
         if (webprofileenabled == true) {
-//          printf("Web Profile enabled\n"); // Debug
+          //          printf("Web Profile enabled\n"); // Debug
           QString TEMPHTTPPAGE =
               loadfile(mCore.getConfigPath() + "/www/index.html");
           if (TEMPHTTPPAGE.isEmpty()) {
