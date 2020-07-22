@@ -21,6 +21,7 @@
 
 form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
     : QDialog(parent), core(core) {
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
 
