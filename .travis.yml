@@ -13,7 +13,7 @@ matrix:
     - gcc
     script:
     - echo $TRAVIS_TAG
-    - qmake I2P-Messenger.pro
+    - qmake I2PChat.pro
     - make
     after_script:
      addons:
@@ -24,7 +24,7 @@ matrix:
     #  api_key:
     #    secure: <key>
     #  file:
-    #  - I2P-Messenger
+    #  - I2PChat
     #  skip_cleanup: true
     #  on:
     #    repo: wipedlifepotato/i2pchat
@@ -39,12 +39,12 @@ matrix:
 #    - brew link qt5 --force
 #    compiler: clang
 #    script:
-#    - mkdir -p /Users/travis/build/wipedlifepotato/i2pchat/I2P-Messenger.app
-#    - /usr/libexec/PlistBuddy -c "Set :CFBundleVersion Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2P-Messenger.app/Contents/Info.plist
-#    - /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2P-Messenger.app/Contents/Info.plist
-#    - qmake "CONFIG+=istravis" -spec macx-xcode I2P-Messenger.pro
-#    - xcodebuild -list -project I2P-Messenger.xcodeproj
-#    - xcodebuild -scheme I2P-Messenger build
+#    - mkdir -p /Users/travis/build/wipedlifepotato/i2pchat/I2PChat.app
+#    - /usr/libexec/PlistBuddy -c "Set :CFBundleVersion Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2PChat.app/Contents/Info.plist
+#    - /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString Alpha_$VERSION_NUMBER" wipedlifepotato/i2pchat/I2PChat.app/Contents/Info.plist
+#    - qmake "CONFIG+=istravis" -spec macx-xcode I2PChat.pro
+#    - xcodebuild -list -project I2PChat.xcodeproj
+#    - xcodebuild -scheme I2PChat build
 #    #ssh-key & deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
 #    #deploy:
 #    #  provider: releases
@@ -57,7 +57,7 @@ matrix:
 #    #    repo: wipedlifepotato/i2pchat
 #    #    tags: true
 
-# Does not works correctly TODO: maybe delete it 😁️ 
+# Does not works correctly TODO: maybe delete it 😁️
 #  - os: windows
 #    before_install:
 #    - dir C:/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/10.0.17134.0/x64
@@ -73,7 +73,7 @@ matrix:
 #    script:
 #    - cmd.exe /C 'cd && "C:\Qt\5.12.3\msvc2017\bin\qtenv2.bat" && cd && "C:\Program
 #      Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
-#      x86 && cd "C:\Users\travis\build\wipedlifepotato\i2pchat" && cd && qmake I2P-Messenger.pro
+#      x86 && cd "C:\Users\travis\build\wipedlifepotato\i2pchat" && cd && qmake I2PChat.pro
 #      && nmake'
 #    #ssh-key & deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
 #    #deploy:
