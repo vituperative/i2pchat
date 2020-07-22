@@ -1,5 +1,5 @@
 @echo off
-cls 
+cls
 echo "Start this Batch - Script from Qt-Console"
 echo "R = Release"
 echo "D = Debug"
@@ -13,15 +13,15 @@ set auswahl=
 if "%auswahl%" == "R" GOTO RELEASE
 if "%auswahl%" == "D" GOTO DEBUG
 
-echo "Abort chose R or D ;)"	
+echo "Abort chose R or D ;)"
 pause
-exit 
+exit
 
 :DEBUG
-	qmake -win32 I2P-Messenger.pro
+	qmake -win32 I2PChat.pro
 	make
 	exit
 :RELEASE
-	qmake I2P-Messenger_release.pro
+	qmake I2PChat_release.pro
 	make
 	exit
