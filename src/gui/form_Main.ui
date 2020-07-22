@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
+    <width>238</width>
     <height>461</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>240</width>
+    <width>238</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>240</width>
+    <width>238</width>
     <height>16777215</height>
    </size>
   </property>
@@ -56,13 +56,13 @@
      <widget class="QListWidget" name="listWidget">
       <property name="minimumSize">
        <size>
-        <width>240</width>
+        <width>238</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>240</width>
+        <width>238</width>
         <height>16777215</height>
        </size>
       </property>
@@ -144,13 +144,13 @@ QListView{padding:1px;}</string>
       </property>
       <property name="minimumSize">
        <size>
-        <width>240</width>
+        <width>238</width>
         <height>31</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>240</width>
+        <width>238</width>
         <height>31</height>
        </size>
       </property>
@@ -185,15 +185,12 @@ QListView{padding:1px;}</string>
         <number>1</number>
        </property>
        <property name="rightMargin">
-        <number>3</number>
+        <number>2</number>
        </property>
        <property name="bottomMargin">
         <number>2</number>
        </property>
-       <property name="horizontalSpacing">
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing">
+       <property name="spacing">
         <number>4</number>
        </property>
        <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
@@ -244,13 +241,13 @@ background: #fff;
          </property>
          <property name="minimumSize">
           <size>
-           <width>110</width>
+           <width>112</width>
            <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>110</width>
+           <width>112</width>
            <height>24</height>
           </size>
          </property>
@@ -295,11 +292,14 @@ background: #fff;
          </property>
          <property name="font">
           <font>
-           <pointsize>9</pointsize>
+           <pointsize>8</pointsize>
           </font>
          </property>
          <property name="text">
           <string>Nickname</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -338,7 +338,7 @@ background: #fff;
    </property>
    <property name="maximumSize">
     <size>
-     <width>240</width>
+     <width>238</width>
      <height>16635</height>
     </size>
    </property>
