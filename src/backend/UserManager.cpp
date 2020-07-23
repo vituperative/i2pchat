@@ -154,16 +154,16 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       CUser *theUser = mUsers.at(i);
 
       if (theUser->getClientName() != nullptr) {
-        Infos = "Nickname:\t\t" + theUser->getName() + "\n";
+        Infos = "Nickname:\t\t" + theUser->getName() + "  \n";
         Infos += "Client:\t\t" + theUser->getClientName() + " " +
-                 theUser->getClientVersion() + "\n";
-        Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
-        Infos += "File transfer support:\t" +
+                 theUser->getClientVersion() + "  \n";
+        Infos += "Protocol:\t\t" + theUser->getProtocolVersion() + "  \n";
+        Infos += "File transfer:\t" +
                  theUser->getMinProtocolVersionFiletransfer() + " - " +
-                 theUser->getMaxProtocolVersionFiletransfer() + "\n";
+                 theUser->getMaxProtocolVersionFiletransfer() + "  \n";
       } else {
-        Infos = "Nickname:\t" + theUser->getName() + "\n";
-        Infos += "Status:\tOffline\n";
+        Infos = "Nickname:\t" + theUser->getName() + "  \n";
+        Infos += "Status:\tOffline  \n";
       }
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
@@ -173,15 +173,15 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
         if (receivedInfos.Gender != nullptr || sAge != "0" ||
             receivedInfos.Interests != nullptr) {
-          Infos += "\nUser Information:\n";
+          //Infos += "\nUser Information:\n";
           if (receivedInfos.Gender != nullptr) {
-            Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";
+            Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
           }
           if (sAge != nullptr && sAge != "0") {
-            Infos += "Age:\t\t" + sAge + "\n";
+            Infos += "Age:\t\t" + sAge + "  \n";
           }
           if (receivedInfos.Interests != nullptr) {
-            Infos += "Interests:\t\t" + receivedInfos.Interests;
+            Infos += "Interests:\t\t" + receivedInfos.Interests + "  ";
           }
         }
       }

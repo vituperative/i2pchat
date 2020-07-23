@@ -18,11 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QIcon>
 #include <QSystemTrayIcon>
-
 #include "UserManager.h"
 #include "form_Main.h"
-#include <QIcon>
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
     : QMainWindow(parent) {
@@ -830,8 +829,9 @@ void form_MainWindow::showUserInfos() {
   } else {
     msgBox.setIconPixmap(avatar);
   }
-  msgBox.setText("");
-  msgBox.setInformativeText(UserInfos);
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  msgBox.setWindowIcon(QIcon(pixmap));
+  msgBox.setText("\n" + UserInfos);
   msgBox.setStandardButtons(QMessageBox::Ok);
   msgBox.setDefaultButton(QMessageBox::Ok);
   msgBox.setWindowModality(Qt::NonModal);
