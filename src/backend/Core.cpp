@@ -237,7 +237,8 @@ QString CCore::calcSessionOptionString() const {
   {
     QStringList AllowEncTypes = {"4", "4,0", "4, 0"};
 
-    auto enc_type = settings.value("i2cp.leaseSetEncType=", "4,0").toString();
+    //auto enc_type = settings.value("i2cp.leaseSetEncType=", "4,0").toString();
+    auto enc_type = settings.value("i2cp.leaseSetEncType=", "4").toString();
     auto encnotfound = true;
     for (int i = 0; i < AllowEncTypes.size(); ++i) {
       if (enc_type.contains(AllowEncTypes.at(i))) {
@@ -249,8 +250,10 @@ QString CCore::calcSessionOptionString() const {
     if (encnotfound)
       SessionOptionString.append(
           "i2cp.leaseSetEncType=" +
-          settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
+          //settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
+          settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
   }
+
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
   settings.sync();
@@ -359,7 +362,7 @@ void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
     } else {
       mConnectionManager->doDestroyStreamObjectByID(ID);
       user->slotIncomingMessageFromSystem(
-          tr("Invalid User - Destination: please delete the user\n"));
+          tr("Invalid Contact Destination: please delete the user\n"));
       user->setConnectionStatus(CONNECTERROR);
     }
     deletePacketManagerByID(ID);
@@ -479,17 +482,6 @@ QString CCore::getConnectionDump() const {
       } else {
         Message += "\tStream Mode:\t???\n";
       }
-
-      // Print ConnectionType
-
-      //      if (Stream->getConnectionType() == UNKNOWN) {
-      //        Message += "\tTrust:\t\tUNKNOWN\n";
-      //      } else if (Stream->getConnectionType() == KNOWN) {
-      //        Message += "\tTrust:\t\tKNOWN\n";
-      //      } else {
-      //        Message += "\tTrust:\t\t???\n";
-      //      }
-      //      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n\n";
     }
 
     Message += "• Streams\n\n";
