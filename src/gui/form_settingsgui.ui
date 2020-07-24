@@ -1147,7 +1147,7 @@ p, li { white-space: pre-wrap; }
            <string>ECIES</string>
           </property>
           <property name="checked">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -1172,7 +1172,7 @@ p, li { white-space: pre-wrap; }
            <string>ECIES + ElGamal</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -2082,7 +2082,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>14</x>
          <y>28</y>
-         <width>189</width>
+         <width>193</width>
          <height>105</height>
         </rect>
        </property>
@@ -2180,7 +2180,7 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
           <property name="text">
-           <string>Sort by last communcation</string>
+           <string>Sort by last communication</string>
           </property>
           <property name="checked">
            <bool>false</bool>
