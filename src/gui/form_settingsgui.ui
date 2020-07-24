@@ -673,9 +673,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>234</y>
+        <y>233</y>
         <width>380</width>
-        <height>161</height>
+        <height>162</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -702,7 +702,7 @@ p, li { white-space: pre-wrap; }
          <height>100</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_10">
+       <layout class="QGridLayout" name="TunnConf">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -860,7 +860,7 @@ p, li { white-space: pre-wrap; }
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_23">
+       <layout class="QGridLayout" name="TunnName">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -904,7 +904,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>50</y>
         <width>380</width>
-        <height>44</height>
+        <height>45</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -928,7 +928,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>12</y>
          <width>356</width>
-         <height>26</height>
+         <height>25</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_30">
@@ -1004,7 +1004,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>184</y>
         <width>380</width>
-        <height>45</height>
+        <height>43</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1029,7 +1029,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>14</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -1126,21 +1126,21 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>99</y>
+        <y>100</y>
         <width>380</width>
-        <height>80</height>
+        <height>79</height>
        </rect>
       </property>
       <widget class="QWidget" name="layoutWidget_10">
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="Signature">
+       <layout class="QGridLayout" name="SigType_2">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -1210,12 +1210,12 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>44</y>
+         <y>46</y>
          <width>356</width>
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_29">
+       <layout class="QGridLayout" name="NewDest">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -1394,11 +1394,23 @@ border-radius: 2px;
      <widget class="QGroupBox" name="UserBio">
       <property name="geometry">
        <rect>
-        <x>3</x>
+        <x>4</x>
         <y>50</y>
-        <width>381</width>
+        <width>380</width>
         <height>109</height>
        </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>16777215</height>
+       </size>
       </property>
       <property name="title">
        <string/>
