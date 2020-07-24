@@ -156,10 +156,10 @@
            </size>
           </property>
           <property name="minimum">
-           <number>5</number>
+           <number>3</number>
           </property>
           <property name="maximum">
-           <number>99999</number>
+           <number>180</number>
           </property>
           <property name="value">
            <number>5</number>
@@ -260,6 +260,9 @@
             <width>80</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
           </property>
          </widget>
         </item>
@@ -541,7 +544,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>32</y>
+         <y>34</y>
          <width>227</width>
          <height>21</height>
         </rect>
@@ -995,7 +998,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="NewDest">
+     <widget class="QGroupBox" name="Crypto">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -1022,71 +1025,11 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>13</x>
-         <y>12</y>
-         <width>356</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_29">
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_26">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>160</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>New Destination:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="cmd_DestinationGenerate">
-          <property name="text">
-           <string>Generate</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="Crypto">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>99</y>
-        <width>380</width>
-        <height>80</height>
-       </rect>
-      </property>
       <widget class="QWidget" name="layoutWidget_9">
        <property name="geometry">
         <rect>
-         <x>13</x>
-         <y>48</y>
+         <x>14</x>
+         <y>14</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -1178,6 +1121,16 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+     </widget>
+     <widget class="QGroupBox" name="SigType">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>99</y>
+        <width>380</width>
+        <height>80</height>
+       </rect>
+      </property>
       <widget class="QWidget" name="layoutWidget_10">
        <property name="geometry">
         <rect>
@@ -1249,6 +1202,56 @@ p, li { white-space: pre-wrap; }
             <string>RedDSA_SHA512_Ed25519</string>
            </property>
           </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_12">
+       <property name="geometry">
+        <rect>
+         <x>13</x>
+         <y>44</y>
+         <width>356</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_29">
+        <property name="horizontalSpacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_26">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>New Destination:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="cmd_DestinationGenerate">
+          <property name="text">
+           <string>Generate</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -1659,7 +1662,7 @@ border-radius: 2px;
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>164</width>
+        <width>161</width>
         <height>30</height>
        </rect>
       </property>
