@@ -18,13 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QSystemTrayIcon>
-
-#include "UserManager.h"
 #include "form_Main.h"
+#include "UserManager.h"
+#include <QIcon>
+#include <QSystemTrayIcon>
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
     : QMainWindow(parent) {
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
+                 Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this); // this sets up GUI
 
   QApplication::setQuitOnLastWindowClosed(false);
@@ -209,24 +211,28 @@ void form_MainWindow::openDebugMessagesWindow() {
 void form_MainWindow::namingMe() {
   QClipboard *clipboard = QApplication::clipboard();
   QString Destination = Core->getMyDestination();
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  setWindowIcon(QIcon(pixmap));
   if (Destination != "") {
     clipboard->setText(Destination);
     QMessageBox::information(
-        this, "", tr("Your Destination has been copied to the clipboard"),
+        this, "", tr("\nYour Destination has been copied to the clipboard"),
         QMessageBox::Close);
-  } else
+  } else {
     QMessageBox::information(this, "",
-                             tr("Your Client must be Online for that"),
+                             tr("\nYou must be online to copy Destination"),
                              QMessageBox::Close);
+  }
 }
 void form_MainWindow::closeApplication() {
-
   if (Core->getFileTransferManager()->checkIfAFileTransferOrReceiveisActive() ==
       false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
+    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    msgBox->setWindowIcon(QIcon(pixmap));
     msgBox->setIcon(QMessageBox::Question);
-    msgBox->setText(tr("Are you sure you wish to quit?"));
+    msgBox->setText(tr("\nAre you sure you wish to quit?"));
     msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox->setDefaultButton(QMessageBox::Yes);
     msgBox->setWindowModality(Qt::WindowModal);
@@ -245,12 +251,12 @@ void form_MainWindow::closeApplication() {
 
     this->close();
   } else {
-
     QMessageBox *msgBox = new QMessageBox(NULL);
+    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    msgBox->setWindowIcon(QIcon(pixmap));
     msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(tr("I2PChat"));
-    msgBox->setInformativeText(tr("File transfer is in progress - cannot "
-                                  "quit.\nAbort the transfer first."));
+    msgBox->setText(
+        tr("\nFile transfer in progress...\nCancel transfer first!"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -384,6 +390,8 @@ void form_MainWindow::eventUserChanged() {
 
 void form_MainWindow::openUserListeClicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  setWindowIcon(QIcon(pixmap));
 
   if (t->text() == "U") {
     // open Chatwindow
@@ -519,11 +527,12 @@ void form_MainWindow::deleteUserClicked() {
 
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  setWindowIcon(QIcon(pixmap));
 
   QMessageBox *msgBox = new QMessageBox(this);
   msgBox->setIcon(QMessageBox::Question);
-  msgBox->setText(tr("I2PChat"));
-  msgBox->setInformativeText(tr("Do you really want to delete this contact?"));
+  msgBox->setText(tr("\nReally delete contact?"));
   msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox->setDefaultButton(QMessageBox::Yes);
   msgBox->setWindowModality(Qt::WindowModal);
@@ -785,9 +794,9 @@ void form_MainWindow::copyDestination() {
   QClipboard *clipboard = QApplication::clipboard();
 
   clipboard->setText(Destination);
-  QMessageBox::information(
-      this, "", tr("The Destination has been copied to the clipboard"),
-      QMessageBox::Close);
+  QMessageBox::information(this, "",
+                           tr("\nContact's Destination copied to clipboard"),
+                           QMessageBox::Close);
 }
 
 void form_MainWindow::muteSound() {
@@ -822,8 +831,9 @@ void form_MainWindow::showUserInfos() {
   } else {
     msgBox.setIconPixmap(avatar);
   }
-  msgBox.setText("");
-  msgBox.setInformativeText(UserInfos);
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  msgBox.setWindowIcon(QIcon(pixmap));
+  msgBox.setText("\n" + UserInfos);
   msgBox.setStandardButtons(QMessageBox::Ok);
   msgBox.setDefaultButton(QMessageBox::Ok);
   msgBox.setWindowModality(Qt::NonModal);

@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #include "SessionController.h"
+#include <QIcon>
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
 
@@ -73,10 +73,12 @@ void CSessionController::slotDisconnected() {
     emit signSessionStreamStatusOK(false);
 
     QMessageBox msgBox(NULL);
+    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Critical);
-    msgBox.setInformativeText(
-        "I2P Stream Controller can't connect\n SAM or I2P crashed\nSAM Host: " +
-        mSamHost + " • SAM Port: " + mSamPort);
+    msgBox.setText("\nI2P Stream Controller can't connect\n SAM or I2P "
+                   "crashed\nSAM Host: " +
+                   mSamHost + ":" + mSamPort);
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.setWindowModality(Qt::NonModal);
@@ -137,8 +139,8 @@ void CSessionController::slotReadFromSocket() {
         if (sam.result == DUPLICATED_DEST) {
           QMessageBox msgBox(NULL);
           msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setInformativeText(
-              tr("DUPLICATE DESTINATION DETECTED!\nDo not attempt to run "
+          msgBox.setText(
+              tr("\nDUPLICATE DESTINATION DETECTED!\nDo not attempt to run "
                  "I2PChat\nwith the same destination twice!\nSAM may need to "
                  "be restarted."));
           msgBox.setStandardButtons(QMessageBox::Ok);

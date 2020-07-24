@@ -154,16 +154,16 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       CUser *theUser = mUsers.at(i);
 
       if (theUser->getClientName() != nullptr) {
-        Infos = "Nickname:\t\t" + theUser->getName() + "\n";
+        Infos = "Nickname:\t\t" + theUser->getName() + "  \n";
         Infos += "Client:\t\t" + theUser->getClientName() + " " +
-                 theUser->getClientVersion() + "\n";
-        Infos += "Protocol version:\t" + theUser->getProtocolVersion() + "\n";
-        Infos += "File transfer support:\t" +
+                 theUser->getClientVersion() + "  \n";
+        Infos += "Protocol:\t\t" + theUser->getProtocolVersion() + "  \n";
+        Infos += "File transfer:\t" +
                  theUser->getMinProtocolVersionFiletransfer() + " - " +
-                 theUser->getMaxProtocolVersionFiletransfer() + "\n";
+                 theUser->getMaxProtocolVersionFiletransfer() + "  \n";
       } else {
-        Infos = "Nickname:\t" + theUser->getName() + "\n";
-        Infos += "Status:\tOffline\n";
+        Infos = "Nickname:\t" + theUser->getName() + "  \n";
+        Infos += "Status:\tOffline  \n";
       }
 
       if (theUser->getProtocolVersion_D() >= 0.3) {
@@ -173,15 +173,15 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
         if (receivedInfos.Gender != nullptr || sAge != "0" ||
             receivedInfos.Interests != nullptr) {
-          Infos += "\nUser Information:\n";
+          // Infos += "\nUser Information:\n";
           if (receivedInfos.Gender != nullptr) {
-            Infos += "Gender:\t\t" + receivedInfos.Gender + "\n";
+            Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
           }
           if (sAge != nullptr && sAge != "0") {
-            Infos += "Age:\t\t" + sAge + "\n";
+            Infos += "Age:\t\t" + sAge + "  \n";
           }
           if (receivedInfos.Interests != nullptr) {
-            Infos += "Interests:\t\t" + receivedInfos.Interests;
+            Infos += "Interests:\t\t" + receivedInfos.Interests + "  ";
           }
         }
       }
@@ -234,6 +234,24 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
       return false;
   };
 
+  auto validateEdDSA_SHA512_Ed25519 = [](QString Dest) {
+    if (Dest.length() == 528 &&
+        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
+        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+      return true;
+    else
+      return false;
+  };
+
+  auto validateRedDSA_SHA512_Ed25519 = [](QString Dest) {
+    if (Dest.length() == 528 &&
+        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
+        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+      return true;
+    else
+      return false;
+  };
+
   if (I2PDestination.right(4).contains("AAAA", Qt::CaseInsensitive)) {
     return validateB64(I2PDestination);
   } else if (I2PDestination.right(8).contains(".b32.i2p",
@@ -249,6 +267,14 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
              I2PDestination.mid(512, 9).contains("BQAIAAMAA",
                                                  Qt::CaseInsensitive)) {
     return validateECDSA_SHA512_P512(I2PDestination);
+  } else if (I2PDestination.length() == 528 &&
+             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
+                                                 Qt::CaseInsensitive)) {
+    return validateEdDSA_SHA512_Ed25519(I2PDestination);
+  } else if (I2PDestination.length() == 528 &&
+             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
+                                                 Qt::CaseInsensitive)) {
+    return validateRedDSA_SHA512_Ed25519(I2PDestination);
   } else
     return false;
 }
@@ -279,13 +305,16 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
           return critical("Already exists user");
   }*/
   if (isValid == false) {
-    /*		qCritical()<<"File\t"<<__FILE__<<endl
-                               <<"Line:\t"<<__LINE__<<endl
-                               <<"Function:\t"<<"CUserManager::addNewUser"<<endl
-                               <<"Message:\t"<<"Destination is not valid"<<endl
-                               <<"Destination:\t"<<I2PDestination<<endl
-                               <<"action add new User ignored"<<endl;
-                    return false;
+    /*
+        qCritical() << "File\t" << __FILE__ << endl
+                    << "Line:\t" << __LINE__ << endl
+                    << "Function:\t"
+                    << "CUserManager::addNewUser" << endl
+                    << "Message:\t"
+                    << "Destination is not valid" << endl
+                    << "Destination:\t" << I2PDestination << endl
+                    << "Action:\tAdd New User ignored" << endl;
+        return false;
     */
     return critical("Not a valid user");
   }

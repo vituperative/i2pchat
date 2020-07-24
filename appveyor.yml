@@ -31,14 +31,14 @@ init:
 install:
   - set PATH=C:\Qt\Tools\mingw530_32\bin;%PATH%
 build_script:
-  - qmake I2P-Messenger.pro
+  - qmake I2PChat.pro
   - if not %platform%==mingw (nmake) else (mingw32-make)
 after_build:
-  - windeployqt release/I2P-Messenger.exe
+  - windeployqt release/I2PChat.exe
   - cmd: cp LICENSE release/LICENSE.txt"
 
 artifacts:
-  - path: Output\I2P-Messenger-*.exe
+  - path: Output\I2PChat-*.exe
   - path: release
     type: zip
 

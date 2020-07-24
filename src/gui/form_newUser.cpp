@@ -37,9 +37,7 @@ void form_newUserWindow::addnewUser() {
   if (Name.isEmpty()) {
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Warning);
-    msgBox->setText(tr("Adding User"));
-    msgBox->setInformativeText(
-        tr("You must add a nick for the User\nadding abborted"));
+    msgBox->setText(tr("\nPlease supply a nickname for the contact"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -51,9 +49,7 @@ void form_newUserWindow::addnewUser() {
 
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Warning);
-    msgBox->setText(tr("Adding User"));
-    msgBox->setInformativeText(
-        tr("The Destination isn't valid\nadding abborted"));
+    msgBox->setText(tr("\nAdd failed: Destination is invalid"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -65,9 +61,7 @@ void form_newUserWindow::addnewUser() {
   if (I2PDestination == Core.getMyDestination()) {
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Warning);
-    msgBox->setText(tr("Adding User"));
-    msgBox->setInformativeText(
-        tr("This Destination is yours, adding aborted !"));
+    msgBox->setText(tr("\nCannot add your own destination to contact list"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -79,9 +73,7 @@ void form_newUserWindow::addnewUser() {
       true) {
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Warning);
-    msgBox->setText(tr("Adding User"));
-    msgBox->setInformativeText(
-        tr("This Destination is the blocklist, adding aborted !"));
+    msgBox->setText(tr("\nAdd failed: Destination is blocklisted"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -94,8 +86,7 @@ void form_newUserWindow::addnewUser() {
 
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Warning);
-    msgBox->setInformativeText(
-        tr("Destination already exists in your user list!"));
+    msgBox->setText(tr("\nAdd failed: Destination already in contacts"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);

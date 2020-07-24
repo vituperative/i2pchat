@@ -99,6 +99,8 @@ void form_fileReceive::askTheUser() {
   FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SizeName, false);
 
   QMessageBox *msgBox = new QMessageBox(NULL);
+  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  msgBox->setWindowIcon(QIcon(pixmap));
   msgBox->setText(tr("Incoming File Transfer: %1 [%2%3]    ")
                       .arg(FileName)
                       .arg(SSize)
