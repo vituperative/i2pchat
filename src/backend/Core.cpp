@@ -190,28 +190,22 @@ QString CCore::calcSessionOptionString() const {
 
   // throttle per client dest to max 60 connections/min to mitigate denial of
   // service ?? is this hampering our file transfers???
-  //SessionOptionString.append(
+  // SessionOptionString.append(
   //    "i2p.streaming.maxConnsPerMinute=" +
-  //    settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + " ");
+  //    settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + "
+  //    ");
 
   // SIGNATURE_TYPE
 
   {
     // TODO: get from ui_form_settingsgui.h
 
-    /*
-        QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
-                                      "ECDSA_SHA512_P521",
-       "EdDSA_SHA512_Ed25519", "RedDSA_SHA512_Ed25519"};
-    */
-
     QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
-                                  "ECDSA_SHA512_P521"};
+                                  "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519",
+                                  "RedDSA_SHA512_Ed25519"};
 
     auto sign_type =
-        //        settings.value("Signature_Type",
-        //        "EdDSA_SHA512_Ed25519").toString(); // invalid dest?!
-        settings.value("Signature_Type", "ECDSA_SHA512_P521").toString();
+        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -221,23 +215,21 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      //      SessionOptionString.append("SIGNATURE_TYPE=" +
-      //      QString("EdDSA_SHA512_Ed25519") + " ");
       SessionOptionString.append(
-          "SIGNATURE_TYPE=" + QString("ECDSA_SHA512_P521") + " ");
+          "SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
   }
 
   /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
   /// Maybe is fixed;
-  /// TODO which Signature_Type as default for best security ???
 
   // Encryption
-  // TODO: Add to UI
+  // TODO: Enable in UI
 
   {
     QStringList AllowEncTypes = {"4", "4,0", "4, 0"};
 
-    //auto enc_type = settings.value("i2cp.leaseSetEncType=", "4,0").toString();
+    // auto enc_type = settings.value("i2cp.leaseSetEncType=",
+    // "4,0").toString();
     auto enc_type = settings.value("i2cp.leaseSetEncType=", "4").toString();
     auto encnotfound = true;
     for (int i = 0; i < AllowEncTypes.size(); ++i) {
@@ -250,7 +242,7 @@ QString CCore::calcSessionOptionString() const {
     if (encnotfound)
       SessionOptionString.append(
           "i2cp.leaseSetEncType=" +
-          //settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
+          // settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
           settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
   }
 

@@ -18,10 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "form_Main.h"
+#include "UserManager.h"
 #include <QIcon>
 #include <QSystemTrayIcon>
-#include "UserManager.h"
-#include "form_Main.h"
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
     : QMainWindow(parent) {

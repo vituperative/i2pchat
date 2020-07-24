@@ -275,7 +275,7 @@
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="General">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -510,7 +510,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="PersistLogs">
+     <widget class="QGroupBox" name="Debugging">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -568,7 +568,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="Network">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -1239,6 +1239,16 @@ p, li { white-space: pre-wrap; }
             <string extracomment="Default">ECDSA_SHA512_P521</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>EdDSA_SHA512_Ed25519</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>RedDSA_SHA512_Ed25519</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -1653,7 +1663,7 @@ border-radius: 2px;
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_13">
+      <layout class="QGridLayout" name="UserDetails">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -1953,7 +1963,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_6">
+      <layout class="QGridLayout" name="Style">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -2067,7 +2077,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Contact List Sorting</string>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>14</x>
@@ -2248,7 +2258,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QGridLayout" name="Security">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -2497,7 +2507,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4">
+      <layout class="QGridLayout" name="Sound">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -3139,7 +3149,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_8">
+      <layout class="QGridLayout" name="Chat">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -3916,7 +3926,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_9">
+      <layout class="QGridLayout" name="Blocklist">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
@@ -4067,7 +4077,7 @@ p, li { white-space: pre-wrap; }
         <height>30</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_5">
+      <layout class="QGridLayout" name="UserSearch">
        <property name="horizontalSpacing">
         <number>3</number>
        </property>

@@ -173,7 +173,7 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
         if (receivedInfos.Gender != nullptr || sAge != "0" ||
             receivedInfos.Interests != nullptr) {
-          //Infos += "\nUser Information:\n";
+          // Infos += "\nUser Information:\n";
           if (receivedInfos.Gender != nullptr) {
             Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
           }
@@ -234,6 +234,24 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
       return false;
   };
 
+  auto validateEdDSA_SHA512_Ed25519 = [](QString Dest) {
+    if (Dest.length() == 528 &&
+        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
+        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+      return true;
+    else
+      return false;
+  };
+
+  auto validateRedDSA_SHA512_Ed25519 = [](QString Dest) {
+    if (Dest.length() == 528 &&
+        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
+        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+      return true;
+    else
+      return false;
+  };
+
   if (I2PDestination.right(4).contains("AAAA", Qt::CaseInsensitive)) {
     return validateB64(I2PDestination);
   } else if (I2PDestination.right(8).contains(".b32.i2p",
@@ -249,6 +267,14 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
              I2PDestination.mid(512, 9).contains("BQAIAAMAA",
                                                  Qt::CaseInsensitive)) {
     return validateECDSA_SHA512_P512(I2PDestination);
+  } else if (I2PDestination.length() == 528 &&
+             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
+                                                 Qt::CaseInsensitive)) {
+    return validateEdDSA_SHA512_Ed25519(I2PDestination);
+  } else if (I2PDestination.length() == 528 &&
+             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
+                                                 Qt::CaseInsensitive)) {
+    return validateRedDSA_SHA512_Ed25519(I2PDestination);
   } else
     return false;
 }
@@ -279,17 +305,17 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
           return critical("Already exists user");
   }*/
   if (isValid == false) {
-/*
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
-                << "Function:\t"
-                << "CUserManager::addNewUser" << endl
-                << "Message:\t"
-                << "Destination is not valid" << endl
-                << "Destination:\t" << I2PDestination << endl
-                << "Action:\tAdd New User ignored" << endl;
-    return false;
-*/
+    /*
+        qCritical() << "File\t" << __FILE__ << endl
+                    << "Line:\t" << __LINE__ << endl
+                    << "Function:\t"
+                    << "CUserManager::addNewUser" << endl
+                    << "Message:\t"
+                    << "Destination is not valid" << endl
+                    << "Destination:\t" << I2PDestination << endl
+                    << "Action:\tAdd New User ignored" << endl;
+        return false;
+    */
     return critical("Not a valid user");
   }
 
