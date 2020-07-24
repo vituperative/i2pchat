@@ -428,9 +428,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>12</x>
-         <y>12</y>
-         <width>351</width>
-         <height>23</height>
+         <y>14</y>
+         <width>178</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -4240,7 +4240,7 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </widget>
-   <widget class="QListWidget" name="itemListWidget">
+   <widget class="QListWidget" name="Sections">
     <property name="geometry">
      <rect>
       <x>2</x>
@@ -4295,8 +4295,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
-      <height>24</height>
+      <width>22</width>
+      <height>22</height>
      </size>
     </property>
     <property name="flow">
@@ -4314,8 +4314,11 @@ p, li { white-space: pre-wrap; }
     <property name="gridSize">
      <size>
       <width>0</width>
-      <height>34</height>
+      <height>30</height>
      </size>
+    </property>
+    <property name="selectionRectVisible">
+     <bool>true</bool>
     </property>
     <property name="sortingEnabled">
      <bool>false</bool>
@@ -4524,7 +4527,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <zorder>itemListWidget</zorder>
+   <zorder>Sections</zorder>
    <zorder>buttonFrame</zorder>
    <zorder>stackedWidget</zorder>
    <zorder>line_2</zorder>
@@ -4554,7 +4557,7 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>itemListWidget</sender>
+   <sender>Sections</sender>
    <signal>currentRowChanged(int)</signal>
    <receiver>stackedWidget</receiver>
    <slot>setCurrentIndex(int)</slot>
