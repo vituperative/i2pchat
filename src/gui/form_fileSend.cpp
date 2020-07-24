@@ -54,15 +54,25 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   init();
 }
 
+static void SetTextToLabel(QLabel *label, QString text) {
+  QFontMetrics metrix(label->font());
+  int width = label->width() - 6;
+  QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
+  label->setText(clippedText);
+}
+
 void form_fileSend::init() {
   QString SSize;
-  QLabel *label_4 = this->label_4;
+  QLabel *labelFilename = this->labelFilename;
   QLabel *label_6 = this->label_6;
   QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
   QString sType;
 
-  label_4->setText(FileTransfer.getFileName());
+  //labelFilename->setText(FileTransfer.getFileName());
+  QString file = FileTransfer.getFileName();
+  SetTextToLabel(labelFilename, file);
+
 
   quint64 FileSize = FileTransfer.getFileSize();
 

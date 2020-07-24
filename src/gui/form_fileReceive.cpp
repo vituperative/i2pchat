@@ -46,15 +46,25 @@ form_fileReceive::form_fileReceive(CFileTransferReceive &FileReceive)
   init();
 }
 
+static void SetTextToLabel(QLabel *label, QString text) {
+  QFontMetrics metrix(label->font());
+  int width = label->width() - 6;
+  QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
+  label->setText(clippedText);
+}
+
 void form_fileReceive::init() {
   QString SSize;
   QString SType;
-  QLabel *label_4 = this->label_4;
+  QLabel *labelFilename = this->labelFilename;
   QLabel *label_6 = this->label_6;
   QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
 
-  label_4->setText(FileReceive.getFileName());
+  //labelFilename->setText(FileReceive.getFileName());
+  QString file = FileReceive.getFileName();
+  SetTextToLabel(labelFilename, file);
+
   quint64 FileSize = FileReceive.getFileSize();
 
   FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SType, false);
@@ -117,7 +127,7 @@ void form_fileReceive::askTheUser() {
 
     if (!FilePath.isEmpty()) {
       FileReceive.start(FilePath, true);
-      label_4->setText(FileReceive.getFileName());
+      labelFilename->setText(FileReceive.getFileName());
     } else {
       FileReceive.start("", false);
       this->close();
