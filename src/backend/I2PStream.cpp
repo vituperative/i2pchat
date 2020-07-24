@@ -20,7 +20,7 @@
 #include "I2PStream.h"
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
-const int CONNECTIONTIMEOUT = 120000;
+const int CONNECTIONTIMEOUT = 20000;
 
 CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
                        QString mStreamBridgeName, StreamMode mMode,

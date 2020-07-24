@@ -189,10 +189,10 @@ QString CCore::calcSessionOptionString() const {
       " ");
 
   // throttle per client dest to max 60 connections/min to mitigate denial of
-  // service
-  SessionOptionString.append(
-      "i2p.streaming.maxConnsPerMinute=" +
-      settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + " ");
+  // service ?? is this hampering our file transfers???
+  //SessionOptionString.append(
+  //    "i2p.streaming.maxConnsPerMinute=" +
+  //    settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + " ");
 
   // SIGNATURE_TYPE
 
