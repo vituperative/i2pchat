@@ -160,6 +160,10 @@ QString CCore::calcSessionOptionString() const {
 
   // + " " for void CSessionController::doSessionCreate() a session option.
 
+  SessionOptionString.append("i2cp.gzip=" + settings.value("i2cp.gzip", "true").toString() + " ");
+  SessionOptionString.append("i2cp.messageReliability=" + settings.value("i2cp.messageReliability", "Guaranteed").toString() + " ");
+  SessionOptionString.append("i2cp.fastReceive=" + settings.value("i2cp.fastReceive", "true").toString() + " ");
+
   SessionOptionString.append(
       "inbound.nickname=" +
       settings.value("TunnelName", "I2PChat").toString().replace(" ", "_") +
