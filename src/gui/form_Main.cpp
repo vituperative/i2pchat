@@ -225,12 +225,12 @@ void form_MainWindow::namingMe() {
   }
 }
 void form_MainWindow::closeApplication() {
-  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-  setWindowIcon(QIcon(pixmap));
   if (Core->getFileTransferManager()->checkIfAFileTransferOrReceiveisActive() ==
       false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
+    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    msgBox->setWindowIcon(QIcon(pixmap));
     msgBox->setIcon(QMessageBox::Question);
     msgBox->setText(tr("\nAre you sure you wish to quit?"));
     msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -252,6 +252,8 @@ void form_MainWindow::closeApplication() {
     this->close();
   } else {
     QMessageBox *msgBox = new QMessageBox(NULL);
+    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    msgBox->setWindowIcon(QIcon(pixmap));
     msgBox->setIcon(QMessageBox::Information);
     msgBox->setText(
         tr("\nFile transfer in progress...\nCancel transfer first!"));

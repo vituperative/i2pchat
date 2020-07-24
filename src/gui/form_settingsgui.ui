@@ -532,7 +532,7 @@ p, li { white-space: pre-wrap; }
        </size>
       </property>
       <property name="title">
-       <string>Persistent Logs</string>
+       <string>Debugging</string>
       </property>
       <widget class="QCheckBox" name="checkBox_DebugLog">
        <property name="enabled">
@@ -1246,7 +1246,7 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
     <widget class="QWidget" name="userdetails_Page">
-     <widget class="QGroupBox" name="groupBox_21">
+     <widget class="QGroupBox" name="SelectAvatar">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -1378,7 +1378,7 @@ border-radius: 2px;
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_5">
+     <widget class="QGroupBox" name="UserBio">
       <property name="geometry">
        <rect>
         <x>3</x>
@@ -1597,7 +1597,7 @@ border-radius: 2px;
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_9">
+     <widget class="QGroupBox" name="UserSuppInfo">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -1731,36 +1731,36 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <zorder>layoutWidget</zorder>
-     <zorder>groupBox_5</zorder>
-     <zorder>groupBox_21</zorder>
-     <zorder>groupBox_9</zorder>
+     <zorder>UserBio</zorder>
+     <zorder>SelectAvatar</zorder>
+     <zorder>UserSuppInfo</zorder>
     </widget>
     <widget class="QWidget" name="style_Page">
-     <widget class="QGroupBox" name="groupBox_3">
+     <widget class="QGroupBox" name="CustomStyle">
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>128</y>
+        <y>120</y>
         <width>380</width>
-        <height>68</height>
+        <height>62</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>62</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>60</height>
+        <height>62</height>
        </size>
       </property>
       <property name="sizeIncrement">
        <size>
         <width>0</width>
-        <height>68</height>
+        <height>0</height>
        </size>
       </property>
       <property name="title">
@@ -1770,9 +1770,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>28</y>
+         <y>26</y>
          <width>361</width>
-         <height>31</height>
+         <height>28</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_24">
@@ -1786,7 +1786,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="maximumSize">
            <size>
-            <width>120</width>
+            <width>130</width>
             <height>92</height>
            </size>
           </property>
@@ -1804,20 +1804,20 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignHCenter">
+        <item row="0" column="1" alignment="Qt::AlignRight">
          <widget class="QComboBox" name="styleSheetCombo">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>26</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>26</height>
            </size>
           </property>
@@ -1845,25 +1845,25 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="WindowStyle">
       <property name="geometry">
        <rect>
         <x>4</x>
         <y>52</y>
         <width>380</width>
-        <height>68</height>
+        <height>62</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>62</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>68</height>
+        <height>62</height>
        </size>
       </property>
       <property name="title">
@@ -1873,9 +1873,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>28</y>
+         <y>26</y>
          <width>361</width>
-         <height>31</height>
+         <height>28</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_25">
@@ -1889,7 +1889,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="maximumSize">
            <size>
-            <width>120</width>
+            <width>130</width>
             <height>92</height>
            </size>
           </property>
@@ -1907,7 +1907,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignHCenter">
+        <item row="0" column="1" alignment="Qt::AlignRight">
          <widget class="QComboBox" name="styleCombo">
           <property name="enabled">
            <bool>true</bool>
@@ -1920,13 +1920,13 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>26</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>26</height>
            </size>
           </property>
@@ -2023,9 +2023,166 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QGroupBox" name="Emoticons">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>188</y>
+        <width>380</width>
+        <height>57</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Emoticons</string>
+      </property>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>28</y>
+         <width>271</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Enable local display of emoticons in chat</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="ContactSort">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>252</y>
+        <width>380</width>
+        <height>143</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Contact List Sorting</string>
+      </property>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>28</y>
+         <width>189</width>
+         <height>105</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_21">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="checkBox_5">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Enable automatic sort</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sort alphabetically</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QRadioButton" name="radioButton_3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sort by date added</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QRadioButton" name="radioButton_4">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sort by last communcation</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="security_Page">
-     <widget class="QGroupBox" name="groupBox_4">
+     <widget class="QGroupBox" name="UserAuth">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2155,7 +2312,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QGroupBox" name="groupBox_19">
+     <widget class="QGroupBox" name="UserBlocking">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2230,7 +2387,7 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_11">
+     <widget class="QGroupBox" name="WebPage">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2403,7 +2560,7 @@ p, li { white-space: pre-wrap; }
       <zorder>label_25</zorder>
       <zorder>label_24</zorder>
      </widget>
-     <widget class="QGroupBox" name="groupBox_15">
+     <widget class="QGroupBox" name="SoundChatMessage">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2506,7 +2663,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_13">
+     <widget class="QGroupBox" name="SoundFilesend">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2609,7 +2766,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_12">
+     <widget class="QGroupBox" name="SoundConnection">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -2790,7 +2947,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_14">
+     <widget class="QGroupBox" name="SoundFileReceive">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -3088,7 +3245,7 @@ p, li { white-space: pre-wrap; }
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox_24">
+      <widget class="QGroupBox" name="LocalStyle">
        <property name="geometry">
         <rect>
          <x>2</x>
@@ -3368,7 +3525,7 @@ p, li { white-space: pre-wrap; }
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_25">
+      <widget class="QGroupBox" name="RemoteStyle">
        <property name="geometry">
         <rect>
          <x>2</x>
@@ -3708,7 +3865,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QGroupBox" name="groupBox_10">
+      <widget class="QGroupBox" name="UserEvents">
        <property name="geometry">
         <rect>
          <x>2</x>
@@ -3983,7 +4140,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QGroupBox" name="groupBox_20">
+     <widget class="QGroupBox" name="BackgroundSearch">
       <property name="geometry">
        <rect>
         <x>4</x>
