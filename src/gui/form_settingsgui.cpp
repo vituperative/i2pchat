@@ -327,12 +327,12 @@ void form_settingsgui::loadSettings() {
     txtShowCurrentChatStyleOverride->textCursor().clearSelection();
   }
 
-  LogOnlineStatusBox->setChecked(
+  checkboxUserEvents->setChecked(
       settings->value("LogOnlineStatesOfUsers", true).toBool());
 
-  // 		spinBox_maxACK->setMaximum(2);
-  // 		spinBox_maxACK->setMaximum(60);
-  // 		spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","10").toInt());
+   spinBox_maxACK->setMaximum(2);
+   spinBox_maxACK->setMaximum(60);
+   spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","60").toInt());
 
   settings->endGroup();
 
@@ -487,7 +487,7 @@ void form_settingsgui::saveSettings() {
                      txtShowCurrentChatStyleOverride->currentFont().toString());
   settings->setValue("ColorForOverwrite",
                      txtShowCurrentChatStyleOverride->textColor().name());
-  settings->setValue("LogOnlineStatesOfUsers", LogOnlineStatusBox->isChecked());
+  settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
   // 		settings->setValue("MaxChatmessageACKTimeInSec",spinBox_maxACK->value());
   settings->endGroup();
 

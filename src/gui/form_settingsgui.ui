@@ -543,7 +543,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="geometry">
         <rect>
-         <x>13</x>
+         <x>12</x>
          <y>34</y>
          <width>227</width>
          <height>21</height>
@@ -1765,21 +1765,21 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>124</y>
+        <y>126</y>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </size>
       </property>
       <property name="sizeIncrement">
@@ -1795,7 +1795,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>28</y>
+         <y>30</y>
          <width>361</width>
          <height>28</height>
         </rect>
@@ -1876,19 +1876,19 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>52</y>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>65</height>
+        <height>69</height>
        </size>
       </property>
       <property name="title">
@@ -1898,7 +1898,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>28</y>
+         <y>30</y>
          <width>361</width>
          <height>28</height>
         </rect>
@@ -2048,60 +2048,28 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QGroupBox" name="Emoticons">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>196</y>
-        <width>380</width>
-        <height>56</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Emoticons</string>
-      </property>
-      <widget class="QCheckBox" name="checkBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>14</x>
-         <y>28</y>
-         <width>271</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable local display of emoticons in chat</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="ContactSort">
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>260</y>
+        <y>210</y>
         <width>380</width>
-        <height>135</height>
+        <height>185</height>
        </rect>
       </property>
       <property name="title">
        <string>Contact List Sorting</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>14</x>
-         <y>28</y>
+         <x>12</x>
+         <y>31</y>
          <width>193</width>
-         <height>98</height>
+         <height>142</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_21">
+       <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
          <widget class="QCheckBox" name="checkBox_5">
           <property name="enabled">
@@ -2110,13 +2078,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>22</height>
+            <height>24</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>22</height>
+            <height>24</height>
            </size>
           </property>
           <property name="text">
@@ -2135,13 +2103,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="text">
@@ -2160,13 +2128,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="text">
@@ -2185,17 +2153,42 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>18</height>
+            <height>20</height>
            </size>
           </property>
           <property name="text">
            <string>Sort by last communication</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QRadioButton" name="radioButton_5">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sort by last online</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -3276,7 +3269,7 @@ p, li { white-space: pre-wrap; }
          <x>2</x>
          <y>12</y>
          <width>380</width>
-         <height>115</height>
+         <height>95</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -3289,6 +3282,12 @@ p, li { white-space: pre-wrap; }
         <size>
          <width>380</width>
          <height>16777215</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>120</height>
         </size>
        </property>
        <property name="font">
@@ -3308,21 +3307,21 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>13</x>
-          <y>68</y>
+          <y>52</y>
           <width>356</width>
-          <height>36</height>
+          <height>32</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>36</height>
+          <height>32</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>368</width>
-          <height>36</height>
+          <height>32</height>
          </size>
         </property>
         <property name="focusPolicy">
@@ -3338,10 +3337,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>14</x>
-          <y>30</y>
-          <width>183</width>
-          <height>30</height>
+          <x>236</x>
+          <y>28</y>
+          <width>132</width>
+          <height>20</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_27">
@@ -3355,14 +3354,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3396,14 +3395,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3437,14 +3436,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3478,14 +3477,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3516,14 +3515,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3554,15 +3553,15 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>138</y>
+         <y>115</y>
          <width>380</width>
-         <height>139</height>
+         <height>95</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
          <width>380</width>
-         <height>120</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -3591,9 +3590,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>14</x>
-          <y>26</y>
+          <y>28</y>
           <width>77</width>
-          <height>21</height>
+          <height>20</height>
          </rect>
         </property>
         <property name="text">
@@ -3607,21 +3606,21 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>13</x>
-          <y>92</y>
+          <y>52</y>
           <width>356</width>
-          <height>36</height>
+          <height>32</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>36</height>
+          <height>32</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>368</width>
-          <height>36</height>
+          <height>32</height>
          </size>
         </property>
         <property name="focusPolicy">
@@ -3640,10 +3639,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>14</x>
-          <y>54</y>
-          <width>183</width>
-          <height>30</height>
+          <x>236</x>
+          <y>28</y>
+          <width>132</width>
+          <height>20</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_26">
@@ -3657,14 +3656,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3698,14 +3697,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3739,14 +3738,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3780,14 +3779,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3818,14 +3817,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolTip">
@@ -3894,9 +3893,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>292</y>
+         <y>290</y>
          <width>380</width>
-         <height>63</height>
+         <height>65</height>
         </rect>
        </property>
        <property name="maximumSize">
@@ -3908,13 +3907,13 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string>User Events</string>
        </property>
-       <widget class="QCheckBox" name="LogOnlineStatusBox">
+       <widget class="QCheckBox" name="checkboxUserEvents">
         <property name="geometry">
          <rect>
           <x>14</x>
           <y>30</y>
-          <width>361</width>
-          <height>23</height>
+          <width>240</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="font">
@@ -3926,6 +3925,38 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="text">
          <string>Display online/offline events in chat</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="Emoticons">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>218</y>
+         <width>380</width>
+         <height>65</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Emoticons</string>
+       </property>
+       <widget class="QCheckBox" name="checkBoxEmoticons">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>14</x>
+          <y>32</y>
+          <width>271</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Enable local display of emoticons in chat</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>
