@@ -33,15 +33,15 @@
                                                 //maybe good for usersearch ?
 
         Every packet must be >= 8 Byte
-        1-4 Byte = Paketlength in Byte (HEX) without the 4 Byte Paketlength
-        5-8 Byte = PaketInfo
-         >8 Byte = PaketData
+        1-4 Byte = Packetlength in Byte (HEX) without the 4 Byte Packetlength
+        5-8 Byte = PacketInfo
+         >8 Byte = PacketData
 */
 
 namespace Protocol_Info {
 const QString PROTOCOLVERSION = "0.6";
 const double PROTOCOLVERSION_D = 0.6;
-const QString FIRSTPAKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
+const QString FIRSTPACKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
 const QString HTTPPAGE =
     "<!DOCTYPE HTML><html><head><title>[USERNAME] | I2PChat "
     "Destination</title><meta http-equiv=\"Content-Type\" content=\"text/html; "

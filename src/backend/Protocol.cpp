@@ -38,10 +38,10 @@ void CProtocol::newConnectionChat(const qint32 ID) {
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
 
   // send the ChatSystem\tProtocolVersion
-  if (stream->getFIRSTPAKETCHAT_allreadySended() == false) {
+  if (stream->getFIRSTPACKETCHAT_allreadySended() == false) {
     // sometime StreamStatusReceived is called again with streamstatus Ok
-    stream->setFIRSTPAKETCHAT_allreadySended(true);
-    *(stream) << (QString)FIRSTPAKETCHAT;
+    stream->setFIRSTPACKETCHAT_allreadySended(true);
+    *(stream) << (QString)FIRSTPACKETCHAT;
   }
 }
 
@@ -290,7 +290,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
   }
 
   if (stream->getConnectionType() == UNKNOWN) {
-    // check if First Paket = from a other CHATSYSTEM
+    // check if First Packet = from another CHATSYSTEM
     if (Data.contains("CHATSYSTEM\t") == true) {
       QByteArray temp = Data.mid(Data.indexOf("\t") + 1,
                                  Data.indexOf("\n") - Data.indexOf("\t") - 1);
@@ -378,7 +378,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       }
       // return Data2;
     } else if (Data.contains("CHATSYSTEMFILETRANSFER\t") == true) {
-      // FIRSTPAKET
+      // FIRSTPACKET
       // ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\nSizeinBit\nFileName";
       QByteArray Data2 = Data;
 
@@ -409,7 +409,7 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       mCore.getFileTransferManager()->addNewFileReceive(
           ID, FileName, FileSize, Destination, ProtovolVersion);
     } else {
-      // not from a other CHATSYSTEM
+      // not from another CHATSYSTEM
       bool webprofileenabled = false;
       if (mCore.getUserBlockManager()->isDestinationInBlockList(
               stream->getDestination()) == true) {
@@ -633,10 +633,10 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID,
   QString temp;
 
   temp.setNum(Data.length() + 4, 16); // hex
-  QString Paketlength = QString("%1").arg(temp, 4, '0');
+  QString Packetlength = QString("%1").arg(temp, 4, '0');
 
   Data.insert(0, ProtocolInfoTag);
-  Data.insert(0, Paketlength);
+  Data.insert(0, Packetlength);
   *(stream) << Data;
 }
 

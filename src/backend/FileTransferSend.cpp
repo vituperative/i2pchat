@@ -53,13 +53,13 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   mStream->doConnect(Destination);
 
   mAllreadyFinished = false;
-  mSendFirstPaket = true;
+  mSendFirstPacket = true;
   mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
   mFileForSend.setFileName(mFilePath);
   mFileTransferAccepted = false;
   mFileSize = mFileForSend.size();
   mAllreadySendedSize = 0;
-  mCurrentPacketSize = NORMPAKETSIZE;
+  mCurrentPacketSize = NORMPACKETSIZE;
   mRemoteReceivedSize = 0;
 }
 
@@ -87,15 +87,15 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
 
   switch (result) {
   case (SAM_Message_Types::OK): {
-    if (mSendFirstPaket == true) {
+    if (mSendFirstPacket == true) {
       QString StringFileSize;
       StringFileSize.setNum(mFileSize);
 
       mStream->operator<<(QString("CHATSYSTEMFILETRANSFER\t" +
                                   mUsingProtocolVersion + "\n" +
                                   StringFileSize + "\n" + mFileName));
-      // mStream->operator <<(FIRSTPAKET+StringFileSize+"\n"+mFileName);
-      mSendFirstPaket = false;
+      // mStream->operator <<(FIRSTPACKET+StringFileSize+"\n"+mFileName);
+      mSendFirstPacket = false;
     }
     break;
   }
@@ -323,7 +323,7 @@ void CFileTransferSend::SendFile_v0dot1() {
   while (mAllreadySendedSize < mFileSize) {
     QByteArray Buffer;
 
-    Buffer = mFileForSend.read(NORMPAKETSIZE);
+    Buffer = mFileForSend.read(NORMPACKETSIZE);
     mAllreadySendedSize += Buffer.length();
 
     mStream->operator<<(Buffer);
