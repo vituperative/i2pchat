@@ -40,11 +40,11 @@ const QString MINPROTOCOLVERSION = "0.1";
 const double MINPROTOCOLVERSION_D = 0.1;
 const QString MAXPROTOCOLVERSION = "0.3";
 const double MAXPROTOCOLVERSION_D = 0.3;
-// const QString FIRSTPAKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
+// const QString FIRSTPACKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
 //+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
-#define NORMPAKETSIZE 1024
+#define NORMPACKETSIZE 1024
 #define MAXPACKETSIZE 30720
 #define TIMERCOUNTFORAVERAGETRANSFERSPEED_WRITE 1000 // 1 sec
 
@@ -111,7 +111,7 @@ private:
   qint64 mRemoteReceivedSize;
   qint32 mStreamID;
   QFile mFileForSend;
-  bool mSendFirstPaket;
+  bool mSendFirstPacket;
   bool mFileTransferAccepted;
   bool mAllreadyFinished;
   QString mFileName;
