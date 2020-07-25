@@ -253,7 +253,7 @@ void CI2PStream::slotReadFromSocket() {
     // start mUnKnownConnectionTimeout
     mUnKnownConnectionTimeout.start();
     emit signDebugMessages("• [Stream ID: " + smID +
-                           "] Controller ‣ Unknown Connection Timeout");
+                           "] Controller ‣ [Unknown] Connection Timeout");
     //--------------------------------
   } else {
     emit signDataReceived(mID, newData);

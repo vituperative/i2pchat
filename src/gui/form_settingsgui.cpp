@@ -133,7 +133,7 @@ form_settingsgui::~form_settingsgui() {
 void form_settingsgui::loadSettings() {
   settings->beginGroup("General");
   spinBox->setValue(settings->value("Debug_Max_Message_count", "20").toInt());
-  waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox->setValue(
+  OfflineUserCheckSpinBox->setValue(
       settings->value("Waittime_between_rechecking_offline_users", "1000")
           .toInt() /
       1000);
@@ -409,7 +409,7 @@ void form_settingsgui::saveSettings() {
   settings->setValue("Debug_Max_Message_count", spinBox->value());
   settings->setValue(
       "Waittime_between_rechecking_offline_users",
-      waitTimeBetweenCheckingForOfflineUsersSecondsSpinBox->value() * 1000);
+      OfflineUserCheckSpinBox->value() * 1000);
   settings->setValue("current_Style", styleCombo->currentText());
   settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
   settings->setValue("AutoAcceptFileReceive",
