@@ -164,7 +164,7 @@ QString CCore::calcSessionOptionString() const {
       "i2cp.gzip=" + settings.value("i2cp.gzip", "true").toString() + " ");
   SessionOptionString.append(
       "i2cp.messageReliability=" +
-      settings.value("i2cp.messageReliability", "Guaranteed").toString() + " ");
+      settings.value("i2cp.messageReliability", "BestEffort").toString() + " ");
   SessionOptionString.append(
       "i2cp.fastReceive=" +
       settings.value("i2cp.fastReceive", "true").toString() + " ");
