@@ -67,7 +67,7 @@ public:
   QString getDestination() { return mDestination; };
   QString getFileName() { return mFileName; };
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
-  quint64 getAllreadySendedSize() { return mAllreadySendedSize; };
+  quint64 getAlreadySentSize() { return mAlreadySentSize; };
   bool getAllreadyTransferAccepted() { return mFileTransferAccepted; };
   bool getIsTransfering();
   bool getIsAllreadyFinished() { return mAllreadyFinished; };
@@ -84,7 +84,7 @@ private slots:
   void slotCalcAverageTransferSpeed();
 
 signals:
-  void signAllreadySendedSizeChanged(quint64 Size);
+  void signAlreadySentSizeChanged(quint64 Size);
   void signFileTransferAccepted(bool t);
   void signFileTransferFinishedOK();
   void signFileTransferError();
@@ -107,7 +107,7 @@ private:
   const double mUsingProtocolVersionD;
   CI2PStream *mStream;
   qint64 mFileSize;
-  qint64 mAllreadySendedSize;
+  qint64 mAlreadySentSize;
   qint64 mRemoteReceivedSize;
   qint32 mStreamID;
   QFile mFileForSend;

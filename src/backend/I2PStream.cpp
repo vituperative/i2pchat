@@ -37,7 +37,7 @@ CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
   mConnectionType = UNKNOWN;
   mIncomingPackets = new QByteArray();
   mDestinationReceived = false;
-  mFIRSTPACKETCHAT_allreadySended = false;
+  mFIRSTPACKETCHAT_alreadySent = false;
   mTimer = NULL;
   mUnKnownConnectionTimeout.setInterval(CONNECTIONTIMEOUT);
 
@@ -131,7 +131,7 @@ void CI2PStream::slotDisconnected() {
   mDestinationReceived = false;
   mDoneDisconnect = false;
   mHandShakeWasSuccesfullDone = false;
-  mFIRSTPACKETCHAT_allreadySended = false;
+  mFIRSTPACKETCHAT_alreadySent = false;
 
   mUnKnownConnectionTimeout.stop();
 
@@ -339,6 +339,6 @@ void CI2PStream::slotInitConnectionTimeout() {
   doDisconnect();
 }
 
-void CI2PStream::setFIRSTPACKETCHAT_allreadySended(bool theValue) {
-  mFIRSTPACKETCHAT_allreadySended = theValue;
+void CI2PStream::setFIRSTPACKETCHAT_alreadySent(bool theValue) {
+  mFIRSTPACKETCHAT_alreadySent = theValue;
 }
