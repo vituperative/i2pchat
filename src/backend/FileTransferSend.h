@@ -40,11 +40,11 @@ const QString MINPROTOCOLVERSION = "0.1";
 const double MINPROTOCOLVERSION_D = 0.1;
 const QString MAXPROTOCOLVERSION = "0.3";
 const double MAXPROTOCOLVERSION_D = 0.3;
-// const QString FIRSTPAKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
+// const QString FIRSTPACKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
 //+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
-#define NORMPAKETSIZE 1024
+#define NORMPACKETSIZE 1024
 #define MAXPACKETSIZE 30720
 #define TIMERCOUNTFORAVERAGETRANSFERSPEED_WRITE 1000 // 1 sec
 
@@ -67,7 +67,7 @@ public:
   QString getDestination() { return mDestination; };
   QString getFileName() { return mFileName; };
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
-  quint64 getAllreadySendedSize() { return mAllreadySendedSize; };
+  quint64 getAlreadySentSize() { return mAlreadySentSize; };
   bool getAllreadyTransferAccepted() { return mFileTransferAccepted; };
   bool getIsTransfering();
   bool getIsAllreadyFinished() { return mAllreadyFinished; };
@@ -84,7 +84,7 @@ private slots:
   void slotCalcAverageTransferSpeed();
 
 signals:
-  void signAllreadySendedSizeChanged(quint64 Size);
+  void signAlreadySentSizeChanged(quint64 Size);
   void signFileTransferAccepted(bool t);
   void signFileTransferFinishedOK();
   void signFileTransferError();
@@ -107,11 +107,11 @@ private:
   const double mUsingProtocolVersionD;
   CI2PStream *mStream;
   qint64 mFileSize;
-  qint64 mAllreadySendedSize;
+  qint64 mAlreadySentSize;
   qint64 mRemoteReceivedSize;
   qint32 mStreamID;
   QFile mFileForSend;
-  bool mSendFirstPaket;
+  bool mSendFirstPacket;
   bool mFileTransferAccepted;
   bool mAllreadyFinished;
   QString mFileName;

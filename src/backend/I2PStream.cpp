@@ -20,7 +20,7 @@
 #include "I2PStream.h"
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
-const int CONNECTIONTIMEOUT = 90 * 1000;
+const int CONNECTIONTIMEOUT = 60 * 1000;
 
 CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
                        QString mStreamBridgeName, StreamMode mMode,
@@ -37,7 +37,7 @@ CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
   mConnectionType = UNKNOWN;
   mIncomingPackets = new QByteArray();
   mDestinationReceived = false;
-  mFIRSTPAKETCHAT_allreadySended = false;
+  mFIRSTPACKETCHAT_alreadySent = false;
   mTimer = NULL;
   mUnKnownConnectionTimeout.setInterval(CONNECTIONTIMEOUT);
 
@@ -131,7 +131,7 @@ void CI2PStream::slotDisconnected() {
   mDestinationReceived = false;
   mDoneDisconnect = false;
   mHandShakeWasSuccesfullDone = false;
-  mFIRSTPAKETCHAT_allreadySended = false;
+  mFIRSTPACKETCHAT_alreadySent = false;
 
   mUnKnownConnectionTimeout.stop();
 
@@ -339,6 +339,6 @@ void CI2PStream::slotInitConnectionTimeout() {
   doDisconnect();
 }
 
-void CI2PStream::setFIRSTPAKETCHAT_allreadySended(bool theValue) {
-  mFIRSTPAKETCHAT_allreadySended = theValue;
+void CI2PStream::setFIRSTPACKETCHAT_alreadySent(bool theValue) {
+  mFIRSTPACKETCHAT_alreadySent = theValue;
 }

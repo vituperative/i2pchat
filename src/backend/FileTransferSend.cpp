@@ -53,13 +53,13 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   mStream->doConnect(Destination);
 
   mAllreadyFinished = false;
-  mSendFirstPaket = true;
+  mSendFirstPacket = true;
   mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
   mFileForSend.setFileName(mFilePath);
   mFileTransferAccepted = false;
   mFileSize = mFileForSend.size();
-  mAllreadySendedSize = 0;
-  mCurrentPacketSize = NORMPAKETSIZE;
+  mAlreadySentSize = 0;
+  mCurrentPacketSize = NORMPACKETSIZE;
   mRemoteReceivedSize = 0;
 }
 
@@ -87,15 +87,15 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
 
   switch (result) {
   case (SAM_Message_Types::OK): {
-    if (mSendFirstPaket == true) {
+    if (mSendFirstPacket == true) {
       QString StringFileSize;
       StringFileSize.setNum(mFileSize);
 
       mStream->operator<<(QString("CHATSYSTEMFILETRANSFER\t" +
                                   mUsingProtocolVersion + "\n" +
                                   StringFileSize + "\n" + mFileName));
-      // mStream->operator <<(FIRSTPAKET+StringFileSize+"\n"+mFileName);
-      mSendFirstPaket = false;
+      // mStream->operator <<(FIRSTPACKET+StringFileSize+"\n"+mFileName);
+      mSendFirstPacket = false;
     }
     break;
   }
@@ -105,7 +105,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   case (SAM_Message_Types::CLOSED): {
     mTimerForActAverageTransferSpeed.stop();
 
-    if (mAllreadySendedSize == mFileSize) {
+    if (mAlreadySentSize == mFileSize) {
       emit signFileTransferFinishedOK();
       if (mAllreadyFinished == false) {
         mCore.getUserManager()
@@ -116,7 +116,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
       }
     } else {
       emit signFileTransferAborted();
-      if (mAllreadySendedSize == 0) {
+      if (mAlreadySentSize == 0) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
@@ -240,8 +240,8 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         // next block & current size received remote
         CurrentPacket.remove('\n');
         mRemoteReceivedSize += CurrentPacket.toInt();
-        emit signAllreadySendedSizeChanged(mRemoteReceivedSize);
-        if ((mAllreadySendedSize - mRemoteReceivedSize) <= 1024) {
+        emit signAlreadySentSizeChanged(mRemoteReceivedSize);
+        if ((mAlreadySentSize - mRemoteReceivedSize) <= 1024) {
           SendFile_v0dot3();
         }
       }
@@ -250,11 +250,11 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
 }
 
 void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
-  mAllreadySendedSize = 0;
+  mAlreadySentSize = 0;
   mFileForSend.open(QIODevice::ReadOnly);
   mFileForSend.seek(mFromPos);
   if (mFromPos != 0) {
-    mAllreadySendedSize = mFromPos;
+    mAlreadySentSize = mFromPos;
   }
 
   mTimer.start();
@@ -285,11 +285,11 @@ void CFileTransferSend::SendFile_v0dot3() {
   QByteArray Buffer;
 
   Buffer = mFileForSend.read(mCurrentPacketSize);
-  mAllreadySendedSize += Buffer.length();
+  mAlreadySentSize += Buffer.length();
 
   mStream->operator<<(Buffer);
 
-  if (mAllreadySendedSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
@@ -304,12 +304,12 @@ void CFileTransferSend::SendFile_v0dot2() {
   QByteArray Buffer;
 
   Buffer = mFileForSend.read(mCurrentPacketSize);
-  mAllreadySendedSize += Buffer.length();
+  mAlreadySentSize += Buffer.length();
 
   mStream->operator<<(Buffer);
-  emit signAllreadySendedSizeChanged(mAllreadySendedSize);
+  emit signAlreadySentSizeChanged(mAlreadySentSize);
 
-  if (mAllreadySendedSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
@@ -320,17 +320,17 @@ void CFileTransferSend::SendFile_v0dot2() {
 }
 
 void CFileTransferSend::SendFile_v0dot1() {
-  while (mAllreadySendedSize < mFileSize) {
+  while (mAlreadySentSize < mFileSize) {
     QByteArray Buffer;
 
-    Buffer = mFileForSend.read(NORMPAKETSIZE);
-    mAllreadySendedSize += Buffer.length();
+    Buffer = mFileForSend.read(NORMPACKETSIZE);
+    mAlreadySentSize += Buffer.length();
 
     mStream->operator<<(Buffer);
-    emit signAllreadySendedSizeChanged(mAllreadySendedSize);
+    emit signAlreadySentSizeChanged(mAlreadySentSize);
   }
 
-  if (mAllreadySendedSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
@@ -362,7 +362,7 @@ void CFileTransferSend::slotCalcAverageTransferSpeed() {
     departedtime = 1;
 
   if (mUsingProtocolVersionD <= 0.2) {
-    speed = mAllreadySendedSize / departedtime;
+    speed = mAlreadySentSize / departedtime;
   } else {
     speed = mRemoteReceivedSize / departedtime;
   }
@@ -386,13 +386,13 @@ void CFileTransferSend::CalcETA(int speed) {
 
   if (speed > 0) {
     if (mUsingProtocolVersionD <= 0.2) {
-      secLeft = (mFileSize - mAllreadySendedSize) / speed;
+      secLeft = (mFileSize - mAlreadySentSize) / speed;
     } else {
       secLeft = (mFileSize - mRemoteReceivedSize) / speed;
     }
   } else {
     if (mUsingProtocolVersionD <= 0.2) {
-      secLeft = mFileSize - mAllreadySendedSize;
+      secLeft = mFileSize - mAlreadySentSize;
     } else {
       secLeft = mFileSize - mRemoteReceivedSize;
     }

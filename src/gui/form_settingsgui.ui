@@ -49,7 +49,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QFrame" name="middleFrame">
+  <widget class="QFrame" name="SettingsContainer">
    <property name="geometry">
     <rect>
      <x>4</x>
@@ -82,7 +82,7 @@
    <property name="frameShadow">
     <enum>QFrame::Plain</enum>
    </property>
-   <widget class="QStackedWidget" name="stackedWidget">
+   <widget class="QStackedWidget" name="Settings">
     <property name="geometry">
      <rect>
       <x>136</x>
@@ -156,10 +156,10 @@
            </size>
           </property>
           <property name="minimum">
-           <number>3</number>
+           <number>5</number>
           </property>
           <property name="maximum">
-           <number>180</number>
+           <number>120</number>
           </property>
           <property name="value">
            <number>5</number>
@@ -170,13 +170,13 @@
          <widget class="QLabel" name="label_6">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>170</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>170</width>
             <height>16777215</height>
            </size>
           </property>
@@ -229,13 +229,13 @@
          <widget class="QLabel" name="label_4">
           <property name="minimumSize">
            <size>
-            <width>160</width>
+            <width>170</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
+            <width>170</width>
             <height>16777215</height>
            </size>
           </property>
@@ -428,9 +428,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>12</x>
-         <y>12</y>
-         <width>351</width>
-         <height>23</height>
+         <y>14</y>
+         <width>178</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -673,9 +673,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>234</y>
+        <y>236</y>
         <width>380</width>
-        <height>161</height>
+        <height>159</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -697,12 +697,12 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>52</y>
+         <y>48</y>
          <width>356</width>
          <height>100</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_10">
+       <layout class="QGridLayout" name="TunnConf">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -830,7 +830,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignHCenter">
+        <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
          <widget class="QLabel" name="label_15">
           <property name="minimumSize">
            <size>
@@ -860,7 +860,7 @@ p, li { white-space: pre-wrap; }
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_23">
+       <layout class="QGridLayout" name="TunnName">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -892,7 +892,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="1" alignment="Qt::AlignVCenter">
          <widget class="QLineEdit" name="lineEdit"/>
         </item>
        </layout>
@@ -904,7 +904,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>50</y>
         <width>380</width>
-        <height>44</height>
+        <height>49</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -926,7 +926,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>12</y>
+         <y>14</y>
          <width>356</width>
          <height>26</height>
         </rect>
@@ -963,7 +963,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="1" alignment="Qt::AlignVCenter">
          <widget class="QLineEdit" name="lineEdit_3"/>
         </item>
         <item row="0" column="2">
@@ -1002,9 +1002,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>184</y>
+        <y>188</y>
         <width>380</width>
-        <height>45</height>
+        <height>43</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1029,7 +1029,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>14</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>23</height>
         </rect>
@@ -1094,7 +1094,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="0" column="2" alignment="Qt::AlignVCenter">
          <widget class="QRadioButton" name="ECIES_ELG">
           <property name="enabled">
            <bool>false</bool>
@@ -1126,9 +1126,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>99</y>
+        <y>104</y>
         <width>380</width>
-        <height>80</height>
+        <height>79</height>
        </rect>
       </property>
       <widget class="QWidget" name="layoutWidget_10">
@@ -1140,7 +1140,7 @@ p, li { white-space: pre-wrap; }
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="Signature">
+       <layout class="QGridLayout" name="SigType_2">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -1172,7 +1172,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="1" alignment="Qt::AlignVCenter">
          <widget class="QComboBox" name="comboBox_Signature">
           <property name="enabled">
            <bool>true</bool>
@@ -1215,7 +1215,7 @@ p, li { white-space: pre-wrap; }
          <height>25</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_29">
+       <layout class="QGridLayout" name="NewDest">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -1247,7 +1247,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="1" alignment="Qt::AlignVCenter">
          <widget class="QPushButton" name="cmd_DestinationGenerate">
           <property name="text">
            <string>Generate</string>
@@ -1394,11 +1394,23 @@ border-radius: 2px;
      <widget class="QGroupBox" name="UserBio">
       <property name="geometry">
        <rect>
-        <x>3</x>
+        <x>4</x>
         <y>50</y>
-        <width>381</width>
+        <width>380</width>
         <height>109</height>
        </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>380</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>380</width>
+        <height>16777215</height>
+       </size>
       </property>
       <property name="title">
        <string/>
@@ -1753,21 +1765,21 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>120</y>
+        <y>124</y>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </size>
       </property>
       <property name="sizeIncrement">
@@ -1783,7 +1795,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>26</y>
+         <y>28</y>
          <width>361</width>
          <height>28</height>
         </rect>
@@ -1864,19 +1876,19 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>52</y>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>380</width>
-        <height>62</height>
+        <height>65</height>
        </size>
       </property>
       <property name="title">
@@ -1886,7 +1898,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>26</y>
+         <y>28</y>
          <width>361</width>
          <height>28</height>
         </rect>
@@ -2040,9 +2052,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>188</y>
+        <y>196</y>
         <width>380</width>
-        <height>57</height>
+        <height>56</height>
        </rect>
       </property>
       <property name="title">
@@ -2072,9 +2084,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>252</y>
+        <y>260</y>
         <width>380</width>
-        <height>143</height>
+        <height>135</height>
        </rect>
       </property>
       <property name="title">
@@ -2086,7 +2098,7 @@ p, li { white-space: pre-wrap; }
          <x>14</x>
          <y>28</y>
          <width>193</width>
-         <height>105</height>
+         <height>98</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_21">
@@ -2098,13 +2110,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>22</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>22</height>
            </size>
           </property>
           <property name="text">
@@ -2123,13 +2135,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="text">
@@ -2148,13 +2160,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="text">
@@ -2173,13 +2185,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="text">
@@ -4240,7 +4252,7 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </widget>
-   <widget class="QListWidget" name="itemListWidget">
+   <widget class="QListWidget" name="Sections">
     <property name="geometry">
      <rect>
       <x>2</x>
@@ -4295,8 +4307,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="iconSize">
      <size>
-      <width>24</width>
-      <height>24</height>
+      <width>22</width>
+      <height>22</height>
      </size>
     </property>
     <property name="flow">
@@ -4314,8 +4326,11 @@ p, li { white-space: pre-wrap; }
     <property name="gridSize">
      <size>
       <width>0</width>
-      <height>34</height>
+      <height>30</height>
      </size>
+    </property>
+    <property name="selectionRectVisible">
+     <bool>true</bool>
     </property>
     <property name="sortingEnabled">
      <bool>false</bool>
@@ -4524,9 +4539,9 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <zorder>itemListWidget</zorder>
+   <zorder>Sections</zorder>
    <zorder>buttonFrame</zorder>
-   <zorder>stackedWidget</zorder>
+   <zorder>Settings</zorder>
    <zorder>line_2</zorder>
   </widget>
  </widget>
@@ -4554,9 +4569,9 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>itemListWidget</sender>
+   <sender>Sections</sender>
    <signal>currentRowChanged(int)</signal>
-   <receiver>stackedWidget</receiver>
+   <receiver>Settings</receiver>
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">

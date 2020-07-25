@@ -42,7 +42,7 @@ signals:
   void closingFileSendWindow(qint32 StreamID);
 
 private slots:
-  void slot_allreadySendedSizeChanged(quint64 value);
+  void slot_alreadySentSizeChanged(quint64 value);
   void slot_FileTransferFinishedOK();
   void slot_FileTransferError();
   void slot_FileTransferAccepted(bool t);
