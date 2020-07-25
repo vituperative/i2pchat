@@ -32,6 +32,7 @@
 #include <getopt.h>
 #include <unistd.h>
 
+#include "Core.h"
 #include "form_Main.h"
 
 QString debugLogDir;
@@ -42,13 +43,13 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
                       const QString &msg);
 
 void help(void) {
-  printf("%s "
-         "(Compiled: " __DATE__ "-" __TIME__ ")\r\n"
-         "-h help\r\n"
-         "-w --workdir=<path to profile dir>\r\n"
-         "-s --stylesheet=<path to qss file>\r\n"
+  printf("%s"
+         " [Built: " __DATE__ "-" __TIME__ "]\r\n"
+         "  -h --help                           - Display this help\r\n"
+         "  -w --workdir <path to profile dir>  - Use non-default profile dir\r\n"
+         "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet for UI\r\n"
          "\r\n",
-         "I2PChat");
+         CLIENTNAME " v" CLIENTVERSION);
   exit(0);
 }
 
