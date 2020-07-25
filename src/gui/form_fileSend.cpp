@@ -27,9 +27,9 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
 
   QPushButton *pushButton = this->pushButton;
 
-  slot_allreadySendedSizeChanged(FileTransfer.getAllreadySendedSize());
-  connect(&FileTransfer, SIGNAL(signAllreadySendedSizeChanged(quint64)), this,
-          SLOT(slot_allreadySendedSizeChanged(quint64)));
+  slot_alreadySentSizeChanged(FileTransfer.getAlreadySentSize());
+  connect(&FileTransfer, SIGNAL(signAlreadySentSizeChanged(quint64)), this,
+          SLOT(slot_alreadySentSizeChanged(quint64)));
 
   connect(&FileTransfer, SIGNAL(signFileTransferFinishedOK()), this,
           SLOT(slot_FileTransferFinishedOK()));
@@ -82,7 +82,7 @@ void form_fileSend::init() {
 
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileTransfer.getFileSize());
-  progressBar->setValue(FileTransfer.getAllreadySendedSize());
+  progressBar->setValue(FileTransfer.getAlreadySentSize());
 
   //  label_10->setText(FileTransfer.getUsingProtocolVersion());
 
@@ -97,7 +97,7 @@ void form_fileSend::init() {
   label_15->setText("n/a");
 }
 
-void form_fileSend::slot_allreadySendedSizeChanged(quint64 value) {
+void form_fileSend::slot_alreadySentSizeChanged(quint64 value) {
   progressBar->setValue(value);
 }
 

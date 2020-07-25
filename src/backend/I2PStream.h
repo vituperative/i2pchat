@@ -57,12 +57,12 @@ public:
   qint32 getID() const { return mID; }
   StreamMode getStreamMode() const { return mMode; }
   Type getConnectionType() const { return mConnectionType; }
-  bool getFIRSTPACKETCHAT_allreadySended() const {
-    return mFIRSTPACKETCHAT_allreadySended;
+  bool getFIRSTPACKETCHAT_alreadySent() const {
+    return mFIRSTPACKETCHAT_alreadySent;
   }
   QString getUsedFor() { return mUsedFor; };
   void setConnectionType(const Type newTyp);
-  void setFIRSTPACKETCHAT_allreadySended(bool theValue);
+  void setFIRSTPACKETCHAT_alreadySent(bool theValue);
   void setUsedFor(QString value) { mUsedFor = value; };
 
   void operator<<(const QByteArray Data);
@@ -102,7 +102,7 @@ private:
   bool mStatusReceived;
   bool mHandShakeWasSuccesfullDone;
   bool mDestinationReceived;
-  bool mFIRSTPACKETCHAT_allreadySended;
+  bool mFIRSTPACKETCHAT_alreadySent;
   QByteArray *mIncomingPackets;
   QTcpSocket mTcpSocket;
   QTimer *mTimer;

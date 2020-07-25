@@ -38,9 +38,9 @@ void CProtocol::newConnectionChat(const qint32 ID) {
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
 
   // send the ChatSystem\tProtocolVersion
-  if (stream->getFIRSTPACKETCHAT_allreadySended() == false) {
+  if (stream->getFIRSTPACKETCHAT_alreadySent() == false) {
     // sometime StreamStatusReceived is called again with streamstatus Ok
-    stream->setFIRSTPACKETCHAT_allreadySended(true);
+    stream->setFIRSTPACKETCHAT_alreadySent(true);
     *(stream) << (QString)FIRSTPACKETCHAT;
   }
 }
