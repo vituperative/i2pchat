@@ -69,10 +69,9 @@ void form_fileSend::init() {
   QProgressBar *progressBar = this->progressBar;
   QString sType;
 
-  //labelFilename->setText(FileTransfer.getFileName());
+  // labelFilename->setText(FileTransfer.getFileName());
   QString file = FileTransfer.getFileName();
   SetTextToLabel(labelFilename, file);
-
 
   quint64 FileSize = FileTransfer.getFileSize();
 

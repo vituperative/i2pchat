@@ -61,7 +61,7 @@ void form_fileReceive::init() {
   QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
 
-  //labelFilename->setText(FileReceive.getFileName());
+  // labelFilename->setText(FileReceive.getFileName());
   QString file = FileReceive.getFileName();
   SetTextToLabel(labelFilename, file);
 
