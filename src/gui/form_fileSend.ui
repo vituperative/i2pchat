@@ -292,7 +292,7 @@
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>9</x>
       <y>12</y>
       <width>185</width>
       <height>24</height>
@@ -317,7 +317,7 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>201</x>
+      <x>200</x>
       <y>12</y>
       <width>75</width>
       <height>24</height>
