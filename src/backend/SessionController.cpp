@@ -107,16 +107,14 @@ void CSessionController::slotReadFromSocket() {
       emit signDebugMessages(t);
       if (sam.result == OK) {
         this->mHandShakeWasSuccesfullDone = true;
-        if (mSamPrivKey == "") {
+        if (mSamPrivKey == "" || mSamPrivKey.length() <= 0) {
           QSettings settings(mConfigPath + "/application.ini",
                              QSettings::IniFormat);
           QString Signature = "SIGNATURE_TYPE=%s";
           settings.beginGroup("Network");
           Signature.replace(
-              "%s",
-              //              settings.value("Signature_Type",
-              //              "EdDSA_SHA512_Ed25519").toString());
-              settings.value("Signature_Type", "ECDSA_SHA512_P521").toString());
+              "%s", settings.value("Signature_Type", "EdDSA_SHA512_Ed25519")
+                        .toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
           settings.sync();
@@ -139,10 +137,10 @@ void CSessionController::slotReadFromSocket() {
         if (sam.result == DUPLICATED_DEST) {
           QMessageBox msgBox(NULL);
           msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setText(
-              tr("\nDUPLICATE DESTINATION DETECTED!\nDo not attempt to run "
-                 "I2PChat\nwith the same destination twice!\nSAM may need to "
-                 "be restarted."));
+          msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!"));
+          msgBox.setText(tr(
+              "Do not attempt to run I2PChat with the same destination twice!"
+              "\nThe SAM client may need to be restarted."));
           msgBox.setStandardButtons(QMessageBox::Ok);
           msgBox.setDefaultButton(QMessageBox::Ok);
           msgBox.setWindowModality(Qt::NonModal);

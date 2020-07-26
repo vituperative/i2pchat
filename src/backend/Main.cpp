@@ -43,13 +43,14 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
                       const QString &msg);
 
 void help(void) {
-  printf("%s"
-         " [Built: " __DATE__ "-" __TIME__ "]\r\n"
-         "  -h --help                           - Display this help\r\n"
-         "  -w --workdir <path to profile dir>  - Use non-default profile dir\r\n"
-         "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet for UI\r\n"
-         "\r\n",
-         CLIENTNAME " v" CLIENTVERSION);
+  printf(
+      "%s"
+      " [Built: " __DATE__ "-" __TIME__ "]\r\n"
+      "  -h --help                           - Display this help\r\n"
+      "  -w --workdir <path to profile dir>  - Use non-default profile dir\r\n"
+      "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
+      "\r\n",
+      CLIENTNAME " v" CLIENTVERSION);
   exit(0);
 }
 
