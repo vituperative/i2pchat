@@ -109,11 +109,11 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
   connect(check_UserSearchEnable, SIGNAL(clicked(bool)), this,
           SLOT(clicked_EnableUserSearch(bool)));
 
-  connect(checkBox_AutoAcceptFileReceive, SIGNAL(clicked(bool)),
-          checkBox_IncomingSubFolders, SLOT(setChecked(bool)));
+  connect(checkBox_AutoAcceptFiles, SIGNAL(clicked(bool)),
+          checkBox_Subfolders, SLOT(setChecked(bool)));
 
-  connect(checkBox_AutoAcceptFileReceive, SIGNAL(toggled(bool)),
-          checkBox_IncomingSubFolders, SLOT(setEnabled(bool)));
+  connect(checkBox_AutoAcceptFiles, SIGNAL(toggled(bool)),
+          checkBox_Subfolders, SLOT(setEnabled(bool)));
 
   connect(cmd_selectAvatarImage, SIGNAL(clicked()), this,
           SLOT(clicked_SelectAvatarImage()));
@@ -156,11 +156,11 @@ void form_settingsgui::loadSettings() {
     styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
   }
 
-  checkBox_AutoAcceptFileReceive->setChecked(
+  checkBox_AutoAcceptFiles->setChecked(
       settings->value("AutoAcceptFileReceive", false).toBool());
-  if (checkBox_AutoAcceptFileReceive->isChecked() == true) {
+  if (checkBox_AutoAcceptFiles->isChecked() == true) {
     cmd_IncomingFileFolder->setEnabled(true);
-    checkBox_IncomingSubFolders->setChecked(
+    checkBox_Subfolders->setChecked(
         settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
   }
 
@@ -413,10 +413,10 @@ void form_settingsgui::saveSettings() {
   settings->setValue("current_Style", styleCombo->currentText());
   settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
   settings->setValue("AutoAcceptFileReceive",
-                     checkBox_AutoAcceptFileReceive->isChecked());
+                     checkBox_AutoAcceptFiles->isChecked());
   settings->setValue("IncomingFileFolder", txt_IncomingFileFolder->text());
   settings->setValue("UseIncomingSubFolderForEveryUser",
-                     checkBox_IncomingSubFolders->isChecked());
+                     checkBox_Subfolders->isChecked());
   settings->setValue("DebugLogging", checkBox_DebugLog->isChecked());
   settings->endGroup();
 
@@ -634,7 +634,7 @@ void form_settingsgui::clicked_IncomingFileFolder() {
       QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks));
 
   if (txt_IncomingFileFolder->text().isEmpty()) {
-    checkBox_AutoAcceptFileReceive->setChecked(false);
+    checkBox_AutoAcceptFiles->setChecked(false);
   }
 }
 
