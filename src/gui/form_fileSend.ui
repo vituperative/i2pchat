@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </size>
   </property>
   <property name="sizeIncrement">
@@ -269,8 +269,20 @@
      <x>4</x>
      <y>108</y>
      <width>283</width>
-     <height>44</height>
+     <height>42</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>42</height>
+    </size>
    </property>
    <property name="title">
     <string/>
@@ -279,7 +291,7 @@
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>12</y>
+      <y>11</y>
       <width>185</width>
       <height>24</height>
      </rect>
@@ -304,7 +316,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>12</y>
+      <y>11</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -345,7 +357,7 @@
    <bool>false</bool>
   </property>
   <property name="gridVisible">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
  </designerdata>
 </ui>
