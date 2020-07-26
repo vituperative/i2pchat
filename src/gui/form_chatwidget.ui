@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>407</width>
-    <height>331</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -471,7 +471,7 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>3</number>
+           <number>0</number>
           </property>
           <item>
            <spacer>
@@ -488,6 +488,18 @@ p, li { white-space: pre-wrap; }
           </item>
           <item>
            <widget class="QPushButton" name="send">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>24</height>
+             </size>
+            </property>
             <property name="text">
              <string>Send</string>
             </property>
