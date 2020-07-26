@@ -136,7 +136,7 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
   txtItalic->setChecked(mCurrentFont.italic());
   txtUnder->setChecked(mCurrentFont.underline());
 
-  resize(400, 300); // maybe too from QSS?
+  resize(480, 360); // maybe too from QSS?
   centerDialog();
 
   changeWindowsTitle();
