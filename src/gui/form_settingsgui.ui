@@ -83,23 +83,26 @@
     <enum>QFrame::Plain</enum>
    </property>
    <widget class="QStackedWidget" name="Settings">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>136</x>
       <y>2</y>
-      <width>384</width>
+      <width>390</width>
       <height>404</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>384</width>
+      <width>390</width>
       <height>404</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>384</width>
+      <width>390</width>
       <height>404</height>
      </size>
     </property>
@@ -142,7 +145,7 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_11">
         <item row="0" column="1" alignment="Qt::AlignLeft">
-         <widget class="QSpinBox" name="OfflineUserCheckSpinBox">
+         <widget class="QSpinBox" name="OfflineChkSpinBox">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -167,7 +170,7 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_offlinechk">
           <property name="minimumSize">
            <size>
             <width>200</width>
@@ -263,6 +266,9 @@
           </property>
           <property name="maximum">
            <number>1000</number>
+          </property>
+          <property name="value">
+           <number>100</number>
           </property>
          </widget>
         </item>
@@ -409,7 +415,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>12</x>
-         <y>14</y>
+         <y>13</y>
          <width>178</width>
          <height>21</height>
         </rect>
@@ -421,7 +427,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QLabel" name="label_16">
+      <widget class="QLabel" name="label_autoDL">
        <property name="geometry">
         <rect>
          <x>12</x>
@@ -449,7 +455,7 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="text">
-        <string>Download location:</string>
+        <string>Auto-download location:</string>
        </property>
       </widget>
       <widget class="QWidget" name="layoutWidget">
@@ -467,10 +473,13 @@ p, li { white-space: pre-wrap; }
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignRight">
-         <widget class="QPushButton" name="cmd_IncomingFileFolder">
+         <widget class="QPushButton" name="cmd_Downloads">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -500,13 +509,13 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>12</x>
-         <y>38</y>
-         <width>176</width>
+         <y>37</y>
+         <width>202</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
-        <string>Create folder per contact</string>
+        <string>Create sub-folder per contact</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -615,13 +624,13 @@ p, li { white-space: pre-wrap; }
            <string>Set to 0 to disable</string>
           </property>
           <property name="minimum">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="maximum">
-           <number>480</number>
+           <number>720</number>
           </property>
           <property name="value">
-           <number>24</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -986,7 +995,11 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignVCenter">
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1057,7 +1070,11 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignVCenter">
-         <widget class="QLineEdit" name="lineEdit_3"/>
+         <widget class="QLineEdit" name="lineEdit_3">
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_18">
@@ -1266,7 +1283,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignVCenter">
-         <widget class="QComboBox" name="comboBox_Signature">
+         <widget class="QComboBox" name="comboBox_SigType">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1341,7 +1358,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignVCenter">
-         <widget class="QPushButton" name="cmd_DestinationGenerate">
+         <widget class="QPushButton" name="cmd_DestGenerate">
           <property name="text">
            <string>Generate</string>
           </property>
@@ -1600,6 +1617,9 @@ border-radius: 2px;
             <width>160</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -2522,7 +2542,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Destination Web Page</string>
       </property>
-      <widget class="QCheckBox" name="blockallcheckBox_2">
+      <widget class="QCheckBox" name="WebProfileCheckbox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -2577,7 +2597,7 @@ p, li { white-space: pre-wrap; }
         <string>http://b32.i2p</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="blockallcheckBox_3">
+      <widget class="QCheckBox" name="HideWebCheckbox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -3362,7 +3382,7 @@ p, li { white-space: pre-wrap; }
          <x>2</x>
          <y>12</y>
          <width>380</width>
-         <height>95</height>
+         <height>80</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -3391,7 +3411,7 @@ p, li { white-space: pre-wrap; }
         </font>
        </property>
        <property name="title">
-        <string>Local Style</string>
+        <string/>
        </property>
        <widget class="QTextEdit" name="txtShowCurrentChatStyle">
         <property name="enabled">
@@ -3400,7 +3420,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>13</x>
-          <y>52</y>
+          <y>38</y>
           <width>356</width>
           <height>32</height>
          </rect>
@@ -3431,7 +3451,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>236</x>
-          <y>28</y>
+          <y>14</y>
           <width>132</width>
           <height>20</height>
          </rect>
@@ -3641,14 +3661,27 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>15</x>
+          <y>18</y>
+          <width>65</width>
+          <height>15</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Local Style</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QGroupBox" name="RemoteStyle">
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>115</y>
+         <y>98</y>
          <width>380</width>
-         <height>95</height>
+         <height>80</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -3677,29 +3710,29 @@ p, li { white-space: pre-wrap; }
         </font>
        </property>
        <property name="title">
-        <string>Override Remote Style</string>
+        <string/>
        </property>
        <widget class="QCheckBox" name="chatOverrideBox">
         <property name="geometry">
          <rect>
           <x>14</x>
-          <y>28</y>
-          <width>77</width>
-          <height>20</height>
+          <y>14</y>
+          <width>161</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Override</string>
+         <string>Override Remote Style</string>
         </property>
        </widget>
-       <widget class="QTextEdit" name="txtShowCurrentChatStyleOverride">
+       <widget class="QTextEdit" name="txtOverrideRemote">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <property name="geometry">
          <rect>
           <x>13</x>
-          <y>52</y>
+          <y>38</y>
           <width>356</width>
           <height>32</height>
          </rect>
@@ -3733,7 +3766,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>236</x>
-          <y>28</y>
+          <y>14</y>
           <width>132</width>
           <height>20</height>
          </rect>
@@ -3944,51 +3977,13 @@ p, li { white-space: pre-wrap; }
         </layout>
        </widget>
       </widget>
-      <widget class="QFrame" name="frame">
-       <property name="geometry">
-        <rect>
-         <x>2</x>
-         <y>316</y>
-         <width>0</width>
-         <height>0</height>
-        </rect>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_28">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Maximum ACK time (seconds):</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="spinBox_maxACK">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QGroupBox" name="UserEvents">
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>290</y>
+         <y>240</y>
          <width>380</width>
-         <height>65</height>
+         <height>50</height>
         </rect>
        </property>
        <property name="maximumSize">
@@ -3998,13 +3993,13 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="title">
-        <string>User Events</string>
+        <string/>
        </property>
        <widget class="QCheckBox" name="checkboxUserEvents">
         <property name="geometry">
          <rect>
           <x>14</x>
-          <y>31</y>
+          <y>18</y>
           <width>240</width>
           <height>21</height>
          </rect>
@@ -4025,13 +4020,13 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>218</y>
+         <y>184</y>
          <width>380</width>
-         <height>65</height>
+         <height>50</height>
         </rect>
        </property>
        <property name="title">
-        <string>Emoticons</string>
+        <string/>
        </property>
        <widget class="QCheckBox" name="checkBoxEmoticons">
         <property name="enabled">
@@ -4040,7 +4035,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>14</x>
-          <y>32</y>
+          <y>18</y>
           <width>271</width>
           <height>21</height>
          </rect>
@@ -4051,6 +4046,87 @@ p, li { white-space: pre-wrap; }
         <property name="checked">
          <bool>true</bool>
         </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>296</y>
+         <width>380</width>
+         <height>59</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>18</y>
+          <width>358</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_6">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>180</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Message timeout (seconds):</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" alignment="Qt::AlignLeft">
+          <widget class="QSpinBox" name="spinBox_maxACK">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>180</number>
+           </property>
+           <property name="value">
+            <number>60</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
      </widget>
@@ -4147,21 +4223,21 @@ p, li { white-space: pre-wrap; }
      <widget class="QTreeWidget" name="UserBlockTreeWidget">
       <property name="geometry">
        <rect>
-        <x>4</x>
+        <x>5</x>
         <y>54</y>
-        <width>380</width>
+        <width>379</width>
         <height>305</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>379</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>379</width>
         <height>16777215</height>
        </size>
       </property>
@@ -4290,6 +4366,9 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QGroupBox" name="BackgroundSearch">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -4315,7 +4394,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <widget class="QCheckBox" name="check_UserSearchEnable">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -4753,7 +4832,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>checkBox_AutoAcceptFiles</sender>
    <signal>clicked(bool)</signal>
-   <receiver>cmd_IncomingFileFolder</receiver>
+   <receiver>cmd_Downloads</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
