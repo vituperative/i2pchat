@@ -494,13 +494,15 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     CUser *User;
     User = Core->getUserManager()->getUserByI2P_Destination(Destination);
 
+    // TODO: FIX!
+/*
     if (User->getConnectionStatus() == ONLINE) {
       QAction *UserSendFile =
           new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
       connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
       contextMnu.addAction(UserSendFile);
     }
-
+*/
     if (User->getIsInvisible() == true) {
       UserInvisible->setChecked(true);
     } else {
