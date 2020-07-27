@@ -24,7 +24,9 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
     : FileTransfer(FileTransfer) {
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
-  // this->setWindowTitle("File Upload to " + recipient); // TODO: add recipient's name to titlebar
+  // TODO: add recipient's name to titlebar
+  // this->setWindowTitle("File Upload to " + recipient);
+
   QPushButton *pushButton = this->pushButton;
 
   slot_alreadySentSizeChanged(FileTransfer.getAlreadySentSize());

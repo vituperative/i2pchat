@@ -109,11 +109,11 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
   connect(check_UserSearchEnable, SIGNAL(clicked(bool)), this,
           SLOT(clicked_EnableUserSearch(bool)));
 
-  connect(checkBox_AutoAcceptFiles, SIGNAL(clicked(bool)),
-          checkBox_Subfolders, SLOT(setChecked(bool)));
+  connect(checkBox_AutoAcceptFiles, SIGNAL(clicked(bool)), checkBox_Subfolders,
+          SLOT(setChecked(bool)));
 
-  connect(checkBox_AutoAcceptFiles, SIGNAL(toggled(bool)),
-          checkBox_Subfolders, SLOT(setEnabled(bool)));
+  connect(checkBox_AutoAcceptFiles, SIGNAL(toggled(bool)), checkBox_Subfolders,
+          SLOT(setEnabled(bool)));
 
   connect(cmd_selectAvatarImage, SIGNAL(clicked()), this,
           SLOT(clicked_SelectAvatarImage()));
@@ -313,8 +313,7 @@ void form_settingsgui::loadSettings() {
     txtOverrideRemote->setFont(font);
     txtOverrideRemote->setTextColor(color);
 
-    txtOverrideRemote->moveCursor(QTextCursor::End,
-                                                QTextCursor::MoveAnchor);
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
     txtOverrideRemote->textCursor().clearSelection();
   } else {
     txtOverrideRemote->selectAll();
@@ -325,18 +324,17 @@ void form_settingsgui::loadSettings() {
 
     txtOverrideRemote->setFont(font);
     txtOverrideRemote->setTextColor(color);
-    txtOverrideRemote->moveCursor(QTextCursor::End,
-                                                QTextCursor::MoveAnchor);
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
     txtOverrideRemote->textCursor().clearSelection();
   }
 
   checkboxUserEvents->setChecked(
       settings->value("LogOnlineStatesOfUsers", true).toBool());
 
-   // TODO: Connection timeout from I2PStream.cpp or nuke ?
-   // spinBox_maxACK->setMinimum(20);
-   // spinBox_maxACK->setMaximum(180);
-   // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
+  // TODO: Connection timeout from I2PStream.cpp or nuke ?
+  // spinBox_maxACK->setMinimum(20);
+  // spinBox_maxACK->setMaximum(180);
+  // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
 
   settings->endGroup();
 
@@ -411,9 +409,8 @@ void form_settingsgui::loadSettings() {
 void form_settingsgui::saveSettings() {
   settings->beginGroup("General");
   settings->setValue("Debug_Max_Message_count", spinBox->value());
-  settings->setValue(
-      "Waittime_between_rechecking_offline_users",
-      OfflineChkSpinBox->value() * 1000);
+  settings->setValue("Waittime_between_rechecking_offline_users",
+                     OfflineChkSpinBox->value() * 1000);
   settings->setValue("current_Style", styleCombo->currentText());
   settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
   settings->setValue("AutoAcceptFileReceive",
@@ -492,7 +489,7 @@ void form_settingsgui::saveSettings() {
   settings->setValue("ColorForOverwrite",
                      txtOverrideRemote->textColor().name());
   settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
-  settings->setValue("MaxChatmessageACKTimeInSec",spinBox_maxACK->value());
+  settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
   settings->endGroup();
 
   settings->beginGroup("Security");
@@ -691,10 +688,8 @@ void form_settingsgui::clicked_ChatMessageFont() {
 
 void form_settingsgui::clicked_OverWriteChatMessageTextColor() {
   txtOverrideRemote->selectAll();
-  txtOverrideRemote->setTextColor(
-      QColorDialog::getColor(Qt::black, this));
-  txtOverrideRemote->moveCursor(QTextCursor::End,
-                                              QTextCursor::MoveAnchor);
+  txtOverrideRemote->setTextColor(QColorDialog::getColor(Qt::black, this));
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
@@ -703,8 +698,7 @@ void form_settingsgui::clicked_OverWriteChatMessageBold(bool t) {
   font.setBold(t);
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setCurrentFont(font);
-  txtOverrideRemote->moveCursor(QTextCursor::End,
-                                              QTextCursor::MoveAnchor);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
@@ -715,8 +709,7 @@ void form_settingsgui::clicked_OverWriteChatMessageFont() {
   if (ok == true) {
     txtOverrideRemote->selectAll();
     txtOverrideRemote->setCurrentFont(newFont);
-    txtOverrideRemote->moveCursor(QTextCursor::End,
-                                                QTextCursor::MoveAnchor);
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
     txtOverrideRemote->textCursor().clearSelection();
   }
 }
@@ -740,16 +733,14 @@ void form_settingsgui::clicked_ChatMessageUnderline(bool t) {
 void form_settingsgui::clicked_OverWriteChatMessageItalic(bool t) {
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setFontItalic(t);
-  txtOverrideRemote->moveCursor(QTextCursor::End,
-                                              QTextCursor::MoveAnchor);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
 void form_settingsgui::clicked_OverWriteChatMessageUnderline(bool t) {
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setFontUnderline(t);
-  txtOverrideRemote->moveCursor(QTextCursor::End,
-                                              QTextCursor::MoveAnchor);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
