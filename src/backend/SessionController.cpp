@@ -137,8 +137,8 @@ void CSessionController::slotReadFromSocket() {
         if (sam.result == DUPLICATED_DEST) {
           QMessageBox msgBox(NULL);
           msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setInformativeText(tr("DUPLICATE DESTINATION DETECTED!"));
-          msgBox.setText(tr(
+          msgBox.setText(tr("DUPLICATE DESTINATION DETECTED!"));
+          msgBox.setInformativeText(tr(
               "Do not attempt to run I2PChat with the same destination twice!"
               "\nThe SAM client may need to be restarted."));
           msgBox.setStandardButtons(QMessageBox::Ok);

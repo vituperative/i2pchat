@@ -162,6 +162,11 @@ void form_settingsgui::loadSettings() {
     cmd_IncomingFileFolder->setEnabled(true);
     checkBox_Subfolders->setChecked(
         settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
+    txt_IncomingFileFolder->setReadOnly(false);
+    txt_IncomingFileFolder->setEnabled(true);
+  } else {
+    checkBox_Subfolders->setDisabled(true);
+    txt_IncomingFileFolder->setReadOnly(true); // no workee :(
   }
 
   txt_IncomingFileFolder->setText(
