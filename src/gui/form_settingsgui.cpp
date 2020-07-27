@@ -203,9 +203,7 @@ void form_settingsgui::loadSettings() {
 
   comboBox_Signature->setEditable(false);
   comboBox_Signature->setCurrentIndex(comboBox_Signature->findText(
-      //      settings->value("SIGNATURE_TYPE",
-      //      "EdDSA_SHA512_Ed25519").toString()));
-      settings->value("SIGNATURE_TYPE", "ECDSA_SHA512_P521").toString()));
+      settings->value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString()));
   settings->endGroup();
 
   settings->beginGroup("Sound");

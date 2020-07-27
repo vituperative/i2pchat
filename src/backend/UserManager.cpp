@@ -235,18 +235,18 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
   };
 
   auto validateEdDSA_SHA512_Ed25519 = [](QString Dest) {
-    if (Dest.length() == 528 &&
-        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
-        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+    if (Dest.length() == 524 &&
+        (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) ||
+        Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
     else
       return false;
   };
 
   auto validateRedDSA_SHA512_Ed25519 = [](QString Dest) {
-    if (Dest.length() == 528 &&
-        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
-        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+    if (Dest.length() == 524 &&
+        (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) ||
+        Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
     else
       return false;
@@ -267,13 +267,13 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
              I2PDestination.mid(512, 9).contains("BQAIAAMAA",
                                                  Qt::CaseInsensitive)) {
     return validateECDSA_SHA512_P512(I2PDestination);
-  } else if (I2PDestination.length() == 528 &&
-             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
-                                                 Qt::CaseInsensitive)) {
+  } else if (I2PDestination.length() == 524 &&
+             (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+             I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateEdDSA_SHA512_Ed25519(I2PDestination);
-  } else if (I2PDestination.length() == 528 &&
-             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
-                                                 Qt::CaseInsensitive)) {
+  } else if (I2PDestination.length() == 524 &&
+             (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+             I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateRedDSA_SHA512_Ed25519(I2PDestination);
   } else
     return false;
@@ -286,7 +286,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
   if (!mCore.getAccessAnyoneIncoming())
     return false;
   if (!nicknameRegExp.exactMatch(Name))
-    Name = "Unallowed nickname";
+    Name = "NonValidNick";
 
   bool isValid = validateI2PDestination(I2PDestination);
 
