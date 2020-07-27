@@ -1048,8 +1048,17 @@ void form_MainWindow::eventDebugWindowClosed() {
   mDebugWindow = NULL;
 }
 
+static void ElideLabel(QLabel *label, QString text) {
+  QFontMetrics metrix(label->font());
+  int width = label->width();
+  QString clippedText = metrix.elidedText(text, Qt::ElideRight, width);
+  label->setText(clippedText);
+}
+
 void form_MainWindow::eventNicknameChanged() {
-  nicknamelabel->setText(Core->getUserInfos().Nickname);
+  // nicknamelabel->setText(Core->getUserInfos().Nickname);
+  QString nick = Core->getUserInfos().Nickname;
+  ElideLabel(nicknamelabel, nick);
 }
 
 void form_MainWindow::eventAvatarImageChanged() {

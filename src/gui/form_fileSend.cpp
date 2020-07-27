@@ -56,7 +56,7 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   init();
 }
 
-static void SetTextToLabel(QLabel *label, QString text) {
+static void ElideLabel(QLabel *label, QString text) {
   QFontMetrics metrix(label->font());
   int width = label->width() - 6;
   QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
@@ -73,7 +73,7 @@ void form_fileSend::init() {
 
   // labelFilename->setText(FileTransfer.getFileName());
   QString file = FileTransfer.getFileName();
-  SetTextToLabel(labelFilename, file);
+  ElideLabel(labelFilename, file);
 
   quint64 FileSize = FileTransfer.getFileSize();
 
