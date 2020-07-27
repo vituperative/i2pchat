@@ -451,6 +451,12 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
 
+  QAction *UserInvisible =
+      new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
+  UserInvisible->setCheckable(true);
+  connect(UserInvisible, SIGNAL(triggered(bool)), this,
+          SLOT(UserInvisible(bool)));
+
   QAction *UserDelete =
       new QAction(QIcon(ICON_USER_DELETE), tr("Delete"), this);
   connect(UserDelete, SIGNAL(triggered()), this, SLOT(deleteUserClicked()));
@@ -463,14 +469,8 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
       new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
   connect(CopyDestination, SIGNAL(triggered()), this, SLOT(copyDestination()));
 
-  QAction *ShowUserInfos = new QAction(QIcon(ICON_ABOUT), tr("Userinfo"), this);
+  QAction *ShowUserInfos = new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
   connect(ShowUserInfos, SIGNAL(triggered()), this, SLOT(showUserInfos()));
-
-  QAction *UserInvisible =
-      new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
-  UserInvisible->setCheckable(true);
-  connect(UserInvisible, SIGNAL(triggered(bool)), this,
-          SLOT(UserInvisible(bool)));
 
   QAction *UserToBlockList = new QAction(QIcon(ICON_BLOCK), tr("Block"), this);
   connect(UserToBlockList, SIGNAL(triggered()), this,
@@ -507,13 +507,13 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
       UserInvisible->setChecked(false);
     }
 
-    contextMnu.addAction(UserToBlockList);
-    contextMnu.addSeparator();
-    contextMnu.addAction(UserRename);
-    contextMnu.addAction(UserDelete);
-    contextMnu.addAction(CopyDestination);
     contextMnu.addAction(UserInvisible);
+    contextMnu.addAction(UserToBlockList);
+    contextMnu.addAction(UserDelete);
+    contextMnu.addSeparator();
     contextMnu.addAction(ShowUserInfos);
+    contextMnu.addAction(CopyDestination);
+    contextMnu.addAction(UserRename);
 
     contextMnuPos.addAction(UP);
     contextMnuPos.addAction(DOWN);
