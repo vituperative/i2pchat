@@ -255,6 +255,7 @@ void form_settingsgui::loadSettings() {
   settings->endGroup();
 
   settings->beginGroup("User-Infos");
+  txt_Nickname->setMaxLength(12);
   txt_Nickname->setText(settings->value("Nickname", "").toString());
   spinAge->setValue(settings->value("Age", "0").toInt());
 
