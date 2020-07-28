@@ -40,13 +40,13 @@ form_fileReceive::form_fileReceive(CFileTransferReceive &FileReceive)
   connect(&FileReceive, SIGNAL(signAverageReceiveSpeed(QString, QString)), this,
           SLOT(slot_SpeedChanged(QString, QString)));
 
-  connect(&FileReceive, SIGNAL(signETA(QString)), label_15,
+  connect(&FileReceive, SIGNAL(signETA(QString)), labelETA,
           SLOT(setText(QString)));
 
   init();
 }
 
-static void SetTextToLabel(QLabel *label, QString text) {
+static void ElideLabel(QLabel *label, QString text) {
   QFontMetrics metrix(label->font());
   int width = label->width() - 6;
   QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
@@ -57,27 +57,24 @@ void form_fileReceive::init() {
   QString SSize;
   QString SType;
   QLabel *labelFilename = this->labelFilename;
-  QLabel *label_6 = this->label_6;
-  QLabel *label_7 = this->label_7;
+  QLabel *labelFilesize = this->labelFilesize;
   QProgressBar *progressBar = this->progressBar;
 
   // labelFilename->setText(FileReceive.getFileName());
   QString file = FileReceive.getFileName();
-  SetTextToLabel(labelFilename, file);
+  ElideLabel(labelFilename, file);
 
   quint64 FileSize = FileReceive.getFileSize();
 
   FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SType, false);
-  label_6->setText(SSize);
-  label_7->setText(SType);
+  labelFilesize->setText(SSize + " " + SType);
 
   checkBox_3->setChecked(true);
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileReceive.getFileSize());
   progressBar->setValue(FileReceive.getAllreadyReceivedSize());
   //  label_10->setText(FileReceive.getUsingProtocolVersion());
-  label_11->setText("waiting...");
-  label_12->setText("");
+  labelSpeed->setText("waiting...");
 }
 
 void form_fileReceive::slot_Button() {
@@ -151,8 +148,7 @@ void form_fileReceive::closeEvent(QCloseEvent *e) {
 }
 
 void form_fileReceive::slot_SpeedChanged(QString SNumber, QString Type) {
-  label_11->setText(SNumber);
-  label_12->setText(Type);
+  labelSpeed->setText(SNumber + " " + Type);
 }
 
 void form_fileReceive::start() {

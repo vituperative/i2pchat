@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>290</height>
+    <width>451</width>
+    <height>354</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>441</width>
-    <height>0</height>
+    <width>346</width>
+    <height>240</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -37,7 +43,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>320</width>
+        <width>220</width>
         <height>0</height>
        </size>
       </property>
@@ -101,13 +107,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>200</width>
-            <height>32</height>
+            <height>24</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>32</height>
+            <height>24</height>
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -115,7 +121,7 @@ p, li { white-space: pre-wrap; }
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>0</number>
+            <number>4</number>
            </property>
            <property name="rightMargin">
             <number>0</number>
@@ -123,198 +129,10 @@ p, li { white-space: pre-wrap; }
            <property name="bottomMargin">
             <number>0</number>
            </property>
-           <item row="0" column="0">
-            <widget class="QToolButton" name="cmd_SendFile">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="baseSize">
-              <size>
-               <width>24</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::TabFocus</enum>
-             </property>
-             <property name="toolTip">
-              <string>Sendfile</string>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="resourcen.qrc">
-               <normaloff>:/icons/upload.svg</normaloff>:/icons/upload.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="checkable">
-              <bool>false</bool>
-             </property>
-             <property name="autoRaise">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QToolButton" name="txtBold">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="baseSize">
-              <size>
-               <width>24</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Bold</string>
-             </property>
-             <property name="text">
-              <string>B</string>
-             </property>
-             <property name="icon">
-              <iconset resource="resourcen.qrc">
-               <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>22</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="autoRaise">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="txtUnder">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="baseSize">
-              <size>
-               <width>24</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Underline</string>
-             </property>
-             <property name="text">
-              <string>U</string>
-             </property>
-             <property name="icon">
-              <iconset resource="resourcen.qrc">
-               <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>22</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="autoRaise">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QToolButton" name="txtItalic">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="baseSize">
-              <size>
-               <width>24</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Italic</string>
-             </property>
-             <property name="text">
-              <string>I</string>
-             </property>
-             <property name="icon">
-              <iconset resource="resourcen.qrc">
-               <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>22</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="autoRaise">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
+           <property name="horizontalSpacing">
+            <number>8</number>
+           </property>
+           <item row="0" column="5" alignment="Qt::AlignVCenter">
             <widget class="QToolButton" name="txtColor">
              <property name="enabled">
               <bool>true</bool>
@@ -338,7 +156,7 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
              <property name="toolTip">
-              <string>Color</string>
+              <string>Select font color</string>
              </property>
              <property name="text">
               <string>C</string>
@@ -358,18 +176,125 @@ p, li { white-space: pre-wrap; }
              </property>
             </widget>
            </item>
-           <item row="0" column="5">
-            <widget class="QToolButton" name="txtFont">
+           <item row="0" column="2">
+            <widget class="QToolButton" name="txtBold">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="minimumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
                <width>24</width>
-               <height>24</height>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Embolden text</string>
+             </property>
+             <property name="text">
+              <string>B</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QToolButton" name="txtUnder">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>24</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Underline text</string>
+             </property>
+             <property name="text">
+              <string>U</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="7">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="6">
+            <widget class="QToolButton" name="txtFont">
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="baseSize">
@@ -379,7 +304,7 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
              <property name="toolTip">
-              <string>Font</string>
+              <string>Select font and size</string>
              </property>
              <property name="text">
               <string/>
@@ -393,6 +318,103 @@ p, li { white-space: pre-wrap; }
                <width>22</width>
                <height>22</height>
               </size>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QToolButton" name="txtItalic">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>24</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Italicize text</string>
+             </property>
+             <property name="text">
+              <string>I</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="8">
+            <widget class="QToolButton" name="cmd_SendFile">
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>24</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::TabFocus</enum>
+             </property>
+             <property name="toolTip">
+              <string>Send file to contact</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="resourcen.qrc">
+               <normaloff>:/icons/upload.svg</normaloff>:/icons/upload.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
              </property>
              <property name="autoRaise">
               <bool>true</bool>
@@ -449,7 +471,7 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>3</number>
+           <number>0</number>
           </property>
           <item>
            <spacer>
@@ -466,8 +488,26 @@ p, li { white-space: pre-wrap; }
           </item>
           <item>
            <widget class="QPushButton" name="send">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>24</height>
+             </size>
+            </property>
             <property name="text">
              <string>Send</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+            <property name="default">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -491,14 +531,26 @@ p, li { white-space: pre-wrap; }
         </item>
         <item alignment="Qt::AlignVCenter">
          <widget class="QFrame" name="chattoolsframe_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
            <property name="leftMargin">
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>9</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -511,8 +563,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="focusPolicy">
@@ -552,8 +604,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -581,8 +633,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -616,8 +668,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="focusPolicy">
@@ -652,13 +704,13 @@ p, li { white-space: pre-wrap; }
              <property name="minimumSize">
               <size>
                <width>16</width>
-               <height>16</height>
+               <height>12</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>24</width>
-               <height>24</height>
+               <height>16</height>
               </size>
              </property>
              <property name="font">
@@ -713,13 +765,13 @@ p, li { white-space: pre-wrap; }
              <property name="minimumSize">
               <size>
                <width>16</width>
-               <height>16</height>
+               <height>12</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>24</width>
-               <height>24</height>
+               <height>16</height>
               </size>
              </property>
              <property name="font">
@@ -745,8 +797,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -786,8 +838,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -827,8 +879,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -868,8 +920,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -903,8 +955,8 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="maximumSize">
               <size>
-               <width>24</width>
-               <height>24</height>
+               <width>20</width>
+               <height>20</height>
               </size>
              </property>
              <property name="toolTip">
@@ -977,7 +1029,7 @@ p, li { white-space: pre-wrap; }
         <property name="sizeHint" stdset="0">
          <size>
           <width>14</width>
-          <height>321</height>
+          <height>0</height>
          </size>
         </property>
        </spacer>
@@ -1051,7 +1103,7 @@ background: #fff;
          <property name="sizeHint" stdset="0">
           <size>
            <width>4</width>
-           <height>210</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>

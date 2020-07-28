@@ -24,6 +24,8 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
     : FileTransfer(FileTransfer) {
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
+  // TODO: add recipient's name to titlebar
+  // this->setWindowTitle("File Upload to " + recipient);
 
   QPushButton *pushButton = this->pushButton;
 
@@ -48,13 +50,13 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   connect(&FileTransfer, SIGNAL(signAverageTransferSpeed(QString, QString)),
           this, SLOT(slot_SpeedChanged(QString, QString)));
 
-  connect(&FileTransfer, SIGNAL(signETA(QString)), label_15,
+  connect(&FileTransfer, SIGNAL(signETA(QString)), labelETA,
           SLOT(setText(QString)));
 
   init();
 }
 
-static void SetTextToLabel(QLabel *label, QString text) {
+static void ElideLabel(QLabel *label, QString text) {
   QFontMetrics metrix(label->font());
   int width = label->width() - 6;
   QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
@@ -64,20 +66,19 @@ static void SetTextToLabel(QLabel *label, QString text) {
 void form_fileSend::init() {
   QString SSize;
   QLabel *labelFilename = this->labelFilename;
-  QLabel *label_6 = this->label_6;
-  QLabel *label_7 = this->label_7;
+  QLabel *labelFilesize = this->labelFilesize;
+  // QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
   QString sType;
 
   // labelFilename->setText(FileTransfer.getFileName());
   QString file = FileTransfer.getFileName();
-  SetTextToLabel(labelFilename, file);
+  ElideLabel(labelFilename, file);
 
   quint64 FileSize = FileTransfer.getFileSize();
 
   FileTransfer.doConvertNumberToTransferSize(FileSize, SSize, sType, false);
-  label_6->setText(SSize);
-  label_7->setText(sType);
+  labelFilesize->setText(SSize + " " + sType);
 
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileTransfer.getFileSize());
@@ -91,9 +92,8 @@ void form_fileSend::init() {
     slot_FileTransferFinishedOK();
   }
 
-  label_13->setText("waiting...");
-  label_11->setText("");
-  label_15->setText("n/a");
+  labelSpeed->setText("waiting...");
+  labelETA->setText("n/a");
 }
 
 void form_fileSend::slot_alreadySentSizeChanged(quint64 value) {
@@ -111,9 +111,9 @@ void form_fileSend::slot_FileTransferAccepted(bool t) {
   if (t == true) {
     checkBox_2->setChecked(true);
     checkBox_3->setChecked(true);
-    label_12->setText("Speed:");
+    Speed->setText("Speed:");
   } else {
-    label_12->setText("Status:");
+    Speed->setText("Status:");
   }
 }
 
@@ -142,9 +142,9 @@ void form_fileSend::getFocus() {
 }
 
 void form_fileSend::slot_SpeedChanged(QString SNumber, QString Type) {
-  label_13->setText(SNumber);
-  label_11->setText(Type);
+  labelSpeed->setText(SNumber + " " + Type);
 }
+
 void form_fileSend::keyPressEvent(QKeyEvent *event) {
   if (event->key() != Qt::Key_Escape) {
     QDialog::keyPressEvent(event);

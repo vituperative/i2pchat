@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>292</width>
-    <height>156</height>
+    <height>154</height>
    </size>
   </property>
   <property name="sizeIncrement">
@@ -143,7 +143,7 @@
       <number>2</number>
      </property>
      <item row="2" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_12">
+      <widget class="QLabel" name="Speed">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -164,15 +164,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>SizeTyp</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_14">
+      <widget class="QLabel" name="ETA">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -190,23 +183,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Size</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>SizeTyp</string>
        </property>
       </widget>
      </item>
@@ -258,14 +234,24 @@
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
-      <widget class="QLabel" name="label_15">
+      <widget class="QLabel" name="labelETA">
        <property name="text">
-        <string>value</string>
+        <string>n/a</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_13">
+     <item row="1" column="1" colspan="2">
+      <widget class="QLabel" name="labelFilesize">
+       <property name="text">
+        <string>Size</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QLabel" name="labelSpeed">
        <property name="text">
         <string>Size</string>
        </property>
@@ -283,8 +269,20 @@
      <x>4</x>
      <y>108</y>
      <width>283</width>
-     <height>44</height>
+     <height>42</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>42</height>
+    </size>
    </property>
    <property name="title">
     <string/>
@@ -293,7 +291,7 @@
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>12</y>
+      <y>11</y>
       <width>185</width>
       <height>24</height>
      </rect>
@@ -317,8 +315,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>201</x>
-      <y>12</y>
+      <x>200</x>
+      <y>11</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -359,7 +357,7 @@
    <bool>false</bool>
   </property>
   <property name="gridVisible">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
  </designerdata>
 </ui>

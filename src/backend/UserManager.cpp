@@ -155,6 +155,27 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
       if (theUser->getClientName() != nullptr) {
         Infos = "Nickname:\t\t" + theUser->getName() + "  \n";
+
+        if (theUser->getProtocolVersion_D() >= 0.3) {
+          CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
+          QString sAge;
+          sAge.setNum(receivedInfos.Age, 10);
+
+          if (receivedInfos.Gender != nullptr || sAge != "0" ||
+              receivedInfos.Interests != nullptr) {
+            if (receivedInfos.Gender != nullptr) {
+              Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
+            }
+            if (sAge != nullptr && sAge != "0") {
+              Infos += "Age:\t\t" + sAge + "  \n";
+            }
+            if (receivedInfos.Interests != nullptr) {
+              Infos += "More info:\t\t" + receivedInfos.Interests + "  \n";
+            }
+            Infos += " \n";
+          }
+        }
+
         Infos += "Client:\t\t" + theUser->getClientName() + " " +
                  theUser->getClientVersion() + "  \n";
         Infos += "Protocol:\t\t" + theUser->getProtocolVersion() + "  \n";
@@ -164,26 +185,6 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       } else {
         Infos = "Nickname:\t" + theUser->getName() + "  \n";
         Infos += "Status:\tOffline  \n";
-      }
-
-      if (theUser->getProtocolVersion_D() >= 0.3) {
-        CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
-        QString sAge;
-        sAge.setNum(receivedInfos.Age, 10);
-
-        if (receivedInfos.Gender != nullptr || sAge != "0" ||
-            receivedInfos.Interests != nullptr) {
-          // Infos += "\nUser Information:\n";
-          if (receivedInfos.Gender != nullptr) {
-            Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
-          }
-          if (sAge != nullptr && sAge != "0") {
-            Infos += "Age:\t\t" + sAge + "  \n";
-          }
-          if (receivedInfos.Interests != nullptr) {
-            Infos += "Interests:\t\t" + receivedInfos.Interests + "  ";
-          }
-        }
       }
     }
   }
@@ -235,18 +236,18 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
   };
 
   auto validateEdDSA_SHA512_Ed25519 = [](QString Dest) {
-    if (Dest.length() == 528 &&
-        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
-        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+    if (Dest.length() == 524 &&
+        (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) ||
+         Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
     else
       return false;
   };
 
   auto validateRedDSA_SHA512_Ed25519 = [](QString Dest) {
-    if (Dest.length() == 528 &&
-        Dest.right(1).contains("=", Qt::CaseInsensitive) &&
-        Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
+    if (Dest.length() == 524 &&
+        (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) ||
+         Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
     else
       return false;
@@ -267,13 +268,13 @@ bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
              I2PDestination.mid(512, 9).contains("BQAIAAMAA",
                                                  Qt::CaseInsensitive)) {
     return validateECDSA_SHA512_P512(I2PDestination);
-  } else if (I2PDestination.length() == 528 &&
-             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
-                                                 Qt::CaseInsensitive)) {
+  } else if (I2PDestination.length() == 524 &&
+             (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+              I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateEdDSA_SHA512_Ed25519(I2PDestination);
-  } else if (I2PDestination.length() == 528 &&
-             I2PDestination.mid(512, 9).contains("BQAIAAMAA",
-                                                 Qt::CaseInsensitive)) {
+  } else if (I2PDestination.length() == 524 &&
+             (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+              I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateRedDSA_SHA512_Ed25519(I2PDestination);
   } else
     return false;
@@ -286,7 +287,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
   if (!mCore.getAccessAnyoneIncoming())
     return false;
   if (!nicknameRegExp.exactMatch(Name))
-    Name = "Unallowed nickname";
+    Name = "NonValidNick";
 
   bool isValid = validateI2PDestination(I2PDestination);
 

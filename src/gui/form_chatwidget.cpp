@@ -136,7 +136,7 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
   txtItalic->setChecked(mCurrentFont.italic());
   txtUnder->setChecked(mCurrentFont.underline());
 
-  resize(650, 400); // maybe too from QSS?
+  resize(480, 360); // maybe too from QSS?
   centerDialog();
 
   changeWindowsTitle();
@@ -425,9 +425,7 @@ void form_ChatWidget::newFileTransfer() {
   } else {
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(tr("Sendfile"));
-    msgBox->setInformativeText(
-        tr("The other user must be online; send aborted"));
+    msgBox->setText(tr("\nCannot send files when contact is offline!"));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);

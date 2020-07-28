@@ -11,6 +11,7 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS   += -std=c++11
 QMAKE_CXXFLAGS += -Wall
+# QMAKE_POST_LINK=$(STRIP) $(TARGET) // doesn't work with appveyor
 
 DEPENDPATH += . \
 	src/gui/ \
@@ -97,7 +98,7 @@ FORMS += \
 	src/gui/form_rename.ui \
 	src/gui/form_settingsgui.ui \
 	src/gui/form_userSearch.ui \
-	src/gui/form_about.ui \  
+	src/gui/form_about.ui \
 	src/gui/form_topicSubscribe.ui
 
 RESOURCES += src/gui/resourcen.qrc
