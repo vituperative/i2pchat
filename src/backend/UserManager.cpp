@@ -155,6 +155,27 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
 
       if (theUser->getClientName() != nullptr) {
         Infos = "Nickname:\t\t" + theUser->getName() + "  \n";
+
+        if (theUser->getProtocolVersion_D() >= 0.3) {
+          CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
+          QString sAge;
+          sAge.setNum(receivedInfos.Age, 10);
+
+          if (receivedInfos.Gender != nullptr || sAge != "0" ||
+              receivedInfos.Interests != nullptr) {
+            if (receivedInfos.Gender != nullptr) {
+              Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
+            }
+            if (sAge != nullptr && sAge != "0") {
+              Infos += "Age:\t\t" + sAge + "  \n";
+            }
+            if (receivedInfos.Interests != nullptr) {
+              Infos += "More info:\t\t" + receivedInfos.Interests + "  \n";
+            }
+            Infos += " \n";
+          }
+        }
+
         Infos += "Client:\t\t" + theUser->getClientName() + " " +
                  theUser->getClientVersion() + "  \n";
         Infos += "Protocol:\t\t" + theUser->getProtocolVersion() + "  \n";
@@ -164,26 +185,6 @@ QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
       } else {
         Infos = "Nickname:\t" + theUser->getName() + "  \n";
         Infos += "Status:\tOffline  \n";
-      }
-
-      if (theUser->getProtocolVersion_D() >= 0.3) {
-        CReceivedInfos receivedInfos = theUser->getReceivedUserInfos();
-        QString sAge;
-        sAge.setNum(receivedInfos.Age, 10);
-
-        if (receivedInfos.Gender != nullptr || sAge != "0" ||
-            receivedInfos.Interests != nullptr) {
-          // Infos += "\nUser Information:\n";
-          if (receivedInfos.Gender != nullptr) {
-            Infos += "Gender:\t\t" + receivedInfos.Gender + "  \n";
-          }
-          if (sAge != nullptr && sAge != "0") {
-            Infos += "Age:\t\t" + sAge + "  \n";
-          }
-          if (receivedInfos.Interests != nullptr) {
-            Infos += "Interests:\t\t" + receivedInfos.Interests + "  ";
-          }
-        }
       }
     }
   }
