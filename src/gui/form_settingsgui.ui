@@ -91,19 +91,19 @@
       <x>136</x>
       <y>2</y>
       <width>390</width>
-      <height>404</height>
+      <height>408</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>390</width>
-      <height>404</height>
+      <height>408</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>390</width>
-      <height>404</height>
+      <width>184</width>
+      <height>408</height>
      </size>
     </property>
     <property name="currentIndex">
@@ -4083,14 +4083,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>180</width>
-             <height>0</height>
+             <width>184</width>
+             <height>16</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>180</width>
-             <height>24</height>
+             <width>184</width>
+             <height>16</height>
             </size>
            </property>
            <property name="text">
