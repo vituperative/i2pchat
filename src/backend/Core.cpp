@@ -524,6 +524,8 @@ QString CCore::getConnectionDump() const {
         Message += "\n";
       } else if (Stream->getConnectionType() == KNOWN) {
         Message += "\tTrust:\t\tKNOWN\n";
+        if (Stream->getUsedFor() == "FileTransferSend")
+          Message += "\n";
       } else {
         Message += "\tTrust:\t\t???\n";
       }
