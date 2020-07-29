@@ -849,7 +849,7 @@ void CCore::loadUserInfos() {
   settings.sync();
 
   if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
-    mUserInfos.Nickname = "Unallowed nickname";
+    mUserInfos.Nickname = "NonValidNick";
     emit signNicknameChanged();
   }
 }
