@@ -2,6 +2,7 @@
 <messaging-emoticon-map>
 
   <emoticon file="angel">
+    <string>*ANGEL*</string>
     <string>O:-)</string>
     <string>O:)</string>
     <string>o:-)</string>
@@ -11,12 +12,14 @@
   </emoticon>
 
   <emoticon file="smile">
+    <string>*SMILE*</string>
     <string>:-)</string>
     <string>=)</string>
     <string>:)</string>
   </emoticon>
 
   <emoticon file="sad">
+    <string>*SAD*</string>
     <string>:-(</string>
     <string>=(</string>
     <string>:(</string>
@@ -61,6 +64,7 @@
   </emoticon>
 
   <emoticon file="kiss">
+    <string>*KISS*</string>
     <string>:-*</string>
     <string>:*</string>
   </emoticon>
@@ -88,11 +92,13 @@
   </emoticon>
 
   <emoticon file="devil">
+    <string>*DEVIL*</string>
     <string>]:-></string>
     <string>]:></string>
   </emoticon>
 
   <emoticon file="crying">
+    <string>*CRY*</string>
     <string>:'‑(</string>
     <string>:'(</string>
     <string>-.-;</string>
@@ -100,27 +106,24 @@
   </emoticon>
 
   <emoticon file="musical-note">
+    <string>*MUSIC*</string>
     <string>[:-}</string>
     <string>[:}</string>
   </emoticon>
 
   <emoticon file="inspect">
+    <string>*HMM*</string>
     <string>*oO*</string>
-    <string>*Oo*</string>
   </emoticon>
 
   <emoticon file="sick">
+    <string>*SICK*</string>
     <string>:-!</string>
     <string>:!</string>
-    <string>*SICK*</string>
   </emoticon>
 
   <emoticon file="eye">
     <string>*EYE*</string>
-  </emoticon>
-
-  <emoticon file="kiss">
-    <string>*KISS*</string>
   </emoticon>
 
   <emoticon file="giggle">
@@ -163,7 +166,7 @@
   </emoticon>
 
   <emoticon file="middlefinger">
-    <string>*FUCK OFF*</string>
+    <string>*FU*</string>
   </emoticon>
 
   <emoticon file="love">
@@ -185,6 +188,7 @@
   </emoticon>
 
   <emoticon file="cowboy">
+    <string>*COWBOY*</string>
     <string>\m/</string>
   </emoticon>
 
@@ -201,8 +205,8 @@
   </emoticon>
 
   <emoticon file="cat">
-    <string>:3</string>
     <string>*CAT*</string>
+    <string>:3</string>
   </emoticon>
 
   <emoticon file="mouse">
@@ -241,7 +245,7 @@
     <string>*MONKEY*</string>
   </emoticon>
 
-  <emoticon file="disapointed">
+  <emoticon file="disappointed">
     <string>*SORRY*</string>
   </emoticon>
 
@@ -293,6 +297,7 @@
   </emoticon>
 
   <emoticon file="uhoh">
+    <string>*UHOH*</string>
     <string>:s</string>
     <string>:S</string>
     <string>:-s</string>
