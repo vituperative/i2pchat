@@ -27,7 +27,7 @@ CFileTransferManager::CFileTransferManager(CCore &Core) : mCore(Core) {}
 CFileTransferManager::~CFileTransferManager() {}
 
 CFileTransferReceive *
-CFileTransferManager::getFileTransferReceiveByID(qint32 ID) const {
+CFileTransferManager::getFileReceiveByID(qint32 ID) const {
   /*for(int i=0;i<mFileReceives.size();i++){
           if(mFileReceives.at(i)->getStreamID()==ID){
                   return mFileReceives.at(i);
@@ -41,7 +41,7 @@ CFileTransferManager::getFileTransferReceiveByID(qint32 ID) const {
 }
 
 CFileTransferSend *
-CFileTransferManager::getFileTransferSendsByID(qint32 ID) const {
+CFileTransferManager::getFileSendByID(qint32 ID) const {
   for (auto it : mFileSends)
     if (it->getStreamID() == ID)
       return it;
@@ -79,8 +79,8 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath,
     qCritical() << "Undefined user for file transfer";
     return;
   }
-  if (this->getFileTransferSendsByID(User->getI2PStreamID()) != NULL ||
-      this->getFileTransferReceiveByID(User->getI2PStreamID()) != NULL) {
+  if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
+      this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
     qCritical() << "Already exists transfer for user";
     throw new std::runtime_error("Already exists transfer for user");
     return;
@@ -167,8 +167,8 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
               .arg(FileName));
     }
 
-    if (this->getFileTransferSendsByID(User->getI2PStreamID()) != NULL ||
-        this->getFileTransferReceiveByID(User->getI2PStreamID()) != NULL) {
+    if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
+        this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
       qCritical() << "File is already in the transfer queue";
       throw new std::runtime_error("File is already in the transfer queue");
       return;
@@ -226,7 +226,7 @@ bool CFileTransferManager::isThisID_a_FileReceiveID(qint32 ID) const {
   return false;
 }
 
-bool CFileTransferManager::checkIfAFileTransferOrReceiveisActive() const {
+bool CFileTransferManager::checkActiveFileTransfer() const {
   if (mFileSends.count() > 0)
     return true;
   if (mFileReceives.count() > 0)

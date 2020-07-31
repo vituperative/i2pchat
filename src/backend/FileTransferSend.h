@@ -36,8 +36,8 @@
 */
 
 namespace FileTransferProtocol {
-const QString MINPROTOCOLVERSION = "0.1";
-const double MINPROTOCOLVERSION_D = 0.1;
+const QString MINPROTOCOLVERSION = "0.3";
+const double MINPROTOCOLVERSION_D = 0.3;
 const QString MAXPROTOCOLVERSION = "0.3";
 const double MAXPROTOCOLVERSION_D = 0.3;
 // const QString FIRSTPACKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
@@ -68,9 +68,9 @@ public:
   QString getFileName() { return mFileName; };
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
   quint64 getAlreadySentSize() { return mAlreadySentSize; };
-  bool getAllreadyTransferAccepted() { return mFileTransferAccepted; };
-  bool getIsTransfering();
-  bool getIsAllreadyFinished() { return mAllreadyFinished; };
+  bool getAlreadyTransferAccepted() { return mFileTransferAccepted; };
+  bool getIsTransferring();
+  bool getIsAlreadyFinished() { return mAlreadyFinished; };
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
                                      QString &outType,
                                      bool addStoOutType = true);
@@ -88,7 +88,7 @@ signals:
   void signFileTransferAccepted(bool t);
   void signFileTransferFinishedOK();
   void signFileTransferError();
-  void signFileTransferAborted(); // the otherSide abort it
+  void signFileTransferAborted(); // recipient cancelled
   void signAverageTransferSpeed(QString SNumber, QString Type);
   void signETA(QString Value);
 
@@ -113,7 +113,7 @@ private:
   QFile mFileForSend;
   bool mSendFirstPacket;
   bool mFileTransferAccepted;
-  bool mAllreadyFinished;
+  bool mAlreadyFinished;
   QString mFileName;
 
   QTimer mTimerForActAverageTransferSpeed;

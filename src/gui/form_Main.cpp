@@ -101,7 +101,7 @@ void form_MainWindow::onlineComboBoxChanged() {
       Core->setOnlineStatus(User::USERINVISIBLE);
   } else if (text.contains(tr("Offline"), Qt::CaseInsensitive) == true) {
     if (Core->getFileTransferManager()
-            ->checkIfAFileTransferOrReceiveisActive() == false) {
+            ->checkActiveFileTransfer() == false) {
       if (Core->getOnlineStatus() != User::USEROFFLINE)
         Core->setOnlineStatus(User::USEROFFLINE);
     } else {
@@ -225,7 +225,7 @@ void form_MainWindow::namingMe() {
   }
 }
 void form_MainWindow::closeApplication() {
-  if (Core->getFileTransferManager()->checkIfAFileTransferOrReceiveisActive() ==
+  if (Core->getFileTransferManager()->checkActiveFileTransfer() ==
       false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
@@ -937,7 +937,7 @@ void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
 
 void form_MainWindow::openFileSendWindow(qint32 StreamID) {
   CFileTransferSend *TransferSend =
-      Core->getFileTransferManager()->getFileTransferSendsByID(StreamID);
+      Core->getFileTransferManager()->getFileSendByID(StreamID);
 
   if (TransferSend == NULL) {
     qCritical() << "form_MainWindow::openFileSendWindow\n"
@@ -962,7 +962,7 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
 
 void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
   CFileTransferReceive *receive =
-      Core->getFileTransferManager()->getFileTransferReceiveByID(StreamID);
+      Core->getFileTransferManager()->getFileReceiveByID(StreamID);
   if (receive == NULL) {
     qCritical() << "form_MainWindow::openFileReceiveWindow\n"
                 << "Can't find FileReceive Object with ID: " << StreamID

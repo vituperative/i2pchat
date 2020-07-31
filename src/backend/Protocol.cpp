@@ -106,14 +106,16 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
     CUser *thisUser = mCore.getUserManager()->getUserByI2P_ID(ID);
 
     if (thisUser != NULL) {
+/*
       if (thisUser->getProtocolVersion() == "0.3") {
         // BUG in Messenger_0.2.15 BETA :(
         send(ANSWER_OF_GET_MAX_PROTOCOLVERSION_FILETRANSFER, ID,
              QString("0.2"));
       } else {
+*/
         send(ANSWER_OF_GET_MAX_PROTOCOLVERSION_FILETRANSFER, ID,
              FileTransferProtocol::MAXPROTOCOLVERSION);
-      }
+//      }
     }
   } else if (ProtocolInfoTag == "1006") { // GET_USER_INFOS
     using namespace User;

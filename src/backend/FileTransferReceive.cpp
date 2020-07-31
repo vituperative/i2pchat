@@ -56,7 +56,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
   connect(&mTimerForActAverageTransferSpeed, SIGNAL(timeout()), this,
           SLOT(slotCalcAverageTransferSpeed()));
 
-  mAllreadyReceivedSize = 0;
+  mAlreadyReceivedSize = 0;
   mRequestAccepted = false;
 
   settings.beginGroup("General");
@@ -119,7 +119,7 @@ void CFileTransferReceive::slotStreamStatusReceived(
   case (SAM_Message_Types::TIMEOUT):
   case (SAM_Message_Types::CLOSED): {
     mTimerForActAverageTransferSpeed.stop();
-    if (mAllreadyReceivedSize == mFileSize) {
+    if (mAlreadyReceivedSize == mFileSize) {
       emit signFileReceivedFinishedOK();
 
       QString SizeName;
@@ -242,11 +242,11 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
              << "mStreamID!=ID WTF";
   }
 
-  mAllreadyReceivedSize += t.length();
+  mAlreadyReceivedSize += t.length();
   mFileForReceive.write(t);
   mFileForReceive.flush();
 
-  emit signAllreadyReceivedSizeChanged(mAllreadyReceivedSize);
+  emit signAlreadyReceivedSizeChanged(mAlreadyReceivedSize);
 
   if (mUsingProtocolVersionD == 0.2) {
     mStream.operator<<(QString("2")); // next block
@@ -256,7 +256,7 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
         QString("2:\t" + QString::number(t.length(), 10) + '\n'));
   }
 
-  if (mAllreadyReceivedSize == mFileSize) {
+  if (mAlreadyReceivedSize == mFileSize) {
 
     QString SizeName;
     QString SSize;
@@ -357,7 +357,7 @@ void CFileTransferReceive::slotCalcAverageTransferSpeed() {
   int departedtime = (mTimer.elapsed() / 1000);
   if (departedtime <= 0)
     departedtime = 1;
-  int speed = mAllreadyReceivedSize / departedtime;
+  int speed = mAlreadyReceivedSize / departedtime;
 
   QString speedSize;
   QString speedType;
@@ -381,9 +381,9 @@ void CFileTransferReceive::CalcETA(int speed) {
   int secLeft;
 
   if (speed > 0) {
-    secLeft = (mFileSize - mAllreadyReceivedSize) / speed;
+    secLeft = (mFileSize - mAlreadyReceivedSize) / speed;
   } else {
-    secLeft = mFileSize - mAllreadyReceivedSize;
+    secLeft = mFileSize - mAlreadyReceivedSize;
   }
 
   if (secLeft > 86400) {
