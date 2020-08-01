@@ -245,6 +245,10 @@
     <string>:3</string>
   </emoticon>
 
+  <emoticon file="unicorn">
+    <string>*UNICORN*</string>
+  </emoticon>
+
   <emoticon file="mouse">
     <string>*MOUSE*</string>
   </emoticon>
