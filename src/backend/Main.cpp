@@ -47,7 +47,7 @@ void help(void) {
       "%s"
       " [Built: " __DATE__ "-" __TIME__ "]\r\n"
       "  -h --help                           - Display this help\r\n"
-      "  -w --workdir <path to profile dir>  - Use non-default profile dir\r\n"
+      "  -p --profile <path to profile dir>  - Use specified profile dir\r\n"
       "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
       "\r\n",
       CLIENTNAME " v" CLIENTVERSION);
@@ -118,11 +118,11 @@ int main(int argc, char *argv[]) {
     int ret;
     int option_index;
     // :: = optional_argument ; = no_argument ; : = required_argument
-    const char *short_options_optarg = "hb::w:s:";
+    const char *short_options_optarg = "hb::p:s:";
 
     const struct option long_options_optarg[] = {
         {"help", no_argument, NULL, 'h'},
-        {"workdir", required_argument, NULL, 'w'},
+        {"profile", required_argument, NULL, 'p'},
         {"stylesheet", required_argument, NULL, 's'},
         {NULL, 0, NULL, 0}};
     while ((ret = getopt_long(argc, argv, short_options_optarg,
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
         help();
         break;
       };
-      case 'w': {
+      case 'p': {
         configPath = QString(optarg);
         break;
       };
