@@ -25,6 +25,10 @@
     <string>:(</string>
   </emoticon>
 
+  <emoticon file="unhappy">
+    <string>*UNHAPPY*</string>
+  </emoticon>
+
   <emoticon file="wink">
     <string>*WINK*</string>
     <string>;-)</string>
@@ -97,18 +101,34 @@
     <string>]:></string>
   </emoticon>
 
-  <emoticon file="crying">
-    <string>*CRY*</string>
+  <emoticon file="ghost">
+    <string>*GHOST*</string>
+  </emoticon>
+
+  <emoticon file="tear">
+    <string>*TEAR*</string>
     <string>:'‑(</string>
     <string>:'(</string>
     <string>-.-;</string>
     <string>-_-;</string>
   </emoticon>
 
+  <emoticon file="crying">
+    <string>*CRY*</string>
+  </emoticon>
+
   <emoticon file="musical-note">
     <string>*MUSIC*</string>
     <string>[:-}</string>
     <string>[:}</string>
+  </emoticon>
+
+  <emoticon file="trumpet">
+    <string>*TRUMPET*</string>
+  </emoticon>
+
+  <emoticon file="violin">
+    <string>*VIOLIN*</string>
   </emoticon>
 
   <emoticon file="inspect">
@@ -120,6 +140,10 @@
     <string>*SICK*</string>
     <string>:-!</string>
     <string>:!</string>
+  </emoticon>
+
+  <emoticon file="ill">
+    <string>*ILL*</string>
   </emoticon>
 
   <emoticon file="eye">
@@ -183,6 +207,14 @@
     <string>*FIRE*</string>
   </emoticon>
 
+  <emoticon file="explode">
+    <string>*EXPLODE*</string>
+  </emoticon>
+
+  <emoticon file="diamond">
+    <string>*DIAMOND*</string>
+  </emoticon>
+
   <emoticon file="question">
     <string>*UNSURE*</string>
   </emoticon>
@@ -204,6 +236,10 @@
     <string>*SNOWMAN*</string>
   </emoticon>
 
+  <emoticon file="pig">
+    <string>*PIG*</string>
+  </emoticon>
+
   <emoticon file="cat">
     <string>*CAT*</string>
     <string>:3</string>
@@ -215,6 +251,11 @@
 
   <emoticon file="cow">
     <string>*COW*</string>
+  </emoticon>
+
+  <emoticon file="bunny">
+    <string>*BUNNY*</string>
+    <string>*RABBIT*</string>
   </emoticon>
 
   <emoticon file="fox">
@@ -355,12 +396,20 @@
     <string>*CHILLI*</string>
   </emoticon>
 
+  <emoticon file="nut">
+    <string>*NUT*</string>
+  </emoticon>
+
   <emoticon file="garlic">
     <string>*GARLIC*</string>
   </emoticon>
 
   <emoticon file="popcorn">
     <string>*POPCORN*</string>
+  </emoticon>
+
+  <emoticon file="sandwich">
+    <string>*SANDWICH*</string>
   </emoticon>
 
   <emoticon file="burger">
