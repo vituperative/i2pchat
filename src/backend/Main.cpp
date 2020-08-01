@@ -47,7 +47,7 @@ void help(void) {
       "%s"
       " [Built: " __DATE__ "-" __TIME__ "]\r\n"
       "  -h --help                           - Display this help\r\n"
-      "  -p --profile <path to profile dir>  - Use specified profile dir\r\n"
+      "  -p --profile <path to profile dir>  - Use specified profile dir (creates a new profile if non-existent)\r\n"
       "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
       "\r\n",
       CLIENTNAME " v" CLIENTVERSION);
