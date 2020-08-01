@@ -1,4 +1,4 @@
-##I2PChat TODO
+## I2PChat TODO
 
 - [ ] Fix Ctrl + C in chat display
 - [ ] Implement Copy B32 Address from Contact context menu
