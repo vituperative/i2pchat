@@ -63,7 +63,6 @@
     <file>emoticons/mushroom.svg</file>
     <file>emoticons/musical-note.svg</file>
     <file>emoticons/nonplussed.svg</file>
-    <file>emoticons/parrot.svg</file>
     <file>emoticons/party.svg</file>
     <file>emoticons/peace.svg</file>
     <file>emoticons/peach.svg</file>
@@ -116,7 +115,6 @@
     <file>icons/network.svg</file>
     <file>icons/newmail.svg</file>
     <file>icons/palette.svg</file>
-    <file>icons/quick_restart.png</file>
     <file>icons/reload.svg</file>
     <file>icons/rename.svg</file>
     <file>icons/security.svg</file>
@@ -135,7 +133,6 @@
     <file>icons/status_online.svg</file>
     <file>icons/theme.svg</file>
     <file>icons/tick.svg</file>
-    <file>icons/Tools.gif</file>
     <file>icons/underline.svg</file>
     <file>icons/upload.svg</file>
   </qresource>
