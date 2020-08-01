@@ -231,6 +231,8 @@ void CSessionController::doSessionCreate() {
 
   QByteArray Message = "SESSION CREATE STYLE=STREAM ID=";
   Message += mBridgeName + " DESTINATION=" + mSamPrivKey;
+  // TODO: Enable as option for Non-persistent destination
+  // Message += mBridgeName + " DESTINATION=TRANSIENT";
 
   if (mSessionOptions.isEmpty() == false) {
     Message += " " + mSessionOptions;
