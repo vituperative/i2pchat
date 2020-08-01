@@ -46,7 +46,7 @@ const double MAXPROTOCOLVERSION_D = 0.3;
 
 #define NORMPACKETSIZE 1024
 #define MAXPACKETSIZE 30720
-#define TIMERCOUNTFORAVERAGETRANSFERSPEED_WRITE 1000 // 1 sec
+#define AVERAGETRANSFERSPEEDPERIOD 1000 // 1 sec
 
 class CCore;
 class CFileTransferSend : public QObject {

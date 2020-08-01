@@ -259,7 +259,7 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
 
   mTimer.start();
   mTimerForActAverageTransferSpeed.start(
-      TIMERCOUNTFORAVERAGETRANSFERSPEED_WRITE);
+      AVERAGETRANSFERSPEEDPERIOD);
 
   if (mUsingProtocolVersionD == 0.1) {
     SendFile_v0dot1();
