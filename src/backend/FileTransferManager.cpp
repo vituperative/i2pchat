@@ -40,8 +40,7 @@ CFileTransferManager::getFileReceiveByID(qint32 ID) const {
   return NULL;
 }
 
-CFileTransferSend *
-CFileTransferManager::getFileSendByID(qint32 ID) const {
+CFileTransferSend *CFileTransferManager::getFileSendByID(qint32 ID) const {
   for (auto it : mFileSends)
     if (it->getStreamID() == ID)
       return it;

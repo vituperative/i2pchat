@@ -652,8 +652,7 @@ QString CCore::getDestinationByID(qint32 ID) const {
     return send->getDestination();
   }
 
-  CFileTransferReceive *receive =
-      mFileTransferManager->getFileReceiveByID(ID);
+  CFileTransferReceive *receive = mFileTransferManager->getFileReceiveByID(ID);
   if (receive != NULL) {
     return receive->getDestination();
   }

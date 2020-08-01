@@ -100,8 +100,7 @@ void form_MainWindow::onlineComboBoxChanged() {
     if (Core->getOnlineStatus() != User::USERINVISIBLE)
       Core->setOnlineStatus(User::USERINVISIBLE);
   } else if (text.contains(tr("Offline"), Qt::CaseInsensitive) == true) {
-    if (Core->getFileTransferManager()
-            ->checkActiveFileTransfer() == false) {
+    if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
       if (Core->getOnlineStatus() != User::USEROFFLINE)
         Core->setOnlineStatus(User::USEROFFLINE);
     } else {
@@ -225,8 +224,7 @@ void form_MainWindow::namingMe() {
   }
 }
 void form_MainWindow::closeApplication() {
-  if (Core->getFileTransferManager()->checkActiveFileTransfer() ==
-      false) {
+  if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
     QPixmap pixmap = QPixmap(":/icons/avatar.svg");
@@ -469,7 +467,8 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
       new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
   connect(CopyDestination, SIGNAL(triggered()), this, SLOT(copyDestination()));
 
-  QAction *ShowUserInfos = new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
+  QAction *ShowUserInfos =
+      new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
   connect(ShowUserInfos, SIGNAL(triggered()), this, SLOT(showUserInfos()));
 
   QAction *UserToBlockList = new QAction(QIcon(ICON_BLOCK), tr("Block"), this);
@@ -495,14 +494,14 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     User = Core->getUserManager()->getUserByI2P_Destination(Destination);
 
     // TODO: FIX!
-/*
-    if (User->getConnectionStatus() == ONLINE) {
-      QAction *UserSendFile =
-          new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
-      connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
-      contextMnu.addAction(UserSendFile);
-    }
-*/
+    /*
+        if (User->getConnectionStatus() == ONLINE) {
+          QAction *UserSendFile =
+              new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
+          connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
+          contextMnu.addAction(UserSendFile);
+        }
+    */
     if (User->getIsInvisible() == true) {
       UserInvisible->setChecked(true);
     } else {
