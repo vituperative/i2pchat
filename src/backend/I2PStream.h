@@ -100,7 +100,7 @@ private:
   bool mModeStreamConnect;
   bool mModeStreamAccept;
   bool mStatusReceived;
-  bool mHandShakeWasSuccesfullDone;
+  bool mHandshakeSuccessful;
   bool mDestinationReceived;
   bool mFIRSTPACKETCHAT_alreadySent;
   QByteArray *mIncomingPackets;

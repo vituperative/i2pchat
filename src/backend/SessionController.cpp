@@ -33,7 +33,7 @@ CSessionController::CSessionController(QString SamHost, QString SamPort,
   mDoneDisconnect = false;
 
   mAnalyser = new CI2PSamMessageAnalyser("CStreamController");
-  mHandShakeWasSuccesfullDone = false;
+  mHandshakeSuccessful = false;
   mSessionWasSuccesfullCreated = false;
   mSamPrivKey = SamPrivKey;
 
@@ -106,7 +106,7 @@ void CSessionController::slotReadFromSocket() {
     case HELLO_REPLAY: {
       emit signDebugMessages(t);
       if (sam.result == OK) {
-        this->mHandShakeWasSuccesfullDone = true;
+        this->mHandshakeSuccessful = true;
         if (mSamPrivKey == "" || mSamPrivKey.length() <= 0) {
           QSettings settings(mConfigPath + "/application.ini",
                              QSettings::IniFormat);

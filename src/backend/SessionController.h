@@ -70,12 +70,12 @@ private:
   CI2PSamMessageAnalyser *mAnalyser;
   QByteArray *mIncomingPackets;
 
-  bool mHandShakeWasSuccesfullDone;
+  bool mHandshakeSuccessful;
   bool mSessionWasSuccesfullCreated;
   bool mDoneDisconnect;
 
   inline void ConnectionReadyCheck() {
-    if (mHandShakeWasSuccesfullDone == false ||
+    if (mHandshakeSuccessful == false ||
         mSessionWasSuccesfullCreated == false ||
         mTcpSocket.state() != QAbstractSocket::ConnectedState)
       return;
