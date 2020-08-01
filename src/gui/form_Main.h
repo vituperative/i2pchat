@@ -97,6 +97,7 @@ private slots:
   // Windows end
   void namingMe();
   void copyDestination();
+  void copyB32();
   void SendFile();
   void closeApplication();
   void eventUserChanged();

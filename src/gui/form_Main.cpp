@@ -467,6 +467,10 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
       new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
   connect(CopyDestination, SIGNAL(triggered()), this, SLOT(copyDestination()));
 
+  QAction *CopyB32 =
+      new QAction(QIcon(ICON_WEB), tr("Copy B32 Address"), this);
+  connect(CopyB32, SIGNAL(triggered()), this, SLOT(copyB32()));
+
   QAction *ShowUserInfos =
       new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
   connect(ShowUserInfos, SIGNAL(triggered()), this, SLOT(showUserInfos()));
@@ -514,6 +518,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnu.addSeparator();
     contextMnu.addAction(ShowUserInfos);
     contextMnu.addAction(CopyDestination);
+    contextMnu.addAction(CopyB32);
     contextMnu.addAction(UserRename);
 
     contextMnuPos.addAction(UP);
@@ -797,6 +802,18 @@ void form_MainWindow::copyDestination() {
   clipboard->setText(Destination);
   QMessageBox::information(this, "",
                            tr("\nContact's Destination copied to clipboard"),
+                           QMessageBox::Close);
+}
+
+void form_MainWindow::copyB32() {
+  QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
+  QString Destination = t->text();
+  QString Address = "http://this_is_a_placeholder";
+  QClipboard *clipboard = QApplication::clipboard();
+
+  clipboard->setText(Address);
+  QMessageBox::information(this, "",
+                           tr("\nContact's profile address copied to clipboard"),
                            QMessageBox::Close);
 }
 

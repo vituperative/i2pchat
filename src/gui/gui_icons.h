@@ -53,5 +53,6 @@
 #define ICON_USERSEARCH ":/icons/groupevent.svg"
 #define ICON_USER_TRYTOCONNECT ":/icons/status_connecting.svg"
 #define ICON_USER_WANTTOCHAT ":/icons/status_available.svg"
+#define ICON_WEB ":/icons/web.svg"
 
 #endif

@@ -147,5 +147,6 @@
     <file>icons/tick.svg</file>
     <file>icons/underline.svg</file>
     <file>icons/upload.svg</file>
+    <file>icons/web.svg</file>
   </qresource>
 </RCC>
