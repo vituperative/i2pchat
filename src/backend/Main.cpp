@@ -44,8 +44,8 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
 
 void help(void) {
   printf(
-      "%s"
-      " [Built: " __DATE__ "-" __TIME__ "]\r\n"
+      "\r\n%s\r\n\r\n"
+      // " [Built at " __TIME__ " on " __DATE__ "]\r\n"
       "  -h --help                           - Display this help\r\n"
       "  -p --profile <path to profile dir>  - Use specified profile dir (creates a new profile if non-existent)\r\n"
       "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
