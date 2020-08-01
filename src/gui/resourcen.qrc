@@ -112,12 +112,9 @@
     <file>icons/font.svg</file>
     <file>icons/groupevent.svg</file>
     <file>icons/hide_frame.png</file>
-    <file>icons/insert-image.png</file>
     <file>icons/italic.svg</file>
-    <file>icons/mail_get.png</file>
     <file>icons/network.svg</file>
     <file>icons/newmail.svg</file>
-    <file>icons/new.png</file>
     <file>icons/palette.svg</file>
     <file>icons/quick_restart.png</file>
     <file>icons/reload.svg</file>
@@ -141,7 +138,5 @@
     <file>icons/Tools.gif</file>
     <file>icons/underline.svg</file>
     <file>icons/upload.svg</file>
-    <file>icons/window_fullscreen.png</file>
-    <file>icons/window_nofullscreen.png</file>
   </qresource>
 </RCC>
