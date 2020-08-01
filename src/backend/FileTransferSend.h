@@ -70,7 +70,7 @@ public:
   quint64 getAlreadySentSize() { return mAlreadySentSize; };
   bool getAlreadyTransferAccepted() { return mFileTransferAccepted; };
   bool getIsTransferring();
-  bool getIsAlreadyFinished() { return mAlreadyFinished; };
+  bool getIsTransferComplete() { return mAlreadyFinished; };
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
                                      QString &outType,
                                      bool addStoOutType = true);

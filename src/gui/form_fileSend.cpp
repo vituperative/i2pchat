@@ -88,7 +88,7 @@ void form_fileSend::init() {
 
   slot_FileTransferAccepted(FileTransfer.getAlreadyTransferAccepted());
 
-  if (FileTransfer.getIsAlreadyFinished() == true) {
+  if (FileTransfer.getIsTransferComplete() == true) {
     slot_FileTransferFinishedOK();
   }
 

@@ -246,7 +246,7 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
   mFileForReceive.write(t);
   mFileForReceive.flush();
 
-  emit signAlreadyReceivedSizeChanged(mAlreadyReceivedSize);
+  emit signgetTransferredSizeChanged(mAlreadyReceivedSize);
 
   if (mUsingProtocolVersionD == 0.2) {
     mStream.operator<<(QString("2")); // next block

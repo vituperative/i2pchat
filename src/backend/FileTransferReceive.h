@@ -48,10 +48,10 @@ public:
   QString getFileName() { return mFileName; };
   QString getDestination() { return mDestination; };
   qint32 getStreamID() { return mStreamID; };
-  quint64 getAlreadyReceivedSize() { return mAlreadyReceivedSize; };
+  quint64 getTransferredSize() { return mAlreadyReceivedSize; };
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
 
-  bool checkIfAlreadyAcceptTheRequest() { return mRequestAccepted; };
+  bool checkIfRequestAccepted() { return mRequestAccepted; };
 
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
                                      QString &outType,
@@ -67,7 +67,7 @@ private slots:
   void slotCalcAverageTransferSpeed();
 
 signals:
-  void signAlreadyReceivedSizeChanged(quint64 Size);
+  void signgetTransferredSizeChanged(quint64 Size);
   void signFileReceiveError();
   void signFileReceivedFinishedOK();
   void signFileReceiveAborted();
