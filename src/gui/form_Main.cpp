@@ -470,6 +470,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QAction *CopyB32 =
       new QAction(QIcon(ICON_WEB), tr("Copy B32 Address"), this);
   connect(CopyB32, SIGNAL(triggered()), this, SLOT(copyB32()));
+  CopyB32->setEnabled(false);
 
   QAction *ShowUserInfos =
       new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
