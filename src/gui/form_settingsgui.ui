@@ -4000,9 +4000,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>240</y>
+         <y>241</y>
          <width>380</width>
-         <height>50</height>
+         <height>51</height>
         </rect>
        </property>
        <property name="maximumSize">
@@ -4041,7 +4041,7 @@ p, li { white-space: pre-wrap; }
          <x>2</x>
          <y>184</y>
          <width>380</width>
-         <height>50</height>
+         <height>51</height>
         </rect>
        </property>
        <property name="title">
@@ -4074,9 +4074,9 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>2</x>
-         <y>296</y>
+         <y>298</y>
          <width>380</width>
-         <height>59</height>
+         <height>57</height>
         </rect>
        </property>
        <property name="title">
@@ -4099,18 +4099,18 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>184</width>
+             <width>270</width>
              <height>16</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>184</width>
+             <width>270</width>
              <height>16</height>
             </size>
            </property>
            <property name="text">
-            <string>Message timeout (seconds):</string>
+            <string>Connection timeout (seconds):</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -4463,7 +4463,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignLeft">
-         <widget class="QSpinBox" name="spinBox_ReAnnouncingUserSearch">
+         <widget class="QSpinBox" name="spinBox_ReAnnounceUserSearch">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -4522,7 +4522,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignLeft">
-         <widget class="QSpinBox" name="spinBox_MaxLogMessagesUserSearch">
+         <widget class="QSpinBox" name="spinBox_MaxLogMsgUserSearch">
           <property name="minimumSize">
            <size>
             <width>80</width>
