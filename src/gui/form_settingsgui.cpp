@@ -396,13 +396,13 @@ void form_settingsgui::loadSettings() {
     check_UserSearchEnable->setChecked(false);
   }
 
-  spinBox_MaxLogMessagesUserSearch->setMinimum(0);
-  spinBox_MaxLogMessagesUserSearch->setMaximum(200);
-  spinBox_MaxLogMessagesUserSearch->setValue(
+  spinBox_MaxLogMsgUserSearch->setMinimum(0);
+  spinBox_MaxLogMsgUserSearch->setMaximum(200);
+  spinBox_MaxLogMsgUserSearch->setValue(
       settings->value("Debug_Max_Message_count", 100).toInt());
-  spinBox_ReAnnouncingUserSearch->setMinimum(0);
-  spinBox_ReAnnouncingUserSearch->setMaximum(23);
-  spinBox_ReAnnouncingUserSearch->setValue(
+  spinBox_ReAnnounceUserSearch->setMinimum(0);
+  spinBox_ReAnnounceUserSearch->setMaximum(23);
+  spinBox_ReAnnounceUserSearch->setValue(
       settings->value("ReAnnounceTimerInHours", 1).toInt());
   settings->endGroup();
   settings->sync();
@@ -516,9 +516,9 @@ void form_settingsgui::saveSettings() {
   settings->beginGroup("Usersearch");
   settings->setValue("Enabled", check_UserSearchEnable->isChecked());
   settings->setValue("Debug_Max_Message_count",
-                     spinBox_MaxLogMessagesUserSearch->value());
+                     spinBox_MaxLogMsgUserSearch->value());
   settings->setValue("ReAnnounceTimerInHours",
-                     spinBox_ReAnnouncingUserSearch->value());
+                     spinBox_ReAnnounceUserSearch->value());
   settings->endGroup();
 
   settings->sync();

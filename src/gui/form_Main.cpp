@@ -450,10 +450,9 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
 
   QAction *UserAutoDownload = new QAction(QIcon(ICON_USER_DOWNLOAD), tr("Auto-download"), this);
-  connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
   UserAutoDownload->setCheckable(true);
-  connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
-          SLOT(UserAutoDownload(bool)));
+  // connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
+  //         SLOT(UserAutoDownload(bool)));
   UserAutoDownload->setEnabled(false);
 
   QAction *UserInvisible =
@@ -534,6 +533,8 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnuPos.addAction(DOWN);
 
     contextMnu.addMenu(&contextMnuPos);
+    // TODO: Fix width of context menu and ensure sub-menu overlaps
+    // contextMnu.setMaximumWidth(170);
     contextMnu.exec(mevent->globalPos());
   }
 }
