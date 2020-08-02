@@ -86,9 +86,9 @@ void form_fileSend::init() {
 
   //  label_10->setText(FileTransfer.getUsingProtocolVersion());
 
-  slot_FileTransferAccepted(FileTransfer.getAllreadyTransferAccepted());
+  slot_FileTransferAccepted(FileTransfer.getAlreadyTransferAccepted());
 
-  if (FileTransfer.getIsAllreadyFinished() == true) {
+  if (FileTransfer.getIsTransferComplete() == true) {
     slot_FileTransferFinishedOK();
   }
 

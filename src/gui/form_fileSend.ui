@@ -95,7 +95,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Transfering</string>
+        <string>Transferring</string>
        </property>
       </widget>
      </item>

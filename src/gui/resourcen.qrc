@@ -7,6 +7,7 @@
     <file>emoticons/beer.svg</file>
     <file>emoticons/bomb.svg</file>
     <file>emoticons/burger.svg</file>
+    <file>emoticons/bunny.svg</file>
     <file>emoticons/bye.svg</file>
     <file>emoticons/cake.svg</file>
     <file>emoticons/cat.svg</file>
@@ -29,6 +30,7 @@
     <file>emoticons/cute.svg</file>
     <file>emoticons/dance.svg</file>
     <file>emoticons/devil.svg</file>
+    <file>emoticons/diamond.svg</file>
     <file>emoticons/disappointed.svg</file>
     <file>emoticons/dont-know.svg</file>
     <file>emoticons/dog.svg</file>
@@ -36,12 +38,14 @@
     <file>emoticons/embarrassed.svg</file>
     <file>emoticons/egg.svg</file>
     <file>emoticons/eye.svg</file>
+    <file>emoticons/explode.svg</file>
     <file>emoticons/emoticons.xml</file>
     <file>emoticons/fire.svg</file>
     <file>emoticons/fox.svg</file>
     <file>emoticons/freaked-out.svg</file>
     <file>emoticons/frog.svg</file>
     <file>emoticons/garlic.svg</file>
+    <file>emoticons/ghost.svg</file>
     <file>emoticons/giggle.svg</file>
     <file>emoticons/glasses.svg</file>
     <file>emoticons/glasses-cool.svg</file>
@@ -63,10 +67,11 @@
     <file>emoticons/mushroom.svg</file>
     <file>emoticons/musical-note.svg</file>
     <file>emoticons/nonplussed.svg</file>
-    <file>emoticons/parrot.svg</file>
+    <file>emoticons/nut.svg</file>
     <file>emoticons/party.svg</file>
     <file>emoticons/peace.svg</file>
     <file>emoticons/peach.svg</file>
+    <file>emoticons/pig.svg</file>
     <file>emoticons/pizza.svg</file>
     <file>emoticons/poo.svg</file>
     <file>emoticons/popcorn.svg</file>
@@ -75,6 +80,7 @@
     <file>emoticons/rofl.svg</file>
     <file>emoticons/rose.svg</file>
     <file>emoticons/sad.svg</file>
+    <file>emoticons/sandwich.svg</file>
     <file>emoticons/sarcastic.svg</file>
     <file>emoticons/shout.svg</file>
     <file>emoticons/shut-mouth.svg</file>
@@ -86,11 +92,16 @@
     <file>emoticons/smoking.svg</file>
     <file>emoticons/snowman.svg</file>
     <file>emoticons/spaceinvader.svg</file>
+    <file>emoticons/spaghetti.svg</file>
     <file>emoticons/strawberry.svg</file>
+    <file>emoticons/tear.svg</file>
     <file>emoticons/thumbsdown.svg</file>
     <file>emoticons/tongue.svg</file>
+    <file>emoticons/trumpet.svg</file>
     <file>emoticons/ufo.svg</file>
     <file>emoticons/uhoh.svg</file>
+    <file>emoticons/unicorn.svg</file>
+    <file>emoticons/violin.svg</file>
     <file>emoticons/weed.svg</file>
     <file>emoticons/whiteflag.svg</file>
     <file>emoticons/wine.svg</file>
@@ -112,14 +123,10 @@
     <file>icons/font.svg</file>
     <file>icons/groupevent.svg</file>
     <file>icons/hide_frame.png</file>
-    <file>icons/insert-image.png</file>
     <file>icons/italic.svg</file>
-    <file>icons/mail_get.png</file>
     <file>icons/network.svg</file>
     <file>icons/newmail.svg</file>
-    <file>icons/new.png</file>
     <file>icons/palette.svg</file>
-    <file>icons/quick_restart.png</file>
     <file>icons/reload.svg</file>
     <file>icons/rename.svg</file>
     <file>icons/security.svg</file>
@@ -138,10 +145,8 @@
     <file>icons/status_online.svg</file>
     <file>icons/theme.svg</file>
     <file>icons/tick.svg</file>
-    <file>icons/Tools.gif</file>
     <file>icons/underline.svg</file>
     <file>icons/upload.svg</file>
-    <file>icons/window_fullscreen.png</file>
-    <file>icons/window_nofullscreen.png</file>
+    <file>icons/web.svg</file>
   </qresource>
 </RCC>

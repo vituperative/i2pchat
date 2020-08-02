@@ -52,7 +52,7 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   mCore.setStreamTypeToKnown(mStreamID, NULL, true);
   mStream->doConnect(Destination);
 
-  mAllreadyFinished = false;
+  mAlreadyFinished = false;
   mSendFirstPacket = true;
   mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
   mFileForSend.setFileName(mFilePath);
@@ -107,12 +107,12 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
 
     if (mAlreadySentSize == mFileSize) {
       emit signFileTransferFinishedOK();
-      if (mAllreadyFinished == false) {
+      if (mAlreadyFinished == false) {
         mCore.getUserManager()
             ->getUserByI2P_Destination(mDestination)
             ->slotIncomingMessageFromSystem(
                 tr("Upload complete [%1]").arg(mFileName));
-        mAllreadyFinished = true;
+        mAlreadyFinished = true;
       }
     } else {
       emit signFileTransferAborted();
@@ -258,8 +258,7 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
   }
 
   mTimer.start();
-  mTimerForActAverageTransferSpeed.start(
-      TIMERCOUNTFORAVERAGETRANSFERSPEED_WRITE);
+  mTimerForActAverageTransferSpeed.start(AVERAGETRANSFERSPEEDPERIOD);
 
   if (mUsingProtocolVersionD == 0.1) {
     SendFile_v0dot1();
@@ -289,13 +288,13 @@ void CFileTransferSend::SendFile_v0dot3() {
 
   mStream->operator<<(Buffer);
 
-  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
             tr("Upload completed [%1]").arg(mFileName));
-    mAllreadyFinished = true;
+    mAlreadyFinished = true;
   }
 }
 
@@ -309,13 +308,13 @@ void CFileTransferSend::SendFile_v0dot2() {
   mStream->operator<<(Buffer);
   emit signAlreadySentSizeChanged(mAlreadySentSize);
 
-  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
             tr("Upload completed [%1]").arg(mFileName));
-    mAllreadyFinished = true;
+    mAlreadyFinished = true;
   }
 }
 
@@ -330,13 +329,13 @@ void CFileTransferSend::SendFile_v0dot1() {
     emit signAlreadySentSizeChanged(mAlreadySentSize);
   }
 
-  if (mAlreadySentSize == mFileSize && mAllreadyFinished == false) {
+  if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
         ->getUserByI2P_Destination(mDestination)
         ->slotIncomingMessageFromSystem(
             tr("Upload completed [%1]").arg(mFileName));
-    mAllreadyFinished = true;
+    mAlreadyFinished = true;
   }
 }
 
@@ -344,8 +343,8 @@ CFileTransferSend::~CFileTransferSend() {
   mTimerForActAverageTransferSpeed.stop();
 }
 
-bool CFileTransferSend::getIsTransfering() {
-  if (mFileTransferAccepted == true && mAllreadyFinished == false) {
+bool CFileTransferSend::getIsTransferring() {
+  if (mFileTransferAccepted == true && mAlreadyFinished == false) {
     return true;
   } else {
     return false;

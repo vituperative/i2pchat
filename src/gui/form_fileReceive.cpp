@@ -27,7 +27,7 @@ form_fileReceive::form_fileReceive(CFileTransferReceive &FileReceive)
   connect(&FileReceive, SIGNAL(signFileReceivedFinishedOK()), this,
           SLOT(slot_FileReceivedFinishedOK()));
 
-  connect(&FileReceive, SIGNAL(signAllreadyReceivedSizeChanged(quint64)), this,
+  connect(&FileReceive, SIGNAL(signgetTransferredSizeChanged(quint64)), this,
           SLOT(slot_allreadyReceivedSizeChanged(quint64)));
 
   connect(&FileReceive, SIGNAL(signFileReceiveError()), this,
@@ -72,7 +72,7 @@ void form_fileReceive::init() {
   checkBox_3->setChecked(true);
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileReceive.getFileSize());
-  progressBar->setValue(FileReceive.getAllreadyReceivedSize());
+  progressBar->setValue(FileReceive.getTransferredSize());
   //  label_10->setText(FileReceive.getUsingProtocolVersion());
   labelSpeed->setText("waiting...");
 }
@@ -152,7 +152,7 @@ void form_fileReceive::slot_SpeedChanged(QString SNumber, QString Type) {
 }
 
 void form_fileReceive::start() {
-  if (FileReceive.checkIfAllreadyAcceptTheRequest() == false) {
+  if (FileReceive.checkIfRequestAccepted() == false) {
     askTheUser();
   }
 }

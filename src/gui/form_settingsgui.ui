@@ -91,19 +91,19 @@
       <x>136</x>
       <y>2</y>
       <width>390</width>
-      <height>404</height>
+      <height>408</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>390</width>
-      <height>404</height>
+      <height>408</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>390</width>
-      <height>404</height>
+      <width>184</width>
+      <height>408</height>
      </size>
     </property>
     <property name="currentIndex">
@@ -778,9 +778,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>236</y>
+        <y>248</y>
         <width>380</width>
-        <height>159</height>
+        <height>147</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -802,7 +802,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>48</y>
+         <y>42</y>
          <width>356</width>
          <height>100</height>
         </rect>
@@ -853,13 +853,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="text">
@@ -940,13 +940,13 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>22</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>20</height>
+            <height>18</height>
            </size>
           </property>
           <property name="text">
@@ -960,7 +960,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>25</height>
         </rect>
@@ -1013,7 +1013,7 @@ p, li { white-space: pre-wrap; }
         <x>4</x>
         <y>50</y>
         <width>380</width>
-        <height>49</height>
+        <height>45</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1035,7 +1035,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>13</x>
-         <y>14</y>
+         <y>12</y>
          <width>356</width>
          <height>26</height>
         </rect>
@@ -1115,7 +1115,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>188</y>
+        <y>202</y>
         <width>380</width>
         <height>43</height>
        </rect>
@@ -1239,9 +1239,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>4</x>
-        <y>104</y>
+        <y>98</y>
         <width>380</width>
-        <height>79</height>
+        <height>101</height>
        </rect>
       </property>
       <widget class="QWidget" name="layoutWidget_10">
@@ -1368,6 +1368,22 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QCheckBox" name="nonpersistdest">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>144</x>
+         <y>74</y>
+         <width>186</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Non-persistent Destination</string>
+       </property>
       </widget>
      </widget>
     </widget>
@@ -4083,14 +4099,14 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>180</width>
-             <height>0</height>
+             <width>184</width>
+             <height>16</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>180</width>
-             <height>24</height>
+             <width>184</width>
+             <height>16</height>
             </size>
            </property>
            <property name="text">

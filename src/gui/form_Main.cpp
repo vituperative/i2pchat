@@ -100,8 +100,7 @@ void form_MainWindow::onlineComboBoxChanged() {
     if (Core->getOnlineStatus() != User::USERINVISIBLE)
       Core->setOnlineStatus(User::USERINVISIBLE);
   } else if (text.contains(tr("Offline"), Qt::CaseInsensitive) == true) {
-    if (Core->getFileTransferManager()
-            ->checkIfAFileTransferOrReceiveisActive() == false) {
+    if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
       if (Core->getOnlineStatus() != User::USEROFFLINE)
         Core->setOnlineStatus(User::USEROFFLINE);
     } else {
@@ -225,8 +224,7 @@ void form_MainWindow::namingMe() {
   }
 }
 void form_MainWindow::closeApplication() {
-  if (Core->getFileTransferManager()->checkIfAFileTransferOrReceiveisActive() ==
-      false) {
+  if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
     QMessageBox *msgBox = new QMessageBox(this);
     QPixmap pixmap = QPixmap(":/icons/avatar.svg");
@@ -451,6 +449,13 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
 
+  QAction *UserAutoDownload = new QAction(QIcon(ICON_USER_DOWNLOAD), tr("Auto-download"), this);
+  connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
+  UserAutoDownload->setCheckable(true);
+  connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
+          SLOT(UserAutoDownload(bool)));
+  UserAutoDownload->setEnabled(false);
+
   QAction *UserInvisible =
       new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
   UserInvisible->setCheckable(true);
@@ -469,7 +474,13 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
       new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
   connect(CopyDestination, SIGNAL(triggered()), this, SLOT(copyDestination()));
 
-  QAction *ShowUserInfos = new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
+  QAction *CopyB32 =
+      new QAction(QIcon(ICON_WEB), tr("Copy B32 Address"), this);
+  connect(CopyB32, SIGNAL(triggered()), this, SLOT(copyB32()));
+  CopyB32->setEnabled(false);
+
+  QAction *ShowUserInfos =
+      new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
   connect(ShowUserInfos, SIGNAL(triggered()), this, SLOT(showUserInfos()));
 
   QAction *UserToBlockList = new QAction(QIcon(ICON_BLOCK), tr("Block"), this);
@@ -495,14 +506,14 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     User = Core->getUserManager()->getUserByI2P_Destination(Destination);
 
     // TODO: FIX!
-/*
-    if (User->getConnectionStatus() == ONLINE) {
-      QAction *UserSendFile =
-          new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
-      connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
-      contextMnu.addAction(UserSendFile);
-    }
-*/
+    /*
+        if (User->getConnectionStatus() == ONLINE) {
+          QAction *UserSendFile =
+              new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
+          connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
+          contextMnu.addAction(UserSendFile);
+        }
+    */
     if (User->getIsInvisible() == true) {
       UserInvisible->setChecked(true);
     } else {
@@ -510,11 +521,13 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     }
 
     contextMnu.addAction(UserInvisible);
+    contextMnu.addAction(UserAutoDownload);
     contextMnu.addAction(UserToBlockList);
     contextMnu.addAction(UserDelete);
     contextMnu.addSeparator();
     contextMnu.addAction(ShowUserInfos);
     contextMnu.addAction(CopyDestination);
+    contextMnu.addAction(CopyB32);
     contextMnu.addAction(UserRename);
 
     contextMnuPos.addAction(UP);
@@ -801,6 +814,18 @@ void form_MainWindow::copyDestination() {
                            QMessageBox::Close);
 }
 
+void form_MainWindow::copyB32() {
+  QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
+  QString Destination = t->text();
+  QString Address = "http://this_is_a_placeholder";
+  QClipboard *clipboard = QApplication::clipboard();
+
+  clipboard->setText(Address);
+  QMessageBox::information(this, "",
+                           tr("\nContact's profile address copied to clipboard"),
+                           QMessageBox::Close);
+}
+
 void form_MainWindow::muteSound() {
   if (this->Mute == false) {
     toggleMuteAction->setIcon(QIcon(ICON_SOUND_OFF));
@@ -937,7 +962,7 @@ void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
 
 void form_MainWindow::openFileSendWindow(qint32 StreamID) {
   CFileTransferSend *TransferSend =
-      Core->getFileTransferManager()->getFileTransferSendsByID(StreamID);
+      Core->getFileTransferManager()->getFileSendByID(StreamID);
 
   if (TransferSend == NULL) {
     qCritical() << "form_MainWindow::openFileSendWindow\n"
@@ -962,7 +987,7 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
 
 void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
   CFileTransferReceive *receive =
-      Core->getFileTransferManager()->getFileTransferReceiveByID(StreamID);
+      Core->getFileTransferManager()->getFileReceiveByID(StreamID);
   if (receive == NULL) {
     qCritical() << "form_MainWindow::openFileReceiveWindow\n"
                 << "Can't find FileReceive Object with ID: " << StreamID

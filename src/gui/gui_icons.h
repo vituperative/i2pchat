@@ -45,6 +45,7 @@
 #define ICON_USER_AWAY ":/icons/status_away.svg"
 #define ICON_USER_BLOCKED_YOU ":/icons/blocked.svg"
 #define ICON_USER_DELETE ":/icons/delete.svg"
+#define ICON_USER_DOWNLOAD ":/icons/download.svg"
 #define ICON_USER_DONT_DISTURB ":/icons/status_dnd.svg"
 #define ICON_USER_INVISIBLE ":/icons/status_invisible.svg"
 #define ICON_USER_OFFLINE ":/icons/status_offline.svg"
@@ -53,5 +54,6 @@
 #define ICON_USERSEARCH ":/icons/groupevent.svg"
 #define ICON_USER_TRYTOCONNECT ":/icons/status_connecting.svg"
 #define ICON_USER_WANTTOCHAT ":/icons/status_available.svg"
+#define ICON_WEB ":/icons/web.svg"
 
 #endif

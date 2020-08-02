@@ -33,7 +33,7 @@ CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
   mDoneDisconnect = false;
   mSilence = false;
   mStatusReceived = false;
-  mHandShakeWasSuccesfullDone = false;
+  mHandshakeSuccessful = false;
   mConnectionType = UNKNOWN;
   mIncomingPackets = new QByteArray();
   mDestinationReceived = false;
@@ -130,7 +130,7 @@ void CI2PStream::slotDisconnected() {
   mStatusReceived = false;
   mDestinationReceived = false;
   mDoneDisconnect = false;
-  mHandShakeWasSuccesfullDone = false;
+  mHandshakeSuccessful = false;
   mFIRSTPACKETCHAT_alreadySent = false;
 
   mUnKnownConnectionTimeout.stop();
@@ -150,13 +150,18 @@ void CI2PStream::slotReadFromSocket() {
     return;
   }
 
-  QString debugData = newData.replace("STREAM STATUS RESULT=", "STATUS: ")
-                          .replace("CANT_REACH_PEER MESSAGE=", "")
-                          .replace("\"Connection timed out\"\n", "No Response");
+  /*
+    QString debugData = newData.replace("STREAM STATUS RESULT=", "STATUS: ")
+                            .replace("CANT_REACH_PEER MESSAGE=", "")
+                            .replace("\"Connection timed out\"\n", "No
+    Response");
 
-  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + debugData);
+    emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " +
+    debugData);
+  */
+  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + newData);
 
-  if (mHandShakeWasSuccesfullDone == false) {
+  if (mHandshakeSuccessful == false) {
 
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
@@ -173,7 +178,7 @@ void CI2PStream::slotReadFromSocket() {
     QString t(CurrentPacket.data());
     SAM_MESSAGE sam = mAnalyser->Analyse(t);
     if (sam.type == HELLO_REPLAY && sam.result == OK) {
-      mHandShakeWasSuccesfullDone = true;
+      mHandshakeSuccessful = true;
     }
 
     delete mAnalyser;
@@ -272,7 +277,7 @@ void CI2PStream::operator<<(const QByteArray Data) {
   QString smID = QString::number(mID, 10);
 
   if (mTcpSocket.state() == QTcpSocket::ConnectedState &&
-      mHandShakeWasSuccesfullDone) {
+      mHandshakeSuccessful) {
     emit signDebugMessages("• [Stream ID: " + smID + "] Outgoing ‣ " + Data);
 
     try {

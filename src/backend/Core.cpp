@@ -524,6 +524,8 @@ QString CCore::getConnectionDump() const {
         Message += "\n";
       } else if (Stream->getConnectionType() == KNOWN) {
         Message += "\tTrust:\t\tKNOWN\n";
+        if (Stream->getUsedFor() == "FileTransferSend")
+          Message += "\n";
       } else {
         Message += "\tTrust:\t\t???\n";
       }
@@ -645,13 +647,12 @@ QString CCore::getDestinationByID(qint32 ID) const {
     return user->getI2PDestination();
   }
 
-  CFileTransferSend *send = mFileTransferManager->getFileTransferSendsByID(ID);
+  CFileTransferSend *send = mFileTransferManager->getFileSendByID(ID);
   if (send != NULL) {
     return send->getDestination();
   }
 
-  CFileTransferReceive *receive =
-      mFileTransferManager->getFileTransferReceiveByID(ID);
+  CFileTransferReceive *receive = mFileTransferManager->getFileReceiveByID(ID);
   if (receive != NULL) {
     return receive->getDestination();
   }
@@ -849,7 +850,7 @@ void CCore::loadUserInfos() {
   settings.sync();
 
   if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
-    mUserInfos.Nickname = "Unallowed nickname";
+    mUserInfos.Nickname = "NonValidNick";
     emit signNicknameChanged();
   }
 }

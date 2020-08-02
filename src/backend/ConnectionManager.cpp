@@ -315,7 +315,7 @@ void CConnectionManager::doReStart() {
 }
 
 void CConnectionManager::stopp() {
-  // close all StreamObjekts
+  // close all StreamObjects
   QMapIterator<qint32, CI2PStream *> i(allStreams);
   while (i.hasNext()) {
     i.next();
@@ -323,7 +323,7 @@ void CConnectionManager::stopp() {
   }
   allStreams.clear();
 
-  // close all StreamIncomingListener
+  // close all StreamIncomingListeners
   QMapIterator<qint32, CI2PStream *> i2(StreamIncomingListener);
   while (i2.hasNext()) {
     i2.next();

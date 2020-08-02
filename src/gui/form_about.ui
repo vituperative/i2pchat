@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>170</height>
+    <height>182</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>349</width>
-    <height>170</height>
+    <height>182</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>349</width>
-    <height>170</height>
+    <height>182</height>
    </size>
   </property>
   <property name="sizeIncrement">
@@ -61,8 +61,20 @@
      <x>4</x>
      <y>4</y>
      <width>341</width>
-     <height>162</height>
+     <height>174</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>341</width>
+     <height>174</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>341</width>
+     <height>174</height>
+    </size>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -76,7 +88,7 @@
       <x>4</x>
       <y>4</y>
       <width>333</width>
-      <height>157</height>
+      <height>168</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,10">
@@ -91,13 +103,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -136,10 +148,16 @@
      </item>
      <item row="0" column="1">
       <widget class="QLabel" name="label_9">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="autoFillBackground">
@@ -164,13 +182,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -212,13 +230,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -257,10 +275,16 @@
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="labelGitCommitCount">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="autoFillBackground">
@@ -285,13 +309,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -330,10 +354,16 @@
      </item>
      <item row="2" column="1">
       <widget class="QLabel" name="label_supportedVersion">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="autoFillBackground">
@@ -355,10 +385,16 @@
      </item>
      <item row="1" column="1">
       <widget class="QLabel" name="label_10">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="autoFillBackground">
@@ -380,6 +416,18 @@
      </item>
      <item row="5" column="1">
       <widget class="QLabel" name="label_dateCompile">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="autoFillBackground">
         <bool>true</bool>
        </property>
@@ -402,13 +450,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -450,13 +498,13 @@
        <property name="minimumSize">
         <size>
          <width>138</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>138</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="baseSize">
@@ -495,10 +543,16 @@
      </item>
      <item row="4" column="1">
       <widget class="QLabel" name="gitCommitHashTextBrowser">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>24</height>
+         <height>26</height>
         </size>
        </property>
        <property name="autoFillBackground">

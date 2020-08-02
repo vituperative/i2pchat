@@ -44,8 +44,8 @@ public:
   void removeFileTransfer(const qint32 ID) /*noexcept*/;
   void removeFileReceive(const qint32 ID);
 
-  CFileTransferReceive *getFileTransferReceiveByID(qint32 ID) const;
-  CFileTransferSend *getFileTransferSendsByID(qint32 ID) const;
+  CFileTransferReceive *getFileReceiveByID(qint32 ID) const;
+  CFileTransferSend *getFileSendByID(qint32 ID) const;
   const QList<CFileTransferReceive *> getFileTransferReceiveList() const;
   const QList<CFileTransferSend *> getFileTransferSendsList() const;
   // template <typename T, typename where, typename what, typename fun>
@@ -53,7 +53,7 @@ public:
   bool isThisID_a_FileSendID(qint32 ID) const;
   bool isThisID_a_FileReceiveID(qint32 ID) const;
 
-  bool checkIfAFileTransferOrReceiveisActive() const;
+  bool checkActiveFileTransfer() const;
 
 signals:
   void signUserStatusChanged();
