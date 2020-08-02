@@ -449,6 +449,13 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
 
+  QAction *UserAutoDownload = new QAction(QIcon(ICON_USER_DOWNLOAD), tr("Auto-download"), this);
+  connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
+  UserAutoDownload->setCheckable(true);
+  connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
+          SLOT(UserAutoDownload(bool)));
+  UserAutoDownload->setEnabled(false);
+
   QAction *UserInvisible =
       new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
   UserInvisible->setCheckable(true);
@@ -514,6 +521,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     }
 
     contextMnu.addAction(UserInvisible);
+    contextMnu.addAction(UserAutoDownload);
     contextMnu.addAction(UserToBlockList);
     contextMnu.addAction(UserDelete);
     contextMnu.addSeparator();

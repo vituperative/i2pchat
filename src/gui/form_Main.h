@@ -98,6 +98,7 @@ private slots:
   void namingMe();
   void copyDestination();
   void copyB32();
+  //void userAutoDownload();
   void SendFile();
   void closeApplication();
   void eventUserChanged();
