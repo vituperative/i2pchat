@@ -44,7 +44,7 @@
    <property name="title">
     <string/>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>12</x>
@@ -102,6 +102,16 @@
    <property name="text">
     <string>OK</string>
    </property>
+   <property name="icon">
+    <iconset resource="resourcen.qrc">
+     <normaloff>:/icons/tick.svg</normaloff>:/icons/tick.svg</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>14</width>
+     <height>14</height>
+    </size>
+   </property>
    <property name="default">
     <bool>true</bool>
    </property>
@@ -129,6 +139,16 @@
    </property>
    <property name="text">
     <string>Cancel</string>
+   </property>
+   <property name="icon">
+    <iconset resource="resourcen.qrc">
+     <normaloff>:/icons/cancel.svg</normaloff>:/icons/cancel.svg</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>14</width>
+     <height>14</height>
+    </size>
    </property>
   </widget>
  </widget>

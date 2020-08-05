@@ -4286,6 +4286,10 @@ p, li { white-space: pre-wrap; }
       <property name="text">
        <string>Unblock</string>
       </property>
+      <property name="icon">
+       <iconset resource="resourcen.qrc">
+        <normaloff>:/emoticons/good.svg</normaloff>:/emoticons/good.svg</iconset>
+      </property>
      </widget>
      <widget class="QPushButton" name="cmd_deleteUserFromBlockList">
       <property name="geometry">
@@ -4298,6 +4302,16 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="text">
        <string>Delete</string>
+      </property>
+      <property name="icon">
+       <iconset resource="resourcen.qrc">
+        <normaloff>:/icons/delete.svg</normaloff>:/icons/delete.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>14</width>
+        <height>14</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -4802,6 +4816,16 @@ p, li { white-space: pre-wrap; }
      <property name="text">
       <string>Cancel</string>
      </property>
+     <property name="icon">
+      <iconset resource="resourcen.qrc">
+       <normaloff>:/icons/cancel.svg</normaloff>:/icons/cancel.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>14</width>
+       <height>14</height>
+      </size>
+     </property>
     </widget>
     <widget class="QPushButton" name="ok_Button">
      <property name="geometry">
@@ -4826,6 +4850,16 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="text">
       <string>OK</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resourcen.qrc">
+       <normaloff>:/icons/tick.svg</normaloff>:/icons/tick.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>14</width>
+       <height>14</height>
+      </size>
      </property>
      <property name="autoRepeat">
       <bool>false</bool>
