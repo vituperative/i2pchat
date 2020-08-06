@@ -183,6 +183,7 @@
   <emoticon file="thumbsdown">
     <string>*THUMBS DOWN*</string>
     <string>*FAIL*</string>
+    <string>*NOK*</string>
   </emoticon>
 
   <emoticon file="peace">

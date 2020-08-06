@@ -503,6 +503,10 @@ p, li { white-space: pre-wrap; }
             <property name="text">
              <string>Send</string>
             </property>
+            <property name="icon">
+             <iconset resource="resourcen.qrc">
+              <normaloff>:/icons/send.svg</normaloff>:/icons/send.svg</iconset>
+            </property>
             <property name="autoDefault">
              <bool>false</bool>
             </property>
