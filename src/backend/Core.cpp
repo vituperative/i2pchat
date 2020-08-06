@@ -255,6 +255,8 @@ QString CCore::calcSessionOptionString() const {
           settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
   }
 
+  SessionOptionString.append("I2PClient.PROP_GZIP=true ");
+
   settings.remove("SessionOptionString"); // no longer used,- so erase it
   settings.endGroup();
   settings.sync();
