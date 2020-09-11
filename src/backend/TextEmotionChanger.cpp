@@ -170,7 +170,7 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
         emoticon = emoticon.nextSibling().toElement();
       }
       QStringList emoticon_keys = m_urls.keys();
-      qSort(emoticon_keys.begin(), emoticon_keys.end(), lengthLessThan);
+      std::sort(emoticon_keys.begin(), emoticon_keys.end(), lengthLessThan);
       m_emoticons.clear();
       foreach (const QString &emoticon, emoticon_keys) {
         m_emoticons << qMakePair(emoticon.toLower(), m_urls.value(emoticon));

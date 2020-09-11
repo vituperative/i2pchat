@@ -27,7 +27,7 @@
 #include <QMapIterator>
 #include <QStringList>
 #include <QTextStream>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QtDebug>
 #include <QtGlobal>
 

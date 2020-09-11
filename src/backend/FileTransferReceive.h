@@ -21,7 +21,7 @@
 #define FILETRANSFER_H
 
 #include "I2PStream.h"
-#include <QTime>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <QtGui>
 
@@ -88,7 +88,7 @@ private:
   QFile mFileForReceive;
   bool mRequestAccepted;
   QTimer mTimerForActAverageTransferSpeed;
-  QTime mTimer;
+  QElapsedTimer mTimer;
   CConnectionManager *mConnectionManager;
 
   void CalcETA(int speed);

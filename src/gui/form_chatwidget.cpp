@@ -538,7 +538,7 @@ void form_ChatWidget::messageTextChanged() {
   message->setTextCursor(tmpCursor);
 }
 void form_ChatWidget::centerDialog() {
-  QRect scr = QApplication::desktop()->screenGeometry(0);
+  QRect scr = QGuiApplication::primaryScreen()->geometry();
   move(scr.center() - rect().center());
 }
 
