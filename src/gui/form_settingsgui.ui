@@ -4019,7 +4019,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>14</x>
           <y>18</y>
-          <width>240</width>
+          <width>358</width>
           <height>21</height>
          </rect>
         </property>
@@ -4031,7 +4031,7 @@ p, li { white-space: pre-wrap; }
          </font>
         </property>
         <property name="text">
-         <string>Display online/offline events in chat</string>
+         <string>Display online / offline events in chat</string>
         </property>
        </widget>
       </widget>
