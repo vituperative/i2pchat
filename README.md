@@ -15,6 +15,10 @@
 
 ### Current news
 
+* September, 2020
+  * Fix issue with i2pd leasesets
+  * Replace deprecated functions and resolve compiler warnings
+
 * July, 2020
   * Set ECIES and ED25519 as default sigtype/encryption
   * Add support for optional web page to display user profile at .b32 address
