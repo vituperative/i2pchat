@@ -62,6 +62,10 @@ int main(int argc, char *argv[]) {
   constexpr auto NameOfConfigDirectoryOnLinux = "/.i2pchat/";
 #endif
 
+#if QT_VERSION >= 0x050600
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
   QApplication app(argc, argv);
   QString configPath;
   QFile styleSheetFile(":qss/Default.qss");
