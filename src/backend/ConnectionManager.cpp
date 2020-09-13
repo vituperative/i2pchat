@@ -289,7 +289,7 @@ QString CConnectionManager::generateBridgeName() const {
   QString Name;
   int length = 0;
 
-  qsrand(QDateTime::currentSecsSinceEpoch());
+  qsrand(QDateTime::currentMSecsSinceEpoch());
 
   while (length < 3) {
     length = rand() % 9;
