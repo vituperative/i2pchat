@@ -29,7 +29,7 @@ init:
   - if %APPVEYOR_REPO_TAG%==true (set nogitinfo=ON) else (set nogitinfo=OFF)
 
 install:
-  - set PATH=C:\Qt\Tools\mingw530_32\bin;%PATH%
+  - set PATH=C:\Qt\Tools\mingw730_32\bin;%PATH%
 build_script:
   - qmake I2PChat.pro
   - if not %platform%==mingw (nmake) else (mingw32-make)
