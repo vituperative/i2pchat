@@ -189,7 +189,7 @@ void form_ChatWidget::newMessageReceived() { // TODO: qss add.
     sb->setValue(sb->maximum());
   }
 
-  this->raise();
+//  this->raise(); // no, do not steal focus!
 }
 
 void form_ChatWidget::addAllMessages() {
@@ -459,7 +459,7 @@ void form_ChatWidget::getFocus() {
   this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
                        Qt::WindowActive);
   this->raise();
-  this->setFocus();
+//  this->setFocus(); // don't automatically focus chat window
 }
 
 void form_ChatWidget::setUnderline(bool t) {
