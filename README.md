@@ -41,17 +41,29 @@
 
 ### Build instructions
 
+ * Note: Qt 5.14 or later required
+
  * Install prerequisites:
 
+#### Debian
 ```
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
-
  * To prepare for compilation, run qmake:
    - Release: `qmake I2PChat.pro "CONFIG += release"`
    - Debug: `qmake I2PChat.pro "CONFIG += debug"`
 
- * To complile:
+#### Fedora 33
+```
+sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtbase-devel
+```
+ * To prepare for compilation, run qmake-qt5:
+   - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
+   - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
+
+#### Compile
+
+ * To compile:
    - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
    - or `make` to compile single-threaded
 
