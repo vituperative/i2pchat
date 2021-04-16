@@ -41,7 +41,7 @@
 
 ### Build instructions
 
- * Note: Qt 5.14 or later required
+ * Note: Qt 5.15 or later required
 
  * Install prerequisites:
 
