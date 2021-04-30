@@ -6,8 +6,8 @@
 
 ### Downloads (pre-built binaries)
 
+* 0.2.37 Linux binary (stripped) with custom profile template and event audio samples: <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
 * Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
-
 ### Features
 
  * Direct peer-to-peer communications without server requirements
