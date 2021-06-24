@@ -36,7 +36,7 @@
    * Created Windows build for 32 bit, which will works on 64 bits
    * Design changes
    * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface and LiAlH4 aka wipedlife start fix crashes and help to dr\z3d
+* June, 2020: dr\|z3d starts work on renovating the user interface and LiAlH4(aka WipedLife) starts works with backend.
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
 ### Build instructions
