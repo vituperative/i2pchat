@@ -381,7 +381,7 @@ bool CUserManager::checkIfUserExistsByI2PDestination(
   return false;
 }
 void CUserManager::changeUserPositionInUserList(int oldPos, int newPos) {
-  mUsers.swap(oldPos, newPos);
+  mUsers.swapItemsAt(oldPos, newPos);
   saveUserList();
   emit signUserStatusChanged();
 }

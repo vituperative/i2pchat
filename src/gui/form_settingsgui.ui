@@ -218,7 +218,7 @@
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget1">
        <property name="geometry">
         <rect>
          <x>13</x>
@@ -458,7 +458,7 @@ p, li { white-space: pre-wrap; }
         <string>Auto-download location:</string>
        </property>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget2">
        <property name="geometry">
         <rect>
          <x>13</x>
@@ -956,7 +956,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget3">
        <property name="geometry">
         <rect>
          <x>13</x>
@@ -1031,7 +1031,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget4">
        <property name="geometry">
         <rect>
          <x>13</x>
@@ -1801,7 +1801,7 @@ border-radius: 2px;
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget5">
       <property name="geometry">
        <rect>
         <x>4</x>
@@ -1923,7 +1923,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Custom Style Sheet</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget6">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2026,7 +2026,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Window Style</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget7">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2192,7 +2192,7 @@ p, li { white-space: pre-wrap; }
       <property name="title">
        <string>Contact List Sorting</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget8">
        <property name="geometry">
         <rect>
          <x>12</x>
@@ -3466,7 +3466,7 @@ p, li { white-space: pre-wrap; }
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget9">
         <property name="geometry">
          <rect>
           <x>236</x>
@@ -3781,7 +3781,7 @@ p, li { white-space: pre-wrap; }
          <set>QTextEdit::AutoNone</set>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget10">
         <property name="geometry">
          <rect>
           <x>236</x>
@@ -4019,7 +4019,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>14</x>
           <y>18</y>
-          <width>240</width>
+          <width>358</width>
           <height>21</height>
          </rect>
         </property>
@@ -4031,7 +4031,7 @@ p, li { white-space: pre-wrap; }
          </font>
         </property>
         <property name="text">
-         <string>Display online/offline events in chat</string>
+         <string>Display online / offline events in chat</string>
         </property>
        </widget>
       </widget>
@@ -4082,7 +4082,7 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string/>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget11">
         <property name="geometry">
          <rect>
           <x>12</x>
@@ -4441,7 +4441,7 @@ p, li { white-space: pre-wrap; }
         <string>Activate background user search</string>
        </property>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget12">
        <property name="geometry">
         <rect>
          <x>12</x>
@@ -4500,7 +4500,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget13">
        <property name="geometry">
         <rect>
          <x>13</x>

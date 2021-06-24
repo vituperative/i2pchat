@@ -783,7 +783,7 @@ void form_settingsgui::showUserBlockList() {
 
     UserBlockTreeWidget->addTopLevelItem(itemTopLevel);
   }
-  UserBlockTreeWidget->sortByColumn(0);
+  UserBlockTreeWidget->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void form_settingsgui::clicked_BlockListDelete() {

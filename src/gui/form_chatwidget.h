@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QColorDialog>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFileDialog>
 #include <QFocusEvent>
 #include <QFontDialog>

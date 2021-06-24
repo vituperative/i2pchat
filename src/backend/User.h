@@ -22,9 +22,10 @@
 
 #include <QByteArray>
 #include <QStringList>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QtGlobal>
 #include <QtGui>
+#include <QDateTime>
 
 #include "I2PStream.h"
 

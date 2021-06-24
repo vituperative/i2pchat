@@ -26,7 +26,8 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTextStream>
-#include <QTime>
+#include <QElapsedTimer>
+#include <QDateTime>
 #include <QtDebug>
 
 #include <getopt.h>
@@ -59,6 +60,10 @@ int main(int argc, char *argv[]) {
 // for configPath
 #ifndef _WIN32
   constexpr auto NameOfConfigDirectoryOnLinux = "/.i2pchat/";
+#endif
+
+#if QT_VERSION >= 0x050600
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
   QApplication app(argc, argv);
@@ -211,7 +216,7 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
                       const QString &msg) {
   QString txt;
 
-  txt.append(QTime::currentTime().toString("hh:mm:ss"));
+  txt.append(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
   switch (type) {
   case QtDebugMsg: {

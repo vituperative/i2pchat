@@ -21,7 +21,7 @@
 #define FILETRANSFERSEND_H
 #include "ConnectionManager.h"
 #include "I2PStream.h"
-#include <QTime>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <QtGlobal>
 #include <QtGui>
@@ -117,7 +117,7 @@ private:
   QString mFileName;
 
   QTimer mTimerForActAverageTransferSpeed;
-  QTime mTimer;
+  QElapsedTimer mTimer;
   int mCurrentPacketSize;
   QByteArray mRemoteDataReceiveBuffer;
 };

@@ -1,6 +1,6 @@
 # I2PChat (formerly I2P-Messenger)
 [![Build status appveyor MinGW32](https://ci.appveyor.com/api/projects/status/0tanjnojnlpksug6?svg=true)](https://ci.appveyor.com/project/wipedlifepotato/i2pchat)
-[![Build Status travis linux(xenial)](https://travis-ci.org/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.org/wipedlifepotato/i2pchat)
+[![Build Status travis linux(focal)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)
 ## Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
@@ -14,6 +14,10 @@
  * Emoticon support
 
 ### Current news
+
+* September, 2020
+  * Fix issue with i2pd leasesets
+  * Replace deprecated functions and resolve compiler warnings
 
 * July, 2020
   * Set ECIES and ED25519 as default sigtype/encryption
@@ -32,22 +36,34 @@
    * Created Windows build for 32 bit, which will works on 64 bits
    * Design changes
    * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface
+* June, 2020: dr\|z3d starts work on renovating the user interface and LiAlH4 aka wipedlife start fix crashes and help to dr\z3d
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
 ### Build instructions
 
+ * Note: Qt 5.15 or later required
+
  * Install prerequisites:
 
+#### Debian / Ubuntu
 ```
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
-
  * To prepare for compilation, run qmake:
    - Release: `qmake I2PChat.pro "CONFIG += release"`
    - Debug: `qmake I2PChat.pro "CONFIG += debug"`
 
- * To complile:
+#### Fedora 33
+```
+sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtbase-devel
+```
+ * To prepare for compilation, run qmake-qt5:
+   - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
+   - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
+
+#### Compile
+
+ * To compile:
    - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
    - or `make` to compile single-threaded
 

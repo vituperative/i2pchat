@@ -25,7 +25,8 @@
 #include "SessionController.h"
 #include <QMap>
 #include <QMapIterator>
-#include <QTime>
+#include <QElapsedTimer>
+#include <QDateTime>
 
 namespace SESSION_ENUMS {
 enum SESSION_STYLEV3 {
