@@ -36,7 +36,7 @@
    * Created Windows build for 32 bit, which will works on 64 bits
    * Design changes
    * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface and LiAlH4(aka WipedLife) starts works with backend.
+* June, 2020: dr\|z3d starts work on renovating the user interface and WipedLife starts work on the backend
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
 ### Build instructions
@@ -47,7 +47,6 @@
 #### Ubuntu
 ```
     sudo apt-get update -qq
-    sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.0-focal
     sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
     sudo apt update
     sudo apt-get install -y qt514-meta-full
