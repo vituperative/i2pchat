@@ -46,8 +46,6 @@
  * Install prerequisites:
 #### Ubuntu (gutsy or later)
 ```
-    sudo apt-get update -qq
-    sudo apt update
     sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
     sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
