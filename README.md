@@ -46,18 +46,15 @@
  * Install prerequisites:
 #### Ubuntu (gutsy or later)
 ```
-    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
-    sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
 
 #### Ubuntu (focal)
 ```
+    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
     sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
     sudo apt update
-    sudo apt-get install -y qt514-meta-full
-    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
-    sudo apt-get install -y qtdeclarative5-dev
-    sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+    sudo apt-get install -y qt514-meta-full qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev qtdeclarative5-dev
     source /opt/qt514/bin/qt514-env.sh
 ```
 
