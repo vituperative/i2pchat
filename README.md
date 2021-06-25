@@ -36,7 +36,7 @@
    * Created Windows build for 32 bit, which will works on 64 bits
    * Design changes
    * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface and WipedLife starts work on the backend
+* June, 2020: dr\|z3d starts work on renovating the user interface, WipedLife starts work on the backend
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
 ### Build instructions
@@ -44,7 +44,15 @@
  * Note: Qt 5.15 or later required
 
  * Install prerequisites:
-#### Ubuntu
+#### Ubuntu (gutsy or later)
+```
+    sudo apt-get update -qq
+    sudo apt update
+    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
+    sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+```
+
+#### Ubuntu (focal)
 ```
     sudo apt-get update -qq
     sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
@@ -54,7 +62,6 @@
     sudo apt-get install -y qtdeclarative5-dev
     sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
     source /opt/qt514/bin/qt514-env.sh
-
 ```
 
 #### Debian
