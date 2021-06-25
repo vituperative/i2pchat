@@ -52,7 +52,6 @@
 
 #### Ubuntu (focal)
 ```
-    sudo apt-get update -qq
     sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
     sudo apt update
     sudo apt-get install -y qt514-meta-full
