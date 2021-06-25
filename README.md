@@ -84,6 +84,7 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtba
 ### Downloads (pre-built binaries)
 
 * Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
+* 0.2.37 Linux binary (stripped) with custom profile template and event audio samples (Qt 5.15 or later required): <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
 
 ### Running
 
