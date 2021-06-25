@@ -1,6 +1,6 @@
 # I2PChat (formerly I2P-Messenger)
 [![Build status appveyor MinGW32](https://ci.appveyor.com/api/projects/status/0tanjnojnlpksug6?svg=true)](https://ci.appveyor.com/project/wipedlifepotato/i2pchat)
-[![Build Status travis linux(xenial)](https://travis-ci.org/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.org/wipedlifepotato/i2pchat)
+[![Build Status travis linux(focal)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)
 ## Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
@@ -36,7 +36,7 @@
    * Created Windows build for 32 bit, which will works on 64 bits
    * Design changes
    * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface
+* June, 2020: dr\|z3d starts work on renovating the user interface and WipedLife starts work on the backend
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
 ### Build instructions
@@ -44,8 +44,20 @@
  * Note: Qt 5.15 or later required
 
  * Install prerequisites:
+#### Ubuntu
+```
+    sudo apt-get update -qq
+    sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
+    sudo apt update
+    sudo apt-get install -y qt514-meta-full
+    sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
+    sudo apt-get install -y qtdeclarative5-dev
+    sudo apt-get install -y qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+    source /opt/qt514/bin/qt514-env.sh
 
-#### Debian / Ubuntu
+```
+
+#### Debian
 ```
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
