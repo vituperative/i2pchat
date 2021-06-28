@@ -78,10 +78,11 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtba
 ```
 </details>
 
+#### Compilation
+
  * To prepare for compilation, run qmake-qt5:
    - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
    - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
-#### Compile
 
  * To compile:
    - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
