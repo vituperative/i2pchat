@@ -52,7 +52,7 @@ sudo apt-get install -y devscripts build-essential lintian dh-make autoconf qt5-
 ```
 </details>
 
-<details><summary>**Ubuntu (focal)**</summary>
+<details><summary>Ubuntu (focal)</summary>
 
 ```
 sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
