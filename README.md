@@ -44,12 +44,13 @@
  * Note: Qt 5.15 or later required
 
  * Install prerequisites:
-#### Ubuntu (gutsy or later)
+
+<details><summary>#### Ubuntu (gutsy or later)</summary>
 ```
 sudo apt-get install -y devscripts build-essential lintian dh-make autoconf qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
-
-#### Ubuntu (focal)
+</details>
+<details><summary>#### Ubuntu (focal)</summary>
 ```
 sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
 sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
@@ -57,23 +58,23 @@ sudo apt update
 sudo apt-get install -y qt514-meta-full qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev qtdeclarative5-dev
 source /opt/qt514/bin/qt514-env.sh
 ```
-
-#### Debian
+</details>
+<details><summary>#### Debian</summary>
 ```
 sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 ```
  * To prepare for compilation, run qmake:
    - Release: `qmake I2PChat.pro "CONFIG += release"`
    - Debug: `qmake I2PChat.pro "CONFIG += debug"`
-
-#### Fedora 33
+</details>
+<details><summary>#### Fedora 33</summary>
 ```
 sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtbase-devel
 ```
  * To prepare for compilation, run qmake-qt5:
    - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
    - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
-
+</details>
 #### Compile
 
  * To compile:
