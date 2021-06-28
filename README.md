@@ -5,7 +5,7 @@
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
-### Features
+## Features
 
  * Direct peer-to-peer communications without server requirements
  * File transfer between contacts
@@ -13,7 +13,7 @@
  * Optional, customizable b32.i2p web page to display profile
  * Emoticon support
 
-### Current news
+## Current news
 
 * September, 2020
   * Fix issue with i2pd leasesets
@@ -39,11 +39,11 @@
 * June, 2020: dr\|z3d starts work on renovating the user interface, WipedLife starts work on the backend
 * 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
 
-### Build instructions
+## Build instructions
 
  * Note: Qt 5.15 or later required
 
- * Install prerequisites:
+#### Dependencies
 
 <details><summary>Ubuntu (gutsy or later)</summary>
 
@@ -87,12 +87,12 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtba
    - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
    - or `make` to compile single-threaded
 
-### Downloads (pre-built binaries)
+## Downloads (pre-built binaries)
 
 * Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
 * 0.2.37 Linux binary (stripped) with custom profile template and event audio samples (Qt 5.15 or later required): <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
 
-### Running
+## Running
 
 On Linux, `make` creates `I2PChat` executable in the current folder. Run it with `./I2PChat`.
 
@@ -101,6 +101,6 @@ On Linux, `make` creates `I2PChat` executable in the current folder. Run it with
 * Select 'Online' from the dropdown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
 * Your settings and contacts will be stored in `~/.i2pchat/` on Linux-based systems, or `%APPDATA%\Roaming\I2PChat\` on Windows
 
-### License
+## License
 
 Licensed under GPLv2.
