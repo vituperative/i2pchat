@@ -110,10 +110,10 @@ bool CI2PStream::doAccept() {
 void CI2PStream::slotConnected() {
   QString smID = QString::number(mID, 10);
 
-  emit signDebugMessages("• [Stream ID: " + smID +
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                          "] Controller ‣ Connected to SAM v3");
   mDoneDisconnect = false;
-  emit signDebugMessages("• [Stream ID: " + smID + "] Outgoing ‣ " +
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Outgoing ‣ " +
                          SAM_HANDSHAKE_V3);
   try {
     if (mTcpSocket.isWritable()) {
@@ -135,7 +135,7 @@ void CI2PStream::slotDisconnected() {
 
   mUnKnownConnectionTimeout.stop();
 
-  emit signDebugMessages("• [Stream ID: " + smID +
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                          "] Controller ‣ Disconnected from SAM");
   emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, "");
 }
@@ -156,10 +156,10 @@ void CI2PStream::slotReadFromSocket() {
                             .replace("\"Connection timed out\"\n", "No
     Response");
 
-    emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " +
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Incoming ‣ " +
     debugData);
   */
-  emit signDebugMessages("• [Stream ID: " + smID + "] Incoming ‣ " + newData);
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Incoming ‣ " + newData);
 
   if (mHandshakeSuccessful == false) {
 
@@ -257,7 +257,7 @@ void CI2PStream::slotReadFromSocket() {
 
     // start mUnKnownConnectionTimeout
     mUnKnownConnectionTimeout.start();
-    emit signDebugMessages("• [Stream ID: " + smID +
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                            "] Controller ‣ [Unknown] Connection Timeout");
     //--------------------------------
   } else {
@@ -275,10 +275,11 @@ void CI2PStream::doDisconnect() {
 
 void CI2PStream::operator<<(const QByteArray Data) {
   QString smID = QString::number(mID, 10);
+  QString timeNow = QString(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
   if (mTcpSocket.state() == QTcpSocket::ConnectedState &&
       mHandshakeSuccessful) {
-    emit signDebugMessages("• [Stream ID: " + smID + "] Outgoing ‣ " + Data);
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Outgoing ‣ " + Data);
 
     try {
       if (mTcpSocket.isWritable()) {
@@ -288,10 +289,10 @@ void CI2PStream::operator<<(const QByteArray Data) {
     } catch (...) {
     }
   } else {
-    QByteArray Message = "• [Stream ID: ";
+    QByteArray Message = " • [Stream ID: ";
     Message += smID;
     Message += "] Controller ‣ Not connected";
-    emit signDebugMessages(Message);
+    emit signDebugMessages(timeNow + " " + Message);
   }
 }
 void CI2PStream::operator<<(const QString Data) {
@@ -307,7 +308,7 @@ void CI2PStream::setConnectionType(const Type newTyp) {
   mConnectionType = newTyp;
   if (newTyp == KNOWN) {
     mUnKnownConnectionTimeout.stop();
-    emit signDebugMessages("• [Stream ID: " + smID +
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                            "] Controller ‣ Connection Type changed to KNOWN");
   }
 }
@@ -339,7 +340,7 @@ void CI2PStream::slotInitConnectionTimeout() {
   QString smID = QString::number(mID, 10);
   emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, QString(""));
   emit signDebugMessages(
-      "• [Stream ID: " + smID +
+      QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
       "] Controller ‣ Disconnected after Initialization Timeout");
   doDisconnect();
 }
