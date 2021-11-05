@@ -793,13 +793,13 @@ void form_MainWindow::SendFile() {
       } catch (std::exception &e) {
         qWarning() << "\nform_MainWindow::SendFile()\n"
                    << e.what() << "Destination: " << Destination << "\n"
-                   << "\naction aported";
+                   << "\nFile send aborted!";
       }
   } else {
     qWarning() << "\nform_MainWindow::SendFile()\n"
-               << "Destination.legth!=516\n"
+               << "Destination.length!=516\n"
                << "Destination: " << Destination << "\n"
-               << "\naction aported";
+               << "\nFile send aborted!";
   }
 }
 
@@ -900,7 +900,7 @@ void form_MainWindow::eventChatWindowClosed(QString Destination) {
     mAllOpenChatWindows[Destination]->hide();
   } else {
     qCritical() << "form_MainWindow::eventChatWindowClosed\n"
-                << "Closing a unknown ChatWindow";
+                << "Closing a unknown chat window";
   }
 }
 
@@ -917,7 +917,7 @@ void form_MainWindow::openChatWindow(QString Destination) {
   User = Core->getUserManager()->getUserByI2P_Destination(Destination);
   if (User == NULL) {
     qCritical() << "form_MainWindow::openChatWindow"
-                << "try to open a Chatwindow, but the user doesn't exist";
+                << "Cannot open chat window for non-existent user!";
     return;
   }
 
@@ -947,7 +947,7 @@ void form_MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
     mAllFileReceiveWindows.remove(StreamID);
   } else {
     qCritical() << "form_MainWindow::eventFileReceiveWindowClose\n"
-                << "Closing a unknown FileReceiveWindow";
+                << "Closing a unknown FileReceive window";
   }
 }
 
@@ -957,7 +957,7 @@ void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
     mAllFileSendWindows.remove(StreamID);
   } else {
     qCritical() << "form_MainWindow::eventFileSendWindowClosed\n"
-                << "Closing a unknown FileSendWindow";
+                << "Closing a unknown FileSend window";
   }
 }
 
@@ -968,7 +968,7 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
   if (TransferSend == NULL) {
     qCritical() << "form_MainWindow::openFileSendWindow\n"
                 << "Can't find FileSend Object with ID: " << StreamID
-                << "\nAction Ignored";
+                << "\nFile transfer failed!";
     return;
   }
 
@@ -992,7 +992,7 @@ void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
   if (receive == NULL) {
     qCritical() << "form_MainWindow::openFileReceiveWindow\n"
                 << "Can't find FileReceive Object with ID: " << StreamID
-                << "\nAction Ignored";
+                << "\nFile transfer failed!";
     return;
   }
 
