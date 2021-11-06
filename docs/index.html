@@ -66,7 +66,7 @@
     <ul>
       <li>Install prerequisites:
     </ul>
-    <div class="language-plaintext highlighter-rouge">
+    <div>
       <div class=highlight>
         <pre class=highlight><code>sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
 </code></pre>
@@ -74,22 +74,22 @@
     </div>
     <ul>
       <li>To prepare for compilation, run qmake:<ul>
-          <li>Release: <code class="language-plaintext highlighter-rouge">qmake I2PChat.pro "CONFIG += release"</code>
-          <li>Debug: <code class="language-plaintext highlighter-rouge">qmake I2PChat.pro "CONFIG += debug"</code>
+          <li>Release: <code>qmake I2PChat.pro "CONFIG += release"</code>
+          <li>Debug: <code>qmake I2PChat.pro "CONFIG += debug"</code>
         </ul>
       <li>To complile:<ul>
-          <li><code class="language-plaintext highlighter-rouge">make -j NUMBER_OF_PROCESSOR_CORES</code> e.g <code class="language-plaintext highlighter-rouge">make -j8</code>
-          <li>or <code class="language-plaintext highlighter-rouge">make</code> to compile single-threaded
+          <li><code>make -j NUMBER_OF_PROCESSOR_CORES</code> e.g <code>make -j8</code>
+          <li>or <code>make</code> to compile single-threaded
         </ul>
     </ul>
     <hr>
     <h3 id=running>Running</h3>
-    <p>On Linux, <code class="language-plaintext highlighter-rouge">make</code> creates <code class="language-plaintext highlighter-rouge">I2PChat</code> executable in the current folder. Run it with <code class="language-plaintext highlighter-rouge">./I2PChat</code>.
+    <p>On Linux, <code>make</code> creates <code>I2PChat</code> executable in the current folder. Run it with <code>./I2PChat</code>.
     <ul>
-      <li>You will need to enable the SAM application bridge in your router: for Java I2P via <a href=http://127.0.0.1:7657/configclients>Client Configuration</a> or for i2pd via i2pd.conf’s [SAM] section.
+      <li>You will need to enable the SAM application bridge in your router: for Java <a href=https://i2pplus.github.io>I2P+</a> / <a href=https://i2p.net>I2P</a> via <a href=http://127.0.0.1:7657/configclients>Client Configuration</a> or for i2pd via i2pd.conf’s [SAM] section.
       <li>As of version 0.2.31, the DSA_SHA1 Signature type is no longer available. The recommended (and default) Signature Type is now: EdDSA_SHA512_Ed25519
       <li>Select ‘Online’ from the dropdown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
-      <li>Your settings and contacts will be stored in <code class="language-plaintext highlighter-rouge">~/.i2pchat/</code> on Linux-based systems, or <code class="language-plaintext highlighter-rouge">%APPDATA%\Roaming\I2PChat\</code> on Windows
+      <li>Your settings and contacts will be stored in <code>~/.i2pchat/</code> on Linux-based systems, or <code>%APPDATA%\Roaming\I2PChat\</code> on Windows
     </ul>
     <hr>
     <h3 id=license>License</h3>
