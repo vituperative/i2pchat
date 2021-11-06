@@ -143,6 +143,10 @@ p {
   padding: 0
 }
 
+#screenshots {
+  text-align: center;
+}
+
 strong {
   color: #222;
   font-weight: 700

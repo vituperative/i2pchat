@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<meta charset=utf-8>
+<title>I2PChat - Instant Messenger | i2pchat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <section>
+    <h1 id=i2pchat---instant-messenger>I2PChat - Instant Messenger</h1>
+    <h3 id=screenshots>Screenshots</h3>
+    <p id=screenshots><img src=https://vituperative.github.io/i2pchat/screenshots/main.png alt=screenshot-roster> <img src=https://vituperative.github.io/i2pchat/screenshots/chat.png alt=screenshot-chat>
+    <hr>
+    <h3 id=downloads-pre-built-binaries>Downloads (pre-built binaries)</h3>
+    <ul>
+      <li>0.2.37 Linux binary (stripped) with custom profile template and event audio samples: <a href=https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip>I2PChat0.2.37-Linux.zip</a>
+      <li>0.2.37 Windows 32bit binary with custom profile template and event audio samples: <a href=https://github.com/vituperative/i2pchat/blob/master/docs/I2PChat0.2.37-Win32.zip?raw=true>I2PChat0.2.37-Win32.zip</a>
+      <li>Latest Windows (Win32/64) build from: <a href=https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts>https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
+    </ul>
+    <h3 id=features>Features</h3>
+    <ul>
+      <li>Direct peer-to-peer communications without server requirements
+      <li>File transfer between contacts
+      <li>Control online visibility on a per-contact basis
+      <li>Optional, customizable b32.i2p web page to display profile
+      <li>Emoticon support
+    </ul>
+    <h3 id=current-news>Current news</h3>
+    <ul>
+      <li>July, 2020<ul>
+          <li>Set ECIES and ED25519 as default sigtype/encryption
+          <li>Add support for optional web page to display user profile at .b32 address
+          <li>Remove insecure DSA_SHA1 from Signature Types
+          <li>Add ECIES (Ratchet) encryption type to new profiles (UI option coming soon!)
+        </ul>
+      <li>June, 2020:<ul>
+          <li>Fixed crash of close chat window
+          <li>Fixed crash of url link in chat
+          <li>Added $HOME/.i2pchat/ directory support for using from /usr/bin
+          <li>Pre inited optarg
+          <li>Core changes
+          <li>Ci pre-inited. Works for windows now
+          <li>Created .deb package for ubuntu/debian x86_64
+          <li>Created Windows build for 32 bit, which will works on 64 bits
+          <li>Design changes
+          <li>Fix offline message crash
+        </ul>
+      <li>June, 2020: dr|z3d starts work on renovating the user interface
+      <li>5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
+    </ul>
+    <h3 id=build-instructions>Build instructions</h3>
+    <ul>
+      <li>Install prerequisites:
+    </ul>
+    <div class="language-plaintext highlighter-rouge">
+      <div class=highlight>
+        <pre class=highlight><code>sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+</code></pre>
+      </div>
+    </div>
+    <ul>
+      <li>To prepare for compilation, run qmake:<ul>
+          <li>Release: <code class="language-plaintext highlighter-rouge">qmake I2PChat.pro "CONFIG += release"</code>
+          <li>Debug: <code class="language-plaintext highlighter-rouge">qmake I2PChat.pro "CONFIG += debug"</code>
+        </ul>
+      <li>To complile:<ul>
+          <li><code class="language-plaintext highlighter-rouge">make -j NUMBER_OF_PROCESSOR_CORES</code> e.g <code class="language-plaintext highlighter-rouge">make -j8</code>
+          <li>or <code class="language-plaintext highlighter-rouge">make</code> to compile single-threaded
+        </ul>
+    </ul>
+    <hr>
+    <h3 id=running>Running</h3>
+    <p>On Linux, <code class="language-plaintext highlighter-rouge">make</code> creates <code class="language-plaintext highlighter-rouge">I2PChat</code> executable in the current folder. Run it with <code class="language-plaintext highlighter-rouge">./I2PChat</code>.
+    <ul>
+      <li>You will need to enable the SAM application bridge in your router: for Java I2P via <a href=http://127.0.0.1:7657/configclients>Client Configuration</a> or for i2pd via i2pd.conf’s [SAM] section.
+      <li>As of version 0.2.31, the DSA_SHA1 Signature type is no longer available. The recommended (and default) Signature Type is now: EdDSA_SHA512_Ed25519
+      <li>Select ‘Online’ from the dropdown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
+      <li>Your settings and contacts will be stored in <code class="language-plaintext highlighter-rouge">~/.i2pchat/</code> on Linux-based systems, or <code class="language-plaintext highlighter-rouge">%APPDATA%\Roaming\I2PChat\</code> on Windows
+    </ul>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv2.
+  </section>
+</div>
+<footer>
+  <p>Project maintained by <a href=https://github.com/vituperative>vituperative</a>
+</footer>
+</body>
+</html>
