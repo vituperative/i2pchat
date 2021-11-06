@@ -1,6 +1,7 @@
 html {
-  background: #6c7989;
   height: 100%;
+  background: #6c7989;
+  scrollbar-color: #cdf #6c7989;
 }
 body {
   padding: 50px 0;
