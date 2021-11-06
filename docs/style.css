@@ -8,8 +8,9 @@ body {
   font-family: 14pt/1.5 Open Sans, Segoe UI, Noto Sans, Ubuntu, sans-serif;
   color: #555;
   font-weight: 500;
-  background: #6c7989;
-  min-height: calc(100% - 100px);
+  background: repeating-linear-gradient(135deg, rgba(0,8,16,.2), rgba(240,250,255,.2)), repeating-linear-gradient(45deg, rgba(0,8,16,.3), rgba(240,250,255,.3)), #6c7989;
+  background-size: 100% 48px, 48px 100%;
+  min-height: 100%;
 }
 .wrapper {
   min-width: 600px;
