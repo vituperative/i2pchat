@@ -42,6 +42,7 @@
 ## Build instructions
 
  * Note: Qt 5.14 or later required
+ * For Qt versions prior to v5.14, you can try building with an older version of the code, available from: https://github.com/vituperative/i2pchat/archive/706c908ee267051da12c51f2b87c0d9c293f69d8.zip
 
 #### Dependencies
 
