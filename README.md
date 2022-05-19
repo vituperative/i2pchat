@@ -45,6 +45,16 @@
 
 #### Dependencies
 
+<details><summary>Ubuntu (jammy or later)</summary>
+
+```
+sudo apt-get install -y devscripts build-essential lintian dh-make autoconf libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+```
+ * To prepare for compilation, run qmake:
+   - Release: `qmake I2PChat.pro "CONFIG += release"`
+   - Debug: `qmake I2PChat.pro "CONFIG += debug"`
+</details>
+
 <details><summary>Ubuntu (gutsy or later)</summary>
 
 ```
