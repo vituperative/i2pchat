@@ -91,7 +91,7 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtba
 
 #### Compilation
 
- * To prepare for compilation, run qmake-qt5:
+ * To prepare for compilation, run qmake-qt5 or qmake, depending on your environment:
    - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
    - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
 
