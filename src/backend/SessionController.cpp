@@ -67,22 +67,11 @@ void CSessionController::slotConnected() {
 void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
-    emit signDebugMessages("• I2P Stream Controller can't connect ‣ SAM or I2P "
-                           "crashed [SAM Host: " +
+    emit signDebugMessages("• I2P Stream Controller disconnected ‣ SAM or I2P "
+                           "unavailable [SAM Host: " +
                            mSamHost + ":" + mSamPort + "]");
     emit signSessionStreamStatusOK(false);
 
-    QMessageBox msgBox(NULL);
-    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-    msgBox.setWindowIcon(QIcon(pixmap));
-    msgBox.setIcon(QMessageBox::Critical);
-    msgBox.setText("\nI2P Stream Controller can't connect\n SAM or I2P "
-                   "crashed\nSAM Host: " +
-                   mSamHost + ":" + mSamPort);
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setWindowModality(Qt::NonModal);
-    msgBox.exec();
 
     // emit SamConnectionClosed();
   }
