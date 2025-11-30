@@ -58,6 +58,9 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
 
   mAlreadyReceivedSize = 0;
   mRequestAccepted = false;
+  
+  // Initialize write buffer for performance
+  mWriteBuffer.reserve(1024 * 1024); // 1MB buffer
 
   settings.beginGroup("General");
   AutoAcceptFileReceive =
@@ -101,6 +104,12 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
 
 CFileTransferReceive::~CFileTransferReceive() {
   mTimerForActAverageTransferSpeed.stop();
+  
+  // Flush any remaining buffer data
+  if (!mWriteBuffer.isEmpty() && mFileForReceive.isOpen()) {
+    mFileForReceive.write(mWriteBuffer);
+    mFileForReceive.flush();
+  }
 }
 
 void CFileTransferReceive::slotStreamStatusReceived(
@@ -243,8 +252,16 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
   }
 
   mAlreadyReceivedSize += t.length();
-  mFileForReceive.write(t);
-  mFileForReceive.flush();
+  
+  // Use buffering for better performance
+  mWriteBuffer.append(t);
+  
+  // Flush buffer when it reaches threshold or transfer is complete
+  if (mWriteBuffer.size() >= 1024*1024 || mAlreadyReceivedSize == mFileSize) {
+    mFileForReceive.write(mWriteBuffer);
+    mFileForReceive.flush();
+    mWriteBuffer.clear();
+  }
 
   emit signgetTransferredSizeChanged(mAlreadyReceivedSize);
 
@@ -261,6 +278,13 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
     QString SizeName;
     QString SSize;
 
+    // Flush any remaining buffer data before closing
+    if (!mWriteBuffer.isEmpty()) {
+      mFileForReceive.write(mWriteBuffer);
+      mFileForReceive.flush();
+      mWriteBuffer.clear();
+    }
+    
     mFileForReceive.close();
 
     if (mFileSize >= (1024 * 1024)) {
@@ -311,6 +335,12 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
 
 void CFileTransferReceive::slotAbbortFileReceive() {
 
+  // Flush any remaining buffer data before closing
+  if (!mWriteBuffer.isEmpty() && mFileForReceive.isOpen()) {
+    mFileForReceive.write(mWriteBuffer);
+    mFileForReceive.flush();
+  }
+  
   mFileForReceive.close();
   mTimerForActAverageTransferSpeed.stop();
   mFileForReceive.remove();

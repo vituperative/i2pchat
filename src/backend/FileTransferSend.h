@@ -44,8 +44,8 @@ const double MAXPROTOCOLVERSION_D = 0.3;
 //+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
-#define NORMPACKETSIZE 4096
-#define MAXPACKETSIZE 65536
+#define NORMPACKETSIZE 32768    // Increased from 4096 to 32KB
+#define MAXPACKETSIZE 262144    // Increased from 65536 to 256KB
 #define AVERAGETRANSFERSPEEDPERIOD 500 // 0.5 sec for faster updates
 
 class CCore;

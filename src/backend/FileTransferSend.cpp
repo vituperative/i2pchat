@@ -283,6 +283,7 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
 void CFileTransferSend::SendFile_v0dot3() {
   QByteArray Buffer;
 
+  // Use larger packet sizes for better performance
   Buffer = mFileForSend.read(mCurrentPacketSize);
   mAlreadySentSize += Buffer.length();
 
@@ -322,7 +323,8 @@ void CFileTransferSend::SendFile_v0dot1() {
   while (mAlreadySentSize < mFileSize) {
     QByteArray Buffer;
 
-    Buffer = mFileForSend.read(NORMPACKETSIZE);
+    // Use larger packet size for better performance
+    Buffer = mFileForSend.read(mCurrentPacketSize);
     mAlreadySentSize += Buffer.length();
 
     mStream->operator<<(Buffer);

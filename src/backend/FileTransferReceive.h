@@ -90,7 +90,12 @@ private:
   QTimer mTimerForActAverageTransferSpeed;
   QElapsedTimer mTimer;
   CConnectionManager *mConnectionManager;
+  
+  // Performance improvements
+  QByteArray mWriteBuffer;
+  static const qint64 BUFFER_SIZE = 1024 * 1024; // 1MB buffer
 
   void CalcETA(int speed);
+  void flushBuffer();
 };
 #endif
