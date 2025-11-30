@@ -234,34 +234,10 @@ void form_ChatWidget::addMessage(QString text) {
       box->showMessage(msg);
       return;
     }
-    // cursor.beginEditBlock();
-    // bool success =
-    cursor.movePosition(QTextCursor::End);
-    /*if(!success) {
-        auto msg="Error appending to chatLog: error moving position to end of
-    chat log document. QTextBrowser"; qDebug() << msg; QErrorMessage * box = new
-    QErrorMessage(this); box->showMessage(msg);
-        //cursor.endEditBlock();
-        return;
-    }*/
-    if (!cursor.atEnd()) {
-      auto msg = "Error appending to chatLog: ¬cursor.atBlockEnd()";
-      qDebug() << msg;
-      QErrorMessage *box = new QErrorMessage(this);
-      box->showMessage(msg);
-      // cursor.endEditBlock();
-      return;
-    }
-
-    // cursor.insertBlock();
-
-    // cursor.insertHtml("<a href='http://www.w3schools.com/'>Link!</a>");
-    // cursor.insertText("something");
-    qDebug() << "inserting HTML: '" << text << "'\n";
-
+// Optimize with edit block for better performance
+    cursor.beginEditBlock();
     cursor.insertHtml(text);
-
-    // cursor.endEditBlock();
+    cursor.endEditBlock();
   }
 
   chat->update();
