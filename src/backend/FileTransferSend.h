@@ -44,9 +44,9 @@ const double MAXPROTOCOLVERSION_D = 0.3;
 //+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
-#define NORMPACKETSIZE 1024
-#define MAXPACKETSIZE 30720
-#define AVERAGETRANSFERSPEEDPERIOD 1000 // 1 sec
+#define NORMPACKETSIZE 4096
+#define MAXPACKETSIZE 65536
+#define AVERAGETRANSFERSPEEDPERIOD 500 // 0.5 sec for faster updates
 
 class CCore;
 class CFileTransferSend : public QObject {
