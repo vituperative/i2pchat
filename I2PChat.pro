@@ -123,3 +123,6 @@ android {
 }
 
 include(gitversion.pri)
+
+# Add build timestamp echo commands using QMAKE_POST_LINK
+QMAKE_POST_LINK = @echo "Build complete: binary created at ./$(TARGET) at: \$$(date '+%Y-%m-%d %H:%M:%S')"
