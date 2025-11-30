@@ -213,40 +213,16 @@ void form_ChatWidget::addMessage(QString text) {
   //	QString& newMessage=text; // UDP(By Voron): DONT NEED, will be
   // deleted!!!
 
-  /* UPD: (by Voron)  temporarly disabled by me, because there is infinite
-  cycle!! is willbe fixed.
-  //<Voron> i did even with itteration, and some another magick. so i did it for
-  one link, but for 2-3 not yet. I will read it firstly
-  //<Voron> https://doc.qt.io/archives/qt-4.8/qregexp.html
-  //<Voron> i did with QStringList list = rx.capturedTexts();
-  //<Voron> for (auto it = ...
-  //<Voron> also i disable
-  //<Voron> open the browser?!
-          //replace http://, https:// and www. with <a href> links
-          QRegExp rx("(https?://[^ <>]*)|(www\\.[^ <>]*)");
-          int pos = 100; //ignore the first 100 char because of the standard DTD
-  ref while ( (pos = rx.indexIn(text, pos)) != -1 ) {
-                  //we need to look ahead to see if it's already a well formed
-  link if (text.mid(pos - 6, 6) != "href=\"" && text.mid(pos - 6, 6) != "href='"
-  && text.mid(pos - 6, 6) != "ttp://" && text.mid(pos - 6, 6) != "tps://"
-                      )
-                  {
-                          if(rx.cap(1).isEmpty()==false)
-                          {
-                              QString linkBefore=text.mid(pos,
-  rx.matchedLength()); QString linkAfter="<a href=\"" + rx.cap(1) + "\">" +
-  rx.cap(1) + "</a>"; newMessage=newMessage.replace(linkBefore,linkAfter);
-
-                          }
-                          else{
-                              QString linkBefore=text.mid(pos,
-  rx.matchedLength()); QString linkAfter="<a href=\"" + rx.cap(2) + "\">" +
-  rx.cap(2) + "</a>"; newMessage=newMessage.replace(linkBefore,linkAfter);
-                          }
-                  }
-                  pos += rx.matchedLength();
-          }
-  */
+// Auto-link URLs - improved regex for better matching
+  QRegExp rx("((?:https?://|www\\.)[^\\s<>'\"]+)");
+  int pos = 0;
+  while ((pos = rx.indexIn(text, pos)) != -1) {
+    QString url = rx.cap(1);
+    QString fullUrl = url.startsWith("www.") ? "http://" + url : url;
+    QString linkHtml = "<a href=\"" + fullUrl + "\" style=\"color:#0066cc; text-decoration:underline;\">" + url + "</a>";
+    text.replace(pos, rx.matchedLength(), linkHtml);
+    pos += linkHtml.length();
+  }
 
   // append HTML (newMessage)
   {
