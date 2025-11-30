@@ -1,4 +1,7 @@
 #include <QErrorMessage>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QRegularExpression>
 
 #include "User.h"
 #include "form_chatwidget.h"
@@ -210,45 +213,11 @@ void form_ChatWidget::addAllMessages() {
 
 void form_ChatWidget::addMessage(QString text) {
   QTextBrowser *chat = this->chat;
-  //	QString& newMessage=text; // UDP(By Voron): DONT NEED, will be
-  // deleted!!!
+  
+  // Process emoticons in received messages
+  CTextEmotionChanger::exemplar()->checkMessageForEmoticons(text);
 
-  /* UPD: (by Voron)  temporarly disabled by me, because there is infinite
-  cycle!! is willbe fixed.
-  //<Voron> i did even with itteration, and some another magick. so i did it for
-  one link, but for 2-3 not yet. I will read it firstly
-  //<Voron> https://doc.qt.io/archives/qt-4.8/qregexp.html
-  //<Voron> i did with QStringList list = rx.capturedTexts();
-  //<Voron> for (auto it = ...
-  //<Voron> also i disable
-  //<Voron> open the browser?!
-          //replace http://, https:// and www. with <a href> links
-          QRegExp rx("(https?://[^ <>]*)|(www\\.[^ <>]*)");
-          int pos = 100; //ignore the first 100 char because of the standard DTD
-  ref while ( (pos = rx.indexIn(text, pos)) != -1 ) {
-                  //we need to look ahead to see if it's already a well formed
-  link if (text.mid(pos - 6, 6) != "href=\"" && text.mid(pos - 6, 6) != "href='"
-  && text.mid(pos - 6, 6) != "ttp://" && text.mid(pos - 6, 6) != "tps://"
-                      )
-                  {
-                          if(rx.cap(1).isEmpty()==false)
-                          {
-                              QString linkBefore=text.mid(pos,
-  rx.matchedLength()); QString linkAfter="<a href=\"" + rx.cap(1) + "\">" +
-  rx.cap(1) + "</a>"; newMessage=newMessage.replace(linkBefore,linkAfter);
-
-                          }
-                          else{
-                              QString linkBefore=text.mid(pos,
-  rx.matchedLength()); QString linkAfter="<a href=\"" + rx.cap(2) + "\">" +
-  rx.cap(2) + "</a>"; newMessage=newMessage.replace(linkBefore,linkAfter);
-                          }
-                  }
-                  pos += rx.matchedLength();
-          }
-  */
-
-  // append HTML (newMessage)
+  // append HTML
   {
     auto cursor = QTextCursor(chat->document());
     if (cursor.isNull()) {
