@@ -104,6 +104,8 @@ public:
   }
   bool getIsInvisible() const { return mInvisible; };
   bool getUsedB32Dest() const { return mUseB32Dest; };
+  bool getAutoDownloadEnabled() const { return mAutoDownloadEnabled; };
+  const QString getOriginalB32Address() const { return mOriginalB32Address; };
   const QStringList getUnsentedMessages() const { return mUnsentedMessages; };
 
   void setConnectionStatus(CONNECTIONTOUSER Status);
@@ -116,6 +118,7 @@ public:
   void setTextColor(QColor textColor);
   void setTextFont(QFont textFont);
   void setInvisible(bool b);
+  void setAutoDownloadEnabled(bool enabled);
   void setMaxProtocolVersionFiletransfer(QString Version) {
     mMaxProtocolVersionFiletransfer = Version;
   };
@@ -169,6 +172,8 @@ private:
 
   CReceivedInfos mReceivedUserInfos;
   bool mUseB32Dest;
+  bool mAutoDownloadEnabled;
+  QString mOriginalB32Address;
 
   //<Settings for the chatwindow>
   QColor mTextColor;

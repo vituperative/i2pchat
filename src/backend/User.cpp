@@ -58,9 +58,18 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
 
   if (mI2PDestination.length() == 60) {
     mUseB32Dest = true;
+    mOriginalB32Address = mI2PDestination; // Store original B32 address
   } else {
     mUseB32Dest = false;
+    mOriginalB32Address = ""; // No original B32 address
   }
+  
+  // Initialize per-user auto-download setting
+  settings.beginGroup("UserSettings");
+  settings.beginGroup(I2PDestination); // Use destination as unique identifier
+  mAutoDownloadEnabled = settings.value("AutoDownload", false).toBool();
+  settings.endGroup();
+  settings.endGroup();
 }
 CUser::~CUser() { emit signUserDeleted(); }
 
@@ -248,12 +257,19 @@ void CUser::slotIncomingMessageFromSystem(QString newMessage,
 
 void CUser::setInvisible(bool b) {
   mInvisible = b;
-  if (mConnectionStatus == ONLINE) {
-    QByteArray Data("1003"); // GET_USER_ONLINESTATUS = send the new
-                             // OnlineStatus
-    mProtocol.slotInputKnown(mI2PStream_ID, Data);
-  }
-  emit signOnlineStateChanged();
+}
+
+void CUser::setAutoDownloadEnabled(bool enabled) {
+  mAutoDownloadEnabled = enabled;
+  
+  // Save the setting
+  QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("UserSettings");
+  settings.beginGroup(mI2PDestination);
+  settings.setValue("AutoDownload", enabled);
+  settings.endGroup();
+  settings.endGroup();
+  settings.sync();
 }
 
 const QStringList CUser::getNewMessages(bool haveFocus) {

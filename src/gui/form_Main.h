@@ -98,7 +98,7 @@ private slots:
   void namingMe();
   void copyDestination();
   void copyB32();
-  //void userAutoDownload();
+  void UserAutoDownload(bool enabled);
   void SendFile();
   void closeApplication();
   void eventUserChanged();
@@ -106,6 +106,8 @@ private slots:
   void showUserInfos();
   void UserPositionUP();
   void UserPositionDOWN();
+  void UserPositionTOP();
+  void UserPositionBOTTOM();
   void UserInvisible(bool b);
 
   void connecttreeWidgetCostumPopupMenu(QPoint point);

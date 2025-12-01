@@ -451,8 +451,8 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
 
   QAction *UserAutoDownload = new QAction(QIcon(ICON_USER_DOWNLOAD), tr("Auto-download"), this);
   UserAutoDownload->setCheckable(true);
-  // connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
-  //         SLOT(UserAutoDownload(bool)));
+  connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
+          SLOT(UserAutoDownload(bool)));
   UserAutoDownload->setEnabled(false);
 
   QAction *UserInvisible =
@@ -491,6 +491,10 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   connect(UP, SIGNAL(triggered()), this, SLOT(UserPositionUP()));
   QAction *DOWN = new QAction(tr("Down"), this);
   connect(DOWN, SIGNAL(triggered()), this, SLOT(UserPositionDOWN()));
+  QAction *TOP = new QAction(tr("Move to Top"), this);
+  connect(TOP, SIGNAL(triggered()), this, SLOT(UserPositionTOP()));
+  QAction *BOTTOM = new QAction(tr("Move to Bottom"), this);
+  connect(BOTTOM, SIGNAL(triggered()), this, SLOT(UserPositionBOTTOM()));
 
   contextMnu.clear();
   contextMnu.addAction(UserChat);
@@ -521,16 +525,35 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
 
     contextMnu.addAction(UserInvisible);
     contextMnu.addAction(UserAutoDownload);
-    contextMnu.addAction(UserToBlockList);
-    contextMnu.addAction(UserDelete);
     contextMnu.addSeparator();
     contextMnu.addAction(ShowUserInfos);
     contextMnu.addAction(CopyDestination);
     contextMnu.addAction(CopyB32);
     contextMnu.addAction(UserRename);
+    
+    // Enable Copy B32 only if user is online (can do naming lookup)
+    if (User->getConnectionStatus() == ONLINE) {
+      CopyB32->setEnabled(true);
+    } else {
+      CopyB32->setEnabled(false);
+    }
+    
+    // Enable and set state of UserAutoDownload
+    UserAutoDownload->setEnabled(true);
+    UserAutoDownload->setChecked(User->getAutoDownloadEnabled());
+    
+    // Set icon based on auto-download state
+    if (User->getAutoDownloadEnabled()) {
+      UserAutoDownload->setIcon(QIcon(ICON_USER_DOWNLOAD));
+    } else {
+      UserAutoDownload->setIcon(QIcon(ICON_USER_DOWNLOAD_DISABLED));
+    }
 
     contextMnuPos.addAction(UP);
     contextMnuPos.addAction(DOWN);
+    contextMnuPos.addSeparator();
+    contextMnuPos.addAction(TOP);
+    contextMnuPos.addAction(BOTTOM);
 
     contextMnu.addMenu(&contextMnuPos);
     // TODO: Fix width of context menu and ensure sub-menu overlaps
@@ -882,6 +905,23 @@ void form_MainWindow::UserPositionDOWN() {
         listWidget->currentRow() / 3, listWidget->currentRow() / 3 + 1);
 }
 
+void form_MainWindow::UserPositionTOP() {
+  QListWidget *listWidget = this->listWidget;
+  int currentUserIndex = listWidget->currentRow() / 3;
+  if (currentUserIndex > 0) {
+    Core->getUserManager()->changeUserPositionInUserList(currentUserIndex, 0);
+  }
+}
+
+void form_MainWindow::UserPositionBOTTOM() {
+  QListWidget *listWidget = this->listWidget;
+  int currentUserIndex = listWidget->currentRow() / 3;
+  int totalUsers = listWidget->count() / 3;
+  if (currentUserIndex < totalUsers - 1) {
+    Core->getUserManager()->changeUserPositionInUserList(currentUserIndex, totalUsers - 1);
+  }
+}
+
 void form_MainWindow::UserInvisible(bool b) {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
@@ -1119,5 +1159,25 @@ void form_MainWindow::openTopicSubscribeWindow() {
     mTopicSubscribeWindow->show();
   } else {
     mTopicSubscribeWindow->requestFocus();
+  }
+}
+
+void form_MainWindow::UserAutoDownload(bool enabled) {
+  QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
+  QString Destination = t->text();
+  
+  CUser *User = Core->getUserManager()->getUserByI2P_Destination(Destination);
+  if (User) {
+    User->setAutoDownloadEnabled(enabled);
+    
+    // Update the icon in the menu action
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (action) {
+      if (enabled) {
+        action->setIcon(QIcon(ICON_USER_DOWNLOAD));
+      } else {
+        action->setIcon(QIcon(ICON_USER_DOWNLOAD_DISABLED));
+      }
+    }
   }
 }
