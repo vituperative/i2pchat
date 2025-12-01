@@ -88,6 +88,8 @@ private slots:
   void clicked_BlockListDelete();
   void clicked_BlockListUnblock();
   void clicked_EnableUserSearch(bool t);
+  void clicked_BlockAllUnknownUsers(bool checked);
+  void clicked_RequestAuthorization(bool checked);
 
   void clicked_SelectAvatarImage();
   void clicked_ClearAvatarImage();

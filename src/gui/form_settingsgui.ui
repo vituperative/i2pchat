@@ -1258,32 +1258,35 @@ p, li { white-space: pre-wrap; }
          <number>10</number>
         </property>
         <item row="0" column="0" alignment="Qt::AlignVCenter">
-         <widget class="QLabel" name="label_13">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Signature Type:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
+      <widget class="QLabel" name="label_13">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>54</y>
+         <width>405</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Request Authorization</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="requestAuthcheckBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>76</y>
+         <width>405</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Request Authorization</string>
+       </property>
+      </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignVCenter">
          <widget class="QComboBox" name="comboBox_SigType">
@@ -2374,7 +2377,7 @@ p, li { white-space: pre-wrap; }
       </widget>
       <widget class="QCheckBox" name="blockallcheckBox">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>

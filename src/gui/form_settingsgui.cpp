@@ -131,6 +131,13 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
 
   connect(cmd_clearAvatarImage, SIGNAL(clicked()), this,
           SLOT(clicked_ClearAvatarImage()));
+  
+  connect(blockallcheckBox, SIGNAL(clicked(bool)), this,
+          SLOT(clicked_BlockAllUnknownUsers(bool)));
+  
+  connect(requestAuthcheckBox, SIGNAL(clicked(bool)), this,
+          SLOT(clicked_RequestAuthorization(bool)));
+  
   // TODO: Add this button from ui file. (QtCreator, i dont have it)
   // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
   // setCustomStyleSheet() ) );
@@ -311,6 +318,11 @@ void form_settingsgui::loadSettings() {
   ownavatar_label->setPixmap(tmpPixmap);
   ownavatar_label_2->setAlignment(Qt::AlignCenter);
   ownavatar_label_2->setPixmap(tmpPixmap);
+  
+  // Clear any default pixmap that might be set in UI
+  if (avatarImageByteArray.isEmpty()) {
+    ownavatar_label_2->clear();
+  }
 
   settings->endGroup();
 
@@ -546,6 +558,13 @@ void form_settingsgui::saveSettings() {
 
   // TODO: DHT implementation
   settings->beginGroup("Usersearch");
+  
+  // Load security settings
+  settings->beginGroup("Security");
+  blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
+  requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", false).toBool());
+  requestAuthcheckBox->setEnabled(true);  // Ensure checkbox is enabled
+  settings->endGroup();
   settings->setValue("Enabled", check_UserSearchEnable->isChecked());
   settings->setValue("Debug_Max_Message_count",
                      spinBox_MaxLogMsgUserSearch->value());
@@ -556,6 +575,35 @@ void form_settingsgui::saveSettings() {
   settings->sync();
   mCore.loadUserInfos();
   mCore.getUserManager()->avatarImageChanged();
+  
+  // Refresh avatar display in config panel AFTER avatar update signals have been sent
+  QPixmap tmpPixmap;
+  avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
+  
+  // Decode B64 string to raw binary data if needed
+  if (!avatarImageByteArray.isEmpty()) {
+    // Check if data is B64 encoded by trying to decode
+    QByteArray decodedData = QByteArray::fromBase64(avatarImageByteArray);
+    if (!decodedData.isEmpty()) {
+      // Use decoded data if successful
+      tmpPixmap.loadFromData(decodedData);
+    } else {
+      // Fall back to original data if decoding fails
+      tmpPixmap.loadFromData(avatarImageByteArray);
+    }
+  } else {
+    // Use original data if empty
+    tmpPixmap.loadFromData(avatarImageByteArray);
+  }
+  
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label_2->setAlignment(Qt::AlignCenter);
+  ownavatar_label_2->setPixmap(tmpPixmap);
+  if (avatarImageByteArray.isEmpty()) {
+    ownavatar_label_2->clear();
+  }
+  
   this->close();
 }
 
@@ -893,11 +941,14 @@ void form_settingsgui::clicked_SelectAvatarImage() {
     tmpPixmap.save(&buffer, "PNG");
     ownavatar_label->setAlignment(Qt::AlignCenter);
     ownavatar_label->setPixmap(tmpPixmap);
+    ownavatar_label_2->setAlignment(Qt::AlignCenter);
+    ownavatar_label_2->setPixmap(tmpPixmap);
   }
 }
 void form_settingsgui::clicked_ClearAvatarImage() {
   avatarImageByteArray.clear();
   ownavatar_label->clear();
+  ownavatar_label_2->clear();
 }
 
 void form_settingsgui::setCustomStyleSheet(void) {
@@ -917,12 +968,20 @@ void form_settingsgui::clicked_sortingEnabled(bool enabled) {
   settings->setValue("SortingEnabled", enabled);
   settings->endGroup();
   settings->sync();
-  
-  // Enable/disable radio buttons based on checkbox state
-  radioButton_2->setEnabled(enabled);
-  radioButton_3->setEnabled(enabled);
-  radioButton_4->setEnabled(enabled);
-  radioButton_5->setEnabled(enabled);
+}
+
+void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
+  settings->beginGroup("Security");
+  settings->setValue("BlockAllUnknownUsers", checked);
+  settings->endGroup();
+  settings->sync();
+}
+
+void form_settingsgui::clicked_RequestAuthorization(bool checked) {
+  settings->beginGroup("Security");
+  settings->setValue("RequestAuthorization", checked);
+  settings->endGroup();
+  settings->sync();
 }
 
 void form_settingsgui::clicked_sortAlphabetically(bool checked) {
