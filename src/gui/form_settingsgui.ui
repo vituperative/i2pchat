@@ -2203,10 +2203,10 @@ p, li { white-space: pre-wrap; }
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox_5">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QCheckBox" name="checkBox_5">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2228,10 +2228,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QRadioButton" name="radioButton_2">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QRadioButton" name="radioButton_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2253,10 +2253,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QRadioButton" name="radioButton_3">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QRadioButton" name="radioButton_3">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2278,10 +2278,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QRadioButton" name="radioButton_4">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QRadioButton" name="radioButton_4">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2303,10 +2303,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QRadioButton" name="radioButton_5">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QRadioButton" name="radioButton_5">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
           <property name="minimumSize">
            <size>
             <width>0</width>

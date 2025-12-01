@@ -386,6 +386,33 @@ void CUserManager::changeUserPositionInUserList(int oldPos, int newPos) {
   emit signUserStatusChanged();
 }
 
+void CUserManager::sortUserList(int sortType) {
+  switch (sortType) {
+    case 0: // Sort alphabetically
+      std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
+        return a->getName().toLower() < b->getName().toLower();
+      });
+      break;
+    case 1: // Sort by date added (using connection status change as proxy)
+      std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
+        return a->getConnectionStatus() == ONLINE && b->getConnectionStatus() != ONLINE;
+      });
+      break;
+    case 2: // Sort by last communication (using connection status change as proxy)
+      std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
+        return a->getConnectionStatus() == ONLINE && b->getConnectionStatus() != ONLINE;
+      });
+      break;
+    case 3: // Sort by last online (using current online state as proxy) - REVERSED
+      std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
+        return a->getOnlineState() == USERONLINE && b->getOnlineState() != USERONLINE;
+      });
+      break;
+  }
+  saveUserList();
+  emit signUserStatusChanged();
+}
+
 bool CUserManager::deleteUserByI2PDestination(QString I2PDestination) {
   auto Him = this->getUserByI2P_Destination(I2PDestination);
   if (Him == NULL)

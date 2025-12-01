@@ -47,10 +47,21 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
           SLOT(clicked_openFile2()));
 
   connect(cmd_openFile_3, SIGNAL(clicked(bool)), this,
-          SLOT(clicked_openFile3()));
+           SLOT(clicked_openFile3()));
 
   connect(cmd_openFile_4, SIGNAL(clicked(bool)), this,
-          SLOT(clicked_openFile4()));
+           SLOT(clicked_openFile4()));
+
+  connect(checkBox_5, SIGNAL(clicked(bool)), this,
+           SLOT(clicked_sortingEnabled(bool)));
+  connect(radioButton_2, SIGNAL(clicked(bool)), this,
+           SLOT(clicked_sortAlphabetically(bool)));
+  connect(radioButton_3, SIGNAL(clicked(bool)), this,
+           SLOT(clicked_sortByDateAdded(bool)));
+  connect(radioButton_4, SIGNAL(clicked(bool)), this,
+           SLOT(clicked_sortByLastCommunication(bool)));
+  connect(radioButton_5, SIGNAL(clicked(bool)), this,
+           SLOT(clicked_sortByLastOnline(bool)));
 
   connect(cmd_openFile_5, SIGNAL(clicked(bool)), this,
           SLOT(clicked_openFile5()));
@@ -155,6 +166,27 @@ void form_settingsgui::loadSettings() {
 
     styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
   }
+
+  settings->beginGroup("UserList");
+  checkBox_5->setChecked(settings->value("SortingEnabled", false).toBool());
+  int sortType = settings->value("SortType", 0).toInt();
+  
+  // Set radio button states
+  radioButton_2->setChecked(sortType == 0);
+  radioButton_3->setChecked(sortType == 1);
+  radioButton_4->setChecked(sortType == 2);
+  radioButton_5->setChecked(sortType == 3);
+  
+  // Enable/disable radio buttons based on checkbox state
+  bool sortingEnabled = settings->value("SortingEnabled", false).toBool();
+  radioButton_2->setEnabled(sortingEnabled);
+  radioButton_3->setEnabled(sortingEnabled);
+  radioButton_4->setEnabled(sortingEnabled);
+  radioButton_5->setEnabled(sortingEnabled);
+  
+  settings->endGroup();
+
+  settings->beginGroup("Network");
 
   checkBox_AutoAcceptFiles->setChecked(
       settings->value("AutoAcceptFileReceive", false).toBool());
@@ -878,4 +910,61 @@ void form_settingsgui::setCustomStyleSheet(void) {
   settings->setValue("CustomStyleSheet", fileName);
   settings->endGroup();
   settings->sync();
+}
+
+void form_settingsgui::clicked_sortingEnabled(bool enabled) {
+  settings->beginGroup("UserList");
+  settings->setValue("SortingEnabled", enabled);
+  settings->endGroup();
+  settings->sync();
+  
+  // Enable/disable radio buttons based on checkbox state
+  radioButton_2->setEnabled(enabled);
+  radioButton_3->setEnabled(enabled);
+  radioButton_4->setEnabled(enabled);
+  radioButton_5->setEnabled(enabled);
+}
+
+void form_settingsgui::clicked_sortAlphabetically(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 0);
+    settings->endGroup();
+    settings->sync();
+    
+    mCore.getUserManager()->sortUserList(0);
+  }
+}
+
+void form_settingsgui::clicked_sortByDateAdded(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 1);
+    settings->endGroup();
+    settings->sync();
+    
+    mCore.getUserManager()->sortUserList(1);
+  }
+}
+
+void form_settingsgui::clicked_sortByLastCommunication(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 2);
+    settings->endGroup();
+    settings->sync();
+    
+    mCore.getUserManager()->sortUserList(2);
+  }
+}
+
+void form_settingsgui::clicked_sortByLastOnline(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 3);
+    settings->endGroup();
+    settings->sync();
+    
+    mCore.getUserManager()->sortUserList(3);
+  }
 }

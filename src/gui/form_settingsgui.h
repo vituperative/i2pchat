@@ -67,6 +67,12 @@ private slots:
   void clicked_Gender_Male(bool state);
   void clicked_Gender_Female(bool state);
 
+  void clicked_sortingEnabled(bool enabled);
+  void clicked_sortAlphabetically(bool checked);
+  void clicked_sortByDateAdded(bool checked);
+  void clicked_sortByLastCommunication(bool checked);
+  void clicked_sortByLastOnline(bool checked);
+
   void clicked_ChatMessageTextColor();
   void clicked_ChatMessageBold(bool t);
   void clicked_ChatMessageFont();
