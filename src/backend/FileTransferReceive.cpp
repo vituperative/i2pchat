@@ -80,11 +80,22 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core, CI2PStream &Stream,
   settings.endGroup();
   settings.sync();
 
-  if (AutoAcceptFileReceive == true) {
-    mCore.getUserManager()
-        ->getUserByI2P_Destination(Destination)
-        ->slotIncomingMessageFromSystem(
-            tr(" Auto-accepted download [%1]").arg(mFileName), true);
+  // Check per-user auto-download setting first, then global setting
+  CUser *theUser = mCore.getUserManager()->getUserByI2P_Destination(Destination);
+  bool shouldAutoAccept = false;
+  
+  if (theUser != NULL) {
+    shouldAutoAccept = theUser->getAutoDownloadEnabled();
+  }
+  
+  // If per-user setting is not enabled, fall back to global setting
+  if (!shouldAutoAccept) {
+    shouldAutoAccept = AutoAcceptFileReceive;
+  }
+  
+  if (shouldAutoAccept == true) {
+    theUser->slotIncomingMessageFromSystem(
+        tr(" Auto-accepted download [%1]").arg(mFileName), true);
 
     QDir dir(AutoAcceptedFilePath);
     if (dir.exists() == false) {
