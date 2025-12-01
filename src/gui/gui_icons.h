@@ -46,6 +46,7 @@
 #define ICON_USER_BLOCKED_YOU ":/icons/blocked.svg"
 #define ICON_USER_DELETE ":/icons/delete.svg"
 #define ICON_USER_DOWNLOAD ":/icons/download.svg"
+#define ICON_USER_DOWNLOAD_DISABLED ":/icons/download_disabled.svg"
 #define ICON_USER_DONT_DISTURB ":/icons/status_dnd.svg"
 #define ICON_USER_INVISIBLE ":/icons/status_invisible.svg"
 #define ICON_USER_OFFLINE ":/icons/status_offline.svg"

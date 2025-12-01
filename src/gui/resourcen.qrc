@@ -117,6 +117,7 @@
     <file>icons/debug.svg</file>
     <file>icons/delete.svg</file>
     <file>icons/download.svg</file>
+    <file>icons/download_disabled.svg</file>
     <file>icons/editcopy.svg</file>
     <file>icons/exit.svg</file>
     <file>icons/find.svg</file>
