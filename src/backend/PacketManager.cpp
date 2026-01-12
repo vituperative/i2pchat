@@ -53,14 +53,14 @@ void CPacketManager::checkifOnePacketIsCompleate() {
     bool OK = false;
     int iPacketLength = sPacketLength.toInt(&OK, 16);
     if (OK == false) {
-      qCritical() << "File\t" << __FILE__ << endl
-                  << "Line:\t" << __LINE__ << endl
+      qCritical() << "File\t" << __FILE__ << Qt::endl
+                  << "Line:\t" << __LINE__ << Qt::endl
                   << "Function:\t"
-                  << "CPacketManager::checkifOnePacketIsCompleate" << endl
+                  << "CPacketManager::checkifOnePacketIsCompleate" << Qt::endl
                   << "Message:\t"
-                  << "cant parse PacketLength" << endl
-                  << "StreamID: " << mID << endl
-                  << "sPacketLength: " << sPacketLength << endl;
+                  << "cant parse PacketLength" << Qt::endl
+                  << "StreamID: " << mID << Qt::endl
+                  << "sPacketLength: " << sPacketLength << Qt::endl;
 
       CI2PStream *stream = mConnectionManager.getStreamObjectByID(mID);
       if (stream != NULL) {

@@ -135,15 +135,15 @@ void CSessionController::slotReadFromSocket() {
           msgBox.setWindowModality(Qt::NonModal);
           msgBox.exec();
 
-          qCritical() << "File\t" << __FILE__ << endl
-                      << "Line:\t" << __LINE__ << endl
+          qCritical() << "File\t" << __FILE__ << Qt::endl
+                      << "Line:\t" << __LINE__ << Qt::endl
                       << "Function:\t"
-                      << "CStreamController::slotReadFromSocket()" << endl
+                      << "CStreamController::slotReadFromSocket()" << Qt::endl
                       << "Message:\t"
-                      << "Session: DUPLICATED_DEST" << endl
+                      << "Session: DUPLICATED_DEST" << Qt::endl
                       << "Only one Messenger per Destination,\nor SAMv3 "
                          "crashed (Tunnel will persist if I2PChat was closed)"
-                      << endl;
+                      << Qt::endl;
         }
 
         emit signSessionStreamStatusOK(false);

@@ -268,13 +268,13 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
   }*/
   // end Messages
   else {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "CProtocol::slotInputKnown" << endl
+               << "CProtocol::slotInputKnown" << Qt::endl
                << "Message:\t"
-               << "Unknown ProtocolInfoTag: " << ProtocolInfoTag << endl
-               << "Packet ignored" << endl;
+               << "Unknown ProtocolInfoTag: " << ProtocolInfoTag << Qt::endl
+               << "Packet ignored" << Qt::endl;
   }
 }
 
@@ -300,13 +300,13 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       bool OK = false;
       double versiond = version.toDouble(&OK);
       if (OK == false) {
-        qCritical() << "File\t" << __FILE__ << endl
-                    << "Line:\t" << __LINE__ << endl
+        qCritical() << "File\t" << __FILE__ << Qt::endl
+                    << "Line:\t" << __LINE__ << Qt::endl
                     << "Function:\t"
-                    << "CProtocol::slotInputUnknown" << endl
+                    << "CProtocol::slotInputUnknown" << Qt::endl
                     << "Message:\t"
-                    << "Can't convert QString to double" << endl
-                    << "QString:\t" << version << endl;
+                    << "Can't convert QString to double" << Qt::endl
+                    << "QString:\t" << version << Qt::endl;
       }
 
       // don't send the first packet if you have connected someone
@@ -348,27 +348,46 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
       // remove Firstpacket
       QByteArray Data2 = Data;
       Data2 = Data2.remove(0, Data.indexOf("\n") + 1);
-      if (mCore.getUserManager()->checkIfUserExistsByI2PDestination(
-              stream->getDestination()) == false) {
+       if (mCore.getUserManager()->checkIfUserExistsByI2PDestination(
+               stream->getDestination()) == false) {
 
-        if (versiond >= 0.3) {
-          mCore.getUserManager()->addNewUser("...identifying...",
-                                             stream->getDestination(), ID);
+          QSettings settings(mCore.getConfigPath() + "/application.ini",
+                             QSettings::IniFormat);
+          settings.beginGroup("Security");
+          bool blockAllUnknown = settings.value("BlockAllUnknownUsers", false).toBool();
+          bool requestAuth = settings.value("RequestAuthorization", true).toBool();
+          settings.endGroup();
+
+          if (blockAllUnknown) {
+            // Block all unknown users - destroy the stream
+            mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+            return;
+          }
+
+          if (requestAuth) {
+            // Emit signal for authorization request
+            emit mCore.signIncomingUserAuthorizationRequest(stream->getDestination(), ID, Data);
+            return; // Don't add user yet
+          }
+
+         if (versiond >= 0.3) {
+           mCore.getUserManager()->addNewUser("...identifying...",
+                                              stream->getDestination(), ID);
+         } else {
+           mCore.getUserManager()->addNewUser("Unknown",
+                                              stream->getDestination(), ID);
+         }
+
+         CUser *User = mCore.getUserManager()->getUserByI2P_Destination(
+             stream->getDestination());
+         User->setI2PStreamID(ID);
+         User->setProtocolVersion(version);
+         User->setConnectionStatus(ONLINE);
+         mCore.setStreamTypeToKnown(ID, Data2, false);
+         if (versiond >= 0.3) {
+           User->setReceivedNicknameToUserNickname();
+         }
         } else {
-          mCore.getUserManager()->addNewUser("Unknown",
-                                             stream->getDestination(), ID);
-        }
-
-        CUser *User = mCore.getUserManager()->getUserByI2P_Destination(
-            stream->getDestination());
-        User->setI2PStreamID(ID);
-        User->setProtocolVersion(version);
-        User->setConnectionStatus(ONLINE);
-        mCore.setStreamTypeToKnown(ID, Data2, false);
-        if (versiond >= 0.3) {
-          User->setReceivedNicknameToUserNickname();
-        }
-      } else {
         if (mCore.useThisChatConnection(stream->getDestination(), ID) == true) {
           CUser *User = mCore.getUserManager()->getUserByI2P_Destination(
               stream->getDestination());
@@ -510,13 +529,13 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
     break;
   }
   default: {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CProtocol::send" << endl
+                << "CProtocol::send" << Qt::endl
                 << "Message:\t"
                 << "unhandeld Command-TAG"
-                << "exit" << endl;
+                << "exit" << Qt::endl;
     exit(-1);
   }
   }
@@ -621,13 +640,13 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID,
     break;
   }
   default: {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CProtocol::send" << endl
+                << "CProtocol::send" << Qt::endl
                 << "Message:\t"
                 << "unhandeld Message-TAG"
-                << "exit" << endl;
+                << "exit" << Qt::endl;
 
     exit(-1);
   }

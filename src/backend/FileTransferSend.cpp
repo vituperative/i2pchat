@@ -75,14 +75,14 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   using namespace FileTransferProtocol;
 
   if (mStreamID != ID) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CFileTransferSend::slotStreamStatus" << endl
+                << "CFileTransferSend::slotStreamStatus" << Qt::endl
                 << "Message:\t"
-                << "mStreamID!=ID WTF" << endl
-                << "mStreamID:\t" << mStreamID << endl
-                << "ID:\t" << ID << endl;
+                << "mStreamID!=ID WTF" << Qt::endl
+                << "mStreamID:\t" << mStreamID << Qt::endl
+                << "ID:\t" << ID << Qt::endl;
   }
 
   switch (result) {
@@ -268,13 +268,13 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
     mCurrentPacketSize = MAXPACKETSIZE;
     SendFile_v0dot3();
   } else {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "CFileTransferSend::StartFileTransfer" << endl
+               << "CFileTransferSend::StartFileTransfer" << Qt::endl
                << "Message:\t"
                << "Unsupported Protocolversion:" << mUsingProtocolVersion
-               << endl;
+               << Qt::endl;
 
     mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
   }

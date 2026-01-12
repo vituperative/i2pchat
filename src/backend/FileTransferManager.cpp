@@ -132,13 +132,13 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
   }
   ProtocolVersionD = ProtocolVersion.toDouble(&OK);
   if (OK == false) {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << " CFileTransferManager::addNewFileReceive" << endl
+               << " CFileTransferManager::addNewFileReceive" << Qt::endl
                << "Message:\t"
-               << "Can't convert QString to double" << endl
-               << "QString:\t" << ProtocolVersion << endl;
+               << "Can't convert QString to double" << Qt::endl
+               << "QString:\t" << ProtocolVersion << Qt::endl;
 
     // abort the Filereceive
     if (ProtocolVersion == "0.1" || ProtocolVersion == "0.2") {

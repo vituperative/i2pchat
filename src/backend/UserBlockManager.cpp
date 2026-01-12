@@ -74,9 +74,9 @@ void CUserBlockManager::saveBlockListe() {
     i.next();
     CUserBlockEntity *currentEntity = i.value();
 
-    out << "NickName:\t" << currentEntity->mNickName << endl
-        << "Destination:\t" << currentEntity->mDestination << endl
-        << "BlockDate:\t" << currentEntity->mBlockDate << endl;
+    out << "NickName:\t" << currentEntity->mNickName << Qt::endl
+        << "Destination:\t" << currentEntity->mDestination << Qt::endl
+        << "BlockDate:\t" << currentEntity->mBlockDate << Qt::endl;
   }
   out.flush();
   file.close();
@@ -91,14 +91,14 @@ void CUserBlockManager::addNewBlockEntity(const QString NickName,
 
   if (mUserBlockMap.contains(Destination) == true) {
     // do nothing allready blocked ?
-    qDebug() << "File\t" << __FILE__ << endl
-             << "Line:\t" << __LINE__ << endl
+    qDebug() << "File\t" << __FILE__ << Qt::endl
+             << "Line:\t" << __LINE__ << Qt::endl
              << "Function:\t"
-             << "cUserBlockManager::addNewBlockEntity" << endl
+             << "cUserBlockManager::addNewBlockEntity" << Qt::endl
              << "Message:\t"
-             << "Destination: " << Destination << endl
-             << "is allready in the Blocklist" << endl
-             << "Action Aborted" << endl;
+             << "Destination: " << Destination << Qt::endl
+             << "is allready in the Blocklist" << Qt::endl
+             << "Action Aborted" << Qt::endl;
   } else {
     if (BlockDate.isEmpty()) {
       if (BlockDate.isEmpty()) {
@@ -155,14 +155,14 @@ void CUserBlockManager::removeBlockEntity(const QString Destination,
     }
 
   } else {
-    qDebug() << "File\t" << __FILE__ << endl
-             << "Line:\t" << __LINE__ << endl
+    qDebug() << "File\t" << __FILE__ << Qt::endl
+             << "Line:\t" << __LINE__ << Qt::endl
              << "Function:\t"
-             << "CUserBlockManager::removeBlockEntity" << endl
+             << "CUserBlockManager::removeBlockEntity" << Qt::endl
              << "Message:\t"
-             << "Destination: " << Destination << endl
-             << "isn't in the Blocklist" << endl
-             << "Action Aborted" << endl;
+             << "Destination: " << Destination << Qt::endl
+             << "isn't in the Blocklist" << Qt::endl
+             << "Action Aborted" << Qt::endl;
   }
   saveBlockListe();
 }

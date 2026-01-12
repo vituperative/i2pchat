@@ -38,15 +38,15 @@ CHttpOverStreamObject::~CHttpOverStreamObject() {
 void CHttpOverStreamObject::slotStreamStatus(
     const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
   if (mStreamID != ID) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CHttpOverStreamObject::slotStreamStatus" << endl
-                << "Stream-Message:\t" << Message << endl
+                << "CHttpOverStreamObject::slotStreamStatus" << Qt::endl
+                << "Stream-Message:\t" << Message << Qt::endl
                 << "Message:\t"
-                << "mStreamID!=ID WTF" << endl
-                << "mStreamID:\t" << mStreamID << endl
-                << "ID:\t" << ID << endl;
+                << "mStreamID!=ID WTF" << Qt::endl
+                << "mStreamID:\t" << mStreamID << Qt::endl
+                << "ID:\t" << ID << Qt::endl;
   }
 
   switch (result) {
@@ -90,14 +90,14 @@ void CHttpOverStreamObject::slotStreamStatus(
 
 void CHttpOverStreamObject::slotDataReceived(const qint32 ID, QByteArray t) {
   if (mStreamID != ID) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CHttpOverStreamObject::slotDataReceived" << endl
+                << "CHttpOverStreamObject::slotDataReceived" << Qt::endl
                 << "Message:\t"
-                << "mStreamID!=ID WTF" << endl
-                << "mStreamID:\t" << mStreamID << endl
-                << "ID:\t" << ID << endl;
+                << "mStreamID!=ID WTF" << Qt::endl
+                << "mStreamID:\t" << mStreamID << Qt::endl
+                << "ID:\t" << ID << Qt::endl;
   }
 
   mDataReceived.append(t);

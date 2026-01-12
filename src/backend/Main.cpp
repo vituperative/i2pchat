@@ -181,10 +181,10 @@ int main(int argc, char *argv[]) {
 
     QSettings settings(configPath + "/application.ini", QSettings::IniFormat);
     // OKEY, OLD AUTHOR SET CURRENT_STYLE IN GENERAL SECTION. COOL.
-    auto CurrentStyle =
-        settings.value("General/current_Style", "Fusion").toString();
-    auto CustomStyleSheet =
-        settings.value("Style/CustomStyleSheet", "").toString();
+    settings.beginGroup("General");
+    auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
+    auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
+    settings.endGroup();
     qDebug() << "Curent style: " << CurrentStyle;
     mainForm->setStyle(QStyleFactory::create(CurrentStyle));
     if (CustomStyleSheet.size() > 1)
@@ -263,5 +263,5 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
   QFile outFile(debugLogDir + "/DebugLog.txt");
   outFile.open(QIODevice::WriteOnly | QIODevice::Append);
   QTextStream ts(&outFile);
-  ts << txt << endl;
+  ts << txt << Qt::endl;
 }

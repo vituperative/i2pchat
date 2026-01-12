@@ -290,13 +290,13 @@ double CUser::getProtocolVersion_D() const {
   bool tmp = mProtocolVersion.toDouble(&OK);
 
   if (OK == false) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CUser::getProtocolVersion_D" << endl
+                << "CUser::getProtocolVersion_D" << Qt::endl
                 << "Message:\t"
-                << "Can't convert QString to double" << endl
-                << "QString:\t" << mProtocolVersion << endl;
+                << "Can't convert QString to double" << Qt::endl
+                << "QString:\t" << mProtocolVersion << Qt::endl;
   }
   return tmp;
 }
@@ -306,13 +306,13 @@ double CUser::getMaxProtocolVersionFiletransfer_D() const {
   double tmp = mMaxProtocolVersionFiletransfer.toDouble(&OK);
 
   if (OK == false) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CUser::getMaxProtocolVersionFiletransfer_D" << endl
+                << "CUser::getMaxProtocolVersionFiletransfer_D" << Qt::endl
                 << "Message\t"
-                << "Can't convert QString to double" << endl
-                << "QString:\t" << mMaxProtocolVersionFiletransfer << endl;
+                << "Can't convert QString to double" << Qt::endl
+                << "QString:\t" << mMaxProtocolVersionFiletransfer << Qt::endl;
   }
   return tmp;
 }
@@ -322,13 +322,13 @@ double CUser::getMinProtocolVersionFiletransfer_D() const {
   double tmp = mMinProtocolVersionFiletransfer.toDouble(&OK);
 
   if (OK == false) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CUser::getMinProtocolVersionFiletransfer_D" << endl
+                << "CUser::getMinProtocolVersionFiletransfer_D" << Qt::endl
                 << "Message:\t"
-                << "Can't convert QString to double" << endl
-                << "QString:\t" << mMinProtocolVersionFiletransfer << endl;
+                << "Can't convert QString to double" << Qt::endl
+                << "QString:\t" << mMinProtocolVersionFiletransfer << Qt::endl;
   }
   return tmp;
 }
@@ -356,11 +356,11 @@ void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, QString value) {
     bool OK = false;
     mReceivedUserInfos.Age = value.toInt(&OK);
     if (OK == false) {
-      qCritical() << "File\t" << __FILE__ << endl
-                  << "Line:\t" << __LINE__ << endl
+      qCritical() << "File\t" << __FILE__ << Qt::endl
+                  << "Line:\t" << __LINE__ << Qt::endl
                   << "Function:\t"
-                  << "Can't convert QString to qint32" << endl
-                  << "QString:\t" << value << endl;
+                  << "Can't convert QString to qint32" << Qt::endl
+                  << "QString:\t" << value << Qt::endl;
     }
     break;
   }
@@ -369,12 +369,12 @@ void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, QString value) {
     break;
   }
   default: {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "CUser::setReceivedUserInfos" << endl
+               << "CUser::setReceivedUserInfos" << Qt::endl
                << "Message:\t"
-               << "unknown Tag" << endl;
+               << "unknown Tag" << Qt::endl;
     break;
   }
   }
@@ -384,12 +384,12 @@ void CUser::setReceivedNicknameToUserNickname() {
   if (getProtocolVersion_D() >= 0.3) {
     mReceivedNicknameToUserNickname = true;
   } else {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "setReceivedNicknameToUserNickname" << endl
+               << "setReceivedNicknameToUserNickname" << Qt::endl
                << "Message:\t"
-               << "Protocolversion <0.3, action ignored" << endl;
+               << "Protocolversion <0.3, action ignored" << Qt::endl;
   }
 }
 
@@ -411,12 +411,12 @@ void CUser::setReplaceB32WithB64(QString b64Dest) {
     QString &dest = const_cast<QString &>(mI2PDestination);
     dest = b64Dest;
   } else {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CUser::setReplaceB32WithB64" << endl
+                << "CUser::setReplaceB32WithB64" << Qt::endl
                 << "Message:\t"
-                << "Current Destination is not a b32 dest" << endl;
+                << "Current Destination is not a b32 dest" << Qt::endl;
   }
 }
 
