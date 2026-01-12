@@ -32,6 +32,8 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
 
   settings =
       new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings->setIniCodec("UTF-8");
+  settings->setDefaultFormat(QSettings::IniFormat);
 
   loadqss();
   styleCombo->addItems(QStyleFactory::keys());
@@ -139,9 +141,9 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
   connect(requestAuthcheckBox, SIGNAL(clicked(bool)), this,
           SLOT(clicked_RequestAuthorization(bool)));
   
-  // TODO: Add this button from ui file. (QtCreator, i dont have it)
-  // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
-  // setCustomStyleSheet() ) );
+    // TODO: Add this button from ui file. (QtCreator, i dont have it)
+    // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
+    // setCustomStyleSheet() ) );
 }
 
 form_settingsgui::~form_settingsgui() {
@@ -174,25 +176,26 @@ void form_settingsgui::loadSettings() {
 
     styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
   }
+  settings->endGroup();
 
   settings->beginGroup("UserList");
   checkBox_5->setChecked(settings->value("SortingEnabled", false).toBool());
   int sortType = settings->value("SortType", 0).toInt();
   
-  // Set radio button states
+    // Set radio button states
   radioButton_2->setChecked(sortType == 0);
   radioButton_3->setChecked(sortType == 1);
   radioButton_4->setChecked(sortType == 2);
   radioButton_5->setChecked(sortType == 3);
   
-  // Enable/disable radio buttons based on checkbox state
+    // Enable/disable radio buttons based on checkbox state
   bool sortingEnabled = settings->value("SortingEnabled", false).toBool();
   radioButton_2->setEnabled(sortingEnabled);
   radioButton_3->setEnabled(sortingEnabled);
   radioButton_4->setEnabled(sortingEnabled);
   radioButton_5->setEnabled(sortingEnabled);
   
-   settings->endGroup();
+    settings->endGroup();
 
     // Apply saved sorting settings
     if (sortingEnabled) {
@@ -220,9 +223,9 @@ void form_settingsgui::loadSettings() {
 
    styleSheetCombo->setCurrentIndex(styleSheetCombo->findText(
        settings->value("current_Style_sheet", "Default").toString()));
-   settings->endGroup();
+    settings->endGroup();
 
-   settings->beginGroup("Network");
+    settings->beginGroup("Network");
    lineEdit_3->setText(settings->value("SamHost", "127.0.0.1").toString());
    lineEdit->setText(settings->value("TunnelName", "I2PChat").toString());
   spinBox_10->setValue(settings->value("SamPort", "7656").toInt());
@@ -299,7 +302,7 @@ void form_settingsgui::loadSettings() {
 
   settings->endGroup();
 
-  settings->beginGroup("User-Infos");
+  settings->beginGroup("User");
   txt_Nickname->setMaxLength(12);
   txt_Nickname->setText(settings->value("Nickname", "").toString());
   spinAge->setValue(settings->value("Age", "0").toInt());
@@ -319,16 +322,17 @@ void form_settingsgui::loadSettings() {
 
   QPixmap tmpPixmap;
   avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
-  tmpPixmap.loadFromData(avatarImageByteArray);
+
+  if (avatarImageByteArray.isEmpty()) {
+    tmpPixmap.load(":/icons/silhouette.svg");
+  } else {
+    tmpPixmap.loadFromData(avatarImageByteArray);
+  }
+
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
   ownavatar_label_2->setAlignment(Qt::AlignCenter);
   ownavatar_label_2->setPixmap(tmpPixmap);
-  
-  // Clear any default pixmap that might be set in UI
-  if (avatarImageByteArray.isEmpty()) {
-    ownavatar_label_2->clear();
-  }
 
   settings->endGroup();
 
@@ -349,7 +353,7 @@ void form_settingsgui::loadSettings() {
                                       QTextCursor::MoveAnchor);
   txtShowCurrentChatStyle->textCursor().clearSelection();
 
-  // override remote chatmessage settings -> font/color
+    // override remote chatmessage settings -> font/color
   chatOverrideBox->setChecked(settings->value("Override", false).toBool());
   if (chatOverrideBox->isChecked() == false) {
     txtOverrideRemote->selectAll();
@@ -382,14 +386,14 @@ void form_settingsgui::loadSettings() {
   checkboxUserEvents->setChecked(
       settings->value("LogOnlineStatesOfUsers", true).toBool());
 
-  // TODO: Connection timeout from I2PStream.cpp or nuke ?
-  // spinBox_maxACK->setMinimum(20);
-  // spinBox_maxACK->setMaximum(180);
-  // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
+    // TODO: Connection timeout from I2PStream.cpp or nuke ?
+    // spinBox_maxACK->setMinimum(20);
+    // spinBox_maxACK->setMaximum(180);
+    // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
 
-   settings->endGroup();
+    settings->endGroup();
 
-   settings->beginGroup("Security");
+    settings->beginGroup("Security");
    if (settings->value("BlockStyle", "Normal").toString() == "Normal") {
      check_BlockNormal->setChecked(true);
    } else {
@@ -413,7 +417,7 @@ void form_settingsgui::loadSettings() {
    blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
    requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", true).toBool());
    requestAuthcheckBox->setEnabled(!blockallcheckBox->isChecked());
-   settings->endGroup();
+    settings->endGroup();
 
    if (!mCore.getMyDestination().isEmpty()) {
     size_t buffersize = 2048;
@@ -443,7 +447,7 @@ void form_settingsgui::loadSettings() {
          Q_NULLPTR));
    }
 
-   settings->beginGroup("Usersearch");
+    settings->beginGroup("Usersearch");
   if (txt_Nickname->text().isEmpty() == false &&
       (settings->value("Enabled", true).toBool()) == true) {
     check_UserSearchEnable->setChecked(true);
@@ -464,91 +468,94 @@ void form_settingsgui::loadSettings() {
 }
 void form_settingsgui::saveSettings() {
   settings->beginGroup("General");
-  settings->setValue("Debug_Max_Message_count", spinBox->value());
-  settings->setValue("Waittime_between_rechecking_offline_users",
+    settings->setValue("Debug_Max_Message_count", spinBox->value());
+    settings->setValue("Waittime_between_rechecking_offline_users",
                      OfflineChkSpinBox->value() * 1000);
-  settings->setValue("current_Style", styleCombo->currentText());
-  settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
-  settings->setValue("AutoAcceptFileReceive",
+    settings->setValue("current_Style", styleCombo->currentText());
+    settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
+    settings->setValue("AutoAcceptFileReceive",
                      checkBox_AutoAcceptFiles->isChecked());
-  settings->setValue("IncomingFileFolder", txt_IncomingFileFolder->text());
-  settings->setValue("UseIncomingSubFolderForEveryUser",
+    settings->setValue("IncomingFileFolder", txt_IncomingFileFolder->text());
+    settings->setValue("UseIncomingSubFolderForEveryUser",
                      checkBox_Subfolders->isChecked());
-  settings->setValue("DebugLogging", checkBox_DebugLog->isChecked());
+    settings->setValue("DebugLogging", checkBox_DebugLog->isChecked());
   settings->endGroup();
 
   settings->beginGroup("Network");
-  settings->setValue("SamHost", lineEdit_3->text());
-  settings->setValue("TunnelName", lineEdit->text());
-  settings->setValue("SamPort", spinBox_10->value());
-  // Inbound options
-  settings->setValue("inbound.quantity", spinBox_5->value());
-  settings->setValue("inbound.backupQuantity", spinBox_6->value());
-  settings->setValue("inbound.length", spinBox_4->value());
-  // Outpound options
-  settings->setValue("outbound.quantity", spinBox_9->value());
-  settings->setValue("outbound.backupQuantity", spinBox_7->value());
-  settings->setValue("outbound.length", spinBox_8->value());
+    settings->setValue("SamHost", lineEdit_3->text());
+    settings->setValue("TunnelName", lineEdit->text());
+    settings->setValue("SamPort", spinBox_10->value());
+    // Inbound options
+    settings->setValue("inbound.quantity", spinBox_5->value());
+    settings->setValue("inbound.backupQuantity", spinBox_6->value());
+    settings->setValue("inbound.length", spinBox_4->value());
+    // Outpound options
+    settings->setValue("outbound.quantity", spinBox_9->value());
+    settings->setValue("outbound.backupQuantity", spinBox_7->value());
+    settings->setValue("outbound.length", spinBox_8->value());
 
-  // Signature_type
-  settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());
+    // Signature_type
+    settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());
   settings->endGroup();
 
   settings->beginGroup("Sound");
   settings->beginGroup("Enable");
-  settings->setValue("User_go_Online", checkBoxSound->isChecked());
-  settings->setValue("User_go_Offline", checkBoxSound_2->isChecked());
-  settings->setValue("FileSend_Finished", checkBoxSound_3->isChecked());
-  settings->setValue("FileReceive_Incoming", checkBoxSound_4->isChecked());
-  settings->setValue("FileReceive_Finished", checkBoxSound_5->isChecked());
-  settings->setValue("NewChatMessage", checkBoxSound_6->isChecked());
+    settings->setValue("User_go_Online", checkBoxSound->isChecked());
+    settings->setValue("User_go_Offline", checkBoxSound_2->isChecked());
+    settings->setValue("FileSend_Finished", checkBoxSound_3->isChecked());
+    settings->setValue("FileReceive_Incoming", checkBoxSound_4->isChecked());
+    settings->setValue("FileReceive_Finished", checkBoxSound_5->isChecked());
+    settings->setValue("NewChatMessage", checkBoxSound_6->isChecked());
   settings->endGroup();
   settings->beginGroup("SoundFilePath");
-  settings->setValue("User_go_Online", txt_SoundFile->text());
-  settings->setValue("User_go_Offline", txt_SoundFile2->text());
-  settings->setValue("FileSend_Finished", txt_SoundFile3->text());
-  settings->setValue("FileReceive_Incoming", txt_SoundFile4->text());
-  settings->setValue("FileReceive_Finished", txt_SoundFile5->text());
-  settings->setValue("NewChatMessage", txt_SoundFile6->text());
+    settings->setValue("User_go_Online", txt_SoundFile->text());
+    settings->setValue("User_go_Offline", txt_SoundFile2->text());
+    settings->setValue("FileSend_Finished", txt_SoundFile3->text());
+    settings->setValue("FileReceive_Incoming", txt_SoundFile4->text());
+    settings->setValue("FileReceive_Finished", txt_SoundFile5->text());
+    settings->setValue("NewChatMessage", txt_SoundFile6->text());
   settings->endGroup();
   settings->endGroup();
 
   settings->beginGroup("Style"); // application.ini
-  // settings->setValue("CurrentStyle", "Fusion");
-  settings->setValue("CustomStyleSheet", "");
-   settings->endGroup();
+    // settings->setValue("CurrentStyle", "Fusion");
+    settings->setValue("CustomStyleSheet", "");
+    settings->endGroup();
 
-   settings->beginGroup("UserDetails");
-   settings->setValue("Nickname", txt_Nickname->text());
-   settings->setValue("Age", spinAge->value());
-   if (checkGender_Male->isChecked() == true) {
-     settings->setValue("Gender", "Male");
-   } else if (checkGender_Female->isChecked() == true) {
-     settings->setValue("Gender", "Female");
-   } else {
-     settings->setValue("Gender", "");
-   }
-   settings->setValue("Interests", txt_Interests->toPlainText());
-   settings->setValue("AvatarBinaryImage", avatarImageByteArray);
-   settings->endGroup();
-   
-   settings->beginGroup("Chat");
-  settings->setValue("DefaultFont",
+    settings->beginGroup("User");
+    settings->setValue("Nickname", txt_Nickname->text());
+    settings->setValue("Age", spinAge->value());
+    if (checkGender_Male->isChecked() == true) {
+      settings->setValue("Gender", "Male");
+    } else if (checkGender_Female->isChecked() == true) {
+      settings->setValue("Gender", "Female");
+    } else {
+      settings->setValue("Gender", "");
+    }
+    settings->setValue("Interests", txt_Interests->toPlainText());
+    settings->setValue("AvatarBinaryImage", avatarImageByteArray);
+    settings->endGroup();
+    settings->sync();
+    
+    qDebug() << "saveSettings: sync complete";
+    
+    settings->beginGroup("Chat");
+    settings->setValue("DefaultFont",
                      txtShowCurrentChatStyle->currentFont().toString());
-  settings->setValue("DefaultColor",
+    settings->setValue("DefaultColor",
                      txtShowCurrentChatStyle->textColor().name());
 
-  // override remoute chatmessageSettings Font/Color
-  settings->setValue("Override", chatOverrideBox->isChecked());
-  settings->setValue("FontForOverwrite",
+    // override remoute chatmessageSettings Font/Color
+    settings->setValue("Override", chatOverrideBox->isChecked());
+    settings->setValue("FontForOverwrite",
                      txtOverrideRemote->currentFont().toString());
-  settings->setValue("ColorForOverwrite",
+    settings->setValue("ColorForOverwrite",
                      txtOverrideRemote->textColor().name());
-  settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
-  settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
-   settings->endGroup();
+    settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
+    settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
+    settings->endGroup();
 
-   settings->beginGroup("Security");
+    settings->beginGroup("Security");
    if (check_BlockInvisible->isChecked() == true) {
      settings->setValue("BlockStyle", "Invisible");
    } else {
@@ -564,34 +571,35 @@ void form_settingsgui::saveSettings() {
    } else {
      settings->setValue("HideWebProfileWhenInvisible", "False");
    }
-   settings->setValue("BlockAllUnknownUsers", blockallcheckBox->isChecked());
-   settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
-   settings->endGroup();
+    settings->setValue("BlockAllUnknownUsers", blockallcheckBox->isChecked());
+    settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
+    settings->endGroup();
    settings->sync();
 
    // TODO: DHT implementation
   settings->beginGroup("Usersearch");
-  settings->setValue("Enabled", check_UserSearchEnable->isChecked());
-  settings->setValue("Debug_Max_Message_count",
+    settings->setValue("Enabled", check_UserSearchEnable->isChecked());
+    settings->setValue("Debug_Max_Message_count",
                      spinBox_MaxLogMsgUserSearch->value());
-  settings->setValue("ReAnnounceTimerInHours",
+    settings->setValue("ReAnnounceTimerInHours",
                      spinBox_ReAnnounceUserSearch->value());
-  settings->endGroup();
+    settings->endGroup();
 
-  settings->sync();
-  mCore.loadUserInfos();
-  mCore.getUserManager()->avatarImageChanged();
+   settings->sync();
+   mCore.loadUserInfos();
+   mCore.getUserManager()->avatarImageChanged();
+   
+   // Force update nickname display in main window
+   emit mCore.signNicknameChanged();
   
-  // Force update nickname display in main window
-  emit mCore.signNicknameChanged();
-  
-  // Refresh avatar display in config panel AFTER avatar update signals have been sent
+     // Refresh avatar display in config panel AFTER avatar update signals have been sent
   QPixmap tmpPixmap;
   avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
-  
-  // Decode B64 string to raw binary data if needed
-  if (!avatarImageByteArray.isEmpty()) {
-    // Check if data is B64 encoded by trying to decode
+
+  if (avatarImageByteArray.isEmpty()) {
+    tmpPixmap.load(":/icons/silhouette.svg");
+  } else {
+    // Decode B64 string to raw binary data if needed
     QByteArray decodedData = QByteArray::fromBase64(avatarImageByteArray);
     if (!decodedData.isEmpty()) {
       // Use decoded data if successful
@@ -600,18 +608,12 @@ void form_settingsgui::saveSettings() {
       // Fall back to original data if decoding fails
       tmpPixmap.loadFromData(avatarImageByteArray);
     }
-  } else {
-    // Use original data if empty
-    tmpPixmap.loadFromData(avatarImageByteArray);
   }
-  
+
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
   ownavatar_label_2->setAlignment(Qt::AlignCenter);
   ownavatar_label_2->setPixmap(tmpPixmap);
-  if (avatarImageByteArray.isEmpty()) {
-    ownavatar_label_2->clear();
-  }
   
   this->close();
 }
@@ -625,8 +627,8 @@ void form_settingsgui::on_styleSheetCombo_activated(const QString &sheetName) {
 }
 
 void form_settingsgui::loadStyleSheet(const QString &sheetName) {
-  //
-  // external Stylesheets
+    //
+    // external Stylesheets
   QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
   if (file.exists()) {
     file.open(QFile::ReadOnly);
@@ -707,7 +709,7 @@ void form_settingsgui::clicked_DestinationGenerate() {
   QSettings *settings =
       new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("Network");
-  settings->setValue("SamPrivKey", "");
+    settings->setValue("SamPrivKey", "");
   settings->endGroup();
   settings->sync();
   delete settings;
@@ -956,8 +958,12 @@ void form_settingsgui::clicked_SelectAvatarImage() {
 }
 void form_settingsgui::clicked_ClearAvatarImage() {
   avatarImageByteArray.clear();
-  ownavatar_label->clear();
-  ownavatar_label_2->clear();
+  QPixmap tmpPixmap;
+  tmpPixmap.load(":/icons/silhouette.svg");
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label_2->setAlignment(Qt::AlignCenter);
+  ownavatar_label_2->setPixmap(tmpPixmap);
 }
 
 void form_settingsgui::setCustomStyleSheet(void) {
@@ -967,25 +973,25 @@ void form_settingsgui::setCustomStyleSheet(void) {
                                    tr("StyleSheet(*.css *.qss *.txt)"));
   loadStyleSheet(fileName);
   settings->beginGroup("Style");
-  settings->setValue("CustomStyleSheet", fileName);
+    settings->setValue("CustomStyleSheet", fileName);
   settings->endGroup();
   settings->sync();
 }
 
 void form_settingsgui::clicked_sortingEnabled(bool enabled) {
   settings->beginGroup("UserList");
-  settings->setValue("SortingEnabled", enabled);
+    settings->setValue("SortingEnabled", enabled);
   settings->endGroup();
   settings->sync();
 }
 
 void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
   settings->beginGroup("Security");
-  settings->setValue("BlockAllUnknownUsers", checked);
+    settings->setValue("BlockAllUnknownUsers", checked);
   settings->endGroup();
   settings->sync();
   
-  // If blocking all unknown users, disable request authorization
+    // If blocking all unknown users, disable request authorization
   requestAuthcheckBox->setEnabled(!checked);
   if (checked) {
     requestAuthcheckBox->setChecked(false);
@@ -994,7 +1000,7 @@ void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
 
 void form_settingsgui::clicked_RequestAuthorization(bool checked) {
   settings->beginGroup("Security");
-  settings->setValue("RequestAuthorization", checked);
+    settings->setValue("RequestAuthorization", checked);
   settings->endGroup();
   settings->sync();
 }

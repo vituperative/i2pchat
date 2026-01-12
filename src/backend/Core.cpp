@@ -33,7 +33,8 @@
 
 CCore::CCore(QString configPath) {
   mConfigPath = configPath;
-
+  mCurrentOnlineStatus = User::USEROFFLINE;  // Initialize immediately
+  
   mDebugMessageHandler = new CDebugMessageManager("General", configPath);
   mSoundManager = new CSoundManager(mConfigPath);
 
@@ -85,6 +86,7 @@ CCore::CCore(QString configPath) {
   mProtocol = new CProtocol(*this);
   this->mCurrentOnlineStatus = User::USEROFFLINE;
 
+  qDebug() << "CCore constructor: calling loadUserInfos";
   loadUserInfos();
   /*
       settings.beginGroup("Usersearch");
@@ -269,19 +271,27 @@ QString CCore::calcSessionOptionString() const {
 void CCore::init() {
   using namespace SESSION_ENUMS;
 
+  qDebug() << "CCore::init() called";
   this->mMyDestination = "";
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings.beginGroup("Network");
 
+  QString SamHost = settings.value("SamHost", "127.0.0.1").toString();
+  QString SamPort = settings.value("SamPort", "7656").toString();
   QString SamPrivKey = settings.value("SamPrivKey", "").toString();
+  
+  qDebug() << "CCore::init() - SamHost:" << SamHost << "SamPort:" << SamPort << "HasPrivKey:" << !SamPrivKey.isEmpty();
 
   if (mConnectionManager->isComponentStopped()) {
+    qDebug() << "CCore::init() - Connection manager stopped, restarting...";
     mConnectionManager->doReStart();
   }
 
+  qDebug() << "CCore::init() - Creating session...";
   mConnectionManager->doCreateSession(STREAM, SamPrivKey,
                                       calcSessionOptionString());
+  qDebug() << "CCore::init() - Session create called";
 
   settings.endGroup();
   settings.sync();
@@ -557,12 +567,16 @@ ONLINESTATE CCore::getOnlineStatus() const {
 }
 
 void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
+  qDebug() << "setOnlineStatus: newStatus =" << newStatus << "currentStatus =" << mCurrentOnlineStatus;
+  
   if (mCurrentOnlineStatus == newStatus)
     return;
 
   if (mCurrentOnlineStatus == USEROFFLINE) {
+    qDebug() << "setOnlineStatus: Transitioning from OFFLINE, storing next status =" << newStatus;
     mNextOnlineStatus = newStatus;
     mCurrentOnlineStatus = USERTRYTOCONNECT;
+    qDebug() << "setOnlineStatus: Calling init()...";
     init();
     emit signOnlineStatusChanged();
     return;
@@ -797,8 +811,9 @@ bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
 
 void CCore::loadUserInfos() {
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.sync();
   
-  settings.beginGroup("UserDetails");
+  settings.beginGroup("User");
   QString savedNickname = settings.value("Nickname", "").toString();
   
   if (mUserInfos.Nickname != savedNickname) {
@@ -807,23 +822,7 @@ void CCore::loadUserInfos() {
   }
 
   if (mUserInfos.Nickname.isEmpty() == true) {
-    // generate random Nickname (8 Chars)
-
-    /*
-        const QString possibleCharacters(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-        const int randomStringLength = 8;
-
-        QString randomString;
-        for (int i = 0; i < randomStringLength; ++i) {
-          int index = qrand() % possibleCharacters.length();
-          QChar nextChar = possibleCharacters.at(index);
-          randomString.append(nextChar);
-        }
-    */
     mUserInfos.Nickname = "Undefined";
-
-    settings.setValue("Nickname", mUserInfos.Nickname);
     emit signNicknameChanged();
 
     QMessageBox *msgBox = new QMessageBox(NULL);
