@@ -20,6 +20,7 @@
 #ifndef FORM_MAIN_H
 #define FORM_MAIN_H
 
+
 #include <QClipboard>
 #include <QContextMenuEvent>
 #include <QCursor>
@@ -118,10 +119,11 @@ private slots:
   void onlineComboBoxChanged();
   void toggleVisibility(QSystemTrayIcon::ActivationReason e);
   void toggleVisibilitycontextmenu();
-  void OnlineStateChanged();
-  //
-signals:
-  void changeAllowIncoming(bool);
+   void OnlineStateChanged();
+   void incomingUserAuthorizationRequest(QString destination, int streamID, QByteArray data);
+   //
+ signals:
+   void changeAllowIncoming(bool);
 
 private:
   void initStyle();

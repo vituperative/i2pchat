@@ -22,6 +22,7 @@
 #include "Core.h"
 #include "UserBlockManager.h"
 #include <QFileDialog>
+#include <QDebug>
 
 form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
                                    Qt::WindowFlags flags)
@@ -191,34 +192,39 @@ void form_settingsgui::loadSettings() {
   radioButton_4->setEnabled(sortingEnabled);
   radioButton_5->setEnabled(sortingEnabled);
   
-  settings->endGroup();
+   settings->endGroup();
 
-  settings->beginGroup("Network");
+    // Apply saved sorting settings
+    if (sortingEnabled) {
+      mCore.getUserManager()->sortUserList(sortType);
+    }
 
-  checkBox_AutoAcceptFiles->setChecked(
-      settings->value("AutoAcceptFileReceive", false).toBool());
-  if (checkBox_AutoAcceptFiles->isChecked() == true) {
-    cmd_Downloads->setEnabled(true);
-    checkBox_Subfolders->setChecked(
-        settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
-    txt_IncomingFileFolder->setReadOnly(false);
-    txt_IncomingFileFolder->setEnabled(true);
-  } else {
-    checkBox_Subfolders->setDisabled(true);
-    txt_IncomingFileFolder->setReadOnly(true); // no workee :(
-  }
+    settings->beginGroup("General");
 
-  txt_IncomingFileFolder->setText(
-      settings->value("IncomingFileFolder", mConfigPath + "/Incoming")
-          .toString());
+   checkBox_AutoAcceptFiles->setChecked(
+       settings->value("AutoAcceptFileReceive", false).toBool());
+   if (checkBox_AutoAcceptFiles->isChecked() == true) {
+     cmd_Downloads->setEnabled(true);
+     checkBox_Subfolders->setChecked(
+         settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
+     txt_IncomingFileFolder->setReadOnly(false);
+     txt_IncomingFileFolder->setEnabled(true);
+   } else {
+     checkBox_Subfolders->setDisabled(true);
+     txt_IncomingFileFolder->setReadOnly(true); // no workee :(
+   }
 
-  styleSheetCombo->setCurrentIndex(styleSheetCombo->findText(
-      settings->value("current_Style_sheet", "Default").toString()));
-  settings->endGroup();
+   txt_IncomingFileFolder->setText(
+       settings->value("IncomingFileFolder", mConfigPath + "/Incoming")
+           .toString());
 
-  settings->beginGroup("Network");
-  lineEdit_3->setText(settings->value("SamHost", "127.0.0.1").toString());
-  lineEdit->setText(settings->value("TunnelName", "I2PChat").toString());
+   styleSheetCombo->setCurrentIndex(styleSheetCombo->findText(
+       settings->value("current_Style_sheet", "Default").toString()));
+   settings->endGroup();
+
+   settings->beginGroup("Network");
+   lineEdit_3->setText(settings->value("SamHost", "127.0.0.1").toString());
+   lineEdit->setText(settings->value("TunnelName", "I2PChat").toString());
   spinBox_10->setValue(settings->value("SamPort", "7656").toInt());
 
   spinBox_4->setMinimum(1);
@@ -381,29 +387,35 @@ void form_settingsgui::loadSettings() {
   // spinBox_maxACK->setMaximum(180);
   // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
 
-  settings->endGroup();
+   settings->endGroup();
 
-  settings->beginGroup("Security");
-  if (settings->value("BlockStyle", "Normal").toString() == "Normal") {
-    check_BlockNormal->setChecked(true);
-  } else {
+   settings->beginGroup("Security");
+   if (settings->value("BlockStyle", "Normal").toString() == "Normal") {
+     check_BlockNormal->setChecked(true);
+   } else {
 
-    check_BlockInvisible->setChecked(true);
-  }
+     check_BlockInvisible->setChecked(true);
+   }
 
-  if (settings->value("WebProfile", "Enabled").toString() == "Enabled") {
-    WebProfileCheckbox->setChecked(true);
-  } else {
-    WebProfileCheckbox->setChecked(false);
-  }
-  if (settings->value("HideWebProfileWhenInvisible", "True").toString() ==
-      "True") {
-    HideWebCheckbox->setChecked(true);
-  } else {
-    HideWebCheckbox->setChecked(false);
-  }
+   if (settings->value("WebProfile", "Enabled").toString() == "Enabled") {
+     WebProfileCheckbox->setChecked(true);
+   } else {
+     WebProfileCheckbox->setChecked(false);
+   }
+   if (settings->value("HideWebProfileWhenInvisible", "True").toString() ==
+       "True") {
+     HideWebCheckbox->setChecked(true);
+   } else {
+     HideWebCheckbox->setChecked(false);
+   }
+   
+   // Load blocking settings
+   blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
+   requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", true).toBool());
+   requestAuthcheckBox->setEnabled(!blockallcheckBox->isChecked());
+   settings->endGroup();
 
-  if (!mCore.getMyDestination().isEmpty()) {
+   if (!mCore.getMyDestination().isEmpty()) {
     size_t buffersize = 2048;
     uint8_t *outputbuffer = (uint8_t *)malloc(buffersize);
     char *b32buffer = (char *)malloc(buffersize);
@@ -427,12 +439,11 @@ void form_settingsgui::loadSettings() {
     free(b32buffer);
   } else {
     b32address->setPlainText(QApplication::translate(
-        "form_settingsgui", "b32 address will be displayed when online",
-        Q_NULLPTR));
-  }
-  settings->endGroup();
+         "form_settingsgui", "b32 address will be displayed when online",
+         Q_NULLPTR));
+   }
 
-  settings->beginGroup("Usersearch");
+   settings->beginGroup("Usersearch");
   if (txt_Nickname->text().isEmpty() == false &&
       (settings->value("Enabled", true).toBool()) == true) {
     check_UserSearchEnable->setChecked(true);
@@ -505,23 +516,23 @@ void form_settingsgui::saveSettings() {
   settings->beginGroup("Style"); // application.ini
   // settings->setValue("CurrentStyle", "Fusion");
   settings->setValue("CustomStyleSheet", "");
-  settings->endGroup();
+   settings->endGroup();
 
-  settings->beginGroup("User-Infos");
-  settings->setValue("Nickname", txt_Nickname->text());
-  settings->setValue("Age", spinAge->value());
-  if (checkGender_Male->isChecked() == true) {
-    settings->setValue("Gender", "Male");
-  } else if (checkGender_Female->isChecked() == true) {
-    settings->setValue("Gender", "Female");
-  } else {
-    settings->setValue("Gender", "");
-  }
-  settings->setValue("Interests", txt_Interests->toPlainText());
-  settings->setValue("AvatarBinaryImage", avatarImageByteArray);
-  settings->endGroup();
-
-  settings->beginGroup("Chat");
+   settings->beginGroup("UserDetails");
+   settings->setValue("Nickname", txt_Nickname->text());
+   settings->setValue("Age", spinAge->value());
+   if (checkGender_Male->isChecked() == true) {
+     settings->setValue("Gender", "Male");
+   } else if (checkGender_Female->isChecked() == true) {
+     settings->setValue("Gender", "Female");
+   } else {
+     settings->setValue("Gender", "");
+   }
+   settings->setValue("Interests", txt_Interests->toPlainText());
+   settings->setValue("AvatarBinaryImage", avatarImageByteArray);
+   settings->endGroup();
+   
+   settings->beginGroup("Chat");
   settings->setValue("DefaultFont",
                      txtShowCurrentChatStyle->currentFont().toString());
   settings->setValue("DefaultColor",
@@ -535,36 +546,31 @@ void form_settingsgui::saveSettings() {
                      txtOverrideRemote->textColor().name());
   settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
   settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
-  settings->endGroup();
+   settings->endGroup();
 
-  settings->beginGroup("Security");
-  if (check_BlockInvisible->isChecked() == true) {
-    settings->setValue("BlockStyle", "Invisible");
-  } else {
-    settings->setValue("BlockStyle", "Normal");
-  }
-  if (WebProfileCheckbox->isChecked() == true) {
-    settings->setValue("WebProfile", "Enabled");
-  } else {
-    settings->setValue("WebProfile", "Disabled");
-  }
-  if (HideWebCheckbox->isChecked() == true) {
-    settings->setValue("HideWebProfileWhenInvisible", "True");
-  } else {
-    settings->setValue("HideWebProfileWhenInvisible", "False");
-  }
+   settings->beginGroup("Security");
+   if (check_BlockInvisible->isChecked() == true) {
+     settings->setValue("BlockStyle", "Invisible");
+   } else {
+     settings->setValue("BlockStyle", "Normal");
+   }
+   if (WebProfileCheckbox->isChecked() == true) {
+     settings->setValue("WebProfile", "Enabled");
+   } else {
+     settings->setValue("WebProfile", "Disabled");
+   }
+   if (HideWebCheckbox->isChecked() == true) {
+     settings->setValue("HideWebProfileWhenInvisible", "True");
+   } else {
+     settings->setValue("HideWebProfileWhenInvisible", "False");
+   }
+   settings->setValue("BlockAllUnknownUsers", blockallcheckBox->isChecked());
+   settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
+   settings->endGroup();
+   settings->sync();
 
-  settings->endGroup();
-
-  // TODO: DHT implementation
+   // TODO: DHT implementation
   settings->beginGroup("Usersearch");
-  
-  // Load security settings
-  settings->beginGroup("Security");
-  blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
-  requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", false).toBool());
-  requestAuthcheckBox->setEnabled(true);  // Ensure checkbox is enabled
-  settings->endGroup();
   settings->setValue("Enabled", check_UserSearchEnable->isChecked());
   settings->setValue("Debug_Max_Message_count",
                      spinBox_MaxLogMsgUserSearch->value());
@@ -575,6 +581,9 @@ void form_settingsgui::saveSettings() {
   settings->sync();
   mCore.loadUserInfos();
   mCore.getUserManager()->avatarImageChanged();
+  
+  // Force update nickname display in main window
+  emit mCore.signNicknameChanged();
   
   // Refresh avatar display in config panel AFTER avatar update signals have been sent
   QPixmap tmpPixmap;
@@ -975,6 +984,12 @@ void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
   settings->setValue("BlockAllUnknownUsers", checked);
   settings->endGroup();
   settings->sync();
+  
+  // If blocking all unknown users, disable request authorization
+  requestAuthcheckBox->setEnabled(!checked);
+  if (checked) {
+    requestAuthcheckBox->setChecked(false);
+  }
 }
 
 void form_settingsgui::clicked_RequestAuthorization(bool checked) {

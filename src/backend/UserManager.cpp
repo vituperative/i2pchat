@@ -27,7 +27,7 @@
 CUserManager::CUserManager(CCore &Core, QString UserFileWithPath,
                            CUnsentChatMessageStorage &UnsentChatMessageStorage)
     : mCore(Core), mUserFileWithPath(UserFileWithPath),
-      mUnsentMessageStorage(UnsentChatMessageStorage) {}
+      mUnsentMessageStorage(UnsentChatMessageStorage), mSortingEnabled(false) {}
 
 CUserManager::~CUserManager() {
 
@@ -78,8 +78,16 @@ void CUserManager::loadUserList() {
     } else if (temp[0] == "TorDest:") {
       // ignore it
     }
-  }
-  file.close();
+   }
+   file.close();
+   
+   // Load sorting settings from application.ini
+   QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
+   mSortingEnabled = settings.value("UserList/SortingEnabled", false).toBool();
+   int sortType = settings.value("UserList/SortType", 0).toInt();
+   if (mSortingEnabled) {
+     sortUserList(sortType);
+   }
 }
 
 void CUserManager::saveUserList() const {
@@ -97,9 +105,9 @@ void CUserManager::saveUserList() const {
       InvisibleText = "false";
     }
 
-    out << "Nick:\t" << (mUsers.at(i)->getName()) << endl
-        << "I2PDest:\t" << (mUsers.at(i)->getI2PDestination()) << endl
-        << "Invisible:\t" << InvisibleText << endl;
+    out << "Nick:\t" << (mUsers.at(i)->getName()) << Qt::endl
+        << "I2PDest:\t" << (mUsers.at(i)->getI2PDestination()) << Qt::endl
+        << "Invisible:\t" << InvisibleText << Qt::endl;
 
     // save unsent ChatMessages for this users
     const QString Dest = mUsers.at(i)->getI2PDestination();
@@ -292,14 +300,14 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
   bool isValid = validateI2PDestination(I2PDestination);
 
   auto critical = [&I2PDestination](QString why = "undefined") {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CUserManager::addNewUser" << endl
+                << "CUserManager::addNewUser" << Qt::endl
                 << "Message:\t"
-                << "Destination is not valid" << endl
-                << "Destination:\t" << I2PDestination << endl
-                << why << endl;
+                << "Destination is not valid" << Qt::endl
+                << "Destination:\t" << I2PDestination << Qt::endl
+                << why << Qt::endl;
     return false;
   };
   /*if(	getUserByI2P_Destination(I2PDestination)	!=	NULL	){
@@ -307,14 +315,14 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination,
   }*/
   if (isValid == false) {
     /*
-        qCritical() << "File\t" << __FILE__ << endl
-                    << "Line:\t" << __LINE__ << endl
+        qCritical() << "File\t" << __FILE__ << Qt::endl
+                    << "Line:\t" << __LINE__ << Qt::endl
                     << "Function:\t"
-                    << "CUserManager::addNewUser" << endl
+                    << "CUserManager::addNewUser" << Qt::endl
                     << "Message:\t"
-                    << "Destination is not valid" << endl
-                    << "Destination:\t" << I2PDestination << endl
-                    << "Action:\tAdd New User ignored" << endl;
+                    << "Destination is not valid" << Qt::endl
+                    << "Destination:\t" << I2PDestination << Qt::endl
+                    << "Action:\tAdd New User ignored" << Qt::endl;
         return false;
     */
     return critical("Not a valid user");
@@ -387,27 +395,39 @@ void CUserManager::changeUserPositionInUserList(int oldPos, int newPos) {
 }
 
 void CUserManager::sortUserList(int sortType) {
+  if (!mSortingEnabled) return;
+  
   switch (sortType) {
-    case 0: // Sort alphabetically
+    case 0: { // Sort alphabetically
       std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
         return a->getName().toLower() < b->getName().toLower();
       });
       break;
-    case 1: // Sort by date added (using connection status change as proxy)
+    }
+    case 1: { // Sort by online status (online first), then alphabetically
       std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
-        return a->getConnectionStatus() == ONLINE && b->getConnectionStatus() != ONLINE;
+        bool aOnline = (a->getConnectionStatus() == ONLINE);
+        bool bOnline = (b->getConnectionStatus() == ONLINE);
+        if (aOnline != bOnline) return aOnline; // online users first
+        return a->getName().toLower() < b->getName().toLower();
       });
       break;
-    case 2: // Sort by last communication (using connection status change as proxy)
+    }
+    case 2: { // Sort by name with online users grouped together
       std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
-        return a->getConnectionStatus() == ONLINE && b->getConnectionStatus() != ONLINE;
+        return a->getName().toLower() < b->getName().toLower();
       });
       break;
-    case 3: // Sort by last online (using current online state as proxy) - REVERSED
+    }
+    case 3: { // Sort by online status (offline first), then alphabetically
       std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
-        return a->getOnlineState() == USERONLINE && b->getOnlineState() != USERONLINE;
+        bool aOnline = (a->getConnectionStatus() == ONLINE);
+        bool bOnline = (b->getConnectionStatus() == ONLINE);
+        if (aOnline != bOnline) return !aOnline; // offline users first
+        return a->getName().toLower() < b->getName().toLower();
       });
       break;
+    }
   }
   saveUserList();
   emit signUserStatusChanged();
@@ -489,12 +509,12 @@ void CUserManager::slotSaveUnsentMessageForDest(QString I2PDest) {
     const QStringList Messages = theUser->getUnsentedMessages();
     mUnsentMessageStorage.saveChatMessagesForDest(I2PDest, Messages);
   } else {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "CUserManager::slotSaveUnsentMessageForDest" << endl
+               << "CUserManager::slotSaveUnsentMessageForDest" << Qt::endl
                << "Message:\t"
-               << "No User found with this destination" << endl
-               << "I2PDest.:\t" << I2PDest << endl;
+               << "No User found with this destination" << Qt::endl
+               << "I2PDest.:\t" << I2PDest << Qt::endl;
   }
 }

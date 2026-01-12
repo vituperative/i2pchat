@@ -38,8 +38,9 @@ CCore::CCore(QString configPath) {
   mSoundManager = new CSoundManager(mConfigPath);
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  m_access_anyone_incoming =
-      settings.value("Users/allow_incoming_new_users", true).toBool();
+  settings.beginGroup("Users");
+  m_access_anyone_incoming = settings.value("allow_incoming_new_users", true).toBool();
+  settings.endGroup();
   settings.beginGroup("Network");
   mMyDestinationB32 = settings.value("MyDestinationB32", "").toString(),
 
@@ -419,15 +420,15 @@ void CCore::slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
       theUser->setReplaceB32WithB64(Value);
     }
   } else if (result == SAM_Message_Types::FAILED) {
-    qWarning() << "File\t" << __FILE__ << endl
-               << "Line:\t" << __LINE__ << endl
+    qWarning() << "File\t" << __FILE__ << Qt::endl
+               << "Line:\t" << __LINE__ << Qt::endl
                << "Function:\t"
-               << "CCore::slotNamingReplyReceived" << endl
+               << "CCore::slotNamingReplyReceived" << Qt::endl
                << "Message:\t"
-               << "slotNamingReplyReceived\nSAM_Message_Types::FAILED" << endl
-               << "Name:\t" << Name << endl
-               << "Value:\t" << Value << endl
-               << "Message:\t" << Message << endl;
+               << "slotNamingReplyReceived\nSAM_Message_Types::FAILED" << Qt::endl
+               << "Name:\t" << Name << Qt::endl
+               << "Value:\t" << Value << Qt::endl
+               << "Message:\t" << Message << Qt::endl;
   }
 }
 const QString CCore::getMyDestination() const { return this->mMyDestination; }
@@ -796,9 +797,12 @@ bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
 
 void CCore::loadUserInfos() {
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings.beginGroup("User-Infos");
-  if (mUserInfos.Nickname != settings.value("Nickname", "").toString()) {
-    mUserInfos.Nickname = settings.value("Nickname", "").toString();
+  
+  settings.beginGroup("UserDetails");
+  QString savedNickname = settings.value("Nickname", "").toString();
+  
+  if (mUserInfos.Nickname != savedNickname) {
+    mUserInfos.Nickname = savedNickname;
     emit signNicknameChanged();
   }
 
@@ -843,19 +847,19 @@ void CCore::loadUserInfos() {
   } else if (settings.value("Gender", "").toString() == "Female") {
     mUserInfos.Gender = "Female";
   }
-  if (mUserInfos.AvatarImage !=
-      settings.value("AvatarBinaryImage", "").toByteArray()) {
-    mUserInfos.AvatarImage =
-        settings.value("AvatarBinaryImage", "").toByteArray();
-    emit signOwnAvatarImageChanged();
-  }
-  settings.endGroup();
-  settings.sync();
+   if (mUserInfos.AvatarImage !=
+       settings.value("AvatarBinaryImage", "").toByteArray()) {
+     mUserInfos.AvatarImage =
+         settings.value("AvatarBinaryImage", "").toByteArray();
+     emit signOwnAvatarImageChanged();
+   }
+   settings.endGroup();
+   settings.sync();
 
-  if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
-    mUserInfos.Nickname = "NonValidNick";
-    emit signNicknameChanged();
-  }
+   if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
+     mUserInfos.Nickname = "NonValidNick";
+     emit signNicknameChanged();
+   }
 }
 
 const CReceivedInfos CCore::getUserInfos() const { return mUserInfos; }
@@ -896,15 +900,15 @@ void CCore::setMyDestinationB32(QString B32Dest) {
     return;
 
   if (!B32Dest.right(8).contains(".b32.i2p", Qt::CaseInsensitive)) {
-    qCritical() << "File\t" << __FILE__ << endl
-                << "Line:\t" << __LINE__ << endl
+    qCritical() << "File\t" << __FILE__ << Qt::endl
+                << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
-                << "CCore::setMyDestinationB32" << endl
+                << "CCore::setMyDestinationB32" << Qt::endl
                 << "Message:\t"
-                << "the last 8 char must be .b32.i2p" << endl
+                << "the last 8 char must be .b32.i2p" << Qt::endl
                 << "\tDestination:\n"
-                << B32Dest << endl
-                << "\tAction apported" << endl;
+                << B32Dest << Qt::endl
+                << "\tAction apported" << Qt::endl;
   }
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);

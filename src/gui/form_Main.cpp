@@ -21,6 +21,7 @@
 #include "form_Main.h"
 #include "UserManager.h"
 #include <QIcon>
+#include <QMessageBox>
 #include <QSystemTrayIcon>
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
@@ -31,12 +32,14 @@ form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
 
   QApplication::setQuitOnLastWindowClosed(false);
   Core = new CCore(configDir);
-  connect(Core, SIGNAL(signUserStatusChanged()), this,
-          SLOT(eventUserChanged()));
-  connect(this, SIGNAL(changeAllowIncoming(bool)), Core,
-          SLOT(changeAccessIncomingUsers(bool)));
-  connect(Core, SIGNAL(signOnlineStatusChanged()), this,
-          SLOT(OnlineStateChanged()));
+   connect(Core, SIGNAL(signUserStatusChanged()), this,
+           SLOT(eventUserChanged()));
+   connect(this, SIGNAL(changeAllowIncoming(bool)), Core,
+           SLOT(changeAccessIncomingUsers(bool)));
+   connect(Core, SIGNAL(signOnlineStatusChanged()), this,
+           SLOT(OnlineStateChanged()));
+   connect(Core, SIGNAL(signIncomingUserAuthorizationRequest(QString, qint32, QByteArray)), this,
+           SLOT(incomingUserAuthorizationRequest(QString, qint32, QByteArray)));
 
   connect(listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
           SLOT(openUserListeClicked()));
@@ -115,8 +118,10 @@ void form_MainWindow::onlineComboBoxChanged() {
       msgBox->show();
       OnlineStateChanged();
     }
-  } else if (text.contains(tr("Connecting"), Qt::CaseInsensitive) == true) {
-  }
+   } else if (text.contains(tr("Connecting"), Qt::CaseInsensitive) == true) {
+     if (Core->getOnlineStatus() != User::USERTRYTOCONNECT)
+       Core->setOnlineStatus(User::USERTRYTOCONNECT);
+   }
 }
 
 void form_MainWindow::initToolBars() {
@@ -1095,6 +1100,50 @@ form_userSearch(*Core,*(Core->getSeedlessManager()));
     }
 }
 */
+
+void form_MainWindow::incomingUserAuthorizationRequest(QString destination, int streamID, QByteArray data) {
+  QMessageBox msgBox;
+  msgBox.setIcon(QMessageBox::Question);
+  msgBox.setText(tr("Incoming connection from unknown user"));
+  msgBox.setInformativeText(tr("Allow connection from %1?").arg(destination));
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::No);
+  int ret = msgBox.exec();
+
+  if (ret == QMessageBox::Yes) {
+    // Extract version
+    QByteArray temp = data.mid(data.indexOf("\t") + 1, data.indexOf("\n") - data.indexOf("\t") - 1);
+    QString version(temp);
+    bool OK = false;
+    double versiond = version.toDouble(&OK);
+    if (!OK) versiond = 0.0;
+
+    // Add the user
+    if (versiond >= 0.3) {
+      Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
+    } else {
+      Core->getUserManager()->addNewUser("Unknown", destination, streamID);
+    }
+
+    CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
+    if (User) {
+      User->setI2PStreamID(streamID);
+      User->setProtocolVersion(version);
+      User->setConnectionStatus(ONLINE);
+      // Remove first packet
+      QByteArray Data2 = data;
+      Data2 = Data2.remove(0, data.indexOf("\n") + 1);
+      Core->setStreamTypeToKnown(streamID, Data2, false);
+      if (versiond >= 0.3) {
+        User->setReceivedNicknameToUserNickname();
+      }
+    }
+  } else {
+    // Deny, close the connection
+    Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+  }
+}
+
 void form_MainWindow::eventUserSearchWindowClosed() {
   delete mUserSearchWindow;
   mUserSearchWindow = NULL;
@@ -1122,9 +1171,8 @@ static void ElideLabel(QLabel *label, QString text) {
 }
 
 void form_MainWindow::eventNicknameChanged() {
-  // nicknamelabel->setText(Core->getUserInfos().Nickname);
   QString nick = Core->getUserInfos().Nickname;
-  ElideLabel(nicknamelabel, nick);
+  nicknamelabel->setText(nick);
 }
 
 void form_MainWindow::eventAvatarImageChanged() {

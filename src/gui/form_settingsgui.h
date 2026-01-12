@@ -41,7 +41,7 @@ class form_settingsgui : public QDialog, private Ui::form_settingsgui {
   Q_OBJECT
 
 public:
-  form_settingsgui(CCore &Core, QWidget *parent = 0, Qt::WindowFlags flags = 0);
+  form_settingsgui(CCore &Core, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
   ~form_settingsgui();
 
   // forbid some operators
