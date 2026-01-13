@@ -120,9 +120,17 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
   m_emoticons.clear();
   QFile file(path);
   QString dirPath = QFileInfo(path).absolutePath();
+  if (path.startsWith(":/")) {
+    dirPath = ":/emoticons";
+  }
   m_dir_path = dirPath;
-  QDir dir(dirPath);
-  QStringList fileList = dir.entryList(QDir::Files);
+  QStringList fileList;
+  if (path.startsWith(":/")) {
+    fileList = QDir(":/emoticons").entryList(QDir::Files);
+  } else {
+    QDir dir(dirPath);
+    fileList = dir.entryList(QDir::Files);
+  }
   if (file.exists() && file.open(QIODevice::ReadOnly)) {
     QDomDocument doc;
     if (doc.setContent(&file)) {

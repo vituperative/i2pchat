@@ -112,6 +112,7 @@ private slots:
   void UserInvisible(bool b);
 
   void connecttreeWidgetCostumPopupMenu(QPoint point);
+  void slotLoadOwnAvatarImage();
   void deleteUserClicked();
   void renameUserCLicked();
   void addUserToBlockList();

@@ -535,18 +535,18 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnu.addAction(CopyDestination);
     contextMnu.addAction(CopyB32);
     contextMnu.addAction(UserRename);
-    
+
     // Enable Copy B32 only if user is online (can do naming lookup)
     if (User->getConnectionStatus() == ONLINE) {
       CopyB32->setEnabled(true);
     } else {
       CopyB32->setEnabled(false);
     }
-    
+
     // Enable and set state of UserAutoDownload
     UserAutoDownload->setEnabled(true);
     UserAutoDownload->setChecked(User->getAutoDownloadEnabled());
-    
+
     // Set icon based on auto-download state
     if (User->getAutoDownloadEnabled()) {
       UserAutoDownload->setIcon(QIcon(ICON_USER_DOWNLOAD));
@@ -674,13 +674,12 @@ void form_MainWindow::OnlineStateChanged() {
     if (comboBox->count() < 6) {
       comboBox->clear();
 
-      comboBox->addItem(QIcon(ICON_USER_ONLINE), tr("Online")); // index 0
-      comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr("Want to chat")); // 1
-      comboBox->addItem(QIcon(ICON_USER_AWAY), tr("Away"));               // 2
-      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB),
-                        tr("No disturbo"));                           // 3
-      comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr("Invisible")); // 4
-      comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline"));     // 5
+      comboBox->addItem(QIcon(ICON_USER_ONLINE), tr("Online"));              // index 0
+      comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr("Want to chat"));    // 1
+      comboBox->addItem(QIcon(ICON_USER_AWAY), tr("Away"));                  // 2
+      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB), tr("No disturbo"));   // 3
+      comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr("Invisible"));        // 4
+      comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline"));            // 5
     }
 
     if (onlinestatus == User::USERONLINE) {
@@ -974,7 +973,7 @@ void form_MainWindow::openChatWindow(QString Destination) {
     connect(tmp, SIGNAL(closingChatWindow(QString)), this,
             SLOT(eventChatWindowClosed(QString)));
 
-    connect(Core, SIGNAL(signOwnAvatarImageChanged()), tmp,
+    connect(Core, SIGNAL(signOwnAvatarImageChanged()), this,
             SLOT(slotLoadOwnAvatarImage()));
 
     mAllOpenChatWindows.insert(Destination, tmp);
@@ -1184,6 +1183,33 @@ void form_MainWindow::eventAvatarImageChanged() {
     avatarlabel->setAlignment(Qt::AlignCenter);
     avatarlabel->setPixmap(avatar);
   }
+  slotLoadOwnAvatarImage();
+}
+
+void form_MainWindow::slotLoadOwnAvatarImage() {
+  for (int i = 0; i < listWidget->count(); i++) {
+    QListWidgetItem *typeItem = listWidget->item(i + 2);
+    if (typeItem && typeItem->text() == "U") {
+      QListWidgetItem *destItem = listWidget->item(i + 1);
+      if (destItem) {
+        QString Destination = destItem->text();
+        CUser *User = Core->getUserManager()->getUserByI2P_Destination(Destination);
+        if (User) {
+          QPixmap avatar;
+          if (User->getReceivedUserInfos().AvatarImage.isEmpty() == false) {
+            avatar.loadFromData(User->getReceivedUserInfos().AvatarImage);
+          } else {
+            avatar = QPixmap(":/icons/avatar.svg");
+          }
+          QListWidgetItem *iconItem = listWidget->item(i);
+          if (iconItem) {
+            iconItem->setIcon(QIcon(avatar));
+          }
+        }
+      }
+    }
+    i += 2;
+  }
 }
 
 void form_MainWindow::openTopicSubscribeWindow() {
@@ -1213,11 +1239,11 @@ void form_MainWindow::openTopicSubscribeWindow() {
 void form_MainWindow::UserAutoDownload(bool enabled) {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
-  
+
   CUser *User = Core->getUserManager()->getUserByI2P_Destination(Destination);
   if (User) {
     User->setAutoDownloadEnabled(enabled);
-    
+
     // Update the icon in the menu action
     QAction *action = qobject_cast<QAction*>(sender());
     if (action) {
