@@ -701,9 +701,13 @@ void form_MainWindow::OnlineStateChanged() {
       comboBox->setCurrentIndex(5);
       trayIcon->setIcon(QIcon(ICON_USER_OFFLINE));
     }
-  }
-  connect(comboBox, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(onlineComboBoxChanged()));
+   }
+
+   // Refresh contact list icons when online status changes
+   slotLoadOwnAvatarImage();
+
+   connect(comboBox, SIGNAL(currentIndexChanged(int)), this,
+           SLOT(onlineComboBoxChanged()));
 }
 
 void form_MainWindow::openAboutDialog() {
@@ -1187,6 +1191,9 @@ void form_MainWindow::eventAvatarImageChanged() {
 }
 
 void form_MainWindow::slotLoadOwnAvatarImage() {
+  ONLINESTATE onlineStatus = Core->getOnlineStatus();
+  bool isOnline = (onlineStatus != User::USEROFFLINE && onlineStatus != User::USERTRYTOCONNECT);
+
   for (int i = 0; i < listWidget->count(); i++) {
     QListWidgetItem *typeItem = listWidget->item(i + 2);
     if (typeItem && typeItem->text() == "U") {
@@ -1195,15 +1202,44 @@ void form_MainWindow::slotLoadOwnAvatarImage() {
         QString Destination = destItem->text();
         CUser *User = Core->getUserManager()->getUserByI2P_Destination(Destination);
         if (User) {
-          QPixmap avatar;
-          if (User->getReceivedUserInfos().AvatarImage.isEmpty() == false) {
-            avatar.loadFromData(User->getReceivedUserInfos().AvatarImage);
-          } else {
-            avatar = QPixmap(":/icons/avatar.svg");
-          }
           QListWidgetItem *iconItem = listWidget->item(i);
           if (iconItem) {
-            iconItem->setIcon(QIcon(avatar));
+            if (isOnline) {
+              // When online, show status icons instead of avatars
+              switch (User->getOnlineState()) {
+              case USERTRYTOCONNECT:
+                iconItem->setIcon(QIcon(ICON_USER_OFFLINE));
+                break;
+              case USERINVISIBLE:
+              case USEROFFLINE:
+                iconItem->setIcon(QIcon(ICON_USER_OFFLINE));
+                break;
+              case USERONLINE:
+                iconItem->setIcon(QIcon(ICON_USER_ONLINE));
+                break;
+              case USERWANTTOCHAT:
+                iconItem->setIcon(QIcon(ICON_USER_WANTTOCHAT));
+                break;
+              case USERAWAY:
+                iconItem->setIcon(QIcon(ICON_USER_AWAY));
+                break;
+              case USERDONT_DISTURB:
+                iconItem->setIcon(QIcon(ICON_USER_DONT_DISTURB));
+                break;
+              case USERBLOCKEDYOU:
+                iconItem->setIcon(QIcon(ICON_USER_BLOCKED_YOU));
+                break;
+              }
+            } else {
+              // When offline, show avatars
+              QPixmap avatar;
+              if (User->getReceivedUserInfos().AvatarImage.isEmpty() == false) {
+                avatar.loadFromData(User->getReceivedUserInfos().AvatarImage);
+              } else {
+                avatar = QPixmap(":/icons/avatar.svg");
+              }
+              iconItem->setIcon(QIcon(avatar));
+            }
           }
         }
       }

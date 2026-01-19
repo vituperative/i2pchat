@@ -31,6 +31,7 @@ CSessionController::CSessionController(QString SamHost, QString SamPort,
 
   mIncomingPackets = new QByteArray();
   mDoneDisconnect = false;
+  mReconnectTimer = new QTimer(this);
 
   mAnalyser = new CI2PSamMessageAnalyser("CStreamController");
   mHandshakeSuccessful = false;
@@ -46,17 +47,22 @@ CSessionController::CSessionController(QString SamHost, QString SamPort,
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()),
           Qt::DirectConnection);
 
+  connect(mReconnectTimer, SIGNAL(timeout()), this, SLOT(slotReconnectTimeout()),
+          Qt::DirectConnection);
+
   emit signDebugMessages("• I2P Stream Controller started");
 }
 
 CSessionController::~CSessionController() {
   doDisconnect();
   mTcpSocket.deleteLater();
+  delete mReconnectTimer;
   emit signDebugMessages("• I2P Stream Controller stopped");
 }
 
 void CSessionController::slotConnected() {
   emit signDebugMessages("• I2P Stream Controller connected");
+  mReconnectTimer->stop();
   emit signDebugMessages(SAM_HANDSHAKE_V3);
   if (mTcpSocket.state() == QAbstractSocket::ConnectedState) {
     mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -72,6 +78,11 @@ void CSessionController::slotDisconnected() {
                            mSamHost + ":" + mSamPort + "]");
     emit signSessionStreamStatusOK(false);
 
+    // Start auto-reconnect timer
+    if (!mReconnectTimer->isActive()) {
+      emit signDebugMessages("• I2P Stream Controller ‣ Scheduling reconnect in 60 seconds");
+      mReconnectTimer->start(60000); // 60 seconds
+    }
 
     // emit SamConnectionClosed();
   }
@@ -187,15 +198,23 @@ void CSessionController::slotReadFromSocket() {
 void CSessionController::doConnect() {
   mDoneDisconnect = false;
 
+  qDebug() << "CSessionController::doConnect() - SamHost:" << mSamHost << "SamPort:" << mSamPort;
+  
   if (mTcpSocket.state() == QAbstractSocket::UnconnectedState) {
+    qDebug() << "CSessionController::doConnect() - Connecting to SAM host...";
     mTcpSocket.connectToHost(mSamHost, mSamPort.toInt());
   }
-  if (!mTcpSocket.waitForConnected(1000))
+  if (!mTcpSocket.waitForConnected(1000)) {
+    qDebug() << "CSessionController::doConnect() - Connection failed, state:" << mTcpSocket.state();
     slotDisconnected();
+  } else {
+    qDebug() << "CSessionController::doConnect() - Connected successfully!";
+  }
 }
 
 void CSessionController::doDisconnect() {
   mDoneDisconnect = true;
+  mReconnectTimer->stop();
 
   if (mTcpSocket.state() != 0) {
     mTcpSocket.disconnectFromHost();
@@ -245,4 +264,10 @@ void CSessionController::doDestGenerate(const QString Options) {
 
   mTcpSocket.write(Message);
   mTcpSocket.flush();
+}
+
+void CSessionController::slotReconnectTimeout() {
+  mReconnectTimer->stop();
+  emit signDebugMessages("• I2P Stream Controller ‣ Attempting to reconnect to SAM");
+  doConnect();
 }
