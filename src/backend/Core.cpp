@@ -57,10 +57,13 @@ CCore::CCore(QString configPath) {
                                        QString, QString)),
           Qt::DirectConnection);
 
-  connect(mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this,
-          SLOT(slotStreamControllerStatusOK(bool)));
+   connect(mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this,
+           SLOT(slotStreamControllerStatusOK(bool)));
 
-  connect(mConnectionManager, SIGNAL(signNewSamPrivKeyGenerated(const QString)),
+   connect(mConnectionManager, SIGNAL(signReconnectAttempt()), this,
+           SLOT(slotReconnectAttempt()));
+
+   connect(mConnectionManager, SIGNAL(signNewSamPrivKeyGenerated(const QString)),
           this, SLOT(slotNewSamPrivKeyGenerated(const QString)));
 
   connect(mConnectionManager,
@@ -687,7 +690,17 @@ void CCore::slotStreamControllerStatusOK(bool Status) {
     }
     createStreamObjectsForAllUsers();
     emit signOnlineStatusChanged();
+  } else {
+    // Session lost - go offline but remember desired status
+    mCurrentOnlineStatus = User::USEROFFLINE;
+    emit signOnlineStatusChanged();
   }
+}
+
+void CCore::slotReconnectAttempt() {
+  // Session reconnect attempt started - show connecting status
+  mCurrentOnlineStatus = User::USERTRYTOCONNECT;
+  emit signOnlineStatusChanged();
 }
 
 void CCore::createStreamObjectsForAllUsers() {

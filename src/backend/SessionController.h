@@ -46,10 +46,11 @@ public:
 
 signals:
   void signDebugMessages(const QString Message);
+  void signSessionStreamStatusOK(bool Status);
+  void signReconnectAttempt();
   void signNamingReplyReceived(const SAM_Message_Types::RESULT result,
                                QString Name, QString Value = "",
                                QString Message = "");
-  void signSessionStreamStatusOK(bool Status);
   void signNewSamPrivKeyGenerated(const QString SamPrivKey);
 
  private slots:

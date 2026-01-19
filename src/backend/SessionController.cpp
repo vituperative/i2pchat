@@ -269,5 +269,6 @@ void CSessionController::doDestGenerate(const QString Options) {
 void CSessionController::slotReconnectTimeout() {
   mReconnectTimer->stop();
   emit signDebugMessages("• I2P Stream Controller ‣ Attempting to reconnect to SAM");
+  emit signReconnectAttempt();
   doConnect();
 }

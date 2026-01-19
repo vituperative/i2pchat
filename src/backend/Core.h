@@ -115,6 +115,7 @@ private slots:
                                QString Name, QString Value = "",
                                QString Message = "");
   void slotStreamControllerStatusOK(bool Status);
+  void slotReconnectAttempt();
   void slotIncomingStream(CI2PStream *stream);
   void slotNewSamPrivKeyGenerated(const QString SamPrivKey);
   // </SIGNALS FROM CONNECTIONMANAGER>

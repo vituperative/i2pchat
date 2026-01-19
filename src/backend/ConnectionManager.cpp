@@ -50,6 +50,9 @@ bool CConnectionManager::doCreateSession(
     connect(StreamController, SIGNAL(signSessionStreamStatusOK(bool)), this,
             SIGNAL(signStreamControllerStatusOK(bool)));
 
+    connect(StreamController, SIGNAL(signReconnectAttempt()), this,
+            SIGNAL(signReconnectAttempt()));
+
     connect(StreamController,
             SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT,
                                            QString, QString, QString)),
