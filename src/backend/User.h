@@ -20,14 +20,14 @@
 #ifndef USER_H
 #define USER_H
 
+#include "I2PStream.h"
+
 #include <QByteArray>
-#include <QStringList>
+#include <QDateTime>
 #include <QElapsedTimer>
+#include <QStringList>
 #include <QtGlobal>
 #include <QtGui>
-#include <QDateTime>
-
-#include "I2PStream.h"
 
 namespace User {
 enum CONNECTIONTOUSER { OFFLINE, ONLINE, TRYTOCONNECT, CONNECTERROR };
@@ -77,30 +77,25 @@ public:
   double getProtocolVersion_D() const;
   const QString getClientName() const { return mClientName; }
   const QString getClientVersion() const { return mClientVersion; }
+  const QDateTime getDateAdded() const { return mDateAdded; }
+  const QDateTime getLastCommunication() const { return mLastCommunication; }
+  const QDateTime getLastOnline() const { return mLastOnline; }
   QColor getTextColor() const { return mTextColor; }
   QFont getTextFont() const { return mTextFont; }
   CONNECTIONTOUSER getConnectionStatus() const { return mConnectionStatus; }
   ONLINESTATE getOnlineState() const { return mCurrentOnlineState; }
   const QStringList &getAllChatMessages();
   const QStringList getNewMessages(bool haveFocus);
-  const CReceivedInfos getReceivedUserInfos() const {
-    return mReceivedUserInfos;
-  }
+  const CReceivedInfos getReceivedUserInfos() const { return mReceivedUserInfos; }
 
   const QString getHighestUsableProtocolVersionFiletransfer() const;
   double getHighestUsableProtocolVersionFiletransfer_D() const;
-  const QString getMaxProtocolVersionFiletransfer() const {
-    return mMaxProtocolVersionFiletransfer;
-  };
+  const QString getMaxProtocolVersionFiletransfer() const { return mMaxProtocolVersionFiletransfer; };
   double getMaxProtocolVersionFiletransfer_D() const;
-  const QString getMinProtocolVersionFiletransfer() const {
-    return mMinProtocolVersionFiletransfer;
-  };
+  const QString getMinProtocolVersionFiletransfer() const { return mMinProtocolVersionFiletransfer; };
   double getMinProtocolVersionFiletransfer_D() const;
   bool getHaveNewUnreadMessages() const { return mHaveNewUnreadMessages; }
-  bool getHaveNewUnreadChatmessages() const {
-    return mHaveNewUnreadChatmessage;
-  }
+  bool getHaveNewUnreadChatmessages() const { return mHaveNewUnreadChatmessage; }
   bool getIsInvisible() const { return mInvisible; };
   bool getUsedB32Dest() const { return mUseB32Dest; };
   bool getAutoDownloadEnabled() const { return mAutoDownloadEnabled; };
@@ -118,17 +113,16 @@ public:
   void setTextFont(QFont textFont);
   void setInvisible(bool b);
   void setAutoDownloadEnabled(bool enabled);
-  void setMaxProtocolVersionFiletransfer(QString Version) {
-    mMaxProtocolVersionFiletransfer = Version;
-  };
-  void setMinProtocolVersionFiletransfer(QString Version) {
-    mMinProtocolVersionFiletransfer = Version;
-  };
+  void setMaxProtocolVersionFiletransfer(QString Version) { mMaxProtocolVersionFiletransfer = Version; };
+  void setMinProtocolVersionFiletransfer(QString Version) { mMinProtocolVersionFiletransfer = Version; };
   void setReceivedUserInfos(RECEIVEDINFOS Tag, const QString &value);
   void setReceivedNicknameToUserNickname();
   void setReplaceB32WithB64(QString b64Dest);
   void setAvatarImage(QByteArray &avatarImage);
   void setUnsentedMessages(QStringList &newMessages);
+  void setDateAdded(const QDateTime &dt) { mDateAdded = dt; }
+  void setLastCommunication(const QDateTime &dt) { mLastCommunication = dt; }
+  void setLastOnline(const QDateTime &dt) { mLastOnline = dt; }
 
 public slots:
   void slotSendChatMessage(const QString &Message);
@@ -172,6 +166,9 @@ private:
   bool mUseB32Dest;
   bool mAutoDownloadEnabled;
   QString mOriginalB32Address;
+  QDateTime mDateAdded;
+  QDateTime mLastCommunication;
+  QDateTime mLastOnline;
 
   //<Settings for the chatwindow>
   QColor mTextColor;

@@ -77,6 +77,18 @@ void CUserManager::loadUserList() {
       if (temp[1] == "true") {
         getUserByI2P_Destination(I2PDest)->setInvisible(true);
       }
+    } else if (temp[0] == "DateAdded:") {
+      CUser *u = getUserByI2P_Destination(I2PDest);
+      if (u)
+        u->setDateAdded(QDateTime::fromString(temp[1], Qt::ISODate));
+    } else if (temp[0] == "LastCommunication:") {
+      CUser *u = getUserByI2P_Destination(I2PDest);
+      if (u)
+        u->setLastCommunication(QDateTime::fromString(temp[1], Qt::ISODate));
+    } else if (temp[0] == "LastOnline:") {
+      CUser *u = getUserByI2P_Destination(I2PDest);
+      if (u)
+        u->setLastOnline(QDateTime::fromString(temp[1], Qt::ISODate));
     } else if (temp[0] == "TorDest:") {
       // ignore it
     }
@@ -109,7 +121,10 @@ void CUserManager::saveUserList() {
 
     out << "Nick:\t" << (mUsers.at(i)->getName()) << Qt::endl
         << "I2PDest:\t" << (mUsers.at(i)->getI2PDestination()) << Qt::endl
-        << "Invisible:\t" << InvisibleText << Qt::endl;
+        << "Invisible:\t" << InvisibleText << Qt::endl
+        << "DateAdded:\t" << mUsers.at(i)->getDateAdded().toString(Qt::ISODate) << Qt::endl
+        << "LastCommunication:\t" << mUsers.at(i)->getLastCommunication().toString(Qt::ISODate) << Qt::endl
+        << "LastOnline:\t" << mUsers.at(i)->getLastOnline().toString(Qt::ISODate) << Qt::endl;
 
     // save unsent ChatMessages for this users
     const QString Dest = mUsers.at(i)->getI2PDestination();
@@ -350,28 +365,33 @@ void CUserManager::sortUserList(int sortType) {
       mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) { return a->getName().toLower() < b->getName().toLower(); });
     break;
   }
-  case 1: { // Sort by online status (online first), then alphabetically
+  case 1: { // Sort by date added
     std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
       bool aOnline = (a->getConnectionStatus() == ONLINE);
       bool bOnline = (b->getConnectionStatus() == ONLINE);
       if (aOnline != bOnline)
-        return aOnline; // online users first
-      return a->getName().toLower() < b->getName().toLower();
+        return aOnline;
+      return a->getDateAdded() < b->getDateAdded();
     });
     break;
   }
-  case 2: { // Sort by name with online users grouped together
-    std::sort(
-      mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) { return a->getName().toLower() < b->getName().toLower(); });
-    break;
-  }
-  case 3: { // Sort by online status (offline first), then alphabetically
+  case 2: { // Sort by last communication (most recent first)
     std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
       bool aOnline = (a->getConnectionStatus() == ONLINE);
       bool bOnline = (b->getConnectionStatus() == ONLINE);
       if (aOnline != bOnline)
-        return !aOnline; // offline users first
-      return a->getName().toLower() < b->getName().toLower();
+        return aOnline;
+      return a->getLastCommunication() > b->getLastCommunication();
+    });
+    break;
+  }
+  case 3: { // Sort by last online (most recent first)
+    std::sort(mUsers.begin(), mUsers.end(), [](CUser *a, CUser *b) {
+      bool aOnline = (a->getConnectionStatus() == ONLINE);
+      bool bOnline = (b->getConnectionStatus() == ONLINE);
+      if (aOnline != bOnline)
+        return aOnline;
+      return a->getLastOnline() > b->getLastOnline();
     });
     break;
   }

@@ -55,6 +55,9 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PD
   this->mMaxProtocolVersionFiletransfer = "0.1";
   this->mMinProtocolVersionFiletransfer = "0.1";
   this->mReceivedUserInfos.Age = 0;
+  mDateAdded = QDateTime::currentDateTime();
+  mLastCommunication = QDateTime::currentDateTime();
+  mLastOnline = QDateTime::currentDateTime();
 
   if (mI2PDestination.length() == 60) {
     mUseB32Dest = true;
@@ -85,6 +88,7 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status) {
   }
 
   mConnectionStatus = Status;
+  mLastOnline = QDateTime::currentDateTime();
 
   if (Status == ONLINE) {
     if (getUsedB32Dest() == true) {
@@ -138,6 +142,7 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
 
   mHaveNewUnreadMessages = true;
   mHaveNewUnreadChatmessage = true;
+  mLastCommunication = QDateTime::currentDateTime();
 
   emit signNewMessageReceived();
   emit signNewMessageSound();
@@ -164,6 +169,7 @@ void CUser::slotSendChatMessage(const QString &Message) {
     this->mNewMessages.push_back(msg);
 
     mHaveNewUnreadMessages = true;
+    mLastCommunication = QDateTime::currentDateTime();
     emit signNewMessageReceived();
   } else {
     int idx = mUnsentedMessages.size();
@@ -175,12 +181,13 @@ void CUser::slotSendChatMessage(const QString &Message) {
     else
       Nickname = mCore.getUserInfos().Nickname;
 
-    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + Message +
-               " <i>(" + tr("pending") + ")</i><br>";
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + Message + " <i>(" +
+               tr("pending") + ")</i><br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);
     mHaveNewUnreadMessages = true;
+    mLastCommunication = QDateTime::currentDateTime();
     emit signNewMessageReceived();
   }
 }
