@@ -1,6 +1,4 @@
 # I2PChat (formerly I2P-Messenger)
-[![Build status appveyor MinGW32](https://ci.appveyor.com/api/projects/status/0tanjnojnlpksug6?svg=true)](https://ci.appveyor.com/project/wipedlifepotato/i2pchat)
-[![Build Status travis linux(focal)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)](https://travis-ci.com/wipedlifepotato/i2pchat.svg?branch=master)
 ## Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
