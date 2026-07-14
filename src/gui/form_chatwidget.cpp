@@ -181,6 +181,7 @@ void form_ChatWidget::addMessage(QString text) {
   // append HTML
   {
     auto cursor = QTextCursor(chat->document());
+    cursor.movePosition(QTextCursor::End);
     if (cursor.isNull()) {
       auto msg = "Error appending to chatLog: cursor is null";
       qDebug() << msg;
