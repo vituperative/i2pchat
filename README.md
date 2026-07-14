@@ -1,22 +1,40 @@
 # I2PChat (formerly I2P-Messenger)
+
+End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for anonymous, serverless communication with full file transfer support.
+
 ## Screenshots
 
 ![screenshot-roster](https://vituperative.github.io/i2pchat/screenshots/main.png) ![screenshot-chat](https://vituperative.github.io/i2pchat/screenshots/chat.png)
 
 ## Features
 
- * Direct peer-to-peer communications without server requirements
- * File transfer between contacts
- * Control online visibility on a per-contact basis
- * Optional, customizable b32.i2p web page to display profile
- * Emoticon support
+* Peer-to-peer messaging and file transfer over I2P — no central server
+* End-to-end encryption via I2P's garlic routing
+* Contact list with online status indicators (Online, Away, Invisible, Do Not Disturb)
+* Userlist sorting — alphabetically, by date added, last communication, or last online
+* Online visibility control per contact (visible, hidden, blocked)
+* Request authorization dialog for new incoming connections
+* Transient (non-persistent) identity option for session-only keys
+* Auto-away detection with configurable timeout
+* Inline pending messages — compose while offline, sent automatically on reconnection
+* Emoticon support with punctuation-boundary detection
+* Automatic URL linking in chat messages
+* Optional b32.i2p web profile page with avatar, bio, and interests
+* File transfer with per-user auto-download configuration
+* Copy b32 address and raw destination with right-click
+* Move contacts to top/bottom of list via right-click menu
+* Offline message queue — messages are delivered when the contact comes online
+* Configurable tunnel length, quantity, and backup quantities
+* ECIES (Ratchet) and EdDSA signature types for new destinations
+* Customizable chat appearance (font, color, style)
+* Sound notifications for online/offline, messages, and file transfers
+* Debug logging for troubleshooting
 
 ## Build instructions
 
- * Note: Qt 5.14 or later required (Qt 6 is not yet supported)
- * For Qt versions prior to v5.14, you can try building with an older version of the code, available from: https://github.com/vituperative/i2pchat/archive/706c908ee267051da12c51f2b87c0d9c293f69d8.zip
-
 #### Dependencies
+
+Qt 5.14 or later (Qt 6 is not yet supported).
 
 <details><summary>Debian / Ubuntu (including 24.04+, trixie+)</summary>
 
@@ -47,19 +65,22 @@ qmake I2PChat.pro "CONFIG += release"
 make -j$(nproc)
 ```
 
-## Downloads (pre-built binaries)
+## Downloads
 
- * [Latest CI build (Linux)](https://github.com/vituperative/i2pchat/actions/workflows/build.yml)
- * 0.2.37 Linux binary (stripped) with custom profile template and event audio samples (Qt 5.14 or later required): <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
+* [Latest CI build (Linux)](https://github.com/vituperative/i2pchat/actions/workflows/build.yml)
 
 ## Running
 
-On Linux, using `bash build.sh` creates a stripped binary at `dist/I2PChat`. For manual builds, `make` creates `I2PChat` in the project root. Run it with `./I2PChat`.
+On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
 
-* You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
-* As of version 0.2.31, the DSA_SHA1 Signature type is no longer available. The recommended (and default) Signature Type is now: EdDSA_SHA512_Ed25519
-* Select 'Online' from the dropdown menu on the main window. When you first go online, your unique address (Destination) will be created when connecting to SAM
-* Your settings and contacts will be stored in `~/.i2pchat/` on Linux-based systems, or `%APPDATA%\Roaming\I2PChat\` on Windows
+* Enable the SAM application bridge in your router: Java I2P via [Client Configuration](http://127.0.0.1:7657/configclients), or i2pd via `i2pd.conf`'s `[SAM]` section.
+* Select **Online** from the dropdown menu on the main window. Your unique I2P destination is created automatically on first SAM connection.
+* Settings and contacts are stored in `~/.i2pchat/` (Linux) or `%APPDATA%\Roaming\I2PChat\` (Windows).
+* Default signature type: EdDSA_SHA512_Ed25519. DSA_SHA1 is no longer available.
+
+## Changelog
+
+See [docs/CHANGELOG.md](docs/CHANGELOG.md).
 
 ## License
 
