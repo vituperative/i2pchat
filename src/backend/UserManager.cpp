@@ -358,10 +358,12 @@ void CUserManager::changeUserPositionInUserList(int oldPos, int newPos) {
   emit signUserStatusChanged();
 }
 
+void CUserManager::setSortingEnabled(bool enabled) {
+  mSortingEnabled = enabled;
+}
+
 void CUserManager::sortUserList(int sortType) {
   mSortType = sortType;
-  if (!mSortingEnabled)
-    return;
 
   switch (sortType) {
   case 0: { // Sort alphabetically
@@ -438,6 +440,8 @@ bool CUserManager::renameUserByI2PDestination(const QString &Destination, const 
 }
 
 void CUserManager::slotResort() {
+  if (!mSortingEnabled)
+    return;
   sortUserList(mSortType);
 }
 

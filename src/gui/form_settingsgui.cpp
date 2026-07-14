@@ -168,7 +168,8 @@ void form_settingsgui::loadSettings() {
 
   settings->endGroup();
 
-  // Apply saved sorting settings
+  // Sync UserManager with persisted sort settings
+  mCore.getUserManager()->setSortingEnabled(sortingEnabled);
   if (sortingEnabled) {
     mCore.getUserManager()->sortUserList(sortType);
   }
@@ -910,6 +911,7 @@ void form_settingsgui::clicked_sortingEnabled(bool enabled) {
   settings->endGroup();
   settings->sync();
 
+  mCore.getUserManager()->setSortingEnabled(enabled);
   if (enabled) {
     int sortType = settings->value("UserList/SortType", 0).toInt();
     mCore.getUserManager()->sortUserList(sortType);

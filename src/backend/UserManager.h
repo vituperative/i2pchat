@@ -45,6 +45,7 @@ public:
   bool checkIfUserExistsByI2PDestination(const QString &I2PDestination) const;
   void changeUserPositionInUserList(int oldPos, int newPos);
   void sortUserList(int sortType);
+  void setSortingEnabled(bool enabled);
   bool renameUserByI2PDestination(const QString &Destination, const QString &newNickname);
   bool deleteUserByI2PDestination(const QString &I2PDestination);
   void avatarImageChanged();
