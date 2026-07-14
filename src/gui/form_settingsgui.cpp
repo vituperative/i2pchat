@@ -112,6 +112,8 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
 
   connect(AutoAway, SIGNAL(toggled(bool)), this, SLOT(clicked_AutoAwayEnabled(bool)));
 
+  connect(nonpersistdest, SIGNAL(clicked(bool)), this, SLOT(clicked_nonPersistDest(bool)));
+
   // TODO: Add this button from ui file. (QtCreator, i dont have it)
   // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
   // setCustomStyleSheet() ) );
@@ -225,6 +227,8 @@ void form_settingsgui::loadSettings() {
   comboBox_SigType->setEditable(false);
   comboBox_SigType->setCurrentIndex(
     comboBox_SigType->findText(settings->value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString()));
+
+  nonpersistdest->setChecked(settings->value("NonPersistentDestination", false).toBool());
   settings->endGroup();
 
   settings->beginGroup("Sound");
@@ -442,6 +446,8 @@ void form_settingsgui::saveSettings() {
 
   // Signature_type
   settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());
+
+  settings->setValue("NonPersistentDestination", nonpersistdest->isChecked());
   settings->endGroup();
 
   settings->beginGroup("Sound");
@@ -987,4 +993,30 @@ void form_settingsgui::clicked_AutoAwayEnabled(bool enabled) {
   NoActivityLabel->setEnabled(enabled);
   if (enabled)
     mCore.resetAutoAway();
+}
+
+void form_settingsgui::clicked_nonPersistDest(bool checked) {
+  settings->beginGroup("Network");
+  settings->setValue("NonPersistentDestination", checked);
+  settings->endGroup();
+  settings->sync();
+
+  if (checked) {
+    settings->beginGroup("Network");
+    settings->setValue("SamPrivKey", "");
+    settings->endGroup();
+    settings->sync();
+
+    QMessageBox *msgBox = new QMessageBox(NULL);
+    msgBox->setIcon(QMessageBox::Information);
+    msgBox->setWindowTitle(tr("I2PChat"));
+    msgBox->setText(tr("Non-persistent destination enabled"));
+    msgBox->setInformativeText(tr("A new destination will be generated on next start.\n"
+                                  "Your current identity will not be saved."));
+    msgBox->setStandardButtons(QMessageBox::Ok);
+    msgBox->setDefaultButton(QMessageBox::Ok);
+    msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
+    msgBox->show();
+  }
 }

@@ -245,7 +245,8 @@ void CCore::init() {
 
   QString SamHost = settings.value("SamHost", "127.0.0.1").toString();
   QString SamPort = settings.value("SamPort", "7656").toString();
-  QString SamPrivKey = settings.value("SamPrivKey", "").toString();
+  bool nonPersist = settings.value("NonPersistentDestination", false).toBool();
+  QString SamPrivKey = nonPersist ? "" : settings.value("SamPrivKey", "").toString();
 
   qDebug() << "CCore::init() - SamHost:" << SamHost << "SamPort:" << SamPort << "HasPrivKey:" << !SamPrivKey.isEmpty();
 
@@ -776,7 +777,9 @@ void CCore::createStreamObjectForUser(CUser &User) {
 void CCore::slotNewSamPrivKeyGenerated(const QString &SamPrivKey) {
   QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("Network");
-  settings->setValue("SamPrivKey", SamPrivKey);
+  bool nonPersist = settings->value("NonPersistentDestination", false).toBool();
+  if (!nonPersist)
+    settings->setValue("SamPrivKey", SamPrivKey);
   settings->endGroup();
   settings->sync();
   delete settings;

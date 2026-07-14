@@ -1369,10 +1369,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QCheckBox" name="nonpersistdest">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+       <widget class="QCheckBox" name="nonpersistdest">
        <property name="geometry">
         <rect>
          <x>144</x>

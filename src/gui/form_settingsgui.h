@@ -93,6 +93,7 @@ private slots:
   void clicked_SelectAvatarImage();
   void clicked_ClearAvatarImage();
   void clicked_AutoAwayEnabled(bool enabled);
+  void clicked_nonPersistDest(bool checked);
   void setCustomStyleSheet();
 
 private:
