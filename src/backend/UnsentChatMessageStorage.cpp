@@ -1,13 +1,11 @@
 #include "UnsentChatMessageStorage.h"
 
-CUnsentChatMessageStorage::CUnsentChatMessageStorage(
-    const QString FileNameWithPath)
-    : mFileNameWithPath(FileNameWithPath) {}
+CUnsentChatMessageStorage::CUnsentChatMessageStorage(const QString FileNameWithPath)
+  : mFileNameWithPath(FileNameWithPath) {}
 
 CUnsentChatMessageStorage::~CUnsentChatMessageStorage() {}
 
-QStringList
-CUnsentChatMessageStorage::getMessagesForDest(const QString I2PDest) {
+QStringList CUnsentChatMessageStorage::getMessagesForDest(const QString I2PDest) {
   QSettings settings(mFileNameWithPath, QSettings::IniFormat);
 
   QStringList message;
@@ -23,8 +21,7 @@ CUnsentChatMessageStorage::getMessagesForDest(const QString I2PDest) {
   return message;
 }
 
-void CUnsentChatMessageStorage::saveChatMessagesForDest(
-    const QString I2PDest, const QStringList Messages) {
+void CUnsentChatMessageStorage::saveChatMessagesForDest(const QString I2PDest, const QStringList Messages) {
 
   if (Messages.isEmpty() == true)
     return;

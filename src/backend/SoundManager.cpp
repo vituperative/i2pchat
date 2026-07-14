@@ -19,12 +19,15 @@
  ***************************************************************************/
 #include "SoundManager.h"
 
-CSoundManager::CSoundManager(QString ConfigPath) : mConfigPath(ConfigPath) {
+CSoundManager::CSoundManager(QString ConfigPath)
+  : mConfigPath(ConfigPath) {
   mIsMute = false;
   reInit();
 }
 
-void CSoundManager::doMute(bool t) { mIsMute = t; }
+void CSoundManager::doMute(bool t) {
+  mIsMute = t;
+}
 
 void CSoundManager::slotUserGoOnline() {
   if (mIsMute == true)
@@ -72,32 +75,20 @@ void CSoundManager::reInit() {
   settings.beginGroup("Sound");
   settings.beginGroup("Enable");
   mEnable_eventUser_go_Online = settings.value("User_go_Online", true).toBool();
-  mEnable_eventUser_go_Offline =
-      settings.value("User_go_Offline", true).toBool();
-  mEnable_eventFileSend_Finished =
-      settings.value("FileSend_Finished", true).toBool();
-  mEnable_eventFileReceive_Incoming =
-      settings.value("FileReceive_Incoming", true).toBool();
-  mEnable_eventFileReceive_Finished =
-      settings.value("FileReceive_Finished", true).toBool();
+  mEnable_eventUser_go_Offline = settings.value("User_go_Offline", true).toBool();
+  mEnable_eventFileSend_Finished = settings.value("FileSend_Finished", true).toBool();
+  mEnable_eventFileReceive_Incoming = settings.value("FileReceive_Incoming", true).toBool();
+  mEnable_eventFileReceive_Finished = settings.value("FileReceive_Finished", true).toBool();
   mEnable_eventNewChatMessage = settings.value("NewChatMessage", true).toBool();
   settings.endGroup();
 
   settings.beginGroup("SoundFilePath");
-  mSoundFileUser_go_Online =
-      settings.value("User_go_Online", "./sounds/online.wav").toString();
-  mSoundFileUser_go_Offline =
-      settings.value("User_go_Offline", "./sounds/offline.wav").toString();
-  mSoundFileFileSend_Finished =
-      settings.value("FileSend_Finished", "./sounds/complete.wav").toString();
-  mSoundFileFileReceive_Incoming =
-      settings.value("FileReceive_Incoming", "./sounds/fileincoming.wav")
-          .toString();
-  mSoundFileFileReceive_Finished =
-      settings.value("FileReceive_Finished", "./sounds/complete.wav")
-          .toString();
-  mSoundFileNewChatMessage =
-      settings.value("NewChatMessage", "./sounds/newmessage.wav").toString();
+  mSoundFileUser_go_Online = settings.value("User_go_Online", "./sounds/online.wav").toString();
+  mSoundFileUser_go_Offline = settings.value("User_go_Offline", "./sounds/offline.wav").toString();
+  mSoundFileFileSend_Finished = settings.value("FileSend_Finished", "./sounds/complete.wav").toString();
+  mSoundFileFileReceive_Incoming = settings.value("FileReceive_Incoming", "./sounds/fileincoming.wav").toString();
+  mSoundFileFileReceive_Finished = settings.value("FileReceive_Finished", "./sounds/complete.wav").toString();
+  mSoundFileNewChatMessage = settings.value("NewChatMessage", "./sounds/newmessage.wav").toString();
   settings.endGroup();
   settings.endGroup();
   settings.sync();

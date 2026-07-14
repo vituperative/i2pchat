@@ -19,42 +19,38 @@
  ***************************************************************************/
 
 #include "form_Main.h"
+
 #include "UserManager.h"
+
 #include <QIcon>
 #include <QMessageBox>
 #include <QSystemTrayIcon>
 
 form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
-    : QMainWindow(parent) {
-  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
-                 Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+  : QMainWindow(parent) {
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
+                 Qt::WindowCloseButtonHint);
   setupUi(this); // this sets up GUI
 
   QApplication::setQuitOnLastWindowClosed(false);
   Core = new CCore(configDir);
-   connect(Core, SIGNAL(signUserStatusChanged()), this,
-           SLOT(eventUserChanged()));
-   connect(this, SIGNAL(changeAllowIncoming(bool)), Core,
-           SLOT(changeAccessIncomingUsers(bool)));
-   connect(Core, SIGNAL(signOnlineStatusChanged()), this,
-           SLOT(OnlineStateChanged()));
-   connect(Core, SIGNAL(signIncomingUserAuthorizationRequest(QString, qint32, QByteArray)), this,
-           SLOT(incomingUserAuthorizationRequest(QString, qint32, QByteArray)));
+  connect(Core, SIGNAL(signUserStatusChanged()), this, SLOT(eventUserChanged()));
+  connect(this, SIGNAL(changeAllowIncoming(bool)), Core, SLOT(changeAccessIncomingUsers(bool)));
+  connect(Core, SIGNAL(signOnlineStatusChanged()), this, SLOT(OnlineStateChanged()));
+  connect(Core,
+          SIGNAL(signIncomingUserAuthorizationRequest(QString, qint32, QByteArray)),
+          this,
+          SLOT(incomingUserAuthorizationRequest(QString, qint32, QByteArray)));
 
-  connect(listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
-          SLOT(openUserListeClicked()));
+  connect(listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openUserListeClicked()));
 
-  connect(listWidget, SIGNAL(customContextMenuRequested(QPoint)), this,
-          SLOT(connecttreeWidgetCostumPopupMenu(QPoint)));
+  connect(listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(connecttreeWidgetCostumPopupMenu(QPoint)));
 
-  connect(comboBox, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(onlineComboBoxChanged()));
+  connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onlineComboBoxChanged()));
 
-  connect(Core, SIGNAL(signOwnAvatarImageChanged()), this,
-          SLOT(eventAvatarImageChanged()));
+  connect(Core, SIGNAL(signOwnAvatarImageChanged()), this, SLOT(eventAvatarImageChanged()));
 
-  connect(Core, SIGNAL(signNicknameChanged()), this,
-          SLOT(eventNicknameChanged()));
+  connect(Core, SIGNAL(signNicknameChanged()), this, SLOT(eventNicknameChanged()));
 
   mUserSearchWindow = NULL;
   mTopicSubscribeWindow = NULL;
@@ -119,22 +115,20 @@ void form_MainWindow::onlineComboBoxChanged() {
       msgBox->show();
       OnlineStateChanged();
     }
-   } else if (text.contains(tr("Connecting"), Qt::CaseInsensitive) == true) {
-     if (Core->getOnlineStatus() != User::USERTRYTOCONNECT)
-       Core->setOnlineStatus(User::USERTRYTOCONNECT);
-   }
+  } else if (text.contains(tr("Connecting"), Qt::CaseInsensitive) == true) {
+    if (Core->getOnlineStatus() != User::USERTRYTOCONNECT)
+      Core->setOnlineStatus(User::USERTRYTOCONNECT);
+  }
 }
 
 void form_MainWindow::initToolBars() {
   // toolBar->setIconSize(QSize(24, 24));
-  QSettings settings(Core->getConfigPath() + "/application.ini",
-                     QSettings::IniFormat);
+  QSettings settings(Core->getConfigPath() + "/application.ini", QSettings::IniFormat);
   QToolBar *toolBar = this->toolBar;
 
   toolBar->setFixedHeight(32);
   toolBar->setContextMenuPolicy(Qt::CustomContextMenu);
-  toolBar->addAction(QIcon(ICON_NEWUSER), tr("Add User"), this,
-                     SLOT(openAdduserWindow()));
+  toolBar->addAction(QIcon(ICON_NEWUSER), tr("Add User"), this, SLOT(openAdduserWindow()));
 
   /* User search disabled.. can we re-enable this?
       {
@@ -170,17 +164,11 @@ void form_MainWindow::initToolBars() {
       }
   */
 
-  toolBar->addAction(QIcon(ICON_MYDESTINATION),
-                     tr("Copy Destination to clipboard"), this,
-                     SLOT(namingMe()));
-  toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this,
-                     SLOT(openConfigWindow()));
-  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this,
-                     SLOT(openDebugMessagesWindow()));
-  toolBar->addAction(QIcon(ICON_ABOUT), tr("About I2PChat"), this,
-                     SLOT(openAboutDialog()));
-  toolBar->addAction(QIcon(ICON_CLOSE), tr("Quit I2PChat"), this,
-                     SLOT(closeApplication()));
+  toolBar->addAction(QIcon(ICON_MYDESTINATION), tr("Copy Destination to clipboard"), this, SLOT(namingMe()));
+  toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this, SLOT(openConfigWindow()));
+  toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this, SLOT(openDebugMessagesWindow()));
+  toolBar->addAction(QIcon(ICON_ABOUT), tr("About I2PChat"), this, SLOT(openAboutDialog()));
+  toolBar->addAction(QIcon(ICON_CLOSE), tr("Quit I2PChat"), this, SLOT(closeApplication()));
 }
 
 void form_MainWindow::openConfigWindow() {
@@ -204,8 +192,7 @@ void form_MainWindow::openDebugMessagesWindow() {
 
     connect(this, SIGNAL(closeAllWindows()), mDebugWindow, SLOT(close()));
 
-    connect(mDebugWindow, SIGNAL(closingDebugWindow()), this,
-            SLOT(eventDebugWindowClosed()));
+    connect(mDebugWindow, SIGNAL(closingDebugWindow()), this, SLOT(eventDebugWindowClosed()));
 
     mDebugWindow->show();
   } else {
@@ -220,13 +207,9 @@ void form_MainWindow::namingMe() {
   setWindowIcon(QIcon(pixmap));
   if (Destination != "") {
     clipboard->setText(Destination);
-    QMessageBox::information(
-        this, "", tr("\nYour Destination has been copied to the clipboard"),
-        QMessageBox::Close);
+    QMessageBox::information(this, "", tr("\nYour Destination has been copied to the clipboard"), QMessageBox::Close);
   } else {
-    QMessageBox::information(this, "",
-                             tr("\nYou must be online to copy Destination"),
-                             QMessageBox::Close);
+    QMessageBox::information(this, "", tr("\nYou must be online to copy Destination"), QMessageBox::Close);
   }
 }
 void form_MainWindow::closeApplication() {
@@ -259,8 +242,7 @@ void form_MainWindow::closeApplication() {
     QPixmap pixmap = QPixmap(":/icons/avatar.svg");
     msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Information);
-    msgBox.setText(
-        tr("\nFile transfer in progress...\nCancel transfer first!"));
+    msgBox.setText(tr("\nFile transfer in progress...\nCancel transfer first!"));
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.setWindowModality(Qt::NonModal);
@@ -273,18 +255,15 @@ void form_MainWindow::eventUserChanged() {
   mLastDestinationWithUnreadMessages = "";
   bool showUnreadMessageAtTray = false;
   QList<CUser *> users = Core->getUserManager()->getUserList();
-  QList<CFileTransferReceive *> FileReceives =
-      Core->getFileTransferManager()->getFileTransferReceiveList();
-  QList<CFileTransferSend *> FileSends =
-      Core->getFileTransferManager()->getFileTransferSendsList();
+  QList<CFileTransferReceive *> FileReceives = Core->getFileTransferManager()->getFileTransferReceiveList();
+  QList<CFileTransferSend *> FileSends = Core->getFileTransferManager()->getFileTransferSendsList();
 
   listWidget->clear();
 
   for (int i = 0; i < users.count(); i++) {
     // USERS
     QListWidgetItem *newItem = new QListWidgetItem(listWidget);
-    QListWidgetItem *ChildWidthI2PDestinationAsText =
-        new QListWidgetItem(listWidget);
+    QListWidgetItem *ChildWidthI2PDestinationAsText = new QListWidgetItem(listWidget);
     QListWidgetItem *ChildWidthTyp = new QListWidgetItem(listWidget);
 
     if (users.at(i)->getHaveNewUnreadChatmessages() == true) {
@@ -449,48 +428,38 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QMenu contextMnuPos("Position", this);
 
   QMouseEvent *mevent =
-      new QMouseEvent(QEvent::MouseButtonPress, point, Qt::RightButton,
-                      Qt::RightButton, Qt::NoModifier);
+    new QMouseEvent(QEvent::MouseButtonPress, point, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
 
   QAction *UserAutoDownload = new QAction(QIcon(ICON_USER_DOWNLOAD), tr("Auto-download"), this);
   UserAutoDownload->setCheckable(true);
-  connect(UserAutoDownload, SIGNAL(triggered(bool)), this,
-          SLOT(UserAutoDownload(bool)));
+  connect(UserAutoDownload, SIGNAL(triggered(bool)), this, SLOT(UserAutoDownload(bool)));
   UserAutoDownload->setEnabled(false);
 
-  QAction *UserInvisible =
-      new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
+  QAction *UserInvisible = new QAction(QIcon(ICON_USER_INVISIBLE), tr("Invisible"), this);
   UserInvisible->setCheckable(true);
-  connect(UserInvisible, SIGNAL(triggered(bool)), this,
-          SLOT(UserInvisible(bool)));
+  connect(UserInvisible, SIGNAL(triggered(bool)), this, SLOT(UserInvisible(bool)));
 
-  QAction *UserDelete =
-      new QAction(QIcon(ICON_USER_DELETE), tr("Delete"), this);
+  QAction *UserDelete = new QAction(QIcon(ICON_USER_DELETE), tr("Delete"), this);
   connect(UserDelete, SIGNAL(triggered()), this, SLOT(deleteUserClicked()));
 
-  QAction *UserRename =
-      new QAction(QIcon(ICON_USER_RENAME), tr("Rename"), this);
+  QAction *UserRename = new QAction(QIcon(ICON_USER_RENAME), tr("Rename"), this);
   connect(UserRename, SIGNAL(triggered()), this, SLOT(renameUserCLicked()));
 
-  QAction *CopyDestination =
-      new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
+  QAction *CopyDestination = new QAction(QIcon(ICON_COPYBASE64), tr("Copy Destination"), this);
   connect(CopyDestination, SIGNAL(triggered()), this, SLOT(copyDestination()));
 
-  QAction *CopyB32 =
-      new QAction(QIcon(ICON_WEB), tr("Copy B32 Address"), this);
+  QAction *CopyB32 = new QAction(QIcon(ICON_WEB), tr("Copy B32 Address"), this);
   connect(CopyB32, SIGNAL(triggered()), this, SLOT(copyB32()));
   CopyB32->setEnabled(false);
 
-  QAction *ShowUserInfos =
-      new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
+  QAction *ShowUserInfos = new QAction(QIcon(ICON_ABOUT), tr("User Info"), this);
   connect(ShowUserInfos, SIGNAL(triggered()), this, SLOT(showUserInfos()));
 
   QAction *UserToBlockList = new QAction(QIcon(ICON_BLOCK), tr("Block"), this);
-  connect(UserToBlockList, SIGNAL(triggered()), this,
-          SLOT(addUserToBlockList()));
+  connect(UserToBlockList, SIGNAL(triggered()), this, SLOT(addUserToBlockList()));
 
   // for contextMnuPos
   QAction *UP = new QAction(tr("Up"), this);
@@ -594,8 +563,7 @@ void form_MainWindow::renameUserCLicked() {
   QListWidgetItem *t2 = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t2->text();
 
-  form_RenameWindow *Dialog =
-      new form_RenameWindow(*Core, OldNickname, Destination);
+  form_RenameWindow *Dialog = new form_RenameWindow(*Core, OldNickname, Destination);
   Dialog->show();
 }
 
@@ -658,8 +626,7 @@ void form_MainWindow::toggleVisibilitycontextmenu() {
 }
 
 void form_MainWindow::OnlineStateChanged() {
-  disconnect(comboBox, SIGNAL(currentIndexChanged(int)), this,
-             SLOT(onlineComboBoxChanged()));
+  disconnect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onlineComboBoxChanged()));
 
   QComboBox *comboBox = this->comboBox;
   ONLINESTATE onlinestatus = Core->getOnlineStatus();
@@ -675,12 +642,12 @@ void form_MainWindow::OnlineStateChanged() {
     if (comboBox->count() < 6) {
       comboBox->clear();
 
-      comboBox->addItem(QIcon(ICON_USER_ONLINE), tr("Online"));              // index 0
-      comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr("Want to chat"));    // 1
-      comboBox->addItem(QIcon(ICON_USER_AWAY), tr("Away"));                  // 2
-      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB), tr("No disturbo"));   // 3
-      comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr("Invisible"));        // 4
-      comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline"));            // 5
+      comboBox->addItem(QIcon(ICON_USER_ONLINE), tr("Online"));            // index 0
+      comboBox->addItem(QIcon(ICON_USER_WANTTOCHAT), tr("Want to chat"));  // 1
+      comboBox->addItem(QIcon(ICON_USER_AWAY), tr("Away"));                // 2
+      comboBox->addItem(QIcon(ICON_USER_DONT_DISTURB), tr("No disturbo")); // 3
+      comboBox->addItem(QIcon(ICON_USER_INVISIBLE), tr("Invisible"));      // 4
+      comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline"));          // 5
     }
 
     if (onlinestatus == User::USERONLINE) {
@@ -702,25 +669,23 @@ void form_MainWindow::OnlineStateChanged() {
       comboBox->setCurrentIndex(5);
       trayIcon->setIcon(QIcon(ICON_USER_OFFLINE));
     }
-   }
+  }
 
-   // Refresh contact list icons when online status changes
-   slotLoadOwnAvatarImage();
+  // Refresh contact list icons when online status changes
+  slotLoadOwnAvatarImage();
 
-   connect(comboBox, SIGNAL(currentIndexChanged(int)), this,
-           SLOT(onlineComboBoxChanged()));
+  connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onlineComboBoxChanged()));
 }
 
 void form_MainWindow::openAboutDialog() {
   if (mAboutWindow == NULL) {
-    mAboutWindow =
-        new form_About(Core->getClientVersion(), Core->getProtocolVersion(),
-                       FileTransferProtocol::MINPROTOCOLVERSION,
-                       FileTransferProtocol::MAXPROTOCOLVERSION);
+    mAboutWindow = new form_About(Core->getClientVersion(),
+                                  Core->getProtocolVersion(),
+                                  FileTransferProtocol::MINPROTOCOLVERSION,
+                                  FileTransferProtocol::MAXPROTOCOLVERSION);
     connect(this, SIGNAL(closeAllWindows()), mAboutWindow, SLOT(close()));
 
-    connect(mAboutWindow, SIGNAL(closingAboutWindow()), this,
-            SLOT(eventAboutWindowClosed()));
+    connect(mAboutWindow, SIGNAL(closingAboutWindow()), this, SLOT(eventAboutWindowClosed()));
 
     mAboutWindow->show();
   } else {
@@ -775,18 +740,15 @@ void form_MainWindow::initTryIconMenu() {
   menu = new QMenu(this);
   QObject::connect(menu, SIGNAL(aboutToShow()), this, SLOT(updateMenu()));
   toggleVisibilityAction =
-      menu->addAction(QIcon(ICON_CHAT), tr("Show/Hide"), this,
-                      SLOT(toggleVisibilitycontextmenu()));
+    menu->addAction(QIcon(ICON_CHAT), tr("Show/Hide"), this, SLOT(toggleVisibilitycontextmenu()));
 
-  toggleMuteAction = menu->addAction(QIcon(ICON_SOUND_ON), tr("Sound on"), this,
-                                     SLOT(muteSound()));
+  toggleMuteAction = menu->addAction(QIcon(ICON_SOUND_ON), tr("Sound on"), this, SLOT(muteSound()));
   menu->addSeparator();
   // menu->addAction(QIcon(ICON_MINIMIZE), tr("Minimize"), this,
   // SLOT(showMinimized())); menu->addAction(QIcon(ICON_MAXIMIZE),
   // tr("Maximize"), this, SLOT(showMaximized()));
   menu->addSeparator();
-  menu->addAction(QIcon(ICON_CLOSE), tr("&Quit"), this,
-                  SLOT(closeApplication()));
+  menu->addAction(QIcon(ICON_CLOSE), tr("&Quit"), this, SLOT(closeApplication()));
 }
 
 void form_MainWindow::initTryIcon() {
@@ -796,12 +758,15 @@ void form_MainWindow::initTryIcon() {
   trayIcon->setContextMenu(menu);
   trayIcon->setIcon(QIcon(ICON_CHAT));
 
-  connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
+  connect(trayIcon,
+          SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+          this,
           SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
 
-  connect(
-      trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
-      SLOT(eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason)));
+  connect(trayIcon,
+          SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+          this,
+          SLOT(eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason)));
 
   trayIcon->show();
 }
@@ -809,8 +774,7 @@ void form_MainWindow::initTryIcon() {
 void form_MainWindow::SendFile() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
-  QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
-                                                  tr("all Files (*)"));
+  QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("all Files (*)"));
 
   if (FilePath.endsWith("/") == true) {
     // only a directory ,- dont send it
@@ -820,8 +784,7 @@ void form_MainWindow::SendFile() {
   if (Destination.length() == 516) {
     if (!FilePath.isEmpty())
       try {
-        Core->getFileTransferManager()->addNewFileTransfer(FilePath,
-                                                           Destination);
+        Core->getFileTransferManager()->addNewFileTransfer(FilePath, Destination);
       } catch (std::exception &e) {
         qWarning() << "\nform_MainWindow::SendFile()\n"
                    << e.what() << "Destination: " << Destination << "\n"
@@ -842,9 +805,7 @@ void form_MainWindow::copyDestination() {
   QClipboard *clipboard = QApplication::clipboard();
 
   clipboard->setText(Destination);
-  QMessageBox::information(this, "",
-                           tr("\nContact's Destination copied to clipboard"),
-                           QMessageBox::Close);
+  QMessageBox::information(this, "", tr("\nContact's Destination copied to clipboard"), QMessageBox::Close);
 }
 
 void form_MainWindow::copyB32() {
@@ -854,9 +815,7 @@ void form_MainWindow::copyB32() {
   QClipboard *clipboard = QApplication::clipboard();
 
   clipboard->setText(Address);
-  QMessageBox::information(this, "",
-                           tr("\nContact's profile address copied to clipboard"),
-                           QMessageBox::Close);
+  QMessageBox::information(this, "", tr("\nContact's profile address copied to clipboard"), QMessageBox::Close);
 }
 
 void form_MainWindow::muteSound() {
@@ -880,8 +839,7 @@ void form_MainWindow::showUserInfos() {
   CUser *user;
 
   user = Core->getUserManager()->getUserByI2P_Destination(Destination);
-  UserInfos =
-      Core->getUserManager()->getUserInfosByI2P_Destination(Destination);
+  UserInfos = Core->getUserManager()->getUserInfosByI2P_Destination(Destination);
 
   avatar.loadFromData(user->getReceivedUserInfos().AvatarImage);
 
@@ -903,15 +861,15 @@ void form_MainWindow::showUserInfos() {
 void form_MainWindow::UserPositionUP() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() >= 1)
-    Core->getUserManager()->changeUserPositionInUserList(
-        listWidget->currentRow() / 3, listWidget->currentRow() / 3 - 1);
+    Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
+                                                         listWidget->currentRow() / 3 - 1);
 }
 
 void form_MainWindow::UserPositionDOWN() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() < (listWidget->count() / 3) - 1)
-    Core->getUserManager()->changeUserPositionInUserList(
-        listWidget->currentRow() / 3, listWidget->currentRow() / 3 + 1);
+    Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
+                                                         listWidget->currentRow() / 3 + 1);
 }
 
 void form_MainWindow::UserPositionTOP() {
@@ -952,10 +910,8 @@ void form_MainWindow::eventChatWindowClosed(QString Destination) {
   }
 }
 
-void form_MainWindow::eventTryIconDoubleClicked(
-    enum QSystemTrayIcon::ActivationReason Reason) {
-  if (Reason == QSystemTrayIcon::DoubleClick &&
-      mLastDestinationWithUnreadMessages.isEmpty() == false) {
+void form_MainWindow::eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason) {
+  if (Reason == QSystemTrayIcon::DoubleClick && mLastDestinationWithUnreadMessages.isEmpty() == false) {
     openChatWindow(mLastDestinationWithUnreadMessages);
   }
 }
@@ -974,11 +930,9 @@ void form_MainWindow::openChatWindow(QString Destination) {
     form_ChatWidget *tmp = new form_ChatWidget(*User, *Core);
     connect(this, SIGNAL(closeAllWindows()), tmp, SLOT(close()));
 
-    connect(tmp, SIGNAL(closingChatWindow(QString)), this,
-            SLOT(eventChatWindowClosed(QString)));
+    connect(tmp, SIGNAL(closingChatWindow(QString)), this, SLOT(eventChatWindowClosed(QString)));
 
-    connect(Core, SIGNAL(signOwnAvatarImageChanged()), this,
-            SLOT(slotLoadOwnAvatarImage()));
+    connect(Core, SIGNAL(signOwnAvatarImageChanged()), this, SLOT(slotLoadOwnAvatarImage()));
 
     mAllOpenChatWindows.insert(Destination, tmp);
     tmp->show();
@@ -1010,21 +964,18 @@ void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
 }
 
 void form_MainWindow::openFileSendWindow(qint32 StreamID) {
-  CFileTransferSend *TransferSend =
-      Core->getFileTransferManager()->getFileSendByID(StreamID);
+  CFileTransferSend *TransferSend = Core->getFileTransferManager()->getFileSendByID(StreamID);
 
   if (TransferSend == NULL) {
     qCritical() << "form_MainWindow::openFileSendWindow\n"
-                << "Can't find FileSend Object with ID: " << StreamID
-                << "\nFile transfer failed!";
+                << "Can't find FileSend Object with ID: " << StreamID << "\nFile transfer failed!";
     return;
   }
 
   if (mAllFileSendWindows.contains(StreamID) == false) {
     // open new FileSendWindow
     form_fileSend *Dialog = new form_fileSend(*TransferSend);
-    connect(Dialog, SIGNAL(closingFileSendWindow(qint32)), this,
-            SLOT(eventFileSendWindowClosed(qint32)));
+    connect(Dialog, SIGNAL(closingFileSendWindow(qint32)), this, SLOT(eventFileSendWindowClosed(qint32)));
 
     mAllFileSendWindows.insert(StreamID, Dialog);
     Dialog->show();
@@ -1035,12 +986,10 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
 }
 
 void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
-  CFileTransferReceive *receive =
-      Core->getFileTransferManager()->getFileReceiveByID(StreamID);
+  CFileTransferReceive *receive = Core->getFileTransferManager()->getFileReceiveByID(StreamID);
   if (receive == NULL) {
     qCritical() << "form_MainWindow::openFileReceiveWindow\n"
-                << "Can't find FileReceive Object with ID: " << StreamID
-                << "\nFile transfer failed!";
+                << "Can't find FileReceive Object with ID: " << StreamID << "\nFile transfer failed!";
     return;
   }
 
@@ -1048,8 +997,7 @@ void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
     // create new FileReceiveWindow
     form_fileReceive *Dialog = new form_fileReceive(*receive);
 
-    connect(Dialog, SIGNAL(closingFileReceiveWindow(qint32)), this,
-            SLOT(eventFileReceiveWindowClosed(qint32)));
+    connect(Dialog, SIGNAL(closingFileReceiveWindow(qint32)), this, SLOT(eventFileReceiveWindowClosed(qint32)));
 
     mAllFileReceiveWindows.insert(StreamID, Dialog);
     Dialog->show();
@@ -1119,7 +1067,8 @@ void form_MainWindow::incomingUserAuthorizationRequest(QString destination, int 
     QString version(temp);
     bool OK = false;
     double versiond = version.toDouble(&OK);
-    if (!OK) versiond = 0.0;
+    if (!OK)
+      versiond = 0.0;
 
     // Add the user
     if (versiond >= 0.3) {
@@ -1182,8 +1131,7 @@ void form_MainWindow::eventAvatarImageChanged() {
   if (Core->getUserInfos().AvatarImage.isEmpty() == false) {
     QPixmap avatar;
     avatar.loadFromData(Core->getUserInfos().AvatarImage);
-    avatar = avatar.scaled(avatarlabel->width(), avatarlabel->height(),
-                           Qt::KeepAspectRatio);
+    avatar = avatar.scaled(avatarlabel->width(), avatarlabel->height(), Qt::KeepAspectRatio);
     avatarlabel->setAlignment(Qt::AlignCenter);
     avatarlabel->setPixmap(avatar);
   }
@@ -1252,8 +1200,7 @@ void form_MainWindow::openTopicSubscribeWindow() {
   ONLINESTATE currentState = Core->getOnlineStatus();
 
   if (currentState == USEROFFLINE || currentState == USERTRYTOCONNECT) {
-    QMessageBox::information(this, "", tr("You must be connected for this"),
-                             QMessageBox::Close);
+    QMessageBox::information(this, "", tr("You must be connected for this"), QMessageBox::Close);
     return;
   }
 
@@ -1261,11 +1208,10 @@ void form_MainWindow::openTopicSubscribeWindow() {
 
     mTopicSubscribeWindow = new form_topicSubscribe(*Core);
 
-    connect(this, SIGNAL(closeAllWindows()), mTopicSubscribeWindow,
-            SLOT(close()));
+    connect(this, SIGNAL(closeAllWindows()), mTopicSubscribeWindow, SLOT(close()));
 
-    connect(mTopicSubscribeWindow, SIGNAL(signClosingTopicSubscribeWindow()),
-            this, SLOT(eventTopicSubscribeWindowClosed()));
+    connect(
+      mTopicSubscribeWindow, SIGNAL(signClosingTopicSubscribeWindow()), this, SLOT(eventTopicSubscribeWindowClosed()));
     mTopicSubscribeWindow->show();
   } else {
     mTopicSubscribeWindow->requestFocus();
@@ -1281,7 +1227,7 @@ void form_MainWindow::UserAutoDownload(bool enabled) {
     User->setAutoDownloadEnabled(enabled);
 
     // Update the icon in the menu action
-    QAction *action = qobject_cast<QAction*>(sender());
+    QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
       if (enabled) {
         action->setIcon(QIcon(ICON_USER_DOWNLOAD));

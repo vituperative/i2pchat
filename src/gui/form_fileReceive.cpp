@@ -18,30 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "form_fileReceive.h"
+
 #include "FileTransferReceive.h"
 
 form_fileReceive::form_fileReceive(CFileTransferReceive &FileReceive)
-    : FileReceive(FileReceive), mStreamID(FileReceive.getStreamID()) {
+  : FileReceive(FileReceive)
+  , mStreamID(FileReceive.getStreamID()) {
   setupUi(this);
 
-  connect(&FileReceive, SIGNAL(signFileReceivedFinishedOK()), this,
-          SLOT(slot_FileReceivedFinishedOK()));
+  connect(&FileReceive, SIGNAL(signFileReceivedFinishedOK()), this, SLOT(slot_FileReceivedFinishedOK()));
 
-  connect(&FileReceive, SIGNAL(signgetTransferredSizeChanged(quint64)), this,
+  connect(&FileReceive,
+          SIGNAL(signgetTransferredSizeChanged(quint64)),
+          this,
           SLOT(slot_allreadyReceivedSizeChanged(quint64)));
 
-  connect(&FileReceive, SIGNAL(signFileReceiveError()), this,
-          SLOT(slot_FileReceiveError()));
+  connect(&FileReceive, SIGNAL(signFileReceiveError()), this, SLOT(slot_FileReceiveError()));
 
   connect(&FileReceive, SIGNAL(signFileReceiveAborted()), this, SLOT(close()));
 
   connect(pushButton, SIGNAL(pressed()), this, SLOT(slot_Button()));
 
-  connect(&FileReceive, SIGNAL(signAverageReceiveSpeed(QString, QString)), this,
-          SLOT(slot_SpeedChanged(QString, QString)));
+  connect(
+    &FileReceive, SIGNAL(signAverageReceiveSpeed(QString, QString)), this, SLOT(slot_SpeedChanged(QString, QString)));
 
-  connect(&FileReceive, SIGNAL(signETA(QString)), labelETA,
-          SLOT(setText(QString)));
+  connect(&FileReceive, SIGNAL(signETA(QString)), labelETA, SLOT(setText(QString)));
 
   init();
 }
@@ -93,7 +94,9 @@ void form_fileReceive::slot_FileReceivedFinishedOK() {
   this->close();
 }
 
-void form_fileReceive::slot_FileReceiveError() { this->close(); }
+void form_fileReceive::slot_FileReceiveError() {
+  this->close();
+}
 
 form_fileReceive::~form_fileReceive() {}
 
@@ -108,10 +111,7 @@ void form_fileReceive::askTheUser() {
   QMessageBox msgBox(NULL);
   QPixmap pixmap = QPixmap(":/icons/avatar.svg");
   msgBox.setWindowIcon(QIcon(pixmap));
-  msgBox.setText(tr("Incoming File Transfer: %1 [%2%3]    ")
-                      .arg(FileName)
-                      .arg(SSize)
-                      .arg(SizeName));
+  msgBox.setText(tr("Incoming File Transfer: %1 [%2%3]    ").arg(FileName).arg(SSize).arg(SizeName));
   msgBox.setInformativeText(tr("Do you wish to download this file?"));
   msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox.setDefaultButton(QMessageBox::Yes);
@@ -119,8 +119,7 @@ void form_fileReceive::askTheUser() {
   int ret = msgBox.exec();
 
   if (ret == QMessageBox::Yes) {
-    QString FilePath =
-        QFileDialog::getSaveFileName(NULL, tr("File Save"), FileName);
+    QString FilePath = QFileDialog::getSaveFileName(NULL, tr("File Save"), FileName);
 
     if (!FilePath.isEmpty()) {
       FileReceive.start(FilePath, true);
@@ -137,8 +136,7 @@ void form_fileReceive::askTheUser() {
 
 void form_fileReceive::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 

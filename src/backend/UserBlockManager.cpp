@@ -17,20 +17,23 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <QSettings>
+#include "UserBlockManager.h"
 
 #include "Core.h"
 #include "I2PStream.h"
 #include "Protocol.h"
 #include "User.h"
-#include "UserBlockManager.h"
 #include "UserManager.h"
 
-CUserBlockManager::CUserBlockManager(CCore &Core,
-                                     const QString FilePathToBlockFile)
-    : mCore(Core), mFilePathToBlockFile(FilePathToBlockFile) {}
+#include <QSettings>
 
-CUserBlockManager::~CUserBlockManager() { saveBlockListe(); }
+CUserBlockManager::CUserBlockManager(CCore &Core, const QString FilePathToBlockFile)
+  : mCore(Core)
+  , mFilePathToBlockFile(FilePathToBlockFile) {}
+
+CUserBlockManager::~CUserBlockManager() {
+  saveBlockListe();
+}
 
 void CUserBlockManager::readBlockListe() {
   QFile file(mFilePathToBlockFile);
@@ -82,9 +85,7 @@ void CUserBlockManager::saveBlockListe() {
   file.close();
 }
 
-void CUserBlockManager::addNewBlockEntity(const QString NickName,
-                                          const QString Destination,
-                                          QString BlockDate) {
+void CUserBlockManager::addNewBlockEntity(const QString NickName, const QString Destination, QString BlockDate) {
   using namespace User;
   CUser *User;
   User = mCore.getUserManager()->getUserByI2P_Destination(Destination);
@@ -106,45 +107,36 @@ void CUserBlockManager::addNewBlockEntity(const QString NickName,
         mUserBlockMap.insert(Destination, tmp);
       }
     } else {
-      CUserBlockEntity *tmp =
-          new CUserBlockEntity(NickName, Destination, BlockDate);
+      CUserBlockEntity *tmp = new CUserBlockEntity(NickName, Destination, BlockDate);
       mUserBlockMap.insert(Destination, tmp);
     }
   }
   if (User != NULL) {
-    if (User->getConnectionStatus() == ONLINE ||
-        User->getConnectionStatus() == TRYTOCONNECT) {
+    if (User->getConnectionStatus() == ONLINE || User->getConnectionStatus() == TRYTOCONNECT) {
       if (User->getProtocolVersion_D() < 0.4) {
         mCore.getProtocol()->send(
-            CHATMESSAGE, User->getI2PStreamID(),
-            QString("You were blocked,all Packets will be ignored !"));
+          CHATMESSAGE, User->getI2PStreamID(), QString("You were blocked,all Packets will be ignored !"));
       } else {
-        QSettings settings(mCore.getConfigPath() + "/application.ini",
-                           QSettings::IniFormat);
+        QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
         settings.beginGroup("Security");
         if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
-          mCore.getProtocol()->send(CHATMESSAGE, User->getI2PStreamID(),
-                                    QString("You were blocked !"));
-          mCore.getProtocol()->send(USER_BLOCK_NORMAL, User->getI2PStreamID(),
-                                    QString(""));
+          mCore.getProtocol()->send(CHATMESSAGE, User->getI2PStreamID(), QString("You were blocked !"));
+          mCore.getProtocol()->send(USER_BLOCK_NORMAL, User->getI2PStreamID(), QString(""));
 
         } else {
           // Block-Style Invisible
-          mCore.getProtocol()->send(USER_BLOCK_INVISIBLE,
-                                    User->getI2PStreamID(), QString(""));
+          mCore.getProtocol()->send(USER_BLOCK_INVISIBLE, User->getI2PStreamID(), QString(""));
         }
         settings.endGroup();
         settings.sync();
       }
     }
-    mCore.getUserManager()->deleteUserByI2PDestination(
-        User->getI2PDestination());
+    mCore.getUserManager()->deleteUserByI2PDestination(User->getI2PDestination());
   }
   saveBlockListe();
 }
 
-void CUserBlockManager::removeBlockEntity(const QString Destination,
-                                          bool CreateUser) {
+void CUserBlockManager::removeBlockEntity(const QString Destination, bool CreateUser) {
   QString Nickname;
 
   if (mUserBlockMap.contains(Destination)) {
@@ -167,7 +159,6 @@ void CUserBlockManager::removeBlockEntity(const QString Destination,
   saveBlockListe();
 }
 
-bool CUserBlockManager::isDestinationInBlockList(
-    const QString Destination) const {
+bool CUserBlockManager::isDestinationInBlockList(const QString Destination) const {
   return mUserBlockMap.contains(Destination);
 }

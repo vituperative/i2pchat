@@ -19,34 +19,38 @@
  ***************************************************************************/
 
 #include "FileTransferSend.h"
+
 #include "Core.h"
 #include "UserManager.h"
 
 CFileTransferSend::CFileTransferSend(CCore &Core,
                                      CConnectionManager &ConnectionManager,
-                                     QString FilePath, QString Destination,
+                                     QString FilePath,
+                                     QString Destination,
                                      QString Protocolversion,
                                      double ProtocolversionD)
 
-    : mCore(Core), mConnectionManager(ConnectionManager), mFilePath(FilePath),
-      mDestination(Destination), mUsingProtocolVersion(Protocolversion),
-      mUsingProtocolVersionD(ProtocolversionD) {
+  : mCore(Core)
+  , mConnectionManager(ConnectionManager)
+  , mFilePath(FilePath)
+  , mDestination(Destination)
+  , mUsingProtocolVersion(Protocolversion)
+  , mUsingProtocolVersionD(ProtocolversionD) {
 
   mStream = ConnectionManager.doCreateNewStreamObject(CONNECT, false);
   mStream->setUsedFor("FileTransferSend");
 
   connect(mStream,
-          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                          const qint32, const QString)),
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
           this,
-          SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32,
-                                QString)));
+          SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32, QString)));
 
-  connect(mStream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-          this, SLOT(slotDataReceived(const qint32, QByteArray)));
+  connect(mStream,
+          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          this,
+          SLOT(slotDataReceived(const qint32, QByteArray)));
 
-  connect(&mTimerForActAverageTransferSpeed, SIGNAL(timeout()), this,
-          SLOT(slotCalcAverageTransferSpeed()));
+  connect(&mTimerForActAverageTransferSpeed, SIGNAL(timeout()), this, SLOT(slotCalcAverageTransferSpeed()));
 
   mStreamID = mStream->getID();
   mCore.setStreamTypeToKnown(mStreamID, NULL, true);
@@ -70,8 +74,7 @@ void CFileTransferSend::slotAbbortFileSend() {
   mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
 }
 
-void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
-                                         const qint32 ID, QString Message) {
+void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
   using namespace FileTransferProtocol;
 
   if (mStreamID != ID) {
@@ -91,9 +94,8 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
       QString StringFileSize;
       StringFileSize.setNum(mFileSize);
 
-      mStream->operator<<(QString("CHATSYSTEMFILETRANSFER\t" +
-                                  mUsingProtocolVersion + "\n" +
-                                  StringFileSize + "\n" + mFileName));
+      mStream->operator<<(
+        QString("CHATSYSTEMFILETRANSFER\t" + mUsingProtocolVersion + "\n" + StringFileSize + "\n" + mFileName));
       // mStream->operator <<(FIRSTPACKET+StringFileSize+"\n"+mFileName);
       mSendFirstPacket = false;
     }
@@ -109,23 +111,20 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
       emit signFileTransferFinishedOK();
       if (mAlreadyFinished == false) {
         mCore.getUserManager()
-            ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(
-                tr("Upload complete [%1]").arg(mFileName));
+          ->getUserByI2P_Destination(mDestination)
+          ->slotIncomingMessageFromSystem(tr("Upload complete [%1]").arg(mFileName));
         mAlreadyFinished = true;
       }
     } else {
       emit signFileTransferAborted();
       if (mAlreadySentSize == 0) {
         mCore.getUserManager()
-            ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(
-                tr("Cannot connect: Upload failed [%1]").arg(mFileName));
+          ->getUserByI2P_Destination(mDestination)
+          ->slotIncomingMessageFromSystem(tr("Cannot connect: Upload failed [%1]").arg(mFileName));
       } else {
         mCore.getUserManager()
-            ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(
-                tr("Recipient aborted transfer [%1]").arg(mFileName));
+          ->getUserByI2P_Destination(mDestination)
+          ->slotIncomingMessageFromSystem(tr("Recipient aborted transfer [%1]").arg(mFileName));
       }
     }
     mFileForSend.close();
@@ -137,11 +136,8 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   case (SAM_Message_Types::I2P_ERROR): {
     emit signFileTransferAborted();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error: Upload failed [%1]<br>%2")
-                .arg(mFileName)
-                .arg(Message));
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem(tr("I2P Stream Error: Upload failed [%1]<br>%2").arg(mFileName).arg(Message));
 
     mFileForSend.close();
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
@@ -151,11 +147,9 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   case (SAM_Message_Types::INVALID_KEY): {
     emit signFileTransferAborted();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            tr("I2P Stream Error (Invalid Key): Upload failed [%1]<br>%2")
-                .arg(mFileName)
-                .arg(Message));
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem(
+        tr("I2P Stream Error (Invalid Key): Upload failed [%1]<br>%2").arg(mFileName).arg(Message));
 
     mFileForSend.close();
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
@@ -165,10 +159,8 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   case (SAM_Message_Types::INVALID_ID): {
     emit signFileTransferAborted();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            "I2P Stream Error (Invalid ID): Upload failed [" + mFileName +
-            "]<br>" + Message);
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem("I2P Stream Error (Invalid ID): Upload failed [" + mFileName + "]<br>" + Message);
 
     mFileForSend.close();
     mConnectionManager.doDestroyStreamObjectByID(mStreamID);
@@ -193,9 +185,8 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
       } else if (t.contains("1")) { // false
         emit signFileTransferAccepted(false);
         mCore.getUserManager()
-            ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(
-                tr("Upload declined [%1]").arg(mFileName));
+          ->getUserByI2P_Destination(mDestination)
+          ->slotIncomingMessageFromSystem(tr("Upload declined [%1]").arg(mFileName));
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
 
@@ -205,17 +196,15 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
     } else {
       emit signFileTransferAccepted(false);
       mCore.getUserManager()
-          ->getUserByI2P_Destination(mDestination)
-          ->slotIncomingMessageFromSystem(
-              tr("Upload declined [%1]").arg(mFileName));
+        ->getUserByI2P_Destination(mDestination)
+        ->slotIncomingMessageFromSystem(tr("Upload declined [%1]").arg(mFileName));
       mConnectionManager.doDestroyStreamObjectByID(ID);
       mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
     }
   } else if (mUsingProtocolVersionD == 0.3) {
     mRemoteDataReceiveBuffer.append(t);
     while (mRemoteDataReceiveBuffer.contains('\n') == true) {
-      QString CurrentPacket = mRemoteDataReceiveBuffer.mid(
-          0, mRemoteDataReceiveBuffer.indexOf('\n', 0) + 1);
+      QString CurrentPacket = mRemoteDataReceiveBuffer.mid(0, mRemoteDataReceiveBuffer.indexOf('\n', 0) + 1);
       mRemoteDataReceiveBuffer.remove(0, CurrentPacket.length());
 
       QString CurrentAction = CurrentPacket.mid(0, 1);
@@ -231,9 +220,8 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
         // File transfer declined
         emit signFileTransferAccepted(false);
         mCore.getUserManager()
-            ->getUserByI2P_Destination(mDestination)
-            ->slotIncomingMessageFromSystem(
-                tr("Upload declined [%1]").arg(mFileName));
+          ->getUserByI2P_Destination(mDestination)
+          ->slotIncomingMessageFromSystem(tr("Upload declined [%1]").arg(mFileName));
         mConnectionManager.doDestroyStreamObjectByID(ID);
         mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
       } else if (CurrentAction == "2") {
@@ -273,8 +261,7 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
                << "Function:\t"
                << "CFileTransferSend::StartFileTransfer" << Qt::endl
                << "Message:\t"
-               << "Unsupported Protocolversion:" << mUsingProtocolVersion
-               << Qt::endl;
+               << "Unsupported Protocolversion:" << mUsingProtocolVersion << Qt::endl;
 
     mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
   }
@@ -292,9 +279,8 @@ void CFileTransferSend::SendFile_v0dot3() {
   if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            tr("Upload completed [%1]").arg(mFileName));
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem(tr("Upload completed [%1]").arg(mFileName));
     mAlreadyFinished = true;
   }
 }
@@ -312,9 +298,8 @@ void CFileTransferSend::SendFile_v0dot2() {
   if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            tr("Upload completed [%1]").arg(mFileName));
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem(tr("Upload completed [%1]").arg(mFileName));
     mAlreadyFinished = true;
   }
 }
@@ -334,9 +319,8 @@ void CFileTransferSend::SendFile_v0dot1() {
   if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
     mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(
-            tr("Upload completed [%1]").arg(mFileName));
+      ->getUserByI2P_Destination(mDestination)
+      ->slotIncomingMessageFromSystem(tr("Upload completed [%1]").arg(mFileName));
     mAlreadyFinished = true;
   }
 }
@@ -377,8 +361,7 @@ void CFileTransferSend::doConvertNumberToTransferSize(quint64 inNumber,
                                                       QString &outNumber,
                                                       QString &outType,
                                                       bool addStoOutType) {
-  return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType,
-                                             addStoOutType);
+  return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
 }
 
 void CFileTransferSend::CalcETA(int speed) {

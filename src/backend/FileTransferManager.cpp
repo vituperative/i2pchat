@@ -22,12 +22,12 @@
 
 #include "UserManager.h"
 
-CFileTransferManager::CFileTransferManager(CCore &Core) : mCore(Core) {}
+CFileTransferManager::CFileTransferManager(CCore &Core)
+  : mCore(Core) {}
 
 CFileTransferManager::~CFileTransferManager() {}
 
-CFileTransferReceive *
-CFileTransferManager::getFileReceiveByID(qint32 ID) const {
+CFileTransferReceive *CFileTransferManager::getFileReceiveByID(qint32 ID) const {
   /*for(int i=0;i<mFileReceives.size();i++){
           if(mFileReceives.at(i)->getStreamID()==ID){
                   return mFileReceives.at(i);
@@ -53,19 +53,16 @@ CFileTransferSend *CFileTransferManager::getFileSendByID(qint32 ID) const {
   return NULL;
 }
 
-const QList<CFileTransferSend *>
-CFileTransferManager::getFileTransferSendsList() const {
+const QList<CFileTransferSend *> CFileTransferManager::getFileTransferSendsList() const {
 
   return mFileSends;
 }
 
-const QList<CFileTransferReceive *>
-CFileTransferManager::getFileTransferReceiveList() const {
+const QList<CFileTransferReceive *> CFileTransferManager::getFileTransferReceiveList() const {
   return mFileReceives;
 }
 
-void CFileTransferManager::addNewFileTransfer(QString FilePath,
-                                              QString Destination) {
+void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destination) {
 
   QString Protocolversion;
   double ProtoVersionD = 0.0;
@@ -85,17 +82,16 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath,
     return;
   }
 
-  CFileTransferSend *t =
-      new CFileTransferSend(mCore, *(mCore.getConnectionManager()), FilePath,
-                            Destination, Protocolversion, ProtoVersionD);
-  connect(t, SIGNAL(signFileTransferFinishedOK()), mCore.getSoundManager(),
-          SLOT(slotFileSendFinished()));
+  CFileTransferSend *t = new CFileTransferSend(
+    mCore, *(mCore.getConnectionManager()), FilePath, Destination, Protocolversion, ProtoVersionD);
+  connect(t, SIGNAL(signFileTransferFinishedOK()), mCore.getSoundManager(), SLOT(slotFileSendFinished()));
 
   mFileSends.append(t);
   emit signUserStatusChanged();
 }
 
-void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
+void CFileTransferManager::addNewFileReceive(qint32 ID,
+                                             QString FileName,
                                              QString FileSize,
                                              QString Destination,
                                              QString ProtocolVersion) {
@@ -112,7 +108,7 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
     msgBox->setText(tr("CCore(addNewFileReceive)"));
     msgBox->setInformativeText(tr("Incoming file transfer rejected\nError "
                                   "converting QString to Quint64\nValue: %1")
-                                   .arg(FileSize));
+                                 .arg(FileSize));
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
@@ -157,14 +153,13 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
     // Show Info Message
     CUser *User = mCore.getUserManager()->getUserByI2P_Destination(Destination);
     if (User != NULL) {
-      User->slotIncomingMessageFromSystem(
-          tr("Incoming file transfer rejected: no protocol support\n"
-             "Incoming protocol version: %1 \n"
-             "Highest supported version: %2\n"
-             "Filename: %3")
-              .arg(ProtocolVersion)
-              .arg(FileTransferProtocol::MAXPROTOCOLVERSION)
-              .arg(FileName));
+      User->slotIncomingMessageFromSystem(tr("Incoming file transfer rejected: no protocol support\n"
+                                             "Incoming protocol version: %1 \n"
+                                             "Highest supported version: %2\n"
+                                             "Filename: %3")
+                                            .arg(ProtocolVersion)
+                                            .arg(FileTransferProtocol::MAXPROTOCOLVERSION)
+                                            .arg(FileName));
     }
 
     if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
@@ -189,20 +184,15 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
   mCore.getSoundManager()->slotFileReceiveIncoming();
 
   disconnect(Stream,
-             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                             const qint32, const QString)),
+             SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
              &mCore,
-             SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                           const qint32, QString)));
+             SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, QString)));
 
   CFileTransferReceive *t =
-      new CFileTransferReceive(mCore, *Stream, ID, FileName, Size, Destination,
-                               ProtocolVersion, ProtocolVersionD);
-  connect(t, SIGNAL(signFileReceivedFinishedOK()), mCore.getSoundManager(),
-          SLOT(slotFileReceiveFinished()));
+    new CFileTransferReceive(mCore, *Stream, ID, FileName, Size, Destination, ProtocolVersion, ProtocolVersionD);
+  connect(t, SIGNAL(signFileReceivedFinishedOK()), mCore.getSoundManager(), SLOT(slotFileReceiveFinished()));
 
-  connect(t, SIGNAL(signFileNameChanged()), this,
-          SIGNAL(signUserStatusChanged()));
+  connect(t, SIGNAL(signFileNameChanged()), this, SIGNAL(signUserStatusChanged()));
 
   mFileReceives.append(t);
   emit signUserStatusChanged();

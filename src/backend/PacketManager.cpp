@@ -19,14 +19,17 @@
  ***************************************************************************/
 
 #include "PacketManager.h"
+
 #include "ConnectionManager.h"
 #include "I2PStream.h"
+
 #include <iostream>
 
 using namespace std;
 
 CPacketManager::CPacketManager(CConnectionManager &ConnectionManager, qint32 ID)
-    : mConnectionManager(ConnectionManager), mID(ID) {
+  : mConnectionManager(ConnectionManager)
+  , mID(ID) {
   mData = new QByteArray();
 }
 

@@ -20,10 +20,10 @@
 #include "form_DebugMessages.h"
 
 form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
-    : QDialog(parent), core(core) {
-  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
-                 Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint |
-                 Qt::WindowCloseButtonHint);
+  : QDialog(parent)
+  , core(core) {
+  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
+                 Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
 
@@ -34,10 +34,8 @@ form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
   }
 
   connect(cmd_clear_sam, SIGNAL(clicked()), this, SLOT(clearDebugMessages()));
-  connect(DebugMessageManager, SIGNAL(signNewDebugMessage(QString)), this,
-          SLOT(newDebugMessage()));
-  connect(cmd_Connection_snapshot, SIGNAL(clicked()), this,
-          SLOT(connectionDump()));
+  connect(DebugMessageManager, SIGNAL(signNewDebugMessage(QString)), this, SLOT(newDebugMessage()));
+  connect(cmd_Connection_snapshot, SIGNAL(clicked()), this, SLOT(connectionDump()));
 
   connect(cmd_close, SIGNAL(clicked()), this, SLOT(close()));
   connect(cmd_close_3, SIGNAL(clicked()), this, SLOT(close()));
@@ -78,8 +76,7 @@ void form_DebugMessages::closeEvent(QCloseEvent *e) {
 }
 void form_DebugMessages::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 void form_DebugMessages::keyPressEvent(QKeyEvent *event) {

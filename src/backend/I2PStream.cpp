@@ -22,12 +22,20 @@
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
 const int CONNECTIONTIMEOUT = 60 * 1000;
 
-CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
-                       QString mStreamBridgeName, StreamMode mMode,
-                       bool mSilence, QString UsedFor)
-    : mSamHost(mSamHost), mSamPort(mSamPort), mID(mID),
-      mStreamBridgeName(mStreamBridgeName), mMode(mMode), mSilence(mSilence),
-      mUsedFor(UsedFor) {
+CI2PStream::CI2PStream(QString mSamHost,
+                       QString mSamPort,
+                       qint32 mID,
+                       QString mStreamBridgeName,
+                       StreamMode mMode,
+                       bool mSilence,
+                       QString UsedFor)
+  : mSamHost(mSamHost)
+  , mSamPort(mSamPort)
+  , mID(mID)
+  , mStreamBridgeName(mStreamBridgeName)
+  , mMode(mMode)
+  , mSilence(mSilence)
+  , mUsedFor(UsedFor) {
   mAnalyser = NULL;
   mIncomingPackets = NULL;
   mDoneDisconnect = false;
@@ -45,8 +53,7 @@ CI2PStream::CI2PStream(QString mSamHost, QString mSamPort, qint32 mID,
   connect(&mTcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()));
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()));
 
-  connect(&mUnKnownConnectionTimeout, SIGNAL(timeout()), this,
-          SLOT(slotInitConnectionTimeout()));
+  connect(&mUnKnownConnectionTimeout, SIGNAL(timeout()), this, SLOT(slotInitConnectionTimeout()));
 }
 
 CI2PStream::~CI2PStream() {
@@ -54,8 +61,7 @@ CI2PStream::~CI2PStream() {
     delete mTimer;
   }
 
-  disconnect(&mTcpSocket, SIGNAL(disconnected()), this,
-             SLOT(slotDisconnected()));
+  disconnect(&mTcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()));
   doDisconnect();
 
   mTcpSocket.deleteLater();
@@ -113,8 +119,8 @@ void CI2PStream::slotConnected() {
   emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                          "] Controller ‣ Connected to SAM v3");
   mDoneDisconnect = false;
-  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Outgoing ‣ " +
-                         SAM_HANDSHAKE_V3);
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                         "] Outgoing ‣ " + SAM_HANDSHAKE_V3);
   try {
     if (mTcpSocket.isWritable()) {
       mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -159,7 +165,8 @@ void CI2PStream::slotReadFromSocket() {
     emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Incoming ‣ " +
     debugData);
   */
-  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Incoming ‣ " + newData);
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                         "] Incoming ‣ " + newData);
 
   if (mHandshakeSuccessful == false) {
 
@@ -170,8 +177,7 @@ void CI2PStream::slotReadFromSocket() {
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket =
-        mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
 
     mAnalyser = new CI2PSamMessageAnalyser("CI2PStream");
 
@@ -188,8 +194,7 @@ void CI2PStream::slotReadFromSocket() {
     if (mMode == ACCEPT) {
       Data.append("STREAM ACCEPT ID=" + mStreamBridgeName);
     } else if (mMode == CONNECT) {
-      Data.append("STREAM CONNECT ID=" + mStreamBridgeName +
-                  " DESTINATION=" + mDestination);
+      Data.append("STREAM CONNECT ID=" + mStreamBridgeName + " DESTINATION=" + mDestination);
     }
 
     if (mSilence == true) {
@@ -208,8 +213,7 @@ void CI2PStream::slotReadFromSocket() {
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket =
-        mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
 
     // Get Stream Status
     mAnalyser = new CI2PSamMessageAnalyser("CI2PStream");
@@ -230,8 +234,7 @@ void CI2PStream::slotReadFromSocket() {
       }
     }
 
-  } else if (mStatusReceived == true && mModeStreamAccept == true &&
-             mDestinationReceived == false) {
+  } else if (mStatusReceived == true && mModeStreamAccept == true && mDestinationReceived == false) {
     // get Destination
     mIncomingPackets->append(newData);
     if (mIncomingPackets->indexOf("\n", 0) == -1) {
@@ -240,8 +243,7 @@ void CI2PStream::slotReadFromSocket() {
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket =
-        mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
 
     mDestination = QString(CurrentPacket.data());
     mDestination = mDestination.trimmed();
@@ -277,9 +279,9 @@ void CI2PStream::operator<<(const QByteArray Data) {
   QString smID = QString::number(mID, 10);
   QString timeNow = QString(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
-  if (mTcpSocket.state() == QTcpSocket::ConnectedState &&
-      mHandshakeSuccessful) {
-    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID + "] Outgoing ‣ " + Data);
+  if (mTcpSocket.state() == QTcpSocket::ConnectedState && mHandshakeSuccessful) {
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                           "] Outgoing ‣ " + Data);
 
     try {
       if (mTcpSocket.isWritable()) {
@@ -339,9 +341,8 @@ void CI2PStream::slotCheckForReconnect() {
 void CI2PStream::slotInitConnectionTimeout() {
   QString smID = QString::number(mID, 10);
   emit signStreamStatusReceived(SAM_Message_Types::CLOSED, mID, QString(""));
-  emit signDebugMessages(
-      QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
-      "] Controller ‣ Disconnected after Initialization Timeout");
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                         "] Controller ‣ Disconnected after Initialization Timeout");
   doDisconnect();
 }
 

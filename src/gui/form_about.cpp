@@ -20,10 +20,12 @@
 
 #include "form_about.h"
 
-form_About::form_About(QString ApplicationVersion, QString Protoclversion,
+form_About::form_About(QString ApplicationVersion,
+                       QString Protoclversion,
                        QString FiletransferversionMin,
-                       QString FiletransferversionMax, QWidget *parent)
-    : QDialog(parent) {
+                       QString FiletransferversionMax,
+                       QWidget *parent)
+  : QDialog(parent) {
   ui.setupUi(this);
   // mBoteDestination="mi8H8RkS1ckUrkS2JiFgojN7ExvoCJ45DAEj8y0Ac0Fu6kMS-vEvLerNa~a0WQN9hVhsUUlHJc2B47Ln6wscK5";
 
@@ -32,8 +34,7 @@ form_About::form_About(QString ApplicationVersion, QString Protoclversion,
 
   ui.label_9->setText(ApplicationVersion);
   ui.label_10->setText(Protoclversion);
-  ui.label_supportedVersion->setText(FiletransferversionMin + tr("…") +
-                                     FiletransferversionMax);
+  ui.label_supportedVersion->setText(FiletransferversionMin + tr("…") + FiletransferversionMax);
 
   ui.labelGitCommitCount->setText(GIT_COMMIT_COUNT);
   ui.gitCommitHashTextBrowser->setText(GIT_HASH);
@@ -58,8 +59,7 @@ void form_About::copyDestToClipboard()
 */
 void form_About::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 void form_About::keyPressEvent(QKeyEvent *event) {

@@ -62,13 +62,9 @@ void CTextEmotionChanger::checkMessageForEmoticons(QString &message) {
         for (; it != m_emoticons.constEnd(); ++it) {
           int length = (*it).first.length();
           if (compareEmoticon(chars, (*it).first) &&
-              (!m_check_space || ( 
-               (chars + length)->isNull() ||
-               (chars + length)->isSpace() ||
-               (chars + length)->isPunct()))) {
-            appendEmoticon(
-                result, (*it).second,
-                QStringRef(&message, chars - begin, (*it).first.length()));
+              (!m_check_space ||
+               ((chars + length)->isNull() || (chars + length)->isSpace() || (chars + length)->isPunct()))) {
+            appendEmoticon(result, (*it).second, QStringRef(&message, chars - begin, (*it).first.length()));
             found = true;
             at_amp = false;
             chars += length;
@@ -89,8 +85,7 @@ void CTextEmotionChanger::checkMessageForEmoticons(QString &message) {
   message = result;
 }
 
-bool CTextEmotionChanger::compareEmoticon(const QChar *c,
-                                          const QString &smile) const {
+bool CTextEmotionChanger::compareEmoticon(const QChar *c, const QString &smile) const {
   const QChar *s = smile.constData();
   while (c->toLower() == *s) {
     if (s->isNull())
@@ -101,8 +96,7 @@ bool CTextEmotionChanger::compareEmoticon(const QChar *c,
   return s->isNull();
 }
 
-void CTextEmotionChanger::appendEmoticon(QString &text, const QString &url,
-                                         const QStringRef &emo) const {
+void CTextEmotionChanger::appendEmoticon(QString &text, const QString &url, const QStringRef &emo) const {
   int i = 0, last = 0;
   while ((i = url.indexOf(QLatin1String("%4"), last)) != -1) {
     text += QStringRef(&url, last, i - last);
@@ -158,23 +152,20 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
                   tmp = QPixmap(dirPath + "/" + fileName.at(0));
                 int width = 16;
                 int height = width;
-                image = image.scaled(width, height, Qt::IgnoreAspectRatio,
-                                     Qt::SmoothTransformation);
+                image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                 QString text = emoticonString.text().toHtmlEscaped();
                 m_urls.insert(text,
                               QString("<img src=\"%1\" width=\"%2\" "
                                       "height=\"%2\" alt=\"%1\" title=\"%1\"/>")
-                                  .arg(dirPath + "/" + fileName.at(0))
-                                  .arg(width)
-                                  .arg(text.replace("\"", "&quot;")));
+                                .arg(dirPath + "/" + fileName.at(0))
+                                .arg(width)
+                                .arg(text.replace("\"", "&quot;")));
                 strings.append(emoticonString.text());
               }
 
               emoticonString = emoticonString.nextSibling().toElement();
             }
-            m_emoticon_list.insert(QString::number(i + 1) + "|" + dirPath +
-                                       "/" + fileName.at(0),
-                                   strings);
+            m_emoticon_list.insert(QString::number(i + 1) + "|" + dirPath + "/" + fileName.at(0), strings);
           }
         }
         emoticon = emoticon.nextSibling().toElement();

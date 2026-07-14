@@ -1,21 +1,20 @@
-#include <QErrorMessage>
-#include <QFile>
-#include <QXmlStreamReader>
-#include <QRegularExpression>
+#include "form_chatwidget.h"
 
 #include "User.h"
-#include "form_chatwidget.h"
+
+#include <QErrorMessage>
+#include <QFile>
+#include <QRegularExpression>
+#include <QXmlStreamReader>
 
 bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
     if (obj->objectName() == "message") {
-      if (keyEvent->key() == Qt::Key_Return &&
-          keyEvent->modifiers() == Qt::NoModifier) {
+      if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::NoModifier) {
         emit sendMessage();
         return true;
-      } else if (keyEvent->key() == Qt::Key_Return &&
-                 keyEvent->modifiers() == Qt::ControlModifier) {
+      } else if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ControlModifier) {
         emit sendMessage();
         return true;
       }
@@ -34,9 +33,10 @@ bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
   return false;
 }
 
-form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
-                                 QDialog *parent /* = 0 */)
-    : QMainWindow(parent, 0), user(user), Core(Core) {
+form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 0 */)
+  : QMainWindow(parent, 0)
+  , user(user)
+  , Core(Core) {
   setupUi(this);
 
   QTextEdit *message = this->message;
@@ -55,44 +55,33 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
 
   message->installEventFilter(m_event_eater);
 
-  connect(&user, SIGNAL(signNewMessageReceived()), this,
-          SLOT(newMessageReceived()));
+  connect(&user, SIGNAL(signNewMessageReceived()), this, SLOT(newMessageReceived()));
 
-  connect(&user, SIGNAL(signOnlineStateChanged()), this,
-          SLOT(changeWindowsTitle()));
+  connect(&user, SIGNAL(signOnlineStateChanged()), this, SLOT(changeWindowsTitle()));
 
   connect(&user, SIGNAL(signUserDeleted()), this, SLOT(close()));
 
-  connect(&user, SIGNAL(signNewAvatarImage()), this,
-          SLOT(remoteAvatarImageChanged()));
+  connect(&user, SIGNAL(signNewAvatarImage()), this, SLOT(remoteAvatarImageChanged()));
 
-  connect(this, SIGNAL(sendChatMessage(QString)), &user,
-          SLOT(slotSendChatMessage(QString)));
+  connect(this, SIGNAL(sendChatMessage(QString)), &user, SLOT(slotSendChatMessage(QString)));
 
   connect(cmd_SendFile, SIGNAL(clicked()), this, SLOT(newFileTransfer()));
 
-  connect(chat, SIGNAL(anchorClicked(const QUrl &)), this,
-          SLOT(anchorClicked(const QUrl &)));
+  connect(chat, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(anchorClicked(const QUrl &)));
 
-  connect(avatarFrameButton, SIGNAL(toggled(bool)), this,
-          SLOT(showAvatarFrame(bool)));
+  connect(avatarFrameButton, SIGNAL(toggled(bool)), this, SLOT(showAvatarFrame(bool)));
 
   connect(message, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
-  connect(tabWidget, SIGNAL(currentChanged(int)), this,
-          SLOT(tabIndexChanged(int)));
+  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
 
-  connect(cmd_Reaload, SIGNAL(clicked(bool)), this,
-          SLOT(reloadOfflineMessages()));
+  connect(cmd_Reaload, SIGNAL(clicked(bool)), this, SLOT(reloadOfflineMessages()));
 
-  connect(cmd_Save, SIGNAL(clicked(bool)), this,
-          SLOT(saveChangedOfflineMessages()));
+  connect(cmd_Save, SIGNAL(clicked(bool)), this, SLOT(saveChangedOfflineMessages()));
 
-  connect(Ui_form_chatwidget::cmd_delete, SIGNAL(clicked(bool)), this,
-          SLOT(cmd_delete()));
+  connect(Ui_form_chatwidget::cmd_delete, SIGNAL(clicked(bool)), this, SLOT(cmd_delete()));
 
-  connect(Ui_form_chatwidget::cmd_new, SIGNAL(clicked(bool)), this,
-          SLOT(cmd_new()));
+  connect(Ui_form_chatwidget::cmd_new, SIGNAL(clicked(bool)), this, SLOT(cmd_new()));
 
   chat->setOpenLinks(false);
 
@@ -121,12 +110,10 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core,
   currentOfflineMessageIndex = 0;
   OfflineMessageCount = 0;
   Ui_form_chatwidget::cmd_next->setEnabled(false);
-  connect(Ui_form_chatwidget::cmd_next, SIGNAL(clicked(bool)),
-          SLOT(cmd_next()));
+  connect(Ui_form_chatwidget::cmd_next, SIGNAL(clicked(bool)), SLOT(cmd_next()));
 
   Ui_form_chatwidget::cmd_back->setEnabled(false);
-  connect(Ui_form_chatwidget::cmd_back, SIGNAL(clicked(bool)),
-          SLOT(cmd_back()));
+  connect(Ui_form_chatwidget::cmd_back, SIGNAL(clicked(bool)), SLOT(cmd_back()));
 
   QPalette pal = message->palette();
   pal.setBrush(QPalette::Text, QBrush(textColor));
@@ -192,7 +179,7 @@ void form_ChatWidget::newMessageReceived() { // TODO: qss add.
     sb->setValue(sb->maximum());
   }
 
-//  this->raise(); // no, do not steal focus!
+  //  this->raise(); // no, do not steal focus!
 }
 
 void form_ChatWidget::addAllMessages() {
@@ -227,7 +214,7 @@ void form_ChatWidget::addMessage(QString text) {
       box->showMessage(msg);
       return;
     }
-// Optimize with edit block for better performance
+    // Optimize with edit block for better performance
     cursor.beginEditBlock();
     cursor.insertHtml(text);
     cursor.endEditBlock();
@@ -274,8 +261,7 @@ void form_ChatWidget::setBold(bool t) {
 }
 
 void form_ChatWidget::closeEvent(QCloseEvent *e) {
-  disconnect(&user, SIGNAL(signNewMessageReceived()), this,
-             SLOT(newMessageReceived()));
+  disconnect(&user, SIGNAL(signNewMessageReceived()), this, SLOT(newMessageReceived()));
 
   emit closingChatWindow(user.getI2PDestination());
   e->ignore();
@@ -356,8 +342,7 @@ void form_ChatWidget::changeWindowsTitle() {
 
 void form_ChatWidget::newFileTransfer() {
   if (user.getConnectionStatus() == ONLINE) {
-    QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
-                                                    tr("all Files (*)"));
+    QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("all Files (*)"));
     QString Destination = user.getI2PDestination();
 
     if (FilePath.endsWith("/") == true) {
@@ -403,10 +388,9 @@ void form_ChatWidget::focusEvent(bool b) {
 
 void form_ChatWidget::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
-//  this->setFocus(); // don't automatically focus chat window
+  //  this->setFocus(); // don't automatically focus chat window
 }
 
 void form_ChatWidget::setUnderline(bool t) {
@@ -555,9 +539,8 @@ void form_ChatWidget::displayOfflineMessages(int index) {
   if (index <= OfflineMessageCount) {
     currentOfflineMessageIndex = index;
 
-    label_currentMessageCount->setText(
-        QString::number(currentOfflineMessageIndex) + " / " +
-        QString::number(OfflineMessageCount));
+    label_currentMessageCount->setText(QString::number(currentOfflineMessageIndex) + " / " +
+                                       QString::number(OfflineMessageCount));
 
     if (currentOfflineMessageIndex == 0) {
       if (offlineMessages.isEmpty() == false) {

@@ -18,18 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "User.h"
+
 #include "ChatmessageChanger.h"
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "Protocol.h"
 #include "UserManager.h"
 
-CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
-             QString I2PDestination, qint32 I2PStream_ID)
-    : mCore(Core), mProtocol(Protocol), mI2PDestination(I2PDestination),
-      mChatMessageChanger(*(CChatMessageChanger::exemplar(Core))) {
-  QSettings settings(mCore.getConfigPath() + "/application.ini",
-                     QSettings::IniFormat);
+CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, QString I2PDestination, qint32 I2PStream_ID)
+  : mCore(Core)
+  , mProtocol(Protocol)
+  , mI2PDestination(I2PDestination)
+  , mChatMessageChanger(*(CChatMessageChanger::exemplar(Core))) {
+  QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
 
   this->mName = Name;
   this->mI2PStream_ID = I2PStream_ID;
@@ -41,12 +42,9 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
   this->mHaveNewUnreadChatmessage = false;
 
   settings.beginGroup("Chat");
-  this->mTextFont.fromString(
-      settings.value("DefaultFont", "SansSerif,10").toString());
-  this->mTextColor.setNamedColor(
-      settings.value("DefaultColor", "#000").toString());
-  this->mLogOnlineStateOfUsers =
-      (settings.value("LogOnlineStatesOfUsers", true).toBool());
+  this->mTextFont.fromString(settings.value("DefaultFont", "SansSerif,10").toString());
+  this->mTextColor.setNamedColor(settings.value("DefaultColor", "#000").toString());
+  this->mLogOnlineStateOfUsers = (settings.value("LogOnlineStatesOfUsers", true).toBool());
   settings.endGroup();
   settings.sync();
   this->mInvisible = false;
@@ -71,7 +69,9 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
   settings.endGroup();
   settings.endGroup();
 }
-CUser::~CUser() { emit signUserDeleted(); }
+CUser::~CUser() {
+  emit signUserDeleted();
+}
 
 void CUser::setName(QString newName) {
   this->mName = newName;
@@ -117,7 +117,9 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status) {
   emit signOnlineStateChanged();
 }
 
-void CUser::setI2PStreamID(qint32 ID) { this->mI2PStream_ID = ID; }
+void CUser::setI2PStreamID(qint32 ID) {
+  this->mI2PStream_ID = ID;
+}
 
 void CUser::setProtocolVersion(QString Version) {
   this->mProtocolVersion = Version;
@@ -126,8 +128,7 @@ void CUser::setProtocolVersion(QString Version) {
 void CUser::slotIncomingNewChatMessage(QString newMessage) {
 
   newMessage = mChatMessageChanger.changeChatMessage(newMessage);
-  auto myMessage = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + mName +
-                   ":" + newMessage + "<br>";
+  auto myMessage = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + mName + ":" + newMessage + "<br>";
 
   // TODO fix this in OOP way
   this->mAllMessages.push_back(myMessage);
@@ -145,8 +146,7 @@ void CUser::slotSendChatMessage(QString Message) {
   using namespace PROTOCOL_TAGS;
   QString Nickname;
 
-  if (mConnectionStatus == ONLINE && mCurrentOnlineState != USEROFFLINE &&
-      mCurrentOnlineState != USERINVISIBLE) {
+  if (mConnectionStatus == ONLINE && mCurrentOnlineState != USEROFFLINE && mCurrentOnlineState != USERINVISIBLE) {
     QByteArray ByteMessage = Message.toUtf8();
     mProtocol.send(CHATMESSAGE, mI2PStream_ID, ByteMessage);
 
@@ -156,8 +156,7 @@ void CUser::slotSendChatMessage(QString Message) {
       Nickname = mCore.getUserInfos().Nickname;
     }
 
-    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname +
-               ":" + Message + "<br>";
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + Message + "<br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);
@@ -166,9 +165,8 @@ void CUser::slotSendChatMessage(QString Message) {
     emit signNewMessageReceived();
   } else {
     mUnsentedMessages.push_back(Message + "<br>");
-    slotIncomingMessageFromSystem(
-        tr("Sending the message when the user comes online.<br>If you close "
-           "the client, the message will be lost."));
+    slotIncomingMessageFromSystem(tr("Sending the message when the user comes online.<br>If you close "
+                                     "the client, the message will be lost."));
   }
 }
 
@@ -189,11 +187,12 @@ void CUser::SendAllunsendedMessages() {
     mProtocol.send(CHATMESSAGE, mI2PStream_ID, mUnsentedMessages.at(i));
 
   mUnsentedMessages.clear();
-  slotIncomingMessageFromSystem(
-      "All previously unsent messages have been sent.", true);
+  slotIncomingMessageFromSystem("All previously unsent messages have been sent.", true);
 }
 
-void CUser::setClientName(QString Name) { mClientName = Name; }
+void CUser::setClientName(QString Name) {
+  mClientName = Name;
+}
 
 void CUser::setClientVersion(QString Version) {
   this->mClientVersion = Version;
@@ -206,10 +205,8 @@ void CUser::setOnlineState(const ONLINESTATE newState) {
   if (mCurrentOnlineState == newState)
     return;
 
-  if (newState != USEROFFLINE && newState != USERINVISIBLE &&
-      newState != USERBLOCKEDYOU) {
-    if (mCurrentOnlineState == USEROFFLINE ||
-        mCurrentOnlineState == USERINVISIBLE ||
+  if (newState != USEROFFLINE && newState != USERINVISIBLE && newState != USERBLOCKEDYOU) {
+    if (mCurrentOnlineState == USEROFFLINE || mCurrentOnlineState == USERINVISIBLE ||
         mCurrentOnlineState == USERBLOCKEDYOU) {
       if (mLogOnlineStateOfUsers == true) {
         slotIncomingMessageFromSystem(tr("%1 is online").arg(mName));
@@ -217,8 +214,7 @@ void CUser::setOnlineState(const ONLINESTATE newState) {
       emit signConnectionOnline();
     }
     this->SendAllunsendedMessages();
-  } else if (newState == USEROFFLINE || newState == USERINVISIBLE ||
-             newState == USERBLOCKEDYOU) {
+  } else if (newState == USEROFFLINE || newState == USERINVISIBLE || newState == USERBLOCKEDYOU) {
     if (newState != mCurrentOnlineState) {
       if (mLogOnlineStateOfUsers == true) {
         slotIncomingMessageFromSystem(tr("%1 is offline").arg(mName));
@@ -231,16 +227,19 @@ void CUser::setOnlineState(const ONLINESTATE newState) {
   emit signOnlineStateChanged();
 }
 
-void CUser::setTextColor(QColor textColor) { this->mTextColor = textColor; }
+void CUser::setTextColor(QColor textColor) {
+  this->mTextColor = textColor;
+}
 
-void CUser::setTextFont(QFont textFont) { this->mTextFont = textFont; }
+void CUser::setTextFont(QFont textFont) {
+  this->mTextFont = textFont;
+}
 
-void CUser::slotIncomingMessageFromSystem(QString newMessage,
-                                          bool indicateWithSoundAndIcon) {
-  this->mAllMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") +
-                               tr(" ‣ [System] ") + newMessage + "<br><br>");
-  this->mNewMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") +
-                               tr(" ‣ [System] ") + newMessage + "<br><br>");
+void CUser::slotIncomingMessageFromSystem(QString newMessage, bool indicateWithSoundAndIcon) {
+  this->mAllMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") + tr(" ‣ [System] ") + newMessage +
+                               "<br><br>");
+  this->mNewMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") + tr(" ‣ [System] ") + newMessage +
+                               "<br><br>");
 
   mHaveNewUnreadMessages = true;
 
@@ -394,8 +393,7 @@ void CUser::setReceivedNicknameToUserNickname() {
 }
 
 const QString CUser::getHighestUsableProtocolVersionFiletransfer() const {
-  return QString::number(getHighestUsableProtocolVersionFiletransfer_D(), 'g',
-                         2);
+  return QString::number(getHighestUsableProtocolVersionFiletransfer_D(), 'g', 2);
 }
 
 double CUser::getHighestUsableProtocolVersionFiletransfer_D() const {

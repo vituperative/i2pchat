@@ -18,10 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "form_newUser.h"
+
 #include "UserManager.h"
 
 form_newUserWindow::form_newUserWindow(CCore &Core, QDialog *parent)
-    : QDialog(parent), Core(Core) {
+  : QDialog(parent)
+  , Core(Core) {
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
   connect(buttonBox, SIGNAL(accepted()), this, SLOT(addnewUser()));
@@ -72,8 +74,7 @@ void form_newUserWindow::addnewUser() {
     return;
   }
 
-  if (Core.getUserBlockManager()->isDestinationInBlockList(I2PDestination) ==
-      true) {
+  if (Core.getUserBlockManager()->isDestinationInBlockList(I2PDestination) == true) {
     QMessageBox *msgBox = new QMessageBox(this);
     msgBox->setIcon(QMessageBox::Warning);
     msgBox->setText(tr("\nAdd failed: Destination is blocklisted"));
@@ -85,8 +86,7 @@ void form_newUserWindow::addnewUser() {
     return;
   }
 
-  if (Core.getUserManager()->addNewUser(Name, I2PDestination, 0, true) ==
-      false) {
+  if (Core.getUserManager()->addNewUser(Name, I2PDestination, 0, true) == false) {
 
     QMessageBox *msgBox = new QMessageBox(NULL);
     msgBox->setIcon(QMessageBox::Warning);

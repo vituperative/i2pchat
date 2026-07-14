@@ -18,40 +18,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QApplication>
-#include <QtGui>
+#include "Core.h"
+#include "form_Main.h"
 
+#include <QApplication>
+#include <QDateTime>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTextStream>
-#include <QElapsedTimer>
-#include <QDateTime>
 #include <QtDebug>
+#include <QtGui>
 
 #include <getopt.h>
 #include <unistd.h>
-
-#include "Core.h"
-#include "form_Main.h"
 
 QString debugLogDir;
 
 void enableDebugLogging(QString configPath);
 // void myMessageHandler(QtMsgType type, const char *msg);
-void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
-                      const QString &msg);
+void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 void help(void) {
-  printf(
-      "\r\n%s\r\n\r\n"
-      // " [Built at " __TIME__ " on " __DATE__ "]\r\n"
-      "  -h --help                           - Display this help\r\n"
-      "  -p --profile <path to profile dir>  - Use specified profile dir (creates a new profile if non-existent)\r\n"
-      "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
-      "\r\n",
-      CLIENTNAME " v" CLIENTVERSION);
+  printf("\r\n%s\r\n\r\n"
+         // " [Built at " __TIME__ " on " __DATE__ "]\r\n"
+         "  -h --help                           - Display this help\r\n"
+         "  -p --profile <path to profile dir>  - Use specified profile dir (creates a new profile if non-existent)\r\n"
+         "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
+         "\r\n",
+         CLIENTNAME " v" CLIENTVERSION);
   exit(0);
 }
 
@@ -71,8 +68,7 @@ int main(int argc, char *argv[]) {
   QFile styleSheetFile(":qss/Default.qss");
 
 #ifdef ANDROID
-  QStringList loc =
-      QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+  QStringList loc = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
   if (loc.size() <= 0) {
     QMessageBox::critical(NULL, "I2PChat", "Error: no USER folder found");
     app.exec();
@@ -84,8 +80,7 @@ int main(int argc, char *argv[]) {
   QString configPathDir("i2pchat");
   configPath = configPathParent + "/" + configPathDir;
   if (!configPathParentDir.mkpath(configPathDir)) {
-    QMessageBox::critical(NULL, "I2PChat",
-                          "Error: mkpath for config dir returned false");
+    QMessageBox::critical(NULL, "I2PChat", "Error: mkpath for config dir returned false");
     app.exec();
     app.closeAllWindows();
     return 1;
@@ -111,11 +106,9 @@ int main(int argc, char *argv[]) {
 #else
 
 #ifdef _WIN32
-  configPath =
-      QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 #else
-  configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) +
-               NameOfConfigDirectoryOnLinux;
+  configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + NameOfConfigDirectoryOnLinux;
 #endif
 
   { // getopt_long + getopt (short)
@@ -125,13 +118,11 @@ int main(int argc, char *argv[]) {
     // :: = optional_argument ; = no_argument ; : = required_argument
     const char *short_options_optarg = "hb::p:s:";
 
-    const struct option long_options_optarg[] = {
-        {"help", no_argument, NULL, 'h'},
-        {"profile", required_argument, NULL, 'p'},
-        {"stylesheet", required_argument, NULL, 's'},
-        {NULL, 0, NULL, 0}};
-    while ((ret = getopt_long(argc, argv, short_options_optarg,
-                              long_options_optarg, &option_index)) != -1) {
+    const struct option long_options_optarg[] = {{"help", no_argument, NULL, 'h'},
+                                                 {"profile", required_argument, NULL, 'p'},
+                                                 {"stylesheet", required_argument, NULL, 's'},
+                                                 {NULL, 0, NULL, 0}};
+    while ((ret = getopt_long(argc, argv, short_options_optarg, long_options_optarg, &option_index)) != -1) {
 
       switch (ret) {
       case 'h': {
@@ -163,8 +154,7 @@ int main(int argc, char *argv[]) {
 
   // configPath=QApplication::applicationDirPath();
   if (QFile::exists(configPath + "/UseHomeForConfigStore") == true) {
-    QStringList tmp =
-        QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QStringList tmp = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
     if (tmp.size() >= 1) {
       configPath = tmp.at(0);
       configPath += "/.I2PChat";
@@ -212,51 +202,33 @@ void enableDebugLogging(QString configPath) {
   settings.sync();
 }
 
-void myMessageHandler(QtMsgType type, const QMessageLogContext &context,
-                      const QString &msg) {
+void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
   QString txt;
 
   txt.append(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
   switch (type) {
   case QtDebugMsg: {
-    txt.append(QString(" Debug: %1 (%2:%3, %4)\n")
-                   .arg(msg)
-                   .arg(context.file)
-                   .arg(context.line)
-                   .arg(context.function));
+    txt.append(QString(" Debug: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
     break;
   }
   case QtWarningMsg: {
-    txt.append(QString(" Warning: %1 (%2:%3, %4)\n")
-                   .arg(msg)
-                   .arg(context.file)
-                   .arg(context.line)
-                   .arg(context.function));
+    txt.append(
+      QString(" Warning: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
     break;
   }
   case QtCriticalMsg: {
-    txt.append(QString(" Critical: %1 (%2:%3, %4)\n")
-                   .arg(msg)
-                   .arg(context.file)
-                   .arg(context.line)
-                   .arg(context.function));
+    txt.append(
+      QString(" Critical: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
     break;
   }
   case QtFatalMsg: {
-    txt.append(QString(" Fatal: %1 (%2:%3, %4)\n")
-                   .arg(msg)
-                   .arg(context.file)
-                   .arg(context.line)
-                   .arg(context.function));
+    txt.append(QString(" Fatal: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
     break;
   }
   default: {
-    txt.append(QString(" Message: %1 (%2:%3, %4)\n")
-                   .arg(msg)
-                   .arg(context.file)
-                   .arg(context.line)
-                   .arg(context.function));
+    txt.append(
+      QString(" Message: %1 (%2:%3, %4)\n").arg(msg).arg(context.file).arg(context.line).arg(context.function));
     break;
   }
   }

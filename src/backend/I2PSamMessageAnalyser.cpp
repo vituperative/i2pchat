@@ -20,7 +20,7 @@
 #include "I2PSamMessageAnalyser.h"
 
 CI2PSamMessageAnalyser::CI2PSamMessageAnalyser(const QString debugFrom)
-    : mDebugFrom(debugFrom) {
+  : mDebugFrom(debugFrom) {
   // Constructor
 }
 
@@ -42,8 +42,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
 
     // Get Message
     t.Message = getValue(Message, "Message");
-  } else if ((list[0].contains("SESSION") == true) &&
-             (list[1].contains("STATUS") == true)) {
+  } else if ((list[0].contains("SESSION") == true) && (list[1].contains("STATUS") == true)) {
     t.type = SESSION_STATUS;
 
     // Get Result
@@ -63,8 +62,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
     // Get Message
     t.Message = getValue(Message, "Message");
 
-  } else if ((list[0].contains("STREAM") == true) &&
-             (list[1].contains("STATUS") == true)) {
+  } else if ((list[0].contains("STREAM") == true) && (list[1].contains("STATUS") == true)) {
     t.type = STREAM_STATUS;
 
     // Get Result
@@ -88,8 +86,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
 
     // Get Message
     t.Message = getValue(Message, "Message");
-  } else if ((list[0].contains("NAMING") == true) &&
-             (list[1].contains("REPLY") == true)) {
+  } else if ((list[0].contains("NAMING") == true) && (list[1].contains("REPLY") == true)) {
     t.type = NAMING_REPLY;
 
     // get Result
@@ -106,8 +103,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
     t.Name = getValue(Message, "NAME");
     t.Value = getValue(Message, "VALUE");
     t.Message = getValue(Message, "MESSAGE");
-  } else if ((list[0].contains("DEST") == true) &&
-             (list[1].contains("REPLY") == true)) {
+  } else if ((list[0].contains("DEST") == true) && (list[1].contains("REPLY") == true)) {
     t.type = DEST_REPLY;
 
     // get the Keys
@@ -125,8 +121,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
 
 CI2PSamMessageAnalyser::~CI2PSamMessageAnalyser() {}
 
-QString CI2PSamMessageAnalyser::getValue(const QString &answer,
-                                         const QString &key) const {
+QString CI2PSamMessageAnalyser::getValue(const QString &answer, const QString &key) const {
   if (key.isEmpty()) {
     return "";
   }

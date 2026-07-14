@@ -20,9 +20,8 @@
 
 #include "HttpOverStreamObject.h"
 
-CHttpOverStreamObject::CHttpOverStreamObject(
-    CConnectionManager &ConnectionManager)
-    : mConnectionManager(ConnectionManager) {
+CHttpOverStreamObject::CHttpOverStreamObject(CConnectionManager &ConnectionManager)
+  : mConnectionManager(ConnectionManager) {
   mStream = NULL;
   mFirstStreamStatus = true;
   mIsTimeOutCantReachPeerCLosed = false;
@@ -35,8 +34,7 @@ CHttpOverStreamObject::~CHttpOverStreamObject() {
   }
 }
 
-void CHttpOverStreamObject::slotStreamStatus(
-    const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
+void CHttpOverStreamObject::slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
   if (mStreamID != ID) {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl
@@ -103,21 +101,20 @@ void CHttpOverStreamObject::slotDataReceived(const qint32 ID, QByteArray t) {
   mDataReceived.append(t);
 }
 
-void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination,
-                                          QStringList HttpHeader) {
+void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination, QStringList HttpHeader) {
   mStream = mConnectionManager.doCreateNewStreamObject(CONNECT, false, true);
   mStream->setUsedFor("HttpOverStreamObject");
   mStreamID = mStream->getID();
 
   connect(mStream,
-          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                          const qint32, const QString)),
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
           this,
-          SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32,
-                                QString)));
+          SLOT(slotStreamStatus(const SAM_Message_Types::RESULT, const qint32, QString)));
 
-  connect(mStream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-          this, SLOT(slotDataReceived(const qint32, QByteArray)));
+  connect(mStream,
+          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          this,
+          SLOT(slotDataReceived(const qint32, QByteArray)));
 
   mMode = mode;
   mDestination = Destination;

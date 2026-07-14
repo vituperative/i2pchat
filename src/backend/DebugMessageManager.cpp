@@ -25,8 +25,7 @@ CDebugMessageManager::CDebugMessageManager(QString Group, QString configPath) {
 
   QSettings settings(configPath + "/application.ini", QSettings::IniFormat);
   settings.beginGroup(Group);
-  this->mMaxMessageCount =
-      settings.value("Debug_Max_Message_count", "20").toInt();
+  this->mMaxMessageCount = settings.value("Debug_Max_Message_count", "20").toInt();
   settings.endGroup();
   settings.sync();
 
@@ -35,7 +34,9 @@ CDebugMessageManager::CDebugMessageManager(QString Group, QString configPath) {
 
 CDebugMessageManager::~CDebugMessageManager() {}
 
-void CDebugMessageManager::doClearAllMessages() { mMessages.clear(); }
+void CDebugMessageManager::doClearAllMessages() {
+  mMessages.clear();
+}
 
 void CDebugMessageManager::slotNewIncomingDebugMessage(const QString Message) {
   while (mMessages.count() >= (signed int)mMaxMessageCount) {

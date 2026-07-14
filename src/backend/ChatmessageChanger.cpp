@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "ChatmessageChanger.h"
+
 #include "Core.h"
 
 CChatMessageChanger *CChatMessageChanger::instanz = NULL;
@@ -30,8 +31,7 @@ CChatMessageChanger::CChatMessageChanger(QString &ConfigPath) {
   mDoChange = settings.value("Override", false).toBool();
   if (mDoChange == true) {
     mControllForChange = new QTextEdit();
-    mFont.fromString(
-        settings.value("FontForOverwrite", "SansSerif,10").toString());
+    mFont.fromString(settings.value("FontForOverwrite", "SansSerif,10").toString());
     mColor.setNamedColor(settings.value("ColorForOverwrite", mFont).toString());
   }
   settings.endGroup();

@@ -26,6 +26,7 @@
 #include "I2PStream.h"
 #include "PacketManager.h"
 #include "UserManager.h"
+
 #include <QApplication>
 #include <QMessageBox>
 #include <QStandardPaths>
@@ -33,7 +34,7 @@
 
 CCore::CCore(QString configPath) {
   mConfigPath = configPath;
-  mCurrentOnlineStatus = User::USEROFFLINE;  // Initialize immediately
+  mCurrentOnlineStatus = User::USEROFFLINE; // Initialize immediately
 
   mDebugMessageHandler = new CDebugMessageManager("General", configPath);
   mSoundManager = new CSoundManager(mConfigPath);
@@ -46,37 +47,33 @@ CCore::CCore(QString configPath) {
   mMyDestinationB32 = settings.value("MyDestinationB32", "").toString(),
 
   mConnectionManager = new CConnectionManager(
-      settings.value("SamHost", "127.0.0.1").toString(),
-      settings.value("SamPort", "7656").toString(), mConfigPath);
+    settings.value("SamHost", "127.0.0.1").toString(), settings.value("SamPort", "7656").toString(), mConfigPath);
 
   connect(mConnectionManager,
-          SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT,
-                                         QString, QString, QString)),
+          SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
           this,
-          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString,
-                                       QString, QString)),
+          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
           Qt::DirectConnection);
 
-   connect(mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this,
-           SLOT(slotStreamControllerStatusOK(bool)));
+  connect(
+    mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this, SLOT(slotStreamControllerStatusOK(bool)));
 
-   connect(mConnectionManager, SIGNAL(signReconnectAttempt()), this,
-           SLOT(slotReconnectAttempt()));
-
-   connect(mConnectionManager, SIGNAL(signNewSamPrivKeyGenerated(const QString)),
-          this, SLOT(slotNewSamPrivKeyGenerated(const QString)));
+  connect(mConnectionManager, SIGNAL(signReconnectAttempt()), this, SLOT(slotReconnectAttempt()));
 
   connect(mConnectionManager,
-          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                          const qint32, const QString)),
+          SIGNAL(signNewSamPrivKeyGenerated(const QString)),
           this,
-          SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                        const qint32, QString)));
+          SLOT(slotNewSamPrivKeyGenerated(const QString)));
 
-  connect(mConnectionManager, SIGNAL(signIncomingStream(CI2PStream *)), this,
-          SLOT(slotIncomingStream(CI2PStream *)));
+  connect(mConnectionManager,
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
+          this,
+          SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, QString)));
 
-  connect(mConnectionManager, SIGNAL(signDebugMessages(const QString)),
+  connect(mConnectionManager, SIGNAL(signIncomingStream(CI2PStream *)), this, SLOT(slotIncomingStream(CI2PStream *)));
+
+  connect(mConnectionManager,
+          SIGNAL(signDebugMessages(const QString)),
           mDebugMessageHandler,
           SLOT(slotNewIncomingDebugMessage(const QString)));
 
@@ -109,22 +106,17 @@ CCore::CCore(QString configPath) {
       settings.sync();
 
   */
-  mUnsentChatMessageStorage = new CUnsentChatMessageStorage(
-      mConfigPath + "/UnsentChatMessageStorage.ini");
-  mUserBlockManager =
-      new CUserBlockManager(*this, mConfigPath + "/UserBlockList.dat");
-  mUserManager = new CUserManager(*this, mConfigPath + "/users.config",
-                                  *mUnsentChatMessageStorage);
+  mUnsentChatMessageStorage = new CUnsentChatMessageStorage(mConfigPath + "/UnsentChatMessageStorage.ini");
+  mUserBlockManager = new CUserBlockManager(*this, mConfigPath + "/UserBlockList.dat");
+  mUserManager = new CUserManager(*this, mConfigPath + "/users.config", *mUnsentChatMessageStorage);
 
   mUserBlockManager->readBlockListe();
 
-  connect(mUserManager, SIGNAL(signUserStatusChanged()), this,
-          SIGNAL(signUserStatusChanged()));
+  connect(mUserManager, SIGNAL(signUserStatusChanged()), this, SIGNAL(signUserStatusChanged()));
   mUserManager->loadUserList();
 
   mFileTransferManager = new CFileTransferManager(*this);
-  connect(mFileTransferManager, SIGNAL(signUserStatusChanged()), this,
-          SIGNAL(signUserStatusChanged()));
+  connect(mFileTransferManager, SIGNAL(signUserStatusChanged()), this, SIGNAL(signUserStatusChanged()));
 
   mKeepAliveTimer.setInterval(60000);
   connect(&mKeepAliveTimer, SIGNAL(timeout()), this, SLOT(slotPingClients()));
@@ -167,42 +159,26 @@ QString CCore::calcSessionOptionString() const {
 
   // + " " for void CSessionController::doSessionCreate() a session option.
 
+  SessionOptionString.append("i2cp.gzip=" + settings.value("i2cp.gzip", "true").toString() + " ");
   SessionOptionString.append(
-      "i2cp.gzip=" + settings.value("i2cp.gzip", "true").toString() + " ");
-  SessionOptionString.append(
-      "i2cp.messageReliability=" +
-      settings.value("i2cp.messageReliability", "BestEffort").toString() + " ");
-  SessionOptionString.append(
-      "i2cp.fastReceive=" +
-      settings.value("i2cp.fastReceive", "true").toString() + " ");
+    "i2cp.messageReliability=" + settings.value("i2cp.messageReliability", "BestEffort").toString() + " ");
+  SessionOptionString.append("i2cp.fastReceive=" + settings.value("i2cp.fastReceive", "true").toString() + " ");
 
   SessionOptionString.append(
-      "inbound.nickname=" +
-      settings.value("TunnelName", "I2PChat").toString().replace(" ", "_") +
-      " ");
+    "inbound.nickname=" + settings.value("TunnelName", "I2PChat").toString().replace(" ", "_") + " ");
   /// FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;
 
   // inbound options
-  SessionOptionString.append(
-      "inbound.quantity=" + settings.value("inbound.quantity", "1").toString() +
-      " ");
-  SessionOptionString.append(
-      "inbound.backupQuantity=" +
-      settings.value("inbound.backupQuantity", "1").toString() + " ");
-  SessionOptionString.append(
-      "inbound.length=" + settings.value("inbound.length", "3").toString() +
-      " ");
+  SessionOptionString.append("inbound.quantity=" + settings.value("inbound.quantity", "1").toString() + " ");
+  SessionOptionString.append("inbound.backupQuantity=" + settings.value("inbound.backupQuantity", "1").toString() +
+                             " ");
+  SessionOptionString.append("inbound.length=" + settings.value("inbound.length", "3").toString() + " ");
 
   // outbound options
-  SessionOptionString.append(
-      "outbound.quantity=" +
-      settings.value("outbound.quantity", "1").toString() + " ");
-  SessionOptionString.append(
-      "outbound.backupQuantity=" +
-      settings.value("outbound.backupQuantity", "1").toString() + " ");
-  SessionOptionString.append(
-      "outbound.length=" + settings.value("outbound.length", "3").toString() +
-      " ");
+  SessionOptionString.append("outbound.quantity=" + settings.value("outbound.quantity", "1").toString() + " ");
+  SessionOptionString.append("outbound.backupQuantity=" + settings.value("outbound.backupQuantity", "1").toString() +
+                             " ");
+  SessionOptionString.append("outbound.length=" + settings.value("outbound.length", "3").toString() + " ");
 
   // throttle per client dest to max 60 connections/min to mitigate denial of
   // service ?? is this hampering our file transfers???
@@ -216,12 +192,10 @@ QString CCore::calcSessionOptionString() const {
   {
     // TODO: get from ui_form_settingsgui.h
 
-    QStringList AllowSignTypes = {"ECDSA_SHA256_P256", "ECDSA_SHA384_P384",
-                                  "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519",
-                                  "RedDSA_SHA512_Ed25519"};
+    QStringList AllowSignTypes = {
+      "ECDSA_SHA256_P256", "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519", "RedDSA_SHA512_Ed25519"};
 
-    auto sign_type =
-        settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
+    auto sign_type = settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -231,8 +205,7 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (notfound)
-      SessionOptionString.append(
-          "SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
+      SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
   }
 
   /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
@@ -256,10 +229,9 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (encnotfound)
-      SessionOptionString.append(
-          "i2cp.leaseSetEncType=" +
-          // settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
-          settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
+      SessionOptionString.append("i2cp.leaseSetEncType=" +
+                                 // settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
+                                 settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
   }
 
   SessionOptionString.append("i2cp.leaseSetType=3 "); // i2pd fix
@@ -293,16 +265,14 @@ void CCore::init() {
   }
 
   qDebug() << "CCore::init() - Creating session...";
-  mConnectionManager->doCreateSession(STREAM, SamPrivKey,
-                                      calcSessionOptionString());
+  mConnectionManager->doCreateSession(STREAM, SamPrivKey, calcSessionOptionString());
   qDebug() << "CCore::init() - Session create called";
 
   settings.endGroup();
   settings.sync();
 }
 
-void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                                     const qint32 ID, QString Message) {
+void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
 
   CI2PStream *stream = mConnectionManager->getStreamObjectByID(ID);
   CUser *user = NULL;
@@ -322,16 +292,13 @@ void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
     if (mFileTransferManager->isThisID_a_FileSendID(ID) == false) {
       mProtocol->newConnectionChat(ID);
     }
-  } else if (result == SAM_Message_Types::CANT_REACH_PEER ||
-             result == SAM_Message_Types::TIMEOUT) {
+  } else if (result == SAM_Message_Types::CANT_REACH_PEER || result == SAM_Message_Types::TIMEOUT) {
     if (user == NULL) {
       mConnectionManager->doDestroyStreamObjectByID(ID);
       return;
     } else {
-      if (user->getOnlineState() != USEROFFLINE &&
-          user->getOnlineState() != USERTRYTOCONNECT) {
-        user->slotIncomingMessageFromSystem(
-            tr("The Connection is broken: %1\nConnection closed").arg(Message));
+      if (user->getOnlineState() != USEROFFLINE && user->getOnlineState() != USERTRYTOCONNECT) {
+        user->slotIncomingMessageFromSystem(tr("The Connection is broken: %1\nConnection closed").arg(Message));
       }
       deletePacketManagerByID(ID);
       user->setConnectionStatus(TRYTOCONNECT);
@@ -364,7 +331,8 @@ void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
 
       deletePacketManagerByID(ID);
 
-      connect(stream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
+      connect(stream,
+              SIGNAL(signDataReceived(const qint32, const QByteArray)),
               mProtocol,
               SLOT(slotInputUnknown(const qint32, const QByteArray)));
     }
@@ -380,8 +348,7 @@ void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
       user->setConnectionStatus(TRYTOCONNECT);
     } else {
       mConnectionManager->doDestroyStreamObjectByID(ID);
-      user->slotIncomingMessageFromSystem(
-          tr("Invalid Contact Destination: please delete the user\n"));
+      user->slotIncomingMessageFromSystem(tr("Invalid Contact Destination: please delete the user\n"));
       user->setConnectionStatus(CONNECTERROR);
     }
     deletePacketManagerByID(ID);
@@ -411,11 +378,9 @@ void CCore::closeAllActiveConnections() {
   QList<CUser *> users = mUserManager->getUserList();
 
   for (int i = 0; i < users.size(); i++) {
-    if (users.at(i)->getConnectionStatus() == ONLINE ||
-        users.at(i)->getConnectionStatus() == TRYTOCONNECT) {
+    if (users.at(i)->getConnectionStatus() == ONLINE || users.at(i)->getConnectionStatus() == TRYTOCONNECT) {
       deletePacketManagerByID(users.at(i)->getI2PStreamID());
-      mConnectionManager->doDestroyStreamObjectByID(
-          users.at(i)->getI2PStreamID());
+      mConnectionManager->doDestroyStreamObjectByID(users.at(i)->getI2PStreamID());
       users.at(i)->setConnectionStatus(User::OFFLINE);
       users.at(i)->setOnlineState(USEROFFLINE);
     }
@@ -423,10 +388,10 @@ void CCore::closeAllActiveConnections() {
 }
 
 void CCore::slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
-                                    QString Name, QString Value,
+                                    QString Name,
+                                    QString Value,
                                     QString Message) {
-  if (result == SAM_Message_Types::OK && Name == "ME" &&
-      mMyDestination.isEmpty()) {
+  if (result == SAM_Message_Types::OK && Name == "ME" && mMyDestination.isEmpty()) {
     this->mMyDestination = Value;
   } else if (result == SAM_Message_Types::OK) {
     CUser *theUser = mUserManager->getUserByI2P_Destination(Name);
@@ -445,7 +410,9 @@ void CCore::slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
                << "Message:\t" << Message << Qt::endl;
   }
 }
-const QString CCore::getMyDestination() const { return this->mMyDestination; }
+const QString CCore::getMyDestination() const {
+  return this->mMyDestination;
+}
 
 void CCore::deletePacketManagerByID(qint32 ID) {
 
@@ -462,7 +429,8 @@ void CCore::deletePacketManagerByID(qint32 ID) {
       if (Stream != NULL) {
         disconnect(Stream,
                    SIGNAL(signDataReceived(const qint32, const QByteArray)),
-                   (CurrentManager), SLOT(slotDataInput(qint32, QByteArray)));
+                   (CurrentManager),
+                   SLOT(slotDataInput(qint32, QByteArray)));
       }
       CurrentManager->deleteLater();
       break;
@@ -478,16 +446,13 @@ QString CCore::getConnectionDump() const {
     Message = "Not connected to network";
     return Message;
   } else {
-    StreamControllerBridgeName =
-        mConnectionManager->getStreamControllerBridgeName();
+    StreamControllerBridgeName = mConnectionManager->getStreamControllerBridgeName();
 
     Message = "• Stream Controller\n";
     Message += "\tNetwork:\t\tI2P\n";
-    Message +=
-        "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
+    Message += "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
 
-    const QMap<qint32, CI2PStream *> *allListener =
-        mConnectionManager->getAllStreamIncomingListenerObjects();
+    const QMap<qint32, CI2PStream *> *allListener = mConnectionManager->getAllStreamIncomingListenerObjects();
     const QList<CI2PStream *> allStreamsListenerList = allListener->values();
     Message += "• Incoming Stream Listener\n";
     for (int i = 0; i < allStreamsListenerList.count(); i++) {
@@ -504,8 +469,7 @@ QString CCore::getConnectionDump() const {
     }
 
     Message += "• Streams\n\n";
-    const QMap<qint32, CI2PStream *> *allStreams =
-        mConnectionManager->getAllStreamObjects();
+    const QMap<qint32, CI2PStream *> *allStreams = mConnectionManager->getAllStreamObjects();
     const QList<CI2PStream *> allStreamsList = allStreams->values();
 
     for (int n = 0; n < allStreamsList.size(); n++) {
@@ -556,8 +520,7 @@ QString CCore::getConnectionDump() const {
         if (theUser->getClientVersion() != nullptr) {
           Message += " " + theUser->getClientVersion() + "\n";
         }
-        if (theUser->getProtocolVersion() != nullptr &&
-            Stream->getConnectionType() != UNKNOWN) {
+        if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
           Message += "\tProtocol:\t\t" + theUser->getProtocolVersion() + "\n\n";
         }
       }
@@ -603,37 +566,31 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
 
     for (int i = 0; i < Users.size(); i++) {
       if (Users.at(i)->getIsInvisible() == true) {
-        mProtocol->send(USER_ONLINESTATUS_OFFLINE,
-                        Users.at(i)->getI2PStreamID(), QString(""));
+        mProtocol->send(USER_ONLINESTATUS_OFFLINE, Users.at(i)->getI2PStreamID(), QString(""));
       } else {
         if (Users.at(i)->getConnectionStatus() == ONLINE) {
           switch (this->mCurrentOnlineStatus) {
           case USERONLINE: {
-            mProtocol->send(USER_ONLINESTATUS_ONLINE,
-                            Users.at(i)->getI2PStreamID(), QString(""));
+            mProtocol->send(USER_ONLINESTATUS_ONLINE, Users.at(i)->getI2PStreamID(), QString(""));
             break;
           }
           case USEROFFLINE: {
             break;
           }
           case USERINVISIBLE: {
-            mProtocol->send(USER_ONLINESTATUS_OFFLINE,
-                            Users.at(i)->getI2PStreamID(), QString(""));
+            mProtocol->send(USER_ONLINESTATUS_OFFLINE, Users.at(i)->getI2PStreamID(), QString(""));
             break;
           }
           case USERAWAY: {
-            mProtocol->send(USER_ONLINESTATUS_AWAY,
-                            Users.at(i)->getI2PStreamID(), QString(""));
+            mProtocol->send(USER_ONLINESTATUS_AWAY, Users.at(i)->getI2PStreamID(), QString(""));
             break;
           }
           case USERWANTTOCHAT: {
-            mProtocol->send(USER_ONLINESTATUS_WANTTOCHAT,
-                            Users.at(i)->getI2PStreamID(), QString(""));
+            mProtocol->send(USER_ONLINESTATUS_WANTTOCHAT, Users.at(i)->getI2PStreamID(), QString(""));
             break;
           }
           case USERDONT_DISTURB: {
-            mProtocol->send(USER_ONLINESTATUS_DONT_DISTURB,
-                            Users.at(i)->getI2PStreamID(), QString(""));
+            mProtocol->send(USER_ONLINESTATUS_DONT_DISTURB, Users.at(i)->getI2PStreamID(), QString(""));
             break;
           }
           case USERTRYTOCONNECT: {
@@ -652,8 +609,8 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
           }
           }
         } // if
-      }   // else
-    }     // for
+      } // else
+    } // for
   }
   emit signOnlineStatusChanged();
 }
@@ -664,7 +621,9 @@ void CCore::stopCore() {
   mConnectionManager->doStopp();
 }
 
-void CCore::restartCore() { this->init(); }
+void CCore::restartCore() {
+  this->init();
+}
 
 QString CCore::getDestinationByID(qint32 ID) const {
   CUser *user = mUserManager->getUserByI2P_ID(ID);
@@ -689,8 +648,7 @@ void CCore::slotStreamControllerStatusOK(bool Status) {
   if (Status == true) {
     mCurrentOnlineStatus = mNextOnlineStatus;
     if (mMyDestination.isEmpty()) {
-      mConnectionManager->doNamingLookUP(
-          "ME"); // get the current Destination from this client
+      mConnectionManager->doNamingLookUP("ME"); // get the current Destination from this client
     }
     createStreamObjectsForAllUsers();
     mKeepAliveTimer.start();
@@ -728,21 +686,25 @@ void CCore::createStreamObjectsForAllUsers() {
   }
 }
 
-void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data,
-                                 bool isFileTransfer_Receive) {
+void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data, bool isFileTransfer_Receive) {
   CI2PStream *t = mConnectionManager->getStreamObjectByID(ID);
   t->setConnectionType(KNOWN);
-  disconnect(t, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-             mProtocol, SLOT(slotInputUnknown(const qint32, const QByteArray)));
+  disconnect(t,
+             SIGNAL(signDataReceived(const qint32, const QByteArray)),
+             mProtocol,
+             SLOT(slotInputUnknown(const qint32, const QByteArray)));
 
   if (isFileTransfer_Receive == false) {
     CPacketManager *packetManager = new CPacketManager(*mConnectionManager, ID);
-    connect(t, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-            packetManager, SLOT(slotDataInput(qint32, QByteArray)));
+    connect(t,
+            SIGNAL(signDataReceived(const qint32, const QByteArray)),
+            packetManager,
+            SLOT(slotDataInput(qint32, QByteArray)));
 
     connect(packetManager,
             SIGNAL(signAPacketIsCompleate(const qint32, const QByteArray)),
-            mProtocol, SLOT(slotInputKnown(const qint32, const QByteArray)));
+            mProtocol,
+            SLOT(slotInputKnown(const qint32, const QByteArray)));
 
     t->setUsedFor("Chat Connection");
     if (Data.isEmpty() == false) {
@@ -760,8 +722,10 @@ CI2PStream *CCore::getI2PStreamObjectByID(qint32 ID) const {
 
 void CCore::slotIncomingStream(CI2PStream *stream) {
   // all incoming stream are first Unknown
-  connect(stream, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-          mProtocol, SLOT(slotInputUnknown(const qint32, const QByteArray)));
+  connect(stream,
+          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          mProtocol,
+          SLOT(slotInputUnknown(const qint32, const QByteArray)));
 }
 
 void CCore::createStreamObjectForUser(CUser &User) {
@@ -775,26 +739,24 @@ void CCore::createStreamObjectForUser(CUser &User) {
     return;
   }
 
-  QSettings *settings =
-      new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("General");
-  msec = settings->value("Waittime_between_rechecking_offline_mUsers", "60000")
-             .toInt();
+  msec = settings->value("Waittime_between_rechecking_offline_mUsers", "60000").toInt();
   settings->endGroup();
 
   CI2PStream *t = mConnectionManager->doCreateNewStreamObject(CONNECT);
   connect(t,
-          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                          const qint32, const QString)),
+          SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
           this,
-          SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT,
-                                        const qint32, QString)));
+          SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, QString)));
 
   User.setI2PStreamID(t->getID());
 
   if (t != NULL) {
-    connect(t, SIGNAL(signDataReceived(const qint32, const QByteArray)),
-            mProtocol, SLOT(slotInputUnknown(const qint32, const QByteArray)));
+    connect(t,
+            SIGNAL(signDataReceived(const qint32, const QByteArray)),
+            mProtocol,
+            SLOT(slotInputUnknown(const qint32, const QByteArray)));
     t->doConnect(User.getI2PDestination());
     t->startUnlimintedReconnect(msec);
   }
@@ -803,8 +765,7 @@ void CCore::createStreamObjectForUser(CUser &User) {
 }
 
 void CCore::slotNewSamPrivKeyGenerated(const QString SamPrivKey) {
-  QSettings *settings =
-      new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("Network");
   settings->setValue("SamPrivKey", SamPrivKey);
   settings->endGroup();
@@ -827,8 +788,7 @@ bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
         // use the new connection
         // close the TRYTOCONNECT connection
         deletePacketManagerByID(theUser->getI2PStreamID());
-        mConnectionManager->doDestroyStreamObjectByID(
-            theUser->getI2PStreamID());
+        mConnectionManager->doDestroyStreamObjectByID(theUser->getI2PStreamID());
         theUser->setI2PStreamID(ID);
         return true;
       }
@@ -857,8 +817,8 @@ void CCore::loadUserInfos() {
     msgBox->setIcon(QMessageBox::Information);
     msgBox->setText(tr("\nNo username configured\nUsing \'%1\'  \n\nChange in "
                        "Settings -> User Details")
-                        //            .arg(randomString));
-                        .arg(mUserInfos.Nickname));
+                      //            .arg(randomString));
+                      .arg(mUserInfos.Nickname));
 
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
@@ -875,24 +835,25 @@ void CCore::loadUserInfos() {
   } else if (settings.value("Gender", "").toString() == "Female") {
     mUserInfos.Gender = "Female";
   }
-   if (mUserInfos.AvatarImage !=
-       settings.value("AvatarBinaryImage", "").toByteArray()) {
-     mUserInfos.AvatarImage =
-         settings.value("AvatarBinaryImage", "").toByteArray();
-     emit signOwnAvatarImageChanged();
-   }
-   settings.endGroup();
-   settings.sync();
+  if (mUserInfos.AvatarImage != settings.value("AvatarBinaryImage", "").toByteArray()) {
+    mUserInfos.AvatarImage = settings.value("AvatarBinaryImage", "").toByteArray();
+    emit signOwnAvatarImageChanged();
+  }
+  settings.endGroup();
+  settings.sync();
 
-   if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
-     mUserInfos.Nickname = "NonValidNick";
-     emit signNicknameChanged();
-   }
+  if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
+    mUserInfos.Nickname = "NonValidNick";
+    emit signNicknameChanged();
+  }
 }
 
-const CReceivedInfos CCore::getUserInfos() const { return mUserInfos; }
+const CReceivedInfos CCore::getUserInfos() const {
+  return mUserInfos;
+}
 
-void CCore::doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
+void CCore::doConvertNumberToTransferSize(quint64 inNumber,
+                                          QString &outNumber,
                                           QString &outType,
                                           bool addStoOutType) const {
   QString SSize;
@@ -921,7 +882,9 @@ void CCore::doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
   }
 }
 
-const QString CCore::getMyDestinationB32() const { return mMyDestinationB32; }
+const QString CCore::getMyDestinationB32() const {
+  return mMyDestinationB32;
+}
 
 void CCore::setMyDestinationB32(QString B32Dest) {
   if (mMyDestinationB32 == B32Dest)
@@ -954,4 +917,6 @@ QString CCore::canonicalizeTopicId(QString topicIdNonCanonicalized) {
   return topicIdNonCanonicalized;
 }
 
-void CCore::changeAccessIncomingUsers(bool m) { m_access_anyone_incoming = m; }
+void CCore::changeAccessIncomingUsers(bool m) {
+  m_access_anyone_incoming = m;
+}

@@ -21,7 +21,7 @@
 #include "form_fileSend.h"
 
 form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
-    : FileTransfer(FileTransfer) {
+  : FileTransfer(FileTransfer) {
   setupUi(this);
   // this->setAttribute(Qt::WA_DeleteOnClose,true);
   // TODO: add recipient's name to titlebar
@@ -30,28 +30,22 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   QPushButton *pushButton = this->pushButton;
 
   slot_alreadySentSizeChanged(FileTransfer.getAlreadySentSize());
-  connect(&FileTransfer, SIGNAL(signAlreadySentSizeChanged(quint64)), this,
-          SLOT(slot_alreadySentSizeChanged(quint64)));
+  connect(&FileTransfer, SIGNAL(signAlreadySentSizeChanged(quint64)), this, SLOT(slot_alreadySentSizeChanged(quint64)));
 
-  connect(&FileTransfer, SIGNAL(signFileTransferFinishedOK()), this,
-          SLOT(slot_FileTransferFinishedOK()));
+  connect(&FileTransfer, SIGNAL(signFileTransferFinishedOK()), this, SLOT(slot_FileTransferFinishedOK()));
 
-  connect(&FileTransfer, SIGNAL(signFileTransferAccepted(bool)), this,
-          SLOT(slot_FileTransferAccepted(bool)));
+  connect(&FileTransfer, SIGNAL(signFileTransferAccepted(bool)), this, SLOT(slot_FileTransferAccepted(bool)));
 
-  connect(&FileTransfer, SIGNAL(signFileTransferAborted()), this,
-          SLOT(slot_FileTransferAborted()));
+  connect(&FileTransfer, SIGNAL(signFileTransferAborted()), this, SLOT(slot_FileTransferAborted()));
 
-  connect(&FileTransfer, SIGNAL(signFileTransferError()), this,
-          SLOT(slot_FileTransferError()));
+  connect(&FileTransfer, SIGNAL(signFileTransferError()), this, SLOT(slot_FileTransferError()));
 
   connect(pushButton, SIGNAL(pressed()), this, SLOT(slot_Button()));
 
-  connect(&FileTransfer, SIGNAL(signAverageTransferSpeed(QString, QString)),
-          this, SLOT(slot_SpeedChanged(QString, QString)));
+  connect(
+    &FileTransfer, SIGNAL(signAverageTransferSpeed(QString, QString)), this, SLOT(slot_SpeedChanged(QString, QString)));
 
-  connect(&FileTransfer, SIGNAL(signETA(QString)), labelETA,
-          SLOT(setText(QString)));
+  connect(&FileTransfer, SIGNAL(signETA(QString)), labelETA, SLOT(setText(QString)));
 
   init();
 }
@@ -123,9 +117,13 @@ void form_fileSend::slot_Button() {
   this->close();
 }
 
-void form_fileSend::slot_FileTransferError() { this->close(); }
+void form_fileSend::slot_FileTransferError() {
+  this->close();
+}
 
-void form_fileSend::slot_FileTransferAborted() { this->close(); }
+void form_fileSend::slot_FileTransferAborted() {
+  this->close();
+}
 
 form_fileSend::~form_fileSend() {}
 
@@ -136,8 +134,7 @@ void form_fileSend::closeEvent(QCloseEvent *e) {
 
 void form_fileSend::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 

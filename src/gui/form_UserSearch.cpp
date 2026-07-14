@@ -1,12 +1,13 @@
 #include "form_UserSearch.h"
+
 #include "Core.h"
 
-form_userSearch::form_userSearch(CCore &Core) : mCore(Core) {
+form_userSearch::form_userSearch(CCore &Core)
+  : mCore(Core) {
   setupUi(this);
 
   treeWidget_SearchResults->setColumnCount(2);
-  treeWidget_SearchResults->setHeaderLabels(QStringList()
-                                            << tr("Nicknames") << tr("values"));
+  treeWidget_SearchResults->setHeaderLabels(QStringList() << tr("Nicknames") << tr("values"));
   treeWidget_SearchResults->setContextMenuPolicy(Qt::CustomContextMenu);
   treeWidget_SearchResults->setColumnWidth(0, 250);
   treeWidget_SearchResults->setColumnWidth(1, 250);
@@ -17,16 +18,14 @@ form_userSearch::form_userSearch(CCore &Core) : mCore(Core) {
 
   connect(cmd_close, SIGNAL(clicked()), this, SLOT(close()));
 
-  connect(checkGender_Female, SIGNAL(clicked()), this,
-          SLOT(slot_genderFemale()));
+  connect(checkGender_Female, SIGNAL(clicked()), this, SLOT(slot_genderFemale()));
 
   connect(checkGender_Male, SIGNAL(clicked()), this, SLOT(slot_genderMale()));
 
-  connect(treeWidget_SearchResults, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(slot_showContextMenu(QPoint)));
+  connect(
+    treeWidget_SearchResults, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_showContextMenu(QPoint)));
 
-  connect(&mCore, SIGNAL(signOnlineStatusChanged()), this,
-          SLOT(slot_onlineStateChanged()));
+  connect(&mCore, SIGNAL(signOnlineStatusChanged()), this, SLOT(slot_onlineStateChanged()));
 }
 
 form_userSearch::~form_userSearch() {}
@@ -161,8 +160,7 @@ void form_userSearch::slot_onlineStateChanged() {
 }
 void form_userSearch::getFocus() {
   this->activateWindow();
-  this->setWindowState((windowState() & (~Qt::WindowMinimized)) |
-                       Qt::WindowActive);
+  this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 void form_userSearch::slot_genderMale() {
