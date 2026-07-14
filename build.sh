@@ -13,11 +13,29 @@ die()  { echo -e "  ${RED}✗${NC} $1"; exit 1; }
 step() { echo -e "\n  ${BLUE}[${1}/${2}]${NC} ${3}"; }
 
 CLEAN=false
+FORMAT=false
+TIDY=false
 JOBS=$(nproc)
+
+usage() {
+    echo "Usage: bash build.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  --clean       Clean previous build artifacts before building"
+    echo "  --format      Run clang-format (auto-fix sources)"
+    echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
+    echo "  -j N          Use N parallel jobs (default: all cores)"
+    echo "  -h, --help    Show this help"
+    exit 0
+}
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --clean) CLEAN=true ;;
+        --format) FORMAT=true ;;
+        --tidy) TIDY=true ;;
         -j) JOBS="$2"; shift ;;
+        -h|--help) usage ;;
         *) die "Unknown argument: $1" ;;
     esac
     shift
@@ -27,7 +45,9 @@ BUILD_DIR="/tmp/build-i2pchat"
 DIST_DIR="$ROOT/dist"
 
 # --- dependency check ---
-DEPS=(g++ qmake make bear clang-format clang-tidy run-clang-tidy compiledb pkg-config)
+DEPS=(g++ qmake make bear compiledb pkg-config)
+if $FORMAT; then DEPS+=(clang-format); fi
+if $TIDY; then DEPS+=(clang-tidy run-clang-tidy); fi
 MISSING=()
 for dep in "${DEPS[@]}"; do
   command -v "$dep" &>/dev/null || MISSING+=("$dep")
@@ -43,9 +63,17 @@ fi
 BUILT_SOURCES=($(sed -n '/^SOURCES/,/^HEADERS/p' I2PChat.pro \
   | grep '\.cpp' | sed 's/\\$//; s/^\s*//; s/\s*$//' | sed '/^$/d'))
 
-TOTAL_STEPS=4
+TOTAL_STEPS=2
+if $FORMAT; then ((TOTAL_STEPS++)); fi
+if $TIDY; then ((TOTAL_STEPS++)); fi
+CUR_STEP=0
 
-step 1 "$TOTAL_STEPS" "Preparing build directory & generated headers"
+next_step() {
+    ((++CUR_STEP))
+    step "$CUR_STEP" "$TOTAL_STEPS" "$1"
+}
+
+next_step "Preparing build directory & generated headers"
 if $CLEAN && test -f Makefile; then
     echo "  Cleaning previous build..."
     make distclean >/dev/null 2>&1
@@ -61,11 +89,14 @@ compiledb make -n >/dev/null 2>&1
 mv compile_commands.json "$BUILD_DIR/"
 pass "compile_commands.json ready"
 
-step 2 "$TOTAL_STEPS" "Formatting ${#BUILT_SOURCES[@]} sources with clang-format"
+if $FORMAT; then
+next_step "Formatting ${#BUILT_SOURCES[@]} sources with clang-format"
 clang-format -i "${BUILT_SOURCES[@]}"
 pass "Formatted ${#BUILT_SOURCES[@]} files"
+fi
 
-step 3 "$TOTAL_STEPS" "Running clang-tidy (${#BUILT_SOURCES[@]} files, parallel)..."
+if $TIDY; then
+next_step "Running clang-tidy (${#BUILT_SOURCES[@]} files, parallel)..."
 CLANG_OUTPUT=$(run-clang-tidy -p "$BUILD_DIR" -quiet -use-color -fix -j "$JOBS" "${BUILT_SOURCES[@]}" 2>&1 || true)
 FINDINGS=$(echo "$CLANG_OUTPUT" \
   | grep -v '^[0-9]\+ warnings generated' \
@@ -86,8 +117,9 @@ if $HAS_ERRORS; then
     exit 1
 fi
 pass "clang-tidy clean"
+fi
 
-step 4 "$TOTAL_STEPS" "Compiling ${#BUILT_SOURCES[@]} source files..."
+next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
 bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
 strip "$DIST_DIR/I2PChat"
 FILESIZE=$(stat --format=%s "$DIST_DIR/I2PChat")
