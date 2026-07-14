@@ -195,7 +195,7 @@ QString CConnectionManager::getStreamControllerBridgeName() const {
   if (StreamController != NULL) {
     return StreamController->getBridgeName();
   }
-  return 0;
+  return QString();
 }
 
 CI2PStream *CConnectionManager::getStreamObjectByDestination(const QString &Destination) const {
