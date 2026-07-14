@@ -62,6 +62,7 @@ public:
 
 protected:
   void closeEvent(QCloseEvent *);
+  bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
   void closeAllWindows();

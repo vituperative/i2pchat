@@ -105,6 +105,12 @@ CCore::CCore(const QString &configPath) {
 
   mKeepAliveTimer.setInterval(60000);
   connect(&mKeepAliveTimer, SIGNAL(timeout()), this, SLOT(slotPingClients()));
+
+  connect(&mAutoAwayTimer, SIGNAL(timeout()), this, SLOT(slotAutoAwayTimeout()));
+  QSettings autoSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  mAutoAwayMinutes = autoSettings.value("General/AutoAwayMinutes", 0).toInt();
+  if (mAutoAwayMinutes > 0)
+    mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
 }
 
 CCore::~CCore() {
@@ -651,6 +657,28 @@ void CCore::slotPingClients() {
       mProtocol->send(PING, users.at(i)->getI2PStreamID());
     }
   }
+}
+
+void CCore::slotAutoAwayTimeout() {
+  if (mCurrentOnlineStatus == USERONLINE || mCurrentOnlineStatus == USERWANTTOCHAT) {
+    setOnlineStatus(USERAWAY);
+  }
+}
+
+void CCore::resetAutoAway() {
+  if (mAutoAwayMinutes > 0) {
+    mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
+    if (mCurrentOnlineStatus == USERAWAY)
+      setOnlineStatus(USERONLINE);
+  }
+}
+
+void CCore::applyAutoAwaySettings(int minutes) {
+  mAutoAwayMinutes = minutes;
+  if (minutes > 0)
+    mAutoAwayTimer.start(minutes * 60000);
+  else
+    mAutoAwayTimer.stop();
 }
 
 void CCore::slotReconnectAttempt() {

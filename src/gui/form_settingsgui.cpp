@@ -110,6 +110,8 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
 
   connect(requestAuthcheckBox, SIGNAL(clicked(bool)), this, SLOT(clicked_RequestAuthorization(bool)));
 
+  connect(AutoAway, SIGNAL(toggled(bool)), this, SLOT(clicked_AutoAwayEnabled(bool)));
+
   // TODO: Add this button from ui file. (QtCreator, i dont have it)
   // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
   // setCustomStyleSheet() ) );
@@ -122,6 +124,11 @@ form_settingsgui::~form_settingsgui() {
 
 void form_settingsgui::loadSettings() {
   settings->beginGroup("General");
+  bool autoAwayEnabled = settings->value("AutoAwayEnabled", false).toBool();
+  AutoAway->setChecked(autoAwayEnabled);
+  AutoAwaySpinBox->setValue(settings->value("AutoAwayMinutes", 10).toInt());
+  AutoAwaySpinBox->setEnabled(autoAwayEnabled);
+  NoActivityLabel->setEnabled(autoAwayEnabled);
   spinBox->setValue(settings->value("Debug_Max_Message_count", "20").toInt());
   OfflineChkSpinBox->setValue(settings->value("Waittime_between_rechecking_offline_users", "1000").toInt() / 1000);
   checkBox_DebugLog->setChecked(settings->value(("DebugLogging"), "true").toBool());
@@ -407,6 +414,8 @@ void form_settingsgui::loadSettings() {
 }
 void form_settingsgui::saveSettings() {
   settings->beginGroup("General");
+  settings->setValue("AutoAwayEnabled", AutoAway->isChecked());
+  settings->setValue("AutoAwayMinutes", AutoAwaySpinBox->value());
   settings->setValue("Debug_Max_Message_count", spinBox->value());
   settings->setValue("Waittime_between_rechecking_offline_users", OfflineChkSpinBox->value() * 1000);
   settings->setValue("current_Style", styleCombo->currentText());
@@ -517,6 +526,11 @@ void form_settingsgui::saveSettings() {
 
   settings->sync();
   mCore.loadUserInfos();
+
+  int autoMinutes = 0;
+  if (settings->value("General/AutoAwayEnabled", false).toBool())
+    autoMinutes = settings->value("General/AutoAwayMinutes", 0).toInt();
+  mCore.applyAutoAwaySettings(autoMinutes);
   mCore.getUserManager()->avatarImageChanged();
 
   // Force update nickname display in main window
@@ -964,4 +978,11 @@ void form_settingsgui::clicked_sortByLastOnline(bool checked) {
 
     mCore.getUserManager()->sortUserList(3);
   }
+}
+
+void form_settingsgui::clicked_AutoAwayEnabled(bool enabled) {
+  AutoAwaySpinBox->setEnabled(enabled);
+  NoActivityLabel->setEnabled(enabled);
+  if (enabled)
+    mCore.resetAutoAway();
 }

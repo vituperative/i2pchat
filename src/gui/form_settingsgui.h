@@ -21,6 +21,7 @@
 #ifndef SETTINGSGUI_H
 #define SETTINGSGUI_H
 
+#include "UserManager.h"
 #include "ui_form_settingsgui.h"
 
 #include <QColorDialog>
@@ -33,8 +34,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QtGui>
-
-#include "UserManager.h"
 
 class CCore;
 class form_settingsgui : public QDialog, private Ui::form_settingsgui {
@@ -93,6 +92,7 @@ private slots:
 
   void clicked_SelectAvatarImage();
   void clicked_ClearAvatarImage();
+  void clicked_AutoAwayEnabled(bool enabled);
   void setCustomStyleSheet();
 
 private:

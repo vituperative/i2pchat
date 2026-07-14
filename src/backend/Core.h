@@ -21,13 +21,6 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <QIODevice>
-#include <QList>
-#include <QSettings>
-#include <QTextStream>
-#include <QTimer>
-#include <QtGui>
-
 #include "DebugMessageManager.h"
 #include "FileTransferManager.h"
 #include "I2PSamMessageAnalyser.h"
@@ -36,6 +29,13 @@
 #include "UnsentChatMessageStorage.h"
 #include "User.h"
 #include "UserBlockManager.h"
+
+#include <QIODevice>
+#include <QList>
+#include <QSettings>
+#include <QTextStream>
+#include <QTimer>
+#include <QtGui>
 
 #define CLIENTVERSION "0.2.38"
 #define CLIENTNAME "I2PChat"
@@ -63,28 +63,20 @@ public:
   ONLINESTATE getOnlineStatus() const;
   QString getClientName() const { return CLIENTNAME; };
   QString getClientVersion() const { return CLIENTVERSION; };
-  QString getProtocolVersion() const {
-    return mProtocol->getProtocolVersion();
-  };
+  QString getProtocolVersion() const { return mProtocol->getProtocolVersion(); };
   CI2PStream *getI2PStreamObjectByID(qint32 ID) const;
   const CReceivedInfos getUserInfos() const;
   QString getConnectionDump() const;
   const QString getConfigPath() const { return mConfigPath; };
 
   //<SUBSYSTEMS>
-  CDebugMessageManager *getDebugMessageHandler() const {
-    return mDebugMessageHandler;
-  };
-  CConnectionManager *getConnectionManager() const {
-    return mConnectionManager;
-  };
+  CDebugMessageManager *getDebugMessageHandler() const { return mDebugMessageHandler; };
+  CConnectionManager *getConnectionManager() const { return mConnectionManager; };
   CUserBlockManager *getUserBlockManager() const { return mUserBlockManager; };
   CProtocol *getProtocol() const { return mProtocol; };
   CSoundManager *getSoundManager() const { return mSoundManager; };
   CUserManager *getUserManager() const { return mUserManager; };
-  CFileTransferManager *getFileTransferManager() const {
-    return mFileTransferManager;
-  };
+  CFileTransferManager *getFileTransferManager() const { return mFileTransferManager; };
   //</SUBSYSTEMS>
 
   void setUserProtocolVersionByStreamID(qint32 ID, QString Version);
@@ -95,7 +87,10 @@ public:
   bool useThisChatConnection(const QString &Destination, const qint32 ID);
 
   void doNamingLookUP(const QString &Name) const;
-  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
+  void resetAutoAway();
+  void applyAutoAwaySettings(int minutes);
+  void doConvertNumberToTransferSize(quint64 inNumber,
+                                     QString &outNumber,
                                      QString &outType,
                                      bool addStoOutType = true) const;
 
@@ -145,6 +140,8 @@ private:
   ONLINESTATE mCurrentOnlineStatus;
   ONLINESTATE mNextOnlineStatus;
   QTimer mKeepAliveTimer;
+  QTimer mAutoAwayTimer;
+  int mAutoAwayMinutes;
 
   void init();
   void stopCore();
@@ -155,6 +152,7 @@ public slots:
 
 private slots:
   void slotPingClients();
+  void slotAutoAwayTimeout();
 
 protected:
   bool m_access_anyone_incoming; // new users.

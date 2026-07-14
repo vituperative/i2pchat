@@ -35,6 +35,7 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
 
   QApplication::setQuitOnLastWindowClosed(false);
   Core = new CCore(configDir);
+  qApp->installEventFilter(this);
   connect(Core, SIGNAL(signUserStatusChanged()), this, SLOT(eventUserChanged()));
   connect(this, SIGNAL(changeAllowIncoming(bool)), Core, SLOT(changeAccessIncomingUsers(bool)));
   connect(Core, SIGNAL(signOnlineStatusChanged()), this, SLOT(OnlineStateChanged()));
@@ -77,6 +78,21 @@ form_MainWindow::~form_MainWindow() {
   delete Core;
   delete trayIcon;
   this->close();
+}
+
+bool form_MainWindow::eventFilter(QObject *obj, QEvent *event) {
+  switch (event->type()) {
+  case QEvent::MouseMove:
+  case QEvent::MouseButtonPress:
+  case QEvent::KeyPress:
+  case QEvent::Wheel:
+  case QEvent::TouchBegin:
+    Core->resetAutoAway();
+    break;
+  default:
+    break;
+  }
+  return QMainWindow::eventFilter(obj, event);
 }
 
 void form_MainWindow::onlineComboBoxChanged() {

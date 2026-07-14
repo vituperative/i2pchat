@@ -572,30 +572,33 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="AutoAway">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>234</y>
-        <width>380</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>380</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>380</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
+      <widget class="QGroupBox" name="AutoAway">
+       <property name="geometry">
+        <rect>
+         <x>4</x>
+         <y>234</y>
+         <width>380</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>380</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Auto-Away</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
       <widget class="QWidget" name="layoutWidget_22">
        <property name="geometry">
         <rect>
@@ -607,10 +610,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <layout class="QGridLayout" name="gridLayout_21">
         <item row="0" column="1" alignment="Qt::AlignLeft">
-         <widget class="QSpinBox" name="AutoAwaySpinBox">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+          <widget class="QSpinBox" name="AutoAwaySpinBox">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -637,11 +637,8 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="NoActivityLabel">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="NoActivityLabel">
           <property name="minimumSize">
            <size>
             <width>200</width>
