@@ -895,6 +895,11 @@ void form_settingsgui::clicked_sortingEnabled(bool enabled) {
   settings->setValue("SortingEnabled", enabled);
   settings->endGroup();
   settings->sync();
+
+  if (enabled) {
+    int sortType = settings->value("UserList/SortType", 0).toInt();
+    mCore.getUserManager()->sortUserList(sortType);
+  }
 }
 
 void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
