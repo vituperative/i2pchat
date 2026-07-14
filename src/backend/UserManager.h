@@ -24,6 +24,7 @@
 #include "Core.h"
 #include "UnsentChatMessageStorage.h"
 #include "User.h"
+
 #include <QObject>
 #include <QRegExp>
 static const QRegExp nicknameRegExp("^[a-zA-Z0-9_ ]{1,12}$");
@@ -31,8 +32,7 @@ static const QRegExp nicknameRegExp("^[a-zA-Z0-9_ ]{1,12}$");
 class CUserManager : public QObject {
   Q_OBJECT
 public:
-  CUserManager(CCore &Core, QString UserFileWithPath,
-               CUnsentChatMessageStorage &UnsentChatMessageStorage);
+  CUserManager(CCore &Core, QString UserFileWithPath, CUnsentChatMessageStorage &UnsentChatMessageStorage);
   ~CUserManager();
 
   // forbid some operators
@@ -41,8 +41,7 @@ public:
 
   void saveUserList();
   void loadUserList();
-  bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0,
-                  bool SaveUserList = true);
+  bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0, bool SaveUserList = true);
   bool checkIfUserExistsByI2PDestination(const QString &I2PDestination) const;
   void changeUserPositionInUserList(int oldPos, int newPos);
   void sortUserList(int sortType);
@@ -62,6 +61,7 @@ signals:
 
 private slots:
   void slotSaveUnsentMessageForDest(const QString &I2PDest);
+  void slotResort();
 
 private:
   CCore &mCore;
@@ -69,7 +69,8 @@ private:
   CUnsentChatMessageStorage &mUnsentMessageStorage;
   QList<CUser *> mUsers;
   bool mSortingEnabled;
+  int mSortType;
 
- private:
+private:
 };
 #endif // CUSERMANAGER_H

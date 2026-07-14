@@ -30,7 +30,8 @@ CUserManager::CUserManager(CCore &Core, QString UserFileWithPath, CUnsentChatMes
   : mCore(Core)
   , mUserFileWithPath(std::move(UserFileWithPath))
   , mUnsentMessageStorage(UnsentChatMessageStorage)
-  , mSortingEnabled(false) {}
+  , mSortingEnabled(false)
+  , mSortType(0) {}
 
 CUserManager::~CUserManager() {
 
@@ -98,9 +99,9 @@ void CUserManager::loadUserList() {
   // Load sorting settings from application.ini
   QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
   mSortingEnabled = settings.value("UserList/SortingEnabled", false).toBool();
-  int sortType = settings.value("UserList/SortType", 0).toInt();
+  mSortType = settings.value("UserList/SortType", 0).toInt();
   if (mSortingEnabled) {
-    sortUserList(sortType);
+    sortUserList(mSortType);
   }
 }
 
@@ -324,6 +325,8 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PSt
   connect(newuser, SIGNAL(signConnectionOffline()), &SoundManager, SLOT(slotUserGoOffline()));
 
   connect(newuser, SIGNAL(signOnlineStateChanged()), this, SIGNAL(signUserStatusChanged()));
+  connect(newuser, SIGNAL(signOnlineStateChanged()), this, SLOT(slotResort()));
+  connect(newuser, SIGNAL(signNewMessageReceived()), this, SLOT(slotResort()));
 
   connect(newuser, SIGNAL(signSaveUnsentMessages(QString)), this, SLOT(slotSaveUnsentMessageForDest(QString)));
 
@@ -356,6 +359,7 @@ void CUserManager::changeUserPositionInUserList(int oldPos, int newPos) {
 }
 
 void CUserManager::sortUserList(int sortType) {
+  mSortType = sortType;
   if (!mSortingEnabled)
     return;
 
@@ -431,6 +435,10 @@ bool CUserManager::renameUserByI2PDestination(const QString &Destination, const 
     }
   }
   return false;
+}
+
+void CUserManager::slotResort() {
+  sortUserList(mSortType);
 }
 
 void CUserManager::avatarImageChanged() {
