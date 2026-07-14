@@ -100,7 +100,6 @@ public slots:
 private:
   void closeEvent(QCloseEvent *e);
   void centerDialog();
-  bool eventFilter(QObject *obj, QEvent *event);
 
   QColor textColor;
 

@@ -175,9 +175,8 @@ void CUser::slotSendChatMessage(const QString &Message) {
     else
       Nickname = mCore.getUserInfos().Nickname;
 
-    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" +
-               "<a href=\"pending:" + QString::number(idx) + "\" style=\"color:orange\">" + Message + "</a> <i>(" +
-               tr("pending") + ")</i><br>";
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + Message +
+               " <i>(" + tr("pending") + ")</i><br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);

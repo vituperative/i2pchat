@@ -4,7 +4,6 @@
 
 #include <QErrorMessage>
 #include <QFile>
-#include <QInputDialog>
 #include <QRegularExpression>
 #include <QXmlStreamReader>
 
@@ -108,8 +107,6 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   addAllMessages();
   QScrollBar *sb = chat->verticalScrollBar();
   sb->setValue(sb->maximum());
-
-  chat->installEventFilter(this);
 
   slotLoadOwnAvatarImage();
 
@@ -456,30 +453,4 @@ void form_ChatWidget::slotLoadOwnAvatarImage() {
   ownavatar_label->setAlignment(Qt::AlignCenter);
   mOwnAvatar.loadFromData(Core.getUserInfos().AvatarImage);
   ownavatar_label->setPixmap(mOwnAvatar);
-}
-
-bool form_ChatWidget::eventFilter(QObject *obj, QEvent *event) {
-  if (obj == chat && event->type() == QEvent::MouseButtonDblClick) {
-    QMouseEvent *me = static_cast<QMouseEvent *>(event);
-    QString anchor = chat->anchorAt(me->pos());
-    if (anchor.startsWith("pending:")) {
-      int idx = anchor.mid(8).toInt();
-      QStringList pending = user.getUnsentedMessages();
-      if (idx >= 0 && idx < pending.size()) {
-        bool ok;
-        QString text =
-          QInputDialog::getMultiLineText(this, tr("Edit pending message"), QString(), pending.at(idx), &ok);
-        if (ok) {
-          if (text.isEmpty())
-            pending.removeAt(idx);
-          else
-            pending.replace(idx, text);
-          user.setUnsentedMessages(pending);
-          addAllMessages();
-        }
-      }
-      return true;
-    }
-  }
-  return QMainWindow::eventFilter(obj, event);
 }
