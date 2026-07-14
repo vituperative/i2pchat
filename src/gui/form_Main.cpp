@@ -131,40 +131,6 @@ void form_MainWindow::initToolBars() {
   toolBar->setContextMenuPolicy(Qt::CustomContextMenu);
   toolBar->addAction(QIcon(ICON_NEWUSER), tr("Add User"), this, SLOT(openAdduserWindow()));
 
-  /* User search disabled.. can we re-enable this?
-      {
-          settings.beginGroup("Usersearch");
-          if((settings.value("Enabled",true).toBool()) ==true){
-              if(Core->getUserInfos().Nickname.isEmpty()==false){
-                  toolBar->addAction(QIcon(ICON_USERSEARCH),tr("Users Search")
-     ,this,SLOT(openUserSearchWindow())); }else{ QMessageBox* msgBox= new
-     QMessageBox(NULL); msgBox->setIcon(QMessageBox::Information);
-                  msgBox->setText(tr("I2PChat"));
-                  msgBox->setInformativeText(tr("You have to enter a Nickname
-     (at User Details) to use the User Search. User Search deactivated"));
-                  msgBox->setStandardButtons(QMessageBox::Ok);
-                  msgBox->setDefaultButton(QMessageBox::Ok);
-                  msgBox->setWindowModality(Qt::NonModal);
-                  msgBox->exec();
-              }
-          }
-          settings.endGroup();
-      }
-  */
-
-  /* Topics appears broken.. disabling for now */
-  /*
-      {
-          settings.beginGroup("Topics");
-          if((settings.value("Enabled",true).toBool())){
-              toolBar->addAction(QIcon(ICON_USERSEARCH), tr("Subscribe to
-     Topic"), this, SLOT(openTopicSubscribeWindow()));
-          }
-          settings.endGroup();
-          settings.sync();
-      }
-  */
-
   toolBar->addAction(QIcon(ICON_MYDESTINATION), tr("Copy Destination to clipboard"), this, SLOT(namingMe()));
   toolBar->addAction(QIcon(ICON_SETTINGS), tr("Settings"), this, SLOT(openConfigWindow()));
   toolBar->addAction(QIcon(ICON_DEBUGMESSAGES), tr("Debug Messages"), this, SLOT(openDebugMessagesWindow()));
@@ -485,15 +451,6 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     CUser *User;
     User = Core->getUserManager()->getUserByI2P_Destination(Destination);
 
-    // TODO: FIX!
-    /*
-        if (User->getConnectionStatus() == ONLINE) {
-          QAction *UserSendFile =
-              new QAction(QIcon(ICON_FILETRANSFER_SEND), tr("SendFile"), this);
-          connect(UserSendFile, SIGNAL(triggered()), this, SLOT(SendFile()));
-          contextMnu.addAction(UserSendFile);
-        }
-    */
     if (User->getIsInvisible() == true) {
       UserInvisible->setChecked(true);
     } else {
@@ -1048,32 +1005,6 @@ void form_MainWindow::addUserToBlockList() {
     }
   }
 }
-/*
-void form_MainWindow::openUserSearchWindow()
-{
-    ONLINESTATE currentState=Core->getOnlineStatus();
-
-    if(currentState==USEROFFLINE || currentState==USERTRYTOCONNECT){
-        QMessageBox::information(this, "",
-                                 tr("Your Client must be Online for
-that"),QMessageBox::Close); return;
-    }
-
-    if(mUserSearchWindow==NULL){
-
-        mUserSearchWindow= new
-form_userSearch(*Core,*(Core->getSeedlessManager()));
-        connect(this,SIGNAL(closeAllWindows()),mUserSearchWindow,
-                SLOT(close()));
-
-        connect(mUserSearchWindow,SIGNAL(signClosingUserSearchWindow()),this,
-                SLOT(eventUserSearchWindowClosed()));
-        mUserSearchWindow->show();
-    }else {
-        mUserSearchWindow->getFocus();
-    }
-}
-*/
 
 void form_MainWindow::incomingUserAuthorizationRequest(const QString &destination,
                                                        int streamID,

@@ -35,7 +35,6 @@ CUserManager::CUserManager(CCore &Core, QString UserFileWithPath, CUnsentChatMes
 CUserManager::~CUserManager() {
 
   for (int i = 0; i < this->mUsers.count(); i++) {
-    // delete mUsers.at(i);
     mUsers.at(i)->deleteLater();
   }
 
@@ -132,13 +131,6 @@ bool CUserManager::deleteUserByI2P_Destination(const QString &Destination) {
 }
 
 CUser *CUserManager::getUserByI2P_ID(qint32 ID) const {
-
-  /*for(int i=0;i<mUsers.size();i++){
-          if(mUsers.at(i)->getI2PStreamID()==ID){
-
-                  return mUsers.at(i);
-          }
-  }*/
   for (auto it : mUsers)
     if (it->getI2PStreamID() == ID)
       return it;
@@ -146,11 +138,6 @@ CUser *CUserManager::getUserByI2P_ID(qint32 ID) const {
   return NULL;
 }
 CUser *CUserManager::getUserByI2P_Destination(const QString &Destination) const {
-  /*for(int i=0;i<mUsers.size();i++){
-          if(mUsers.at(i)->getI2PDestination()==Destination){
-                  return mUsers.at(i);
-          }
-  }*/
   for (auto it : mUsers)
     if (it->getI2PDestination() == Destination)
       return it;
@@ -296,21 +283,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PSt
                 << why << Qt::endl;
     return false;
   };
-  /*if(	getUserByI2P_Destination(I2PDestination)	!=	NULL	){
-          return critical("Already exists user");
-  }*/
   if (isValid == false) {
-    /*
-        qCritical() << "File\t" << __FILE__ << Qt::endl
-                    << "Line:\t" << __LINE__ << Qt::endl
-                    << "Function:\t"
-                    << "CUserManager::addNewUser" << Qt::endl
-                    << "Message:\t"
-                    << "Destination is not valid" << Qt::endl
-                    << "Destination:\t" << I2PDestination << Qt::endl
-                    << "Action:\tAdd New User ignored" << Qt::endl;
-        return false;
-    */
     return critical("Not a valid user");
   }
 
@@ -357,11 +330,6 @@ bool CUserManager::checkIfUserExistsByI2PDestination(const QString &I2PDestinati
   if (I2PDestination == mCore.getMyDestination())
     return true;
 
-  /*for(int i=0;i<mUsers.count();i++){
-          if(mUsers.at(i)->getI2PDestination()==I2PDestination){
-                  return true;
-          }
-  }*/
   if (this->getUserByI2P_Destination(I2PDestination) != NULL)
     return true;
   return false;
@@ -418,25 +386,6 @@ bool CUserManager::deleteUserByI2PDestination(const QString &I2PDestination) {
   auto Him = this->getUserByI2P_Destination(I2PDestination);
   if (Him == NULL)
     return false;
-  /*for(int i=0;i<mUsers.count();i++){
-          if(mUsers.at(i)->getI2PDestination()==I2PDestination){
-                  if(mUsers.at(i)->getConnectionStatus()==ONLINE
-  ||mUsers.at(i)->getConnectionStatus()==TRYTOCONNECT){
-                          mCore.deletePacketManagerByID(mUsers.at(i)->getI2PStreamID());
-                          mCore.getConnectionManager()->doDestroyStreamObjectByID(mUsers.at(i)->getI2PStreamID());
-                  }
-
-                  if(mCore.getConnectionManager()->isComponentStopped()==false){
-                          mCore.getConnectionManager()->doDestroyStreamObjectByID(mUsers.at(i)->getI2PStreamID());
-                  }
-                  mUsers.at(i)->deleteLater();
-                  mUsers.removeAt(i);
-                  saveUserList();
-                  emit signUserStatusChanged();
-                  return true;
-          }
-  }*/
-
   if (Him->getConnectionStatus() == ONLINE || Him->getConnectionStatus() == TRYTOCONNECT) {
     mCore.deletePacketManagerByID(Him->getI2PStreamID());
     mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
@@ -446,7 +395,6 @@ bool CUserManager::deleteUserByI2PDestination(const QString &I2PDestination) {
     mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
   }
   Him->deleteLater();
-  // mUsers.removeAt(i);
   this->deleteUserByI2P_Destination(I2PDestination);
   saveUserList();
   emit signUserStatusChanged();

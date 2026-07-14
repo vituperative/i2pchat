@@ -91,24 +91,6 @@ CCore::CCore(const QString &configPath) {
 
   qDebug() << "CCore constructor: calling loadUserInfos";
   loadUserInfos();
-  /*
-      settings.beginGroup("Usersearch");
-      if((settings.value("Enabled",false).toBool()) ==true &&
-     getUserInfos().Nickname.isEmpty()==false){ mSeedlessManager= new
-     CSeedlessManager(*this, mConfigPath+"/SeedlessServerList.dat",
-                                                 mConfigPath+"/application.ini");
-
-          mDebugSeedlessHandler= new CDebugMessageManager("Usersearch");
-          connect(mSeedlessManager,SIGNAL(DebugMessages(QString)),mDebugSeedlessHandler,
-                  SLOT(slotNewIncomingDebugMessage(const QString)));
-      }else{
-          mSeedlessManager=NULL;
-          mDebugSeedlessHandler=NULL;
-      }
-      settings.endGroup();
-      settings.sync();
-
-  */
   mUnsentChatMessageStorage = new CUnsentChatMessageStorage(mConfigPath + "/UnsentChatMessageStorage.ini");
   mUserBlockManager = new CUserBlockManager(*this, mConfigPath + "/UserBlockList.dat");
   mUserManager = new CUserManager(*this, mConfigPath + "/users.config", *mUnsentChatMessageStorage);
@@ -232,9 +214,8 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (encnotfound)
-      SessionOptionString.append("i2cp.leaseSetEncType=" +
-                                 // settings.value("i2cp.leaseSetEncType=", "4,0").toString() + " ");
-                                 settings.value("i2cp.leaseSetEncType=", "4").toString() + " ");
+      SessionOptionString.append("i2cp.leaseSetEncType=" + settings.value("i2cp.leaseSetEncType=", "4").toString() +
+                                 " ");
   }
 
   SessionOptionString.append("i2cp.leaseSetType=3 "); // i2pd fix
@@ -713,8 +694,6 @@ void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray &Data, bool isFileT
       packetManager->slotDataInput(ID, Data);
     }
     mDataPacketsManagers.push_back(packetManager);
-  }
-  if (isFileTransfer_Receive == true) {
   }
 }
 
