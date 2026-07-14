@@ -164,9 +164,23 @@ void CUser::slotSendChatMessage(QString Message) {
     mHaveNewUnreadMessages = true;
     emit signNewMessageReceived();
   } else {
-    mUnsentedMessages.push_back(Message + "<br>");
-    slotIncomingMessageFromSystem(tr("Sending the message when the user comes online.<br>If you close "
-                                     "the client, the message will be lost."));
+    int idx = mUnsentedMessages.size();
+    mUnsentedMessages.push_back(Message);
+
+    QString Nickname;
+    if (mCore.getUserInfos().Nickname.isEmpty())
+      Nickname = tr("Me ");
+    else
+      Nickname = mCore.getUserInfos().Nickname;
+
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" +
+               "<a href=\"pending:" + QString::number(idx) + "\" style=\"color:orange\">" + Message + "</a> <i>(" +
+               tr("pending") + ")</i><br>";
+
+    this->mAllMessages.push_back(msg);
+    this->mNewMessages.push_back(msg);
+    mHaveNewUnreadMessages = true;
+    emit signNewMessageReceived();
   }
 }
 

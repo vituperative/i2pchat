@@ -4,6 +4,7 @@
 
 #include <QErrorMessage>
 #include <QFile>
+#include <QInputDialog>
 #include <QRegularExpression>
 #include <QXmlStreamReader>
 
@@ -47,8 +48,6 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   m_event_eater = new ChatEventEater(this);
 
-  tabWidget->setCurrentIndex(0);
-
   connect(m_event_eater, SIGNAL(sendMessage()), send, SLOT(click()));
 
   connect(m_event_eater, SIGNAL(haveFocus(bool)), this, SLOT(focusEvent(bool)));
@@ -73,22 +72,10 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   connect(message, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
-  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
-
-  connect(cmd_Reaload, SIGNAL(clicked(bool)), this, SLOT(reloadOfflineMessages()));
-
-  connect(cmd_Save, SIGNAL(clicked(bool)), this, SLOT(saveChangedOfflineMessages()));
-
-  connect(Ui_form_chatwidget::cmd_delete, SIGNAL(clicked(bool)), this, SLOT(cmd_delete()));
-
-  connect(Ui_form_chatwidget::cmd_new, SIGNAL(clicked(bool)), this, SLOT(cmd_new()));
-
   chat->setOpenLinks(false);
 
   mCurrentFont = user.getTextFont();
-  mCurrentFont2 = user.getTextFont();
   textColor = user.getTextColor();
-  textColor2 = user.getTextColor();
   mHaveFocus = false;
 
   QPixmap pxm(22, 22);
@@ -97,24 +84,10 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   connect(send, SIGNAL(clicked()), SLOT(sendMessageSignal()));
   connect(txtColor, SIGNAL(clicked()), SLOT(setTextColor()));
-  connect(txtColor_2, SIGNAL(clicked()), SLOT(setTextColor_2()));
   connect(txtBold, SIGNAL(clicked(bool)), SLOT(setBold(bool)));
-  connect(txtBold_2, SIGNAL(clicked(bool)), SLOT(setBold_2(bool)));
   connect(txtFont, SIGNAL(clicked()), SLOT(setFont()));
-  connect(txtFont_2, SIGNAL(clicked()), SLOT(setFont_2()));
   connect(txtUnder, SIGNAL(clicked(bool)), SLOT(setUnderline(bool)));
-  connect(txtUnder_2, SIGNAL(clicked(bool)), SLOT(setUnderline_2(bool)));
   connect(txtItalic, SIGNAL(clicked(bool)), SLOT(setItalic(bool)));
-  connect(txtItalic_2, SIGNAL(clicked(bool)), SLOT(setItalic_2(bool)));
-
-  currentOfflineMessageIndex = 0;
-  OfflineMessageCount = 0;
-  Ui_form_chatwidget::cmd_next->setEnabled(false);
-  connect(Ui_form_chatwidget::cmd_next, SIGNAL(clicked(bool)), SLOT(cmd_next()));
-
-  Ui_form_chatwidget::cmd_back->setEnabled(false);
-  connect(Ui_form_chatwidget::cmd_back, SIGNAL(clicked(bool)), SLOT(cmd_back()));
-
   QPalette pal = message->palette();
   pal.setBrush(QPalette::Text, QBrush(textColor));
   message->setPalette(pal);
@@ -133,6 +106,8 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   addAllMessages();
   QScrollBar *sb = chat->verticalScrollBar();
   sb->setValue(sb->maximum());
+
+  chat->installEventFilter(this);
 
   slotLoadOwnAvatarImage();
 
@@ -481,147 +456,28 @@ void form_ChatWidget::slotLoadOwnAvatarImage() {
   ownavatar_label->setPixmap(mOwnAvatar);
 }
 
-void form_ChatWidget::setTextColor_2() {
-  textColor2 = QColorDialog::getColor(textColor2, this);
-
-  QPalette pal = textEdit->palette();
-  pal.setBrush(QPalette::Text, QBrush(textColor2));
-  textEdit->setPalette(pal);
-}
-
-void form_ChatWidget::setBold_2(bool t) {
-  mCurrentFont2.setBold(t);
-
-  textEdit->setCurrentFont(mCurrentFont2);
-  textEdit->setFont(mCurrentFont2);
-}
-
-void form_ChatWidget::setFont_2() {
-  bool ok;
-  mCurrentFont2 = QFontDialog::getFont(&ok, mCurrentFont2, this);
-
-  textEdit->setCurrentFont(mCurrentFont2);
-  textEdit->setFont(mCurrentFont2);
-  textEdit->setFocus();
-}
-void form_ChatWidget::setUnderline_2(bool t) {
-  mCurrentFont2.setUnderline(t);
-
-  textEdit->setCurrentFont(mCurrentFont2);
-  textEdit->setFont(mCurrentFont2);
-  textEdit->setFocus();
-}
-
-void form_ChatWidget::setItalic_2(bool t) {
-  mCurrentFont2.setItalic(t);
-
-  textEdit->setCurrentFont(mCurrentFont2);
-  textEdit->setFont(mCurrentFont2);
-  textEdit->setFocus();
-}
-
-void form_ChatWidget::tabIndexChanged(int tabIndex) {
-  if (tabIndex == 1) {
-    reloadOfflineMessages();
-  }
-}
-
-void form_ChatWidget::reloadOfflineMessages() {
-  offlineMessages = offlineMessages = user.getUnsentedMessages();
-  OfflineMessageCount = offlineMessages.count();
-  if (currentOfflineMessageIndex == 0 && OfflineMessageCount > 0) {
-    currentOfflineMessageIndex = 1;
-    Ui_form_chatwidget::cmd_next->setEnabled(true);
-  }
-  displayOfflineMessages(currentOfflineMessageIndex);
-}
-
-void form_ChatWidget::displayOfflineMessages(int index) {
-  textEdit->clear();
-  if (index <= OfflineMessageCount) {
-    currentOfflineMessageIndex = index;
-
-    label_currentMessageCount->setText(QString::number(currentOfflineMessageIndex) + " / " +
-                                       QString::number(OfflineMessageCount));
-
-    if (currentOfflineMessageIndex == 0) {
-      if (offlineMessages.isEmpty() == false) {
-        textEdit->insertHtml(offlineMessages.at(currentOfflineMessageIndex));
+bool form_ChatWidget::eventFilter(QObject *obj, QEvent *event) {
+  if (obj == chat && event->type() == QEvent::MouseButtonDblClick) {
+    QMouseEvent *me = static_cast<QMouseEvent *>(event);
+    QString anchor = chat->anchorAt(me->pos());
+    if (anchor.startsWith("pending:")) {
+      int idx = anchor.mid(8).toInt();
+      QStringList pending = user.getUnsentedMessages();
+      if (idx >= 0 && idx < pending.size()) {
+        bool ok;
+        QString text =
+          QInputDialog::getMultiLineText(this, tr("Edit pending message"), QString(), pending.at(idx), &ok);
+        if (ok) {
+          if (text.isEmpty())
+            pending.removeAt(idx);
+          else
+            pending.replace(idx, text);
+          user.setUnsentedMessages(pending);
+          addAllMessages();
+        }
       }
-    } else {
-      textEdit->insertHtml(offlineMessages.at(currentOfflineMessageIndex - 1));
-    }
-
-    // qDebug()<<textEdit->toHtml()<<endl;
-  }
-  if (currentOfflineMessageIndex < OfflineMessageCount) {
-    Ui_form_chatwidget::cmd_next->setEnabled(true);
-  } else {
-    Ui_form_chatwidget::cmd_next->setEnabled(false);
-  }
-
-  if (currentOfflineMessageIndex > 1) {
-    Ui_form_chatwidget::cmd_back->setEnabled(true);
-  } else {
-    Ui_form_chatwidget::cmd_back->setEnabled(false);
-  }
-}
-// UDP: by voron like offline messages does not works correctly.
-void form_ChatWidget::saveChangedOfflineMessages() {
-  if (textEdit->toPlainText().length() == 0) {
-    cmd_delete();
-  } else {
-    QString NewMessage = textEdit->toHtml();
-
-    if (NewMessage.length() < 65535) {
-      if (offlineMessages.size() > 1)
-        offlineMessages.replace(currentOfflineMessageIndex - 1, NewMessage);
-      // qDebug()<<textEdit->toHtml()<<endl;
-      user.setUnsentedMessages(offlineMessages);
-
-    } else {
-      QMessageBox *msgBox = new QMessageBox(this);
-      msgBox->setIcon(QMessageBox::Critical);
-      msgBox->setText("I2PChat");
-      msgBox->setInformativeText(tr("Sorry, the chatmessage is too long!"));
-      msgBox->setStandardButtons(QMessageBox::Ok);
-      msgBox->setDefaultButton(QMessageBox::Ok);
-      msgBox->setWindowModality(Qt::NonModal);
-      msgBox->setAttribute(Qt::WA_DeleteOnClose);
-      msgBox->show();
+      return true;
     }
   }
-}
-
-void form_ChatWidget::cmd_back() {
-  if (currentOfflineMessageIndex >= 1) {
-    displayOfflineMessages(currentOfflineMessageIndex - 1);
-  }
-}
-
-void form_ChatWidget::cmd_next() {
-  if (currentOfflineMessageIndex + 1 <= OfflineMessageCount) {
-    displayOfflineMessages(currentOfflineMessageIndex + 1);
-  }
-}
-
-void form_ChatWidget::cmd_delete() {
-  if (offlineMessages.isEmpty() == false) {
-    offlineMessages.removeAt(currentOfflineMessageIndex - 1);
-    OfflineMessageCount = offlineMessages.count();
-  }
-
-  if (currentOfflineMessageIndex > OfflineMessageCount) {
-    currentOfflineMessageIndex = OfflineMessageCount;
-  }
-
-  user.setUnsentedMessages(offlineMessages);
-  reloadOfflineMessages();
-}
-
-void form_ChatWidget::cmd_new() {
-  offlineMessages.push_back("");
-  OfflineMessageCount = offlineMessages.count();
-
-  displayOfflineMessages(OfflineMessageCount);
+  return QMainWindow::eventFilter(obj, event);
 }

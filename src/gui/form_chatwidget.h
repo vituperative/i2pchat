@@ -34,6 +34,7 @@
 #include <QFocusEvent>
 #include <QFontDialog>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QPalette>
 #include <QPushButton>
 #include <QScrollBar>
@@ -73,16 +74,11 @@ private slots:
   void addAllMessages();
   void addMessage(QString text);
   void setTextColor();
-  void setTextColor_2();
   void newMessageReceived();
   void setBold(bool t);
-  void setBold_2(bool t);
   void setFont();
-  void setFont_2();
   void setUnderline(bool t);
-  void setUnderline_2(bool t);
   void setItalic(bool t);
-  void setItalic_2(bool t);
 
   void changeWindowsTitle();
   void newFileTransfer();
@@ -93,34 +89,22 @@ private slots:
   void remoteAvatarImageChanged();
   void messageTextChanged();
 
-  void tabIndexChanged(int tabIndex);
-
-  void saveChangedOfflineMessages();
-
 signals:
   void sendChatMessage(QString chatMessage);
   void closingChatWindow(QString);
 
 public slots:
   void slotLoadOwnAvatarImage();
-private slots:
-  void displayOfflineMessages(int index);
-  void cmd_back();
-  void cmd_next();
-  void cmd_delete();
-  void cmd_new();
-  void reloadOfflineMessages();
 
 private:
   void closeEvent(QCloseEvent *e);
   void centerDialog();
+  bool eventFilter(QObject *obj, QEvent *event);
 
   QColor textColor;
-  QColor textColor2;
 
   CUser &user;
   QFont mCurrentFont;
-  QFont mCurrentFont2;
 
   ChatEventEater *m_event_eater;
   CCore &Core;
@@ -129,8 +113,5 @@ private:
   void keyPressEvent(QKeyEvent *event);
   QPixmap mOwnAvatar;
   QPixmap mUserAvatar;
-  int currentOfflineMessageIndex;
-  int OfflineMessageCount;
-  QStringList offlineMessages;
 };
 #endif
