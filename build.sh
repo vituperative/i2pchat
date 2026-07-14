@@ -15,6 +15,7 @@ step() { echo -e "\n  ${BLUE}[${1}/${2}]${NC} ${3}"; }
 CLEAN=false
 FORMAT=false
 TIDY=false
+BUMP=false
 JOBS=$(nproc)
 
 usage() {
@@ -24,6 +25,7 @@ usage() {
     echo "  --clean       Clean previous build artifacts before building"
     echo "  --format      Run clang-format (auto-fix sources)"
     echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
+    echo "  --bump        Bump patch version, update Core.h and create git tag"
     echo "  -j N          Use N parallel jobs (default: all cores)"
     echo "  -h, --help    Show this help"
     exit 0
@@ -31,15 +33,30 @@ usage() {
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --clean) CLEAN=true ;;
-        --format) FORMAT=true ;;
-        --tidy) TIDY=true ;;
-        -j) JOBS="$2"; shift ;;
-        -h|--help) usage ;;
-        *) die "Unknown argument: $1" ;;
+    --clean) CLEAN=true ;;
+    --format) FORMAT=true ;;
+    --tidy) TIDY=true ;;
+    --bump) BUMP=true ;;
+    -j) JOBS="$2"; shift ;;
+    -h|--help) usage ;;
+    *) die "Unknown argument: $1" ;;
     esac
     shift
 done
+
+# --- version bump ---
+if $BUMP; then
+  OLD=$(sed -n 's/^#define CLIENTVERSION "\(.*\)"$/\1/p' src/backend/Core.h)
+  IFS=. read -r MAJ MIN PAT <<< "$OLD"
+  NEW="$MAJ.$MIN.$((PAT + 1))"
+  sed -i "s/^#define CLIENTVERSION \"$OLD\"$/#define CLIENTVERSION \"$NEW\"/" src/backend/Core.h
+  echo "  Bumped version: $OLD → $NEW"
+  git add src/backend/Core.h
+  git commit -m "chore: bump version to $NEW"
+  git tag -a "$NEW" -m "Release $NEW"
+  echo "  Created tag: $NEW"
+  exit 0
+fi
 
 BUILD_DIR="/tmp/build-i2pchat"
 DIST_DIR="$ROOT/dist"
