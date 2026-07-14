@@ -22,6 +22,7 @@ INCLUDEPATH += . \
 	src/backend/
 
 SOURCES += \
+	src/backend/Base.cpp \
 	src/backend/Main.cpp \
 	src/backend/Core.cpp \
 	src/backend/User.cpp \

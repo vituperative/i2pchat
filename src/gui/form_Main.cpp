@@ -20,6 +20,7 @@
 
 #include "form_Main.h"
 
+#include "Base.h"
 #include "UserManager.h"
 
 #include <QIcon>
@@ -812,9 +813,26 @@ void form_MainWindow::copyDestination() {
 void form_MainWindow::copyB32() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
-  QString Address = "http://this_is_a_placeholder";
-  QClipboard *clipboard = QApplication::clipboard();
 
+  size_t buffersize = 2048;
+  uint8_t *outputbuffer = (uint8_t *)malloc(buffersize);
+  char *b32buffer = (char *)malloc(buffersize);
+
+  int outputcount =
+    i2p::data::Base64ToByteStream(Destination.toUtf8().constData(), Destination.size(), outputbuffer, buffersize);
+  QByteArray qarraysha256hash = QByteArray((char *)outputbuffer, outputcount);
+  while (outputcount > qarraysha256hash.size()) {
+    qarraysha256hash.append((char)0);
+  }
+  QByteArray sha256hash = QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256);
+  outputcount = i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
+  b32buffer[52] = '\0';
+  QString Address = "http://" + QString(b32buffer) + ".b32.i2p";
+
+  free(outputbuffer);
+  free(b32buffer);
+
+  QClipboard *clipboard = QApplication::clipboard();
   clipboard->setText(Address);
   QMessageBox::information(this, "", tr("\nContact's profile address copied to clipboard"), QMessageBox::Close);
 }

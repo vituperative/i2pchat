@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "form_settingsgui.h"
 
-#include "Base.cpp" // NOLINT: intentional inclusion of base utilities
+#include "Base.h"
 #include "Core.h"
 #include "UserBlockManager.h"
 

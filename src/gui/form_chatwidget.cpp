@@ -276,7 +276,6 @@ void form_ChatWidget::sendMessageSignal() {
 
 void form_ChatWidget::changeWindowsTitle() {
   QString OnlineStatus;
-  QString OnlineStatusIcon;
   switch (user.getOnlineState()) {
 
   case USERTRYTOCONNECT:
