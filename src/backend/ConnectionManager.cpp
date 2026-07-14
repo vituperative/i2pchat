@@ -69,7 +69,7 @@ bool CConnectionManager::doCreateSession(SESSION_ENUMS::SESSION_STYLEV3 SessionS
     return false;
   }
 
-  return false;
+  return true;
 }
 
 void CConnectionManager::slotSessionStreamStatusOK(bool Status) {
