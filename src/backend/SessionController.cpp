@@ -48,8 +48,8 @@ CSessionController::CSessionController(QString SamHost,
 
   connect(&mTcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()), Qt::DirectConnection);
 
-  connect(&mTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotDisconnected()),
-          Qt::DirectConnection);
+  connect(
+    &mTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotDisconnected()), Qt::DirectConnection);
 
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()), Qt::DirectConnection);
 

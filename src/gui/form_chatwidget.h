@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QColorDialog>
-#include <QScreen>
 #include <QFileDialog>
 #include <QFocusEvent>
 #include <QFontDialog>
@@ -37,6 +36,7 @@
 #include <QMouseEvent>
 #include <QPalette>
 #include <QPushButton>
+#include <QScreen>
 #include <QScrollBar>
 #include <QTextBrowser>
 #include <Qt>
@@ -46,7 +46,8 @@ class ChatEventEater : public QObject {
   Q_OBJECT
 
 public:
-  ChatEventEater(QWidget *parent = 0) : QObject(parent) {}
+  ChatEventEater(QWidget *parent = 0)
+    : QObject(parent) {}
 
 signals:
   void sendMessage();
