@@ -14,8 +14,8 @@ win32 {
 BASE_GIT_COMMAND = git --git-dir $$PWD/.git --work-tree $$PWD
 
 # Trying to get version from git tag / revision
-GIT_HASH = $$system($$BASE_GIT_COMMAND describe --always --tags 2> $$NULL_DEVICE)
-GIT_VERSION = $$GIT_HASH
+GIT_HASH = $$system($$BASE_GIT_COMMAND rev-parse --short HEAD 2> $$NULL_DEVICE)
+GIT_VERSION = $$system($$BASE_GIT_COMMAND describe --always --tags 2> $$NULL_DEVICE)
 GIT_COMMIT_COUNT = -1
 
 # Check if we only have hash without version number
@@ -47,7 +47,7 @@ win32 { # On windows version can only be numerical so remove commit hash
 # also here we want full version on every system so using GIT_VERSION
 DEFINES += GIT_VERSION=\\\"$$GIT_VERSION\\\"
 DEFINES += GIT_HASH=\\\"$$GIT_HASH\\\"
-DEFINES += GIT_COMMIT_COUNT=\\\"$$GIT_COMMIT_COUNT\\\"
+
 
 # By default Qt only uses major and minor version for Info.plist on Mac.
 # This will rewrite Info.plist with full version

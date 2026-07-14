@@ -9,28 +9,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>349</width>
-    <height>182</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>349</width>
-    <height>182</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>349</width>
-    <height>182</height>
-   </size>
-  </property>
+     <width>349</width>
+     <height>154</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>349</width>
+     <height>154</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>349</width>
+     <height>154</height>
+    </size>
+   </property>
   <property name="sizeIncrement">
    <size>
     <width>0</width>
@@ -60,22 +60,22 @@
     <rect>
      <x>4</x>
      <y>4</y>
-     <width>341</width>
-     <height>174</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>341</width>
-     <height>174</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>341</width>
-     <height>174</height>
-    </size>
-   </property>
+    <width>341</width>
+    <height>146</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>341</width>
+    <height>146</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>341</width>
+    <height>146</height>
+   </size>
+  </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
    </property>
@@ -88,7 +88,7 @@
       <x>4</x>
       <y>4</y>
       <width>333</width>
-      <height>168</height>
+      <height>140</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,10">
@@ -273,85 +273,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="labelGitCommitCount">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>&lt;git c c&gt;</string>
-       </property>
-       <property name="margin">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_5">
-       <property name="minimumSize">
-        <size>
-         <width>138</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>138</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>Git Commit Count:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
+
      <item row="2" column="1">
       <widget class="QLabel" name="label_supportedVersion">
        <property name="minimumSize">
@@ -414,8 +336,8 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="label_dateCompile">
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_dateCompile">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -445,8 +367,8 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_7">
+      <item row="3" column="0" alignment="Qt::AlignRight">
+       <widget class="QLabel" name="label_7">
        <property name="minimumSize">
         <size>
          <width>138</width>
@@ -493,8 +415,8 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_3">
+      <item row="4" column="0" alignment="Qt::AlignRight">
+       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
         <size>
          <width>138</width>
@@ -541,8 +463,8 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="gitCommitHashTextBrowser">
+      <item row="3" column="1">
+       <widget class="QLabel" name="gitCommitHashTextBrowser">
        <property name="minimumSize">
         <size>
          <width>0</width>

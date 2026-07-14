@@ -20,12 +20,12 @@
 #ifndef FORM_ABOUT_H
 #define FORM_ABOUT_H
 
+#include "ui_form_about.h"
+
 #include <QClipboard>
 #include <QMessageBox>
 #include <QtGlobal>
 #include <QtGui>
-
-#include "ui_form_about.h"
 
 class form_About : public QDialog {
 
