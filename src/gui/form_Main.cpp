@@ -802,6 +802,8 @@ void form_MainWindow::SendFile() {
 
 void form_MainWindow::copyDestination() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
+  if (t == NULL)
+    return;
   QString Destination = t->text();
 
   QClipboard *clipboard = QApplication::clipboard();
@@ -812,6 +814,8 @@ void form_MainWindow::copyDestination() {
 
 void form_MainWindow::copyB32() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
+  if (t == NULL)
+    return;
   QString Destination = t->text();
 
   size_t buffersize = 2048;
