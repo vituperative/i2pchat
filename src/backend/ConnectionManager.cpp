@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "ConnectionManager.h"
+#include <QRandomGenerator>
 
 CConnectionManager::CConnectionManager(QString SamHost, QString SamPort,
                                        QString ConfigPath)
@@ -105,27 +106,20 @@ void CConnectionManager::slotSessionStreamStatusOK(bool Status) {
 
 qint32 CConnectionManager::nextFreePosID() const {
   qint32 nextNumber = 1;
-
-  for (int i = 0; i < allStreams.size(); i++) {
-    if (allStreams.contains(nextNumber) == true) {
-      nextNumber++;
-    } else {
-      break;
-      ;
-    }
+  for (auto it = allStreams.constBegin(); it != allStreams.constEnd(); ++it) {
+    qint32 id = it.key();
+    if (id > 0 && id >= nextNumber)
+      nextNumber = id + 1;
   }
   return nextNumber;
 }
 
 qint32 CConnectionManager::nextFreeNegID() const {
   qint32 nextNumber = -1;
-
-  for (int i = 0; i < allStreams.size(); i++) {
-    if (allStreams.contains(nextNumber) == true) {
-      nextNumber--;
-    } else {
-      break;
-    }
+  for (auto it = allStreams.constBegin(); it != allStreams.constEnd(); ++it) {
+    qint32 id = it.key();
+    if (id < 0 && id <= nextNumber)
+      nextNumber = id - 1;
   }
   return nextNumber;
 }
@@ -197,7 +191,8 @@ CConnectionManager::doCreateNewStreamObject(StreamMode Mode, bool Silence,
 }
 
 void CConnectionManager::doNamingLookUP(QString Name) {
-  SessionStreamStatusOKCheck();
+  if (SessionStreamStatusOKCheck() == false)
+    return;
 
   if (StreamController != NULL) {
     StreamController->doNamingLookUP(Name);
@@ -223,6 +218,7 @@ CI2PStream *
 CConnectionManager::getStreamObjectByDestination(QString Destination) const {
   QMapIterator<qint32, CI2PStream *> i(allStreams);
   while (i.hasNext()) {
+    i.next();
     if (i.value()->getDestination() == Destination)
       return i.value();
   }
@@ -249,6 +245,12 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
     //----------------------------------------------------
 
     // create new StreamIncomingListener
+    if (StreamIncomingListener.size() >= 32) {
+      emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                             " • [Stream ID: " + QString::number(t->getID(), 10) +
+                             "] Listener cap reached (32), not creating new");
+      return;
+    }
     CI2PStream *t2 =
         new CI2PStream(mSamHost, mSamPort, nextFreeNegID(),
                        StreamController->getBridgeName(), ACCEPT, false);
@@ -292,14 +294,12 @@ QString CConnectionManager::generateBridgeName() const {
   QString Name;
   int length = 0;
 
-  qsrand(QDateTime::currentMSecsSinceEpoch());
-
   while (length < 3) {
-    length = rand() % 9;
+    length = QRandomGenerator::global()->bounded(9);
   }
 
   for (int i = 0; i < length; i++) {
-    Name.append(("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[qrand() % 26]));
+    Name.append(QLatin1Char('A' + QRandomGenerator::global()->bounded(26)));
   }
 
   return Name;
@@ -330,7 +330,7 @@ void CConnectionManager::stopp() {
   QMapIterator<qint32, CI2PStream *> i2(StreamIncomingListener);
   while (i2.hasNext()) {
     i2.next();
-    delete i2.value();
+    i2.value()->deleteLater();
   }
   StreamIncomingListener.clear();
 

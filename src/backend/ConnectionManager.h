@@ -104,9 +104,8 @@ private:
   const QString mSamPort;
   const QString mConfigPath;
 
-  inline void SessionStreamStatusOKCheck() {
-    if (mSessionStreamStatusOK == false)
-      return;
+  inline bool SessionStreamStatusOKCheck() {
+    return mSessionStreamStatusOK;
   }
   QMap<qint32, CI2PStream *> allStreams;
 };

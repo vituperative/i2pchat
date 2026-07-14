@@ -34,7 +34,7 @@
 CCore::CCore(QString configPath) {
   mConfigPath = configPath;
   mCurrentOnlineStatus = User::USEROFFLINE;  // Initialize immediately
-  
+
   mDebugMessageHandler = new CDebugMessageManager("General", configPath);
   mSoundManager = new CSoundManager(mConfigPath);
 
@@ -125,6 +125,9 @@ CCore::CCore(QString configPath) {
   mFileTransferManager = new CFileTransferManager(*this);
   connect(mFileTransferManager, SIGNAL(signUserStatusChanged()), this,
           SIGNAL(signUserStatusChanged()));
+
+  mKeepAliveTimer.setInterval(60000);
+  connect(&mKeepAliveTimer, SIGNAL(timeout()), this, SLOT(slotPingClients()));
 }
 
 CCore::~CCore() {
@@ -135,10 +138,8 @@ CCore::~CCore() {
   delete mUserManager;
   delete mSoundManager;
 
-  QList<CPacketManager *>::Iterator it;
-  for (it = mDataPacketsManagers.begin(); it < mDataPacketsManagers.end();
-       ++it) {
-    mDataPacketsManagers.erase(it);
+  while (!mDataPacketsManagers.isEmpty()) {
+    delete mDataPacketsManagers.takeFirst();
   }
 
   if (mProtocol != NULL) {
@@ -283,7 +284,7 @@ void CCore::init() {
   QString SamHost = settings.value("SamHost", "127.0.0.1").toString();
   QString SamPort = settings.value("SamPort", "7656").toString();
   QString SamPrivKey = settings.value("SamPrivKey", "").toString();
-  
+
   qDebug() << "CCore::init() - SamHost:" << SamHost << "SamPort:" << SamPort << "HasPrivKey:" << !SamPrivKey.isEmpty();
 
   if (mConnectionManager->isComponentStopped()) {
@@ -488,7 +489,7 @@ QString CCore::getConnectionDump() const {
     const QMap<qint32, CI2PStream *> *allListener =
         mConnectionManager->getAllStreamIncomingListenerObjects();
     const QList<CI2PStream *> allStreamsListenerList = allListener->values();
-    Message = "• Incoming Stream Listener\n";
+    Message += "• Incoming Stream Listener\n";
     for (int i = 0; i < allStreamsListenerList.count(); i++) {
       CI2PStream *Stream = allStreamsListenerList.value(i);
       Message += "\n\tStream ID:\t\t" + QString::number(Stream->getID()) + "\n";
@@ -571,7 +572,7 @@ ONLINESTATE CCore::getOnlineStatus() const {
 
 void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
   qDebug() << "setOnlineStatus: newStatus =" << newStatus << "currentStatus =" << mCurrentOnlineStatus;
-  
+
   if (mCurrentOnlineStatus == newStatus)
     return;
 
@@ -579,6 +580,7 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
     qDebug() << "setOnlineStatus: Transitioning from OFFLINE, storing next status =" << newStatus;
     mNextOnlineStatus = newStatus;
     mCurrentOnlineStatus = USERTRYTOCONNECT;
+    mKeepAliveTimer.stop();
     qDebug() << "setOnlineStatus: Calling init()...";
     init();
     emit signOnlineStatusChanged();
@@ -587,6 +589,7 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
 
   if (newStatus == User::USEROFFLINE) {
     this->mCurrentOnlineStatus = newStatus;
+    mKeepAliveTimer.stop();
     stopCore();
   } else if (newStatus == USERTRYTOCONNECT) {
     if (mCurrentOnlineStatus == USEROFFLINE) {
@@ -644,6 +647,7 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
             msgBox->setStandardButtons(QMessageBox::Ok);
             msgBox->setDefaultButton(QMessageBox::Ok);
             msgBox->setWindowModality(Qt::NonModal);
+            msgBox->setAttribute(Qt::WA_DeleteOnClose);
             msgBox->show();
           }
           }
@@ -689,11 +693,22 @@ void CCore::slotStreamControllerStatusOK(bool Status) {
           "ME"); // get the current Destination from this client
     }
     createStreamObjectsForAllUsers();
+    mKeepAliveTimer.start();
     emit signOnlineStatusChanged();
   } else {
-    // Session lost - go offline but remember desired status
+    // Session lost - close active connections but remember desired status
     mCurrentOnlineStatus = User::USEROFFLINE;
+    closeAllActiveConnections();
     emit signOnlineStatusChanged();
+  }
+}
+
+void CCore::slotPingClients() {
+  QList<CUser *> users = mUserManager->getUserList();
+  for (int i = 0; i < users.size(); i++) {
+    if (users.at(i)->getConnectionStatus() == ONLINE) {
+      mProtocol->send(PING, users.at(i)->getI2PStreamID());
+    }
   }
 }
 
@@ -825,10 +840,10 @@ bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
 void CCore::loadUserInfos() {
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings.sync();
-  
+
   settings.beginGroup("User");
   QString savedNickname = settings.value("Nickname", "").toString();
-  
+
   if (mUserInfos.Nickname != savedNickname) {
     mUserInfos.Nickname = savedNickname;
     emit signNicknameChanged();
@@ -848,6 +863,7 @@ void CCore::loadUserInfos() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
   }
 

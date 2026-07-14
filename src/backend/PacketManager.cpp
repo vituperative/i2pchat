@@ -66,6 +66,7 @@ void CPacketManager::checkifOnePacketIsCompleate() {
       if (stream != NULL) {
         stream->doDisconnect();
       }
+      return;
     }
 
     if (mData != NULL && mData->length() >= iPacketLength + 4) {

@@ -25,6 +25,7 @@
 #include <QList>
 #include <QSettings>
 #include <QTextStream>
+#include <QTimer>
 #include <QtGui>
 
 #include "DebugMessageManager.h"
@@ -144,6 +145,7 @@ private:
   QList<CPacketManager *> mDataPacketsManagers;
   ONLINESTATE mCurrentOnlineStatus;
   ONLINESTATE mNextOnlineStatus;
+  QTimer mKeepAliveTimer;
 
   void init();
   void stopCore();
@@ -151,6 +153,9 @@ private:
   void closeAllActiveConnections();
 public slots:
   void changeAccessIncomingUsers(bool);
+
+private slots:
+  void slotPingClients();
 
 protected:
   bool m_access_anyone_incoming; // new users.

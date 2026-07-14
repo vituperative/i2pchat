@@ -63,7 +63,7 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name,
     mUseB32Dest = false;
     mOriginalB32Address = ""; // No original B32 address
   }
-  
+
   // Initialize per-user auto-download setting
   settings.beginGroup("UserSettings");
   settings.beginGroup(I2PDestination); // Use destination as unique identifier
@@ -261,7 +261,7 @@ void CUser::setInvisible(bool b) {
 
 void CUser::setAutoDownloadEnabled(bool enabled) {
   mAutoDownloadEnabled = enabled;
-  
+
   // Save the setting
   QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
   settings.beginGroup("UserSettings");
@@ -287,7 +287,7 @@ const QStringList CUser::getNewMessages(bool haveFocus) {
 
 double CUser::getProtocolVersion_D() const {
   bool OK = false;
-  bool tmp = mProtocolVersion.toDouble(&OK);
+  double tmp = mProtocolVersion.toDouble(&OK);
 
   if (OK == false) {
     qCritical() << "File\t" << __FILE__ << Qt::endl
