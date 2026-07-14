@@ -186,9 +186,9 @@ void CI2PStream::slotReadFromSocket() {
     QByteArray Data;
 
     if (mMode == ACCEPT) {
-      Data.append("STREAM ACCEPT ID=" + mStreamBridgeName);
+      Data.append(QString("STREAM ACCEPT ID=" + mStreamBridgeName).toUtf8());
     } else if (mMode == CONNECT) {
-      Data.append("STREAM CONNECT ID=" + mStreamBridgeName + " DESTINATION=" + mDestination);
+      Data.append(QString("STREAM CONNECT ID=" + mStreamBridgeName + " DESTINATION=" + mDestination).toUtf8());
     }
 
     if (mSilence == true) {

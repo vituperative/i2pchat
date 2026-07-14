@@ -136,7 +136,7 @@ void CHttpOverStreamObject::sendRequest() {
   }
 
   for (int i = 0; i < mHttpHeader.count(); i++) {
-    PacketForSending.append(mHttpHeader.at(i));
+    PacketForSending.append(mHttpHeader.at(i).toUtf8());
   }
 
   *(mStream) << PacketForSending;

@@ -519,8 +519,7 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
 }
 
 void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QString Data) const {
-  QByteArray t = "";
-  t.insert(0, Data);
+  QByteArray t = Data.toUtf8();
 
   send(TAG, ID, t);
 }
@@ -628,8 +627,8 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QByteArray Data) 
   temp.setNum(Data.length() + 4, 16); // hex
   QString Packetlength = QString("%1").arg(temp, 4, '0');
 
-  Data.insert(0, ProtocolInfoTag);
-  Data.insert(0, Packetlength);
+  Data.insert(0, ProtocolInfoTag.toUtf8());
+  Data.insert(0, Packetlength.toUtf8());
   *(stream) << Data;
 }
 
