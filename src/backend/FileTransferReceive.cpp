@@ -95,7 +95,7 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core,
     shouldAutoAccept = AutoAcceptFileReceive;
   }
 
-  if (shouldAutoAccept == true) {
+  if (shouldAutoAccept == true && theUser != NULL) {
     theUser->slotIncomingMessageFromSystem(tr(" Auto-accepted download [%1]").arg(mFileName), true);
 
     QDir dir(AutoAcceptedFilePath);
@@ -105,11 +105,10 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core,
 
     start(AutoAcceptedFilePath + "/" + mFileName, true);
   } else {
-    mCore.getUserManager()
-      ->getUserByI2P_Destination(Destination)
-      ->slotIncomingMessageFromSystem(tr(" Incoming file transfer [%1]"
-                                         "<br>Accept or reject from the userlist")
-                                        .arg(mFileName));
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(Destination))
+      u->slotIncomingMessageFromSystem(tr(" Incoming file transfer [%1]"
+                                          "<br>Accept or reject from the userlist")
+                                         .arg(mFileName));
   }
 }
 
@@ -176,22 +175,19 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
         SSize.setNum(mFileSize, 10);
         SizeName = "bytes";
       }
-      mCore.getUserManager()
-        ->getUserByI2P_Destination(mDestination)
-        ->slotIncomingMessageFromSystem(tr("Download complete [%1 %2 %3]").arg(mFileName).arg(SSize).arg(SizeName));
+      if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+        u->slotIncomingMessageFromSystem(tr("Download complete [%1 %2 %3]").arg(mFileName).arg(SSize).arg(SizeName));
     } else {
       emit signFileReceiveAborted();
       if (mRequestAccepted == true) {
         mFileForReceive.remove();
-        mCore.getUserManager()
-          ->getUserByI2P_Destination(mDestination)
-          ->slotIncomingMessageFromSystem(tr("Sender aborted file transfer [%1]").arg(mFileName));
+        if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+          u->slotIncomingMessageFromSystem(tr("Sender aborted file transfer [%1]").arg(mFileName));
 
       } else {
         mFileForReceive.remove();
-        mCore.getUserManager()
-          ->getUserByI2P_Destination(mDestination)
-          ->slotIncomingMessageFromSystem(tr("Download aborted [%1]").arg(mFileName));
+        if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+          u->slotIncomingMessageFromSystem(tr("Download aborted [%1]").arg(mFileName));
       }
     }
 
@@ -203,9 +199,8 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
   }
   case (SAM_Message_Types::I2P_ERROR): {
     emit signFileReceiveAborted();
-    mCore.getUserManager()
-      ->getUserByI2P_Destination(mDestination)
-      ->slotIncomingMessageFromSystem(tr("I2P Stream Error: Download failed [%1]<br>%2").arg(mFileName).arg(Message));
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+      u->slotIncomingMessageFromSystem(tr("I2P Stream Error: Download failed [%1]<br>%2").arg(mFileName).arg(Message));
     mFileForReceive.close();
 
     mConnectionManager->doDestroyStreamObjectByID(mStreamID);
@@ -214,9 +209,8 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
   }
   case (SAM_Message_Types::INVALID_KEY): {
     emit signFileReceiveAborted();
-    mCore.getUserManager()
-      ->getUserByI2P_Destination(mDestination)
-      ->slotIncomingMessageFromSystem(
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+      u->slotIncomingMessageFromSystem(
         tr("I2P Stream Error (Invalid Key): Download failed [%1]<br>%2").arg(mFileName).arg(Message));
 
     mFileForReceive.close();
@@ -227,9 +221,8 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
   }
   case (SAM_Message_Types::INVALID_ID): {
     emit signFileReceiveAborted();
-    mCore.getUserManager()
-      ->getUserByI2P_Destination(mDestination)
-      ->slotIncomingMessageFromSystem(
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+      u->slotIncomingMessageFromSystem(
         tr("I2P Stream Error (Invalid ID): Download failed [%1]<br>%2").arg(mFileName).arg(Message));
 
     mFileForReceive.close();
@@ -319,9 +312,8 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, const QByteArray &t
       SSize.setNum(mFileSize, 10);
       SizeName = "Bytes";
     }
-    mCore.getUserManager()
-      ->getUserByI2P_Destination(mDestination)
-      ->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName + " " + SSize + " " + SizeName + "]");
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+      u->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName + " " + SSize + " " + SizeName + "]");
 
     mFileForReceive.close();
     mCore.getFileTransferManager()->removeFileReceive(mStreamID);
