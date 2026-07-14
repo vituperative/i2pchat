@@ -14,7 +14,7 @@ BUILD_DIR="/tmp/build-i2pchat"
 DIST_DIR="$ROOT/dist"
 
 # --- dependency check ---
-DEPS=(g++ qmake make bear clang-format clang-tidy pkg-config)
+DEPS=(g++ qmake make bear clang-format clang-tidy compiledb pkg-config)
 MISSING=()
 for dep in "${DEPS[@]}"; do
   command -v "$dep" &>/dev/null || MISSING+=("$dep")
@@ -32,13 +32,13 @@ BUILT_SOURCES=($(sed -n '/^SOURCES/,/^HEADERS/p' I2PChat.pro \
 
 mkdir -p "$BUILD_DIR" "$DIST_DIR"
 
-# --- Step 0: clean build, regenerate Makefile, build with bear ---
-info "Compiling..."
+# --- Step 0: regenerate Makefile, generate compile_commands.json without compiling ---
+info "Generating compilation database..."
 rm -rf "$BUILD_DIR"/*
 rm -f Makefile
 qmake -after DESTDIR=dist/ OBJECTS_DIR="$BUILD_DIR/obj/" MOC_DIR="$BUILD_DIR/moc/" RCC_DIR="$BUILD_DIR/qrc/" 2>&1 | tail -1
-bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$(nproc)" 2>&1 | tail -1
-strip "$DIST_DIR/I2PChat"
+compiledb make -n 2>&1 | tail -1
+mv compile_commands.json "$BUILD_DIR/"
 echo ""
 
 # --- Step 1: clang-format (auto-fix in place) ---
@@ -47,7 +47,7 @@ clang-format -i "${BUILT_SOURCES[@]}"
 pass "Formatted ${#BUILT_SOURCES[@]} files"
 echo ""
 
-# --- Step 2: clang-tidy ---
+# --- Step 2: clang-tidy (early check, no binary yet) ---
 info "Running clang-tidy..."
 HAS_ERRORS=false
 for f in "${BUILT_SOURCES[@]}"; do
@@ -65,8 +65,16 @@ done
 
 echo ""
 if $HAS_ERRORS; then
-    fail "clang-tidy found issues — binary at $DIST_DIR/I2PChat"
+    fail "clang-tidy found issues — fix before building"
     exit 1
-else
-    pass "clang-tidy clean — binary at $DIST_DIR/I2PChat"
 fi
+pass "clang-tidy clean"
+echo ""
+
+# --- Step 3: compile ---
+info "Compiling..."
+bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$(nproc)" 2>&1 | tail -1
+strip "$DIST_DIR/I2PChat"
+echo ""
+
+pass "Build complete — binary at $DIST_DIR/I2PChat"
