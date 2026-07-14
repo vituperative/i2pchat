@@ -115,6 +115,7 @@ void form_MainWindow::onlineComboBoxChanged() {
       msgBox->setStandardButtons(QMessageBox::Ok);
       msgBox->setDefaultButton(QMessageBox::Ok);
       msgBox->setWindowModality(Qt::NonModal);
+      msgBox->setAttribute(Qt::WA_DeleteOnClose);
       msgBox->show();
       OnlineStateChanged();
     }
@@ -231,15 +232,15 @@ void form_MainWindow::namingMe() {
 void form_MainWindow::closeApplication() {
   if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
-    QMessageBox *msgBox = new QMessageBox(this);
+    QMessageBox msgBox(this);
     QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-    msgBox->setWindowIcon(QIcon(pixmap));
-    msgBox->setIcon(QMessageBox::Question);
-    msgBox->setText(tr("\nAre you sure you wish to quit?"));
-    msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox->setDefaultButton(QMessageBox::Yes);
-    msgBox->setWindowModality(Qt::WindowModal);
-    int ret = msgBox->exec();
+    msgBox.setWindowIcon(QIcon(pixmap));
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setText(tr("\nAre you sure you wish to quit?"));
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    msgBox.setWindowModality(Qt::WindowModal);
+    int ret = msgBox.exec();
     if (ret == QMessageBox::No) {
       return;
     }
@@ -254,16 +255,16 @@ void form_MainWindow::closeApplication() {
 
     this->close();
   } else {
-    QMessageBox *msgBox = new QMessageBox(NULL);
+    QMessageBox msgBox(NULL);
     QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-    msgBox->setWindowIcon(QIcon(pixmap));
-    msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(
+    msgBox.setWindowIcon(QIcon(pixmap));
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setText(
         tr("\nFile transfer in progress...\nCancel transfer first!"));
-    msgBox->setStandardButtons(QMessageBox::Ok);
-    msgBox->setDefaultButton(QMessageBox::Ok);
-    msgBox->setWindowModality(Qt::NonModal);
-    msgBox->exec();
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setWindowModality(Qt::NonModal);
+    msgBox.exec();
   }
 }
 
@@ -574,13 +575,13 @@ void form_MainWindow::deleteUserClicked() {
   QPixmap pixmap = QPixmap(":/icons/avatar.svg");
   setWindowIcon(QIcon(pixmap));
 
-  QMessageBox *msgBox = new QMessageBox(this);
-  msgBox->setIcon(QMessageBox::Question);
-  msgBox->setText(tr("\nReally delete contact?"));
-  msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox->setDefaultButton(QMessageBox::Yes);
-  msgBox->setWindowModality(Qt::WindowModal);
-  int ret = msgBox->exec();
+  QMessageBox msgBox(this);
+  msgBox.setIcon(QMessageBox::Question);
+  msgBox.setText(tr("\nReally delete contact?"));
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::Yes);
+  msgBox.setWindowModality(Qt::WindowModal);
+  int ret = msgBox.exec();
   if (ret == QMessageBox::Yes) {
     Core->getUserManager()->deleteUserByI2PDestination(Destination);
   }
@@ -943,9 +944,8 @@ void form_MainWindow::UserInvisible(bool b) {
 
 void form_MainWindow::eventChatWindowClosed(QString Destination) {
   if (mAllOpenChatWindows.contains(Destination) == true) {
-    // delete (mAllOpenChatWindows.value(Destination)); // TODO: What for is
-    // what added? mAllOpenChatWindows.remove(Destination);
-    mAllOpenChatWindows[Destination]->hide();
+    mAllOpenChatWindows[Destination]->deleteLater();
+    mAllOpenChatWindows.remove(Destination);
   } else {
     qCritical() << "form_MainWindow::eventChatWindowClosed\n"
                 << "Closing a unknown chat window";

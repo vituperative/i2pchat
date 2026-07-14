@@ -94,6 +94,7 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
         msgBox->setStandardButtons(QMessageBox::Ok);
         msgBox->setDefaultButton(QMessageBox::Ok);
         msgBox->setWindowModality(Qt::NonModal);
+        msgBox->setAttribute(Qt::WA_DeleteOnClose);
         msgBox->show();
       }
       } // switch

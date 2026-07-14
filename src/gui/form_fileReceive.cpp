@@ -105,18 +105,18 @@ void form_fileReceive::askTheUser() {
 
   FileReceive.doConvertNumberToTransferSize(FileSize, SSize, SizeName, false);
 
-  QMessageBox *msgBox = new QMessageBox(NULL);
+  QMessageBox msgBox(NULL);
   QPixmap pixmap = QPixmap(":/icons/avatar.svg");
-  msgBox->setWindowIcon(QIcon(pixmap));
-  msgBox->setText(tr("Incoming File Transfer: %1 [%2%3]    ")
+  msgBox.setWindowIcon(QIcon(pixmap));
+  msgBox.setText(tr("Incoming File Transfer: %1 [%2%3]    ")
                       .arg(FileName)
                       .arg(SSize)
                       .arg(SizeName));
-  msgBox->setInformativeText(tr("Do you wish to download this file?"));
-  msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox->setDefaultButton(QMessageBox::Yes);
-  msgBox->setWindowModality(Qt::WindowModal);
-  int ret = msgBox->exec();
+  msgBox.setInformativeText(tr("Do you wish to download this file?"));
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::Yes);
+  msgBox.setWindowModality(Qt::WindowModal);
+  int ret = msgBox.exec();
 
   if (ret == QMessageBox::Yes) {
     QString FilePath =

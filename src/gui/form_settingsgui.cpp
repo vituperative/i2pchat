@@ -134,13 +134,13 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent,
 
   connect(cmd_clearAvatarImage, SIGNAL(clicked()), this,
           SLOT(clicked_ClearAvatarImage()));
-  
+
   connect(blockallcheckBox, SIGNAL(clicked(bool)), this,
           SLOT(clicked_BlockAllUnknownUsers(bool)));
-  
+
   connect(requestAuthcheckBox, SIGNAL(clicked(bool)), this,
           SLOT(clicked_RequestAuthorization(bool)));
-  
+
     // TODO: Add this button from ui file. (QtCreator, i dont have it)
     // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
     // setCustomStyleSheet() ) );
@@ -181,20 +181,20 @@ void form_settingsgui::loadSettings() {
   settings->beginGroup("UserList");
   checkBox_5->setChecked(settings->value("SortingEnabled", false).toBool());
   int sortType = settings->value("SortType", 0).toInt();
-  
+
     // Set radio button states
   radioButton_2->setChecked(sortType == 0);
   radioButton_3->setChecked(sortType == 1);
   radioButton_4->setChecked(sortType == 2);
   radioButton_5->setChecked(sortType == 3);
-  
+
     // Enable/disable radio buttons based on checkbox state
   bool sortingEnabled = settings->value("SortingEnabled", false).toBool();
   radioButton_2->setEnabled(sortingEnabled);
   radioButton_3->setEnabled(sortingEnabled);
   radioButton_4->setEnabled(sortingEnabled);
   radioButton_5->setEnabled(sortingEnabled);
-  
+
     settings->endGroup();
 
     // Apply saved sorting settings
@@ -412,7 +412,7 @@ void form_settingsgui::loadSettings() {
    } else {
      HideWebCheckbox->setChecked(false);
    }
-   
+
    // Load blocking settings
    blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
    requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", true).toBool());
@@ -536,9 +536,9 @@ void form_settingsgui::saveSettings() {
     settings->setValue("AvatarBinaryImage", avatarImageByteArray);
     settings->endGroup();
     settings->sync();
-    
+
     qDebug() << "saveSettings: sync complete";
-    
+
     settings->beginGroup("Chat");
     settings->setValue("DefaultFont",
                      txtShowCurrentChatStyle->currentFont().toString());
@@ -588,10 +588,10 @@ void form_settingsgui::saveSettings() {
    settings->sync();
    mCore.loadUserInfos();
    mCore.getUserManager()->avatarImageChanged();
-   
+
    // Force update nickname display in main window
    emit mCore.signNicknameChanged();
-  
+
      // Refresh avatar display in config panel AFTER avatar update signals have been sent
   QPixmap tmpPixmap;
   avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
@@ -614,7 +614,7 @@ void form_settingsgui::saveSettings() {
   ownavatar_label->setPixmap(tmpPixmap);
   ownavatar_label_2->setAlignment(Qt::AlignCenter);
   ownavatar_label_2->setPixmap(tmpPixmap);
-  
+
   this->close();
 }
 
@@ -714,13 +714,13 @@ void form_settingsgui::clicked_DestinationGenerate() {
   settings->sync();
   delete settings;
 
-  QMessageBox *msgBox = new QMessageBox(NULL);
-  msgBox->setIcon(QMessageBox::Information);
-  msgBox->setText(tr("Please restart I2PChat"));
-  msgBox->setStandardButtons(QMessageBox::Ok);
-  msgBox->setDefaultButton(QMessageBox::Ok);
-  msgBox->setWindowModality(Qt::NonModal);
-  msgBox->exec();
+  QMessageBox msgBox(NULL);
+  msgBox.setIcon(QMessageBox::Information);
+  msgBox.setText(tr("Please restart I2PChat"));
+  msgBox.setStandardButtons(QMessageBox::Ok);
+  msgBox.setDefaultButton(QMessageBox::Ok);
+  msgBox.setWindowModality(Qt::NonModal);
+  msgBox.exec();
 }
 
 void form_settingsgui::clicked_IncomingFileFolder() {
@@ -922,15 +922,15 @@ void form_settingsgui::clicked_BlockListUnblock() {
 void form_settingsgui::clicked_EnableUserSearch(bool t) {
   if (t == true) {
     if (txt_Nickname->text().isEmpty() == true) {
-      QMessageBox *msgBox = new QMessageBox(NULL);
-      msgBox->setIcon(QMessageBox::Information);
-      msgBox->setText(tr("I2PChat"));
-      msgBox->setInformativeText(tr("Sorry you have to enter a Nickname(at "
+      QMessageBox msgBox(NULL);
+      msgBox.setIcon(QMessageBox::Information);
+      msgBox.setText(tr("I2PChat"));
+      msgBox.setInformativeText(tr("Sorry you have to enter a Nickname(at "
                                     "User-details) for UserSearch"));
-      msgBox->setStandardButtons(QMessageBox::Ok);
-      msgBox->setDefaultButton(QMessageBox::Ok);
-      msgBox->setWindowModality(Qt::NonModal);
-      msgBox->exec();
+      msgBox.setStandardButtons(QMessageBox::Ok);
+      msgBox.setDefaultButton(QMessageBox::Ok);
+      msgBox.setWindowModality(Qt::NonModal);
+      msgBox.exec();
       check_UserSearchEnable->setChecked(false);
       return;
     }
@@ -990,7 +990,7 @@ void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
     settings->setValue("BlockAllUnknownUsers", checked);
   settings->endGroup();
   settings->sync();
-  
+
     // If blocking all unknown users, disable request authorization
   requestAuthcheckBox->setEnabled(!checked);
   if (checked) {
@@ -1011,7 +1011,7 @@ void form_settingsgui::clicked_sortAlphabetically(bool checked) {
     settings->setValue("SortType", 0);
     settings->endGroup();
     settings->sync();
-    
+
     mCore.getUserManager()->sortUserList(0);
   }
 }
@@ -1022,7 +1022,7 @@ void form_settingsgui::clicked_sortByDateAdded(bool checked) {
     settings->setValue("SortType", 1);
     settings->endGroup();
     settings->sync();
-    
+
     mCore.getUserManager()->sortUserList(1);
   }
 }
@@ -1033,7 +1033,7 @@ void form_settingsgui::clicked_sortByLastCommunication(bool checked) {
     settings->setValue("SortType", 2);
     settings->endGroup();
     settings->sync();
-    
+
     mCore.getUserManager()->sortUserList(2);
   }
 }
@@ -1044,7 +1044,7 @@ void form_settingsgui::clicked_sortByLastOnline(bool checked) {
     settings->setValue("SortType", 3);
     settings->endGroup();
     settings->sync();
-    
+
     mCore.getUserManager()->sortUserList(3);
   }
 }

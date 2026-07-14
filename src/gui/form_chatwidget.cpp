@@ -213,7 +213,7 @@ void form_ChatWidget::addAllMessages() {
 
 void form_ChatWidget::addMessage(QString text) {
   QTextBrowser *chat = this->chat;
-  
+
   // Process emoticons in received messages
   CTextEmotionChanger::exemplar()->checkMessageForEmoticons(text);
 
@@ -308,6 +308,7 @@ void form_ChatWidget::sendMessageSignal() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
   }
 }
@@ -374,6 +375,7 @@ void form_ChatWidget::newFileTransfer() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
   }
 }
@@ -600,6 +602,7 @@ void form_ChatWidget::saveChangedOfflineMessages() {
       msgBox->setStandardButtons(QMessageBox::Ok);
       msgBox->setDefaultButton(QMessageBox::Ok);
       msgBox->setWindowModality(Qt::NonModal);
+      msgBox->setAttribute(Qt::WA_DeleteOnClose);
       msgBox->show();
     }
   }

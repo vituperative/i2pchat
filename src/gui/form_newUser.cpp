@@ -41,6 +41,7 @@ void form_newUserWindow::addnewUser() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
     return;
   }
@@ -53,6 +54,7 @@ void form_newUserWindow::addnewUser() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
 
     return;
@@ -65,6 +67,7 @@ void form_newUserWindow::addnewUser() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
     return;
   }
@@ -77,6 +80,7 @@ void form_newUserWindow::addnewUser() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
     return;
   }
@@ -90,6 +94,7 @@ void form_newUserWindow::addnewUser() {
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
 
     this->close();

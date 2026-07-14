@@ -116,6 +116,7 @@ void CFileTransferManager::addNewFileReceive(qint32 ID, QString FileName,
     msgBox->setStandardButtons(QMessageBox::Ok);
     msgBox->setDefaultButton(QMessageBox::Ok);
     msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
     msgBox->show();
 
     // abort the Filereceive
