@@ -78,7 +78,7 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destinat
   if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
       this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
     qCritical() << "Already exists transfer for user";
-    throw new std::runtime_error("Already exists transfer for user");
+    throw std::runtime_error("Already exists transfer for user");
     return;
   }
 
@@ -165,7 +165,7 @@ void CFileTransferManager::addNewFileReceive(qint32 ID,
     if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
         this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
       qCritical() << "File is already in the transfer queue";
-      throw new std::runtime_error("File is already in the transfer queue");
+      throw std::runtime_error("File is already in the transfer queue");
       return;
     }
 

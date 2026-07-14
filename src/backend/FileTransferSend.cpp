@@ -340,8 +340,8 @@ bool CFileTransferSend::getIsTransferring() {
 void CFileTransferSend::slotCalcAverageTransferSpeed() {
   QString speedSize;
   QString speedType;
-  int speed;
-  int departedtime = (mTimer.elapsed() / 1000);
+  qint64 speed;
+  qint64 departedtime = (mTimer.elapsed() / 1000);
 
   if (departedtime <= 0)
     departedtime = 1;
@@ -352,7 +352,7 @@ void CFileTransferSend::slotCalcAverageTransferSpeed() {
     speed = mRemoteReceivedSize / departedtime;
   }
 
-  mCore.doConvertNumberToTransferSize(speed, speedSize, speedType);
+  mCore.doConvertNumberToTransferSize(static_cast<quint64>(speed), speedSize, speedType);
   emit signAverageTransferSpeed(speedSize, speedType);
   CalcETA(speed);
 }
@@ -364,9 +364,9 @@ void CFileTransferSend::doConvertNumberToTransferSize(quint64 inNumber,
   return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
 }
 
-void CFileTransferSend::CalcETA(int speed) {
+void CFileTransferSend::CalcETA(qint64 speed) {
   QString EmitString;
-  int secLeft;
+  qint64 secLeft;
 
   if (speed > 0) {
     if (mUsingProtocolVersionD <= 0.2) {

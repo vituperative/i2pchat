@@ -379,10 +379,10 @@ void CFileTransferReceive::start(QString FilePath, bool Accepted) {
 }
 
 void CFileTransferReceive::slotCalcAverageTransferSpeed() {
-  int departedtime = (mTimer.elapsed() / 1000);
+  qint64 departedtime = (mTimer.elapsed() / 1000);
   if (departedtime <= 0)
     departedtime = 1;
-  int speed = mAlreadyReceivedSize / departedtime;
+  quint64 speed = mAlreadyReceivedSize / departedtime;
 
   QString speedSize;
   QString speedType;
@@ -400,9 +400,9 @@ void CFileTransferReceive::doConvertNumberToTransferSize(quint64 inNumber,
   return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
 }
 
-void CFileTransferReceive::CalcETA(int speed) {
+void CFileTransferReceive::CalcETA(quint64 speed) {
   QString EmitString;
-  int secLeft;
+  quint64 secLeft;
 
   if (speed > 0) {
     secLeft = (mFileSize - mAlreadyReceivedSize) / speed;

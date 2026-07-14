@@ -95,7 +95,7 @@ private:
   QByteArray mWriteBuffer;
   static const qint64 BUFFER_SIZE = 1024 * 1024; // 1MB buffer
 
-  void CalcETA(int speed);
+  void CalcETA(quint64 speed);
   void flushBuffer();
 };
 #endif

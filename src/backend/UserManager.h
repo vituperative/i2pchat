@@ -39,7 +39,7 @@ public:
   CUserManager(const CUserManager &) = delete;
   CUserManager &operator=(const CUserManager &) = delete;
 
-  void saveUserList() const;
+  void saveUserList();
   void loadUserList();
   bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0,
                   bool SaveUserList = true);

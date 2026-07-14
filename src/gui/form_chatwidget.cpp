@@ -34,7 +34,7 @@ bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
 }
 
 form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 0 */)
-  : QMainWindow(parent, 0)
+  : QMainWindow(parent, Qt::WindowFlags())
   , user(user)
   , Core(Core) {
   setupUi(this);
@@ -336,6 +336,8 @@ void form_ChatWidget::changeWindowsTitle() {
     this->setWindowIcon(QIcon(ICON_USER_BLOCKED_YOU));
     break;
   }
+  default:
+    break;
   }
   this->setWindowTitle(user.getName() + " [" + OnlineStatus + "]");
 }

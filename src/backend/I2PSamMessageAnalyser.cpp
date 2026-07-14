@@ -28,7 +28,7 @@ const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
   using namespace SAM_Message_Types;
 
   SAM_MESSAGE t;
-  QStringList list = Message.split(" ", QString::SkipEmptyParts);
+  QStringList list = Message.split(" ", Qt::SkipEmptyParts);
 
   if ((list[0] == "HELLO") && (list[1] == "REPLY")) {
     t.type = HELLO_REPLAY;

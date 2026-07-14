@@ -33,6 +33,8 @@ CUserBlockManager::CUserBlockManager(CCore &Core, const QString FilePathToBlockF
 
 CUserBlockManager::~CUserBlockManager() {
   saveBlockListe();
+  qDeleteAll(mUserBlockMap);
+  mUserBlockMap.clear();
 }
 
 void CUserBlockManager::readBlockListe() {
@@ -102,10 +104,8 @@ void CUserBlockManager::addNewBlockEntity(const QString NickName, const QString 
              << "Action Aborted" << Qt::endl;
   } else {
     if (BlockDate.isEmpty()) {
-      if (BlockDate.isEmpty()) {
-        CUserBlockEntity *tmp = new CUserBlockEntity(NickName, Destination);
-        mUserBlockMap.insert(Destination, tmp);
-      }
+      CUserBlockEntity *tmp = new CUserBlockEntity(NickName, Destination);
+      mUserBlockMap.insert(Destination, tmp);
     } else {
       CUserBlockEntity *tmp = new CUserBlockEntity(NickName, Destination, BlockDate);
       mUserBlockMap.insert(Destination, tmp);
@@ -141,6 +141,7 @@ void CUserBlockManager::removeBlockEntity(const QString Destination, bool Create
 
   if (mUserBlockMap.contains(Destination)) {
     Nickname = mUserBlockMap.value(Destination)->mNickName;
+    delete mUserBlockMap.value(Destination);
     mUserBlockMap.remove(Destination);
     if (CreateUser == true) {
       mCore.getUserManager()->addNewUser(Nickname, Destination, true);

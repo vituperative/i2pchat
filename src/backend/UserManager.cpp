@@ -91,7 +91,7 @@ void CUserManager::loadUserList() {
   }
 }
 
-void CUserManager::saveUserList() const {
+void CUserManager::saveUserList() {
   QFile file(mCore.getConfigPath() + "/users.config");
   file.open(QIODevice::WriteOnly | QIODevice::Text);
   QTextStream out(&file);

@@ -39,7 +39,6 @@ CI2PStream::CI2PStream(QString mSamHost,
   mAnalyser = NULL;
   mIncomingPackets = NULL;
   mDoneDisconnect = false;
-  mSilence = false;
   mStatusReceived = false;
   mHandshakeSuccessful = false;
   mConnectionType = UNKNOWN;
@@ -51,6 +50,7 @@ CI2PStream::CI2PStream(QString mSamHost,
 
   connect(&mTcpSocket, SIGNAL(connected()), this, SLOT(slotConnected()));
   connect(&mTcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()));
+  connect(&mTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotDisconnected()));
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()));
 
   connect(&mUnKnownConnectionTimeout, SIGNAL(timeout()), this, SLOT(slotInitConnectionTimeout()));
@@ -88,9 +88,6 @@ bool CI2PStream::doConnect(QString mDestination) {
     return false;
 
   mTcpSocket.connectToHost(mSamHost, mSamPort.toInt());
-  if (!mTcpSocket.waitForConnected(1000))
-    slotDisconnected();
-
   return true;
 }
 
@@ -107,9 +104,6 @@ bool CI2PStream::doAccept() {
     return false;
 
   mTcpSocket.connectToHost(mSamHost, mSamPort.toInt());
-  if (!mTcpSocket.waitForConnected(1000))
-    slotDisconnected();
-
   return true;
 }
 
@@ -291,15 +285,12 @@ void CI2PStream::operator<<(const QByteArray Data) {
     } catch (...) {
     }
   } else {
-    QByteArray Message = " • [Stream ID: ";
-    Message += smID;
-    Message += "] Controller ‣ Not connected";
+    QString Message = QStringLiteral(" • [Stream ID: %1] Controller ‣ Not connected").arg(smID);
     emit signDebugMessages(timeNow + " " + Message);
   }
 }
 void CI2PStream::operator<<(const QString Data) {
-  QByteArray t = "";
-  t.insert(0, Data);
+  QByteArray t = Data.toUtf8();
 
   *(this) << t;
 }
@@ -330,6 +321,8 @@ void CI2PStream::stopUnlimintedReconnect() {
 }
 
 void CI2PStream::slotCheckForReconnect() {
+  if (mTimer == NULL)
+    return;
   mTimer->stop();
   if (mMode == CONNECT) {
     doConnect(mDestination);

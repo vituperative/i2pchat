@@ -97,7 +97,7 @@ private:
   void SendFile_v0dot1();
   void SendFile_v0dot2();
   void SendFile_v0dot3();
-  void CalcETA(int speed);
+  void CalcETA(qint64 speed);
 
   CCore &mCore;
   CConnectionManager &mConnectionManager;

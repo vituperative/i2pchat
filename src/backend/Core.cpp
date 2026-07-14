@@ -34,7 +34,8 @@
 
 CCore::CCore(QString configPath) {
   mConfigPath = configPath;
-  mCurrentOnlineStatus = User::USEROFFLINE; // Initialize immediately
+  mCurrentOnlineStatus = User::USEROFFLINE;
+  mNextOnlineStatus = User::USEROFFLINE;
 
   mDebugMessageHandler = new CDebugMessageManager("General", configPath);
   mSoundManager = new CSoundManager(mConfigPath);
@@ -44,7 +45,7 @@ CCore::CCore(QString configPath) {
   m_access_anyone_incoming = settings.value("allow_incoming_new_users", true).toBool();
   settings.endGroup();
   settings.beginGroup("Network");
-  mMyDestinationB32 = settings.value("MyDestinationB32", "").toString(),
+  mMyDestinationB32 = settings.value("MyDestinationB32", "").toString();
 
   mConnectionManager = new CConnectionManager(
     settings.value("SamHost", "127.0.0.1").toString(), settings.value("SamPort", "7656").toString(), mConfigPath);

@@ -48,6 +48,9 @@ CSessionController::CSessionController(QString SamHost,
 
   connect(&mTcpSocket, SIGNAL(disconnected()), this, SLOT(slotDisconnected()), Qt::DirectConnection);
 
+  connect(&mTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotDisconnected()),
+          Qt::DirectConnection);
+
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()), Qt::DirectConnection);
 
   connect(mReconnectTimer, SIGNAL(timeout()), this, SLOT(slotReconnectTimeout()), Qt::DirectConnection);
@@ -59,6 +62,8 @@ CSessionController::~CSessionController() {
   doDisconnect();
   mTcpSocket.deleteLater();
   delete mReconnectTimer;
+  delete mAnalyser;
+  delete mIncomingPackets;
   emit signDebugMessages("• I2P Stream Controller stopped");
 }
 
@@ -200,12 +205,7 @@ void CSessionController::doConnect() {
     qDebug() << "CSessionController::doConnect() - Connecting to SAM host...";
     mTcpSocket.connectToHost(mSamHost, mSamPort.toInt());
   }
-  if (!mTcpSocket.waitForConnected(1000)) {
-    qDebug() << "CSessionController::doConnect() - Connection failed, state:" << mTcpSocket.state();
-    slotDisconnected();
-  } else {
-    qDebug() << "CSessionController::doConnect() - Connected successfully!";
-  }
+  qDebug() << "CSessionController::doConnect() - Connection initiated, result handled asynchronously";
 }
 
 void CSessionController::doDisconnect() {
@@ -223,8 +223,8 @@ void CSessionController::doDisconnect() {
 void CSessionController::doNamingLookUP(QString Name) {
   ConnectionReadyCheck();
 
-  QByteArray Message = "NAMING LOOKUP NAME=";
-  Message += Name + "\n";
+  QByteArray Message;
+  Message += "NAMING LOOKUP NAME=" + Name.toUtf8() + '\n';
   emit signDebugMessages(Message);
   mTcpSocket.write(Message);
   mTcpSocket.flush();
@@ -233,16 +233,16 @@ void CSessionController::doNamingLookUP(QString Name) {
 void CSessionController::doSessionCreate() {
   ConnectionReadyCheck();
 
-  QByteArray Message = "SESSION CREATE STYLE=STREAM ID=";
-  Message += mBridgeName + " DESTINATION=" + mSamPrivKey;
+  QByteArray Message;
+  Message += "SESSION CREATE STYLE=STREAM ID=" + mBridgeName.toUtf8() + " DESTINATION=" + mSamPrivKey.toUtf8();
   // TODO: Enable as option for Non-persistent destination
   // Message += mBridgeName + " DESTINATION=TRANSIENT";
 
   if (mSessionOptions.isEmpty() == false) {
-    Message += " " + mSessionOptions;
+    Message += " " + mSessionOptions.toUtf8();
   }
 
-  Message += "\n";
+  Message += '\n';
   emit signDebugMessages(Message);
   mTcpSocket.write(Message);
   mTcpSocket.flush();
@@ -252,9 +252,9 @@ void CSessionController::doDestGenerate(const QString Options) {
   ConnectionReadyCheck();
   QByteArray Message = "DEST GENERATE ";
   if (Options.isEmpty() == false) {
-    Message += Options;
+    Message += Options.toUtf8();
   }
-  Message += "\n";
+  Message += '\n';
 
   emit signDebugMessages(Message);
 

@@ -302,6 +302,8 @@ void form_MainWindow::eventUserChanged() {
         newItem->setIcon(QIcon(ICON_USER_BLOCKED_YOU));
         break;
       }
+      default:
+        break;
       }
 
     newItem->setTextAlignment(Qt::AlignLeft);
@@ -427,8 +429,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QMenu contextMnu(this);
   QMenu contextMnuPos("Position", this);
 
-  QMouseEvent *mevent =
-    new QMouseEvent(QEvent::MouseButtonPress, point, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+  QMouseEvent mevent(QEvent::MouseButtonPress, point, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
@@ -533,7 +534,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnu.addMenu(&contextMnuPos);
     // TODO: Fix width of context menu and ensure sub-menu overlaps
     // contextMnu.setMaximumWidth(170);
-    contextMnu.exec(mevent->globalPos());
+    contextMnu.exec(mevent.globalPos());
   }
 }
 
@@ -945,7 +946,7 @@ void form_MainWindow::openChatWindow(QString Destination) {
 
 void form_MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
   if (mAllFileReceiveWindows.contains(StreamID) == true) {
-    delete (mAllFileReceiveWindows.value(StreamID));
+    mAllFileReceiveWindows.value(StreamID)->deleteLater();
     mAllFileReceiveWindows.remove(StreamID);
   } else {
     qCritical() << "form_MainWindow::eventFileReceiveWindowClose\n"
@@ -955,7 +956,7 @@ void form_MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
 
 void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
   if (mAllFileSendWindows.contains(StreamID) == true) {
-    delete mAllFileSendWindows.value(StreamID);
+    mAllFileSendWindows.value(StreamID)->deleteLater();
     mAllFileSendWindows.remove(StreamID);
   } else {
     qCritical() << "form_MainWindow::eventFileSendWindowClosed\n"
@@ -1097,29 +1098,22 @@ void form_MainWindow::incomingUserAuthorizationRequest(QString destination, int 
 }
 
 void form_MainWindow::eventUserSearchWindowClosed() {
-  delete mUserSearchWindow;
+  mUserSearchWindow->deleteLater();
   mUserSearchWindow = NULL;
 }
 
 void form_MainWindow::eventTopicSubscribeWindowClosed() {
-  delete mTopicSubscribeWindow;
+  mTopicSubscribeWindow->deleteLater();
   mTopicSubscribeWindow = NULL;
 }
 
 void form_MainWindow::eventAboutWindowClosed() {
-  delete mAboutWindow;
+  mAboutWindow->deleteLater();
   mAboutWindow = NULL;
 }
 void form_MainWindow::eventDebugWindowClosed() {
-  delete mDebugWindow;
+  mDebugWindow->deleteLater();
   mDebugWindow = NULL;
-}
-
-static void ElideLabel(QLabel *label, QString text) {
-  QFontMetrics metrix(label->font());
-  int width = label->width();
-  QString clippedText = metrix.elidedText(text, Qt::ElideRight, width);
-  label->setText(clippedText);
 }
 
 void form_MainWindow::eventNicknameChanged() {
@@ -1176,6 +1170,8 @@ void form_MainWindow::slotLoadOwnAvatarImage() {
                 break;
               case USERBLOCKEDYOU:
                 iconItem->setIcon(QIcon(ICON_USER_BLOCKED_YOU));
+                break;
+              default:
                 break;
               }
             } else {
