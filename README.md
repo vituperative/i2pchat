@@ -13,11 +13,7 @@
 
 ## Current news
 
-* September, 2020
-  * Fix issue with i2pd leasesets
-  * Replace deprecated functions and resolve compiler warnings
-
-* July, 2020
+* July, 2026
   * Set ECIES and ED25519 as default sigtype/encryption
   * Add support for optional web page to display user profile at .b32 address
   * Remove insecure DSA_SHA1 from Signature Types
@@ -39,72 +35,48 @@
 
 ## Build instructions
 
- * Note: Qt 5.14 or later required
+ * Note: Qt 5.14 or later required (Qt 6 is not yet supported)
  * For Qt versions prior to v5.14, you can try building with an older version of the code, available from: https://github.com/vituperative/i2pchat/archive/706c908ee267051da12c51f2b87c0d9c293f69d8.zip
 
 #### Dependencies
 
-<details><summary>Ubuntu (jammy or later)</summary>
+<details><summary>Debian / Ubuntu (including 24.04+, trixie+)</summary>
 
 ```
-sudo apt-get install -y devscripts build-essential lintian dh-make autoconf libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
-```
- * To prepare for compilation, run qmake:
-   - Release: `qmake I2PChat.pro "CONFIG += release"`
-   - Debug: `qmake I2PChat.pro "CONFIG += debug"`
-</details>
-
-<details><summary>Ubuntu (gutsy or later)</summary>
-
-```
-sudo apt-get install -y devscripts build-essential lintian dh-make autoconf qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
+sudo apt-get install -y build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
 ```
 </details>
 
-<details><summary>Ubuntu (focal)</summary>
+<details><summary>Fedora</summary>
 
 ```
-sudo apt-get install -y devscripts build-essential lintian dh-make autoconf
-sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
-sudo apt update
-sudo apt-get install -y qt514-meta-full qt5-qmake qt5-default libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev qtdeclarative5-dev
-source /opt/qt514/bin/qt514-env.sh
-```
-</details>
-<details><summary>Debian</summary>
-
-```
-sudo apt-get install qt5-qmake qt5-default build-essential libqt5multimedia5 qtmultimedia5-dev libqt5svg5-dev
-```
- * To prepare for compilation, run qmake:
-   - Release: `qmake I2PChat.pro "CONFIG += release"`
-   - Debug: `qmake I2PChat.pro "CONFIG += debug"`
-</details>
-<details><summary>Fedora 33</summary>
-
-```
-sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase qt5-qtbase-devel
+sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 ```
 </details>
 
-#### Compilation
+#### Quick build
 
- * To prepare for compilation, run qmake-qt5 or qmake, depending on your environment:
-   - Release: `qmake-qt5 I2PChat.pro "CONFIG += release"`
-   - Debug: `qmake-qt5 I2PChat.pro "CONFIG += debug"`
+```
+bash build.sh
+```
 
- * To compile:
-   - `make -j NUMBER_OF_PROCESSOR_CORES` e.g `make -j8`
-   - or `make` to compile single-threaded
+Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting).
+
+#### Manual compilation
+
+```
+qmake I2PChat.pro "CONFIG += release"
+make -j$(nproc)
+```
 
 ## Downloads (pre-built binaries)
 
-* Latest Windows (Win32/64) build from: <a href="https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts">https://ci.appveyor.com/project/wipedlifepotato/i2pchat/build/artifacts</a>
-* 0.2.37 Linux binary (stripped) with custom profile template and event audio samples (Qt 5.14 or later required): <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
+ * [Latest CI build (Linux)](https://github.com/vituperative/i2pchat/actions/workflows/build.yml)
+ * 0.2.37 Linux binary (stripped) with custom profile template and event audio samples (Qt 5.14 or later required): <a href="https://vituperative.github.io/i2pchat/I2PChat0.2.37-Linux.zip">I2PChat0.2.37-Linux.zip</a>
 
 ## Running
 
-On Linux, `make` creates `I2PChat` executable in the current folder. Run it with `./I2PChat`.
+On Linux, using `bash build.sh` creates a stripped binary at `dist/I2PChat`. For manual builds, `make` creates `I2PChat` in the project root. Run it with `./I2PChat`.
 
 * You will need to enable the SAM application bridge in your router: for Java I2P via <a href="http://127.0.0.1:7657/configclients">Client Configuration</a> or for i2pd via i2pd.conf's [SAM] section.
 * As of version 0.2.31, the DSA_SHA1 Signature type is no longer available. The recommended (and default) Signature Type is now: EdDSA_SHA512_Ed25519
