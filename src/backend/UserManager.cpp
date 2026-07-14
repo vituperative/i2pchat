@@ -24,9 +24,11 @@
 #include "Protocol.h"
 #include "UserBlockManager.h"
 
+#include <utility>
+
 CUserManager::CUserManager(CCore &Core, QString UserFileWithPath, CUnsentChatMessageStorage &UnsentChatMessageStorage)
   : mCore(Core)
-  , mUserFileWithPath(UserFileWithPath)
+  , mUserFileWithPath(std::move(UserFileWithPath))
   , mUnsentMessageStorage(UnsentChatMessageStorage)
   , mSortingEnabled(false) {}
 
@@ -119,7 +121,7 @@ void CUserManager::saveUserList() {
   file.close();
 }
 
-bool CUserManager::deleteUserByI2P_Destination(QString Destination) {
+bool CUserManager::deleteUserByI2P_Destination(const QString &Destination) {
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
       mUsers.removeAt(i);
@@ -143,7 +145,7 @@ CUser *CUserManager::getUserByI2P_ID(qint32 ID) const {
 
   return NULL;
 }
-CUser *CUserManager::getUserByI2P_Destination(QString Destination) const {
+CUser *CUserManager::getUserByI2P_Destination(const QString &Destination) const {
   /*for(int i=0;i<mUsers.size();i++){
           if(mUsers.at(i)->getI2PDestination()==Destination){
                   return mUsers.at(i);
@@ -156,7 +158,7 @@ CUser *CUserManager::getUserByI2P_Destination(QString Destination) const {
   return NULL;
 }
 
-QString CUserManager::getUserInfosByI2P_Destination(QString Destination) const {
+QString CUserManager::getUserInfosByI2P_Destination(const QString &Destination) const {
   QString Infos = "No Information received";
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
@@ -201,77 +203,76 @@ const QList<CUser *> CUserManager::getUserList() const {
   return mUsers;
 }
 
-bool CUserManager::validateI2PDestination(const QString I2PDestination) const {
-  auto validateB64 = [](QString Dest) {
+bool CUserManager::validateI2PDestination(const QString &I2PDestination) const {
+  auto validateB64 = [](const QString &Dest) {
     if (Dest.length() == 516 && Dest.right(4).contains("AAAA", Qt::CaseInsensitive))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateB32 = [](QString Dest) {
+  auto validateB32 = [](const QString &Dest) {
     if (Dest.length() == 60 && Dest.right(8).contains(".b32.i2p", Qt::CaseInsensitive))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateECDSA_SHA256_P256 = [](QString Dest) {
+  auto validateECDSA_SHA256_P256 = [](const QString &Dest) {
     if (Dest.length() == 524 && Dest.right(10).contains("AEAAEAAA==", Qt::CaseInsensitive))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateECDSA_SHA384_P384 = [](QString Dest) {
+  auto validateECDSA_SHA384_P384 = [](const QString &Dest) {
     if (Dest.length() == 524 && Dest.right(10).contains("AEAAIAAA==", Qt::CaseInsensitive))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateECDSA_SHA512_P512 = [](QString Dest) {
+  auto validateECDSA_SHA512_P512 = [](const QString &Dest) {
     if (Dest.length() == 528 && Dest.right(1).contains("=", Qt::CaseInsensitive) &&
         Dest.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateEdDSA_SHA512_Ed25519 = [](QString Dest) {
+  auto validateEdDSA_SHA512_Ed25519 = [](const QString &Dest) {
     if (Dest.length() == 524 &&
         (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) || Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
-    else
-      return false;
+    return false;
   };
 
-  auto validateRedDSA_SHA512_Ed25519 = [](QString Dest) {
+  auto validateRedDSA_SHA512_Ed25519 = [](const QString &Dest) {
     if (Dest.length() == 524 &&
         (Dest.right(5).contains("AAQ==", Qt::CaseInsensitive) || Dest.right(5).contains("AAA==", Qt::CaseInsensitive)))
       return true;
-    else
-      return false;
+    return false;
   };
 
   if (I2PDestination.right(4).contains("AAAA", Qt::CaseInsensitive)) {
     return validateB64(I2PDestination);
-  } else if (I2PDestination.right(8).contains(".b32.i2p", Qt::CaseInsensitive)) {
+  }
+  if (I2PDestination.right(8).contains(".b32.i2p", Qt::CaseInsensitive)) {
     return validateB32(I2PDestination);
-  } else if (I2PDestination.right(10).contains("AEAAEAAA==", Qt::CaseInsensitive)) {
+  }
+  if (I2PDestination.right(10).contains("AEAAEAAA==", Qt::CaseInsensitive)) {
     return validateECDSA_SHA256_P256(I2PDestination);
-  } else if (I2PDestination.right(10).contains("AEAAIAAA==", Qt::CaseInsensitive)) {
+  }
+  if (I2PDestination.right(10).contains("AEAAIAAA==", Qt::CaseInsensitive)) {
     return validateECDSA_SHA384_P384(I2PDestination);
-  } else if (I2PDestination.length() == 528 && I2PDestination.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive)) {
+  }
+  if (I2PDestination.length() == 528 && I2PDestination.mid(512, 9).contains("BQAIAAMAA", Qt::CaseInsensitive)) {
     return validateECDSA_SHA512_P512(I2PDestination);
-  } else if (I2PDestination.length() == 524 && (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
-                                                I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
+  }
+  if (I2PDestination.length() == 524 && (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+                                         I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateEdDSA_SHA512_Ed25519(I2PDestination);
-  } else if (I2PDestination.length() == 524 && (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
-                                                I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
+  }
+  if (I2PDestination.length() == 524 && (I2PDestination.right(5).contains("AAA==", Qt::CaseInsensitive) ||
+                                         I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateRedDSA_SHA512_Ed25519(I2PDestination);
-  } else
-    return false;
+  }
+  return false;
 }
 
 bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID, bool SaveUserList) {
@@ -284,7 +285,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PSt
 
   bool isValid = validateI2PDestination(I2PDestination);
 
-  auto critical = [&I2PDestination](QString why = "undefined") {
+  auto critical = [&I2PDestination](const QString &why = "undefined") {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl
                 << "Function:\t"
@@ -352,7 +353,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PSt
   return true;
 }
 
-bool CUserManager::checkIfUserExistsByI2PDestination(const QString I2PDestination) const {
+bool CUserManager::checkIfUserExistsByI2PDestination(const QString &I2PDestination) const {
   if (I2PDestination == mCore.getMyDestination())
     return true;
 
@@ -406,12 +407,14 @@ void CUserManager::sortUserList(int sortType) {
     });
     break;
   }
+  default:
+    break;
   }
   saveUserList();
   emit signUserStatusChanged();
 }
 
-bool CUserManager::deleteUserByI2PDestination(QString I2PDestination) {
+bool CUserManager::deleteUserByI2PDestination(const QString &I2PDestination) {
   auto Him = this->getUserByI2P_Destination(I2PDestination);
   if (Him == NULL)
     return false;
@@ -450,7 +453,7 @@ bool CUserManager::deleteUserByI2PDestination(QString I2PDestination) {
   return true;
 }
 
-bool CUserManager::renameUserByI2PDestination(const QString Destination, const QString newNickname) {
+bool CUserManager::renameUserByI2PDestination(const QString &Destination, const QString &newNickname) {
   for (int i = 0; i < mUsers.size(); i++) {
     if (mUsers.at(i)->getI2PDestination() == Destination) {
       mUsers.at(i)->setName(newNickname);
@@ -474,7 +477,7 @@ void CUserManager::avatarImageChanged() {
   }
 }
 
-void CUserManager::slotSaveUnsentMessageForDest(QString I2PDest) {
+void CUserManager::slotSaveUnsentMessageForDest(const QString &I2PDest) {
   CUser *theUser = getUserByI2P_Destination(I2PDest);
   if (theUser != NULL) {
     const QStringList Messages = theUser->getUnsentedMessages();

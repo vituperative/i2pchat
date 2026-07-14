@@ -27,7 +27,7 @@
 
 #include <QSettings>
 
-CUserBlockManager::CUserBlockManager(CCore &Core, const QString FilePathToBlockFile)
+CUserBlockManager::CUserBlockManager(CCore &Core, const QString &FilePathToBlockFile)
   : mCore(Core)
   , mFilePathToBlockFile(FilePathToBlockFile) {}
 
@@ -87,7 +87,9 @@ void CUserBlockManager::saveBlockListe() {
   file.close();
 }
 
-void CUserBlockManager::addNewBlockEntity(const QString NickName, const QString Destination, QString BlockDate) {
+void CUserBlockManager::addNewBlockEntity(const QString &NickName,
+                                          const QString &Destination,
+                                          const QString &BlockDate) {
   using namespace User;
   CUser *User;
   User = mCore.getUserManager()->getUserByI2P_Destination(Destination);
@@ -136,7 +138,7 @@ void CUserBlockManager::addNewBlockEntity(const QString NickName, const QString 
   saveBlockListe();
 }
 
-void CUserBlockManager::removeBlockEntity(const QString Destination, bool CreateUser) {
+void CUserBlockManager::removeBlockEntity(const QString &Destination, bool CreateUser) {
   QString Nickname;
 
   if (mUserBlockMap.contains(Destination)) {
@@ -160,6 +162,6 @@ void CUserBlockManager::removeBlockEntity(const QString Destination, bool Create
   saveBlockListe();
 }
 
-bool CUserBlockManager::isDestinationInBlockList(const QString Destination) const {
+bool CUserBlockManager::isDestinationInBlockList(const QString &Destination) const {
   return mUserBlockMap.contains(Destination);
 }

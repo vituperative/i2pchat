@@ -25,14 +25,16 @@
 #include "Protocol.h"
 #include "UserManager.h"
 
-CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, QString I2PDestination, qint32 I2PStream_ID)
+#include <utility>
+
+CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PDestination, qint32 I2PStream_ID)
   : mCore(Core)
   , mProtocol(Protocol)
   , mI2PDestination(I2PDestination)
   , mChatMessageChanger(*(CChatMessageChanger::exemplar(Core))) {
   QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
 
-  this->mName = Name;
+  this->mName = std::move(Name);
   this->mI2PStream_ID = I2PStream_ID;
   this->mConnectionStatus = OFFLINE;
   this->mClientName = "";
@@ -74,7 +76,7 @@ CUser::~CUser() {
 }
 
 void CUser::setName(QString newName) {
-  this->mName = newName;
+  this->mName = std::move(newName);
   mCore.getUserManager()->saveUserList();
 }
 void CUser::setConnectionStatus(CONNECTIONTOUSER Status) {
@@ -122,7 +124,7 @@ void CUser::setI2PStreamID(qint32 ID) {
 }
 
 void CUser::setProtocolVersion(QString Version) {
-  this->mProtocolVersion = Version;
+  this->mProtocolVersion = std::move(Version);
 }
 
 void CUser::slotIncomingNewChatMessage(QString newMessage) {
@@ -142,7 +144,7 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
   emit signOnlineStateChanged();
 }
 
-void CUser::slotSendChatMessage(QString Message) {
+void CUser::slotSendChatMessage(const QString &Message) {
   using namespace PROTOCOL_TAGS;
   QString Nickname;
 
@@ -205,11 +207,11 @@ void CUser::SendAllunsendedMessages() {
 }
 
 void CUser::setClientName(QString Name) {
-  mClientName = Name;
+  mClientName = std::move(Name);
 }
 
 void CUser::setClientVersion(QString Version) {
-  this->mClientVersion = Version;
+  this->mClientVersion = std::move(Version);
   if (mClientName == "I2P-Messenger (QT)" && mClientVersion == "0.2.15 Beta") {
     setMaxProtocolVersionFiletransfer("0.2");
   }
@@ -242,14 +244,14 @@ void CUser::setOnlineState(const ONLINESTATE newState) {
 }
 
 void CUser::setTextColor(QColor textColor) {
-  this->mTextColor = textColor;
+  this->mTextColor = std::move(textColor);
 }
 
 void CUser::setTextFont(QFont textFont) {
-  this->mTextFont = textFont;
+  this->mTextFont = std::move(textFont);
 }
 
-void CUser::slotIncomingMessageFromSystem(QString newMessage, bool indicateWithSoundAndIcon) {
+void CUser::slotIncomingMessageFromSystem(const QString &newMessage, bool indicateWithSoundAndIcon) {
   this->mAllMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") + tr(" ‣ [System] ") + newMessage +
                                "<br><br>");
   this->mNewMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") + tr(" ‣ [System] ") + newMessage +
@@ -346,7 +348,7 @@ double CUser::getMinProtocolVersionFiletransfer_D() const {
   return tmp;
 }
 
-void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, QString value) {
+void CUser::setReceivedUserInfos(RECEIVEDINFOS Tag, const QString &value) {
   switch (Tag) {
   case NICKNAME: {
     mReceivedUserInfos.Nickname = value;
@@ -421,7 +423,7 @@ double CUser::getHighestUsableProtocolVersionFiletransfer_D() const {
 void CUser::setReplaceB32WithB64(QString b64Dest) {
   if (mUseB32Dest == true) {
     QString &dest = const_cast<QString &>(mI2PDestination);
-    dest = b64Dest;
+    dest = std::move(b64Dest);
   } else {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl

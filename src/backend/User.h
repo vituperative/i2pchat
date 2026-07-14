@@ -63,8 +63,7 @@ class CCMessageAckManager;
 class CUser : public QObject {
   Q_OBJECT
 public:
-  CUser(CCore &Core, CProtocol &Protocol, QString Name, QString I2PDestination,
-        qint32 I2PStream_ID);
+  CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PDestination, qint32 I2PStream_ID);
   ~CUser();
 
   // forbid some operators
@@ -125,17 +124,16 @@ public:
   void setMinProtocolVersionFiletransfer(QString Version) {
     mMinProtocolVersionFiletransfer = Version;
   };
-  void setReceivedUserInfos(RECEIVEDINFOS Tag, QString value);
+  void setReceivedUserInfos(RECEIVEDINFOS Tag, const QString &value);
   void setReceivedNicknameToUserNickname();
   void setReplaceB32WithB64(QString b64Dest);
   void setAvatarImage(QByteArray &avatarImage);
   void setUnsentedMessages(QStringList &newMessages);
 
 public slots:
-  void slotSendChatMessage(QString Message);
+  void slotSendChatMessage(const QString &Message);
   void slotIncomingNewChatMessage(QString newMessage);
-  void slotIncomingMessageFromSystem(QString newMessage,
-                                     bool indicateWithSoundAndIcon = false);
+  void slotIncomingMessageFromSystem(const QString &newMessage, bool indicateWithSoundAndIcon = false);
 
 signals:
   void signOnlineStateChanged();

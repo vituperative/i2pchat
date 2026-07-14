@@ -44,16 +44,14 @@ public:
   CHttpOverStreamObject(const CHttpOverStreamObject &) = delete;
   CHttpOverStreamObject &operator=(const CHttpOverStreamObject &) = delete;
 
-  void doHttpRequest(HTTPMODE mode, QString Destination,
-                     QStringList HttpHeader);
+  void doHttpRequest(HTTPMODE mode, const QString &Destination, QStringList HttpHeader);
 
 signals:
   void signDoneSuccessfully(bool, QByteArray);
 
 private slots:
-  void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID,
-                        QString Message);
-  void slotDataReceived(const qint32 ID, QByteArray t);
+  void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message);
+  void slotDataReceived(const qint32 ID, const QByteArray &t);
 
 private:
   CConnectionManager &mConnectionManager;

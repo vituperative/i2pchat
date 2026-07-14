@@ -37,9 +37,12 @@ public:
   CFileTransferManager(const CFileTransferManager &) = delete;
   CFileTransferManager &operator=(const CFileTransferManager &) = delete;
 
-  void addNewFileTransfer(QString FilePath, QString Destination);
-  void addNewFileReceive(qint32 ID, QString FileName, QString FileSize,
-                         QString Destination, QString ProtocolVersion);
+  void addNewFileTransfer(const QString &FilePath, const QString &Destination);
+  void addNewFileReceive(qint32 ID,
+                         QString FileName,
+                         const QString &FileSize,
+                         const QString &Destination,
+                         const QString &ProtocolVersion);
 
   void removeFileTransfer(const qint32 ID) /*noexcept*/;
   void removeFileReceive(const qint32 ID);

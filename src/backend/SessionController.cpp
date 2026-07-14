@@ -21,6 +21,8 @@
 
 #include <QIcon>
 
+#include <utility>
+
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
 
 CSessionController::CSessionController(QString SamHost,
@@ -29,11 +31,11 @@ CSessionController::CSessionController(QString SamHost,
                                        QString SamPrivKey,
                                        QString ConfigPath,
                                        QString SessionOptions)
-  : mSamHost(SamHost)
-  , mSamPort(SamPort)
-  , mBridgeName(BridgeName)
-  , mConfigPath(ConfigPath)
-  , mSessionOptions(SessionOptions) {
+  : mSamHost(std::move(SamHost))
+  , mSamPort(std::move(SamPort))
+  , mBridgeName(std::move(BridgeName))
+  , mConfigPath(std::move(ConfigPath))
+  , mSessionOptions(std::move(SessionOptions)) {
 
   mIncomingPackets = new QByteArray();
   mDoneDisconnect = false;
@@ -42,7 +44,7 @@ CSessionController::CSessionController(QString SamHost,
   mAnalyser = new CI2PSamMessageAnalyser("CStreamController");
   mHandshakeSuccessful = false;
   mSessionWasSuccesfullCreated = false;
-  mSamPrivKey = SamPrivKey;
+  mSamPrivKey = std::move(SamPrivKey);
 
   connect(&mTcpSocket, SIGNAL(connected()), this, SLOT(slotConnected()), Qt::DirectConnection);
 
@@ -220,7 +222,7 @@ void CSessionController::doDisconnect() {
   }
 }
 
-void CSessionController::doNamingLookUP(QString Name) {
+void CSessionController::doNamingLookUP(const QString &Name) {
   ConnectionReadyCheck();
 
   QByteArray Message;
@@ -248,7 +250,7 @@ void CSessionController::doSessionCreate() {
   mTcpSocket.flush();
 }
 
-void CSessionController::doDestGenerate(const QString Options) {
+void CSessionController::doDestGenerate(const QString &Options) {
   ConnectionReadyCheck();
   QByteArray Message = "DEST GENERATE ";
   if (Options.isEmpty() == false) {

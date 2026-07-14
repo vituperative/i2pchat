@@ -19,12 +19,12 @@
  ***************************************************************************/
 #include "I2PSamMessageAnalyser.h"
 
-CI2PSamMessageAnalyser::CI2PSamMessageAnalyser(const QString debugFrom)
+CI2PSamMessageAnalyser::CI2PSamMessageAnalyser(const QString &debugFrom)
   : mDebugFrom(debugFrom) {
   // Constructor
 }
 
-const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(QString Message) const {
+const SAM_MESSAGE CI2PSamMessageAnalyser::Analyse(const QString &Message) const {
   using namespace SAM_Message_Types;
 
   SAM_MESSAGE t;

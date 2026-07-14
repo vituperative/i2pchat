@@ -62,7 +62,7 @@ const QList<CFileTransferReceive *> CFileTransferManager::getFileTransferReceive
   return mFileReceives;
 }
 
-void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destination) {
+void CFileTransferManager::addNewFileTransfer(const QString &FilePath, const QString &Destination) {
 
   QString Protocolversion;
   double ProtoVersionD = 0.0;
@@ -92,9 +92,9 @@ void CFileTransferManager::addNewFileTransfer(QString FilePath, QString Destinat
 
 void CFileTransferManager::addNewFileReceive(qint32 ID,
                                              QString FileName,
-                                             QString FileSize,
-                                             QString Destination,
-                                             QString ProtocolVersion) {
+                                             const QString &FileSize,
+                                             const QString &Destination,
+                                             const QString &ProtocolVersion) {
   CI2PStream *Stream = mCore.getConnectionManager()->getStreamObjectByID(ID);
   FileName = FilterForFileName(FileName);
 

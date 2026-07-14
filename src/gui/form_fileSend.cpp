@@ -50,7 +50,7 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   init();
 }
 
-static void ElideLabel(QLabel *label, QString text) {
+static void ElideLabel(QLabel *label, const QString &text) {
   QFontMetrics metrix(label->font());
   int width = label->width() - 6;
   QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
@@ -138,7 +138,7 @@ void form_fileSend::getFocus() {
   this->raise();
 }
 
-void form_fileSend::slot_SpeedChanged(QString SNumber, QString Type) {
+void form_fileSend::slot_SpeedChanged(const QString &SNumber, const QString &Type) {
   labelSpeed->setText(SNumber + " " + Type);
 }
 

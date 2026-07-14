@@ -43,28 +43,27 @@ public:
   void loadUserList();
   bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0,
                   bool SaveUserList = true);
-  bool checkIfUserExistsByI2PDestination(QString I2PDestination) const;
+  bool checkIfUserExistsByI2PDestination(const QString &I2PDestination) const;
   void changeUserPositionInUserList(int oldPos, int newPos);
   void sortUserList(int sortType);
-  bool renameUserByI2PDestination(const QString Destination,
-                                  const QString newNickname);
-  bool deleteUserByI2PDestination(const QString I2PDestination);
+  bool renameUserByI2PDestination(const QString &Destination, const QString &newNickname);
+  bool deleteUserByI2PDestination(const QString &I2PDestination);
   void avatarImageChanged();
 
-  bool deleteUserByI2P_Destination(QString Destination);
+  bool deleteUserByI2P_Destination(const QString &Destination);
   CUser *getUserByI2P_ID(qint32 ID) const;
-  CUser *getUserByI2P_Destination(QString Destination) const;
-  QString getUserInfosByI2P_Destination(QString Destination) const;
+  CUser *getUserByI2P_Destination(const QString &Destination) const;
+  QString getUserInfosByI2P_Destination(const QString &Destination) const;
   const QList<CUser *> getUserList() const;
-  bool validateI2PDestination(const QString I2PDestination) const;
+  bool validateI2PDestination(const QString &I2PDestination) const;
 
 signals:
   void signUserStatusChanged();
 
 private slots:
-  void slotSaveUnsentMessageForDest(QString I2PDest);
+  void slotSaveUnsentMessageForDest(const QString &I2PDest);
 
- private:
+private:
   CCore &mCore;
   const QString mUserFileWithPath;
   CUnsentChatMessageStorage &mUnsentMessageStorage;

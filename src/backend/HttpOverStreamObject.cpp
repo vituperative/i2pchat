@@ -20,6 +20,8 @@
 
 #include "HttpOverStreamObject.h"
 
+#include <utility>
+
 CHttpOverStreamObject::CHttpOverStreamObject(CConnectionManager &ConnectionManager)
   : mConnectionManager(ConnectionManager) {
   mStream = NULL;
@@ -34,7 +36,9 @@ CHttpOverStreamObject::~CHttpOverStreamObject() {
   }
 }
 
-void CHttpOverStreamObject::slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
+void CHttpOverStreamObject::slotStreamStatus(const SAM_Message_Types::RESULT result,
+                                             const qint32 ID,
+                                             const QString &Message) {
   if (mStreamID != ID) {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl
@@ -86,7 +90,7 @@ void CHttpOverStreamObject::slotStreamStatus(const SAM_Message_Types::RESULT res
   }
 }
 
-void CHttpOverStreamObject::slotDataReceived(const qint32 ID, QByteArray t) {
+void CHttpOverStreamObject::slotDataReceived(const qint32 ID, const QByteArray &t) {
   if (mStreamID != ID) {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl
@@ -101,7 +105,7 @@ void CHttpOverStreamObject::slotDataReceived(const qint32 ID, QByteArray t) {
   mDataReceived.append(t);
 }
 
-void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination, QStringList HttpHeader) {
+void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, const QString &Destination, QStringList HttpHeader) {
   mStream = mConnectionManager.doCreateNewStreamObject(CONNECT, false, true);
   mStream->setUsedFor("HttpOverStreamObject");
   mStreamID = mStream->getID();
@@ -118,7 +122,7 @@ void CHttpOverStreamObject::doHttpRequest(HTTPMODE mode, QString Destination, QS
 
   mMode = mode;
   mDestination = Destination;
-  mHttpHeader = HttpHeader;
+  mHttpHeader = std::move(HttpHeader);
   mFirstStreamStatus = true;
   mDataReceived.clear();
   mIsTimeOutCantReachPeerCLosed = false;

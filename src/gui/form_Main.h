@@ -57,7 +57,7 @@ class form_MainWindow : public QMainWindow, private Ui::form_MainWindow {
   Q_OBJECT
 
 public:
-  form_MainWindow(QString configDir, QWidget *parent = 0);
+  form_MainWindow(const QString &configDir, QWidget *parent = 0);
   ~form_MainWindow();
 
   // forbid some operators
@@ -72,7 +72,7 @@ signals:
 
 public slots:
   void eventAboutWindowClosed();
-  void eventChatWindowClosed(QString Destination);
+  void eventChatWindowClosed(const QString &Destination);
   void eventFileReceiveWindowClosed(qint32 StreamID);
   void eventFileSendWindowClosed(qint32 StreamID);
   void eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason);
@@ -89,7 +89,7 @@ private slots:
   void openDebugMessagesWindow();
   void openAboutDialog();
   void openUserListeClicked();
-  void openChatWindow(QString Destination);
+  void openChatWindow(const QString &Destination);
   void openFileReceiveWindow(qint32 StreamID);
   void openFileSendWindow(qint32 StreamID);
   // void openUserSearchWindow();
@@ -121,7 +121,7 @@ private slots:
   void toggleVisibility(QSystemTrayIcon::ActivationReason e);
   void toggleVisibilitycontextmenu();
    void OnlineStateChanged();
-   void incomingUserAuthorizationRequest(QString destination, int streamID, QByteArray data);
+   void incomingUserAuthorizationRequest(const QString &destination, int streamID, const QByteArray &data);
    //
  signals:
    void changeAllowIncoming(bool);

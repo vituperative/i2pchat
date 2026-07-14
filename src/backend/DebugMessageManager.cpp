@@ -21,7 +21,7 @@
 
 // cDebugMessageManager::cDebugMessageManager(CConnectionManager*
 // ConnectionManager)
-CDebugMessageManager::CDebugMessageManager(QString Group, QString configPath) {
+CDebugMessageManager::CDebugMessageManager(const QString &Group, const QString &configPath) {
 
   QSettings settings(configPath + "/application.ini", QSettings::IniFormat);
   settings.beginGroup(Group);
@@ -38,7 +38,7 @@ void CDebugMessageManager::doClearAllMessages() {
   mMessages.clear();
 }
 
-void CDebugMessageManager::slotNewIncomingDebugMessage(const QString Message) {
+void CDebugMessageManager::slotNewIncomingDebugMessage(const QString &Message) {
   while (mMessages.count() >= (signed int)mMaxMessageCount) {
     mMessages.removeLast();
   }

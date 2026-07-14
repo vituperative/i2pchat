@@ -23,10 +23,12 @@
 #include "Core.h"
 #include "UserManager.h"
 
+#include <utility>
+
 CFileTransferSend::CFileTransferSend(CCore &Core,
                                      CConnectionManager &ConnectionManager,
-                                     QString FilePath,
-                                     QString Destination,
+                                     const QString &FilePath,
+                                     const QString &Destination,
                                      QString Protocolversion,
                                      double ProtocolversionD)
 
@@ -34,7 +36,7 @@ CFileTransferSend::CFileTransferSend(CCore &Core,
   , mConnectionManager(ConnectionManager)
   , mFilePath(FilePath)
   , mDestination(Destination)
-  , mUsingProtocolVersion(Protocolversion)
+  , mUsingProtocolVersion(std::move(Protocolversion))
   , mUsingProtocolVersionD(ProtocolversionD) {
 
   mStream = ConnectionManager.doCreateNewStreamObject(CONNECT, false);
@@ -74,7 +76,9 @@ void CFileTransferSend::slotAbbortFileSend() {
   mCore.getFileTransferManager()->removeFileTransfer(mStreamID);
 }
 
-void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
+void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
+                                         const qint32 ID,
+                                         const QString &Message) {
   using namespace FileTransferProtocol;
 
   if (mStreamID != ID) {
@@ -173,7 +177,7 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
   }
 }
 
-void CFileTransferSend::slotDataReceived(const qint32 ID, QByteArray t) {
+void CFileTransferSend::slotDataReceived(const qint32 ID, const QByteArray &t) {
   if (mUsingProtocolVersionD <= 0.2) {
     if (t.length() == 1) {
 
@@ -329,12 +333,11 @@ CFileTransferSend::~CFileTransferSend() {
   mTimerForActAverageTransferSpeed.stop();
 }
 
-bool CFileTransferSend::getIsTransferring() {
+bool CFileTransferSend::getIsTransferring() const {
   if (mFileTransferAccepted == true && mAlreadyFinished == false) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 void CFileTransferSend::slotCalcAverageTransferSpeed() {
@@ -361,7 +364,7 @@ void CFileTransferSend::doConvertNumberToTransferSize(quint64 inNumber,
                                                       QString &outNumber,
                                                       QString &outType,
                                                       bool addStoOutType) {
-  return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
+  mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
 }
 
 void CFileTransferSend::CalcETA(qint64 speed) {

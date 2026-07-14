@@ -33,16 +33,21 @@ class CFileTransferReceive : public QObject {
 
   Q_OBJECT
 public:
-  CFileTransferReceive(CCore &Core, CI2PStream &Stream, qint32 StreamID,
-                       QString FileName, quint64 FileSize, QString Destination,
-                       QString Protocolversion, double ProtocolversionD);
+  CFileTransferReceive(CCore &Core,
+                       CI2PStream &Stream,
+                       qint32 StreamID,
+                       QString FileName,
+                       quint64 FileSize,
+                       const QString &Destination,
+                       QString Protocolversion,
+                       double ProtocolversionD);
   ~CFileTransferReceive();
 
   // forbid some operators
   CFileTransferReceive(const CFileTransferReceive &) = delete;
   CFileTransferReceive &operator=(const CFileTransferReceive &) = delete;
 
-  void start(QString FilePath, bool Accepted);
+  void start(const QString &FilePath, bool Accepted);
 
   quint64 getFileSize() { return mFileSize; };
   QString getFileName() { return mFileName; };
@@ -61,9 +66,8 @@ public slots:
   void slotAbbortFileReceive();
 
 private slots:
-  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                                const qint32 ID, QString Message);
-  void slotDataReceived(const qint32 ID, QByteArray t);
+  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message);
+  void slotDataReceived(const qint32 ID, const QByteArray &t);
   void slotCalcAverageTransferSpeed();
 
 signals:

@@ -37,11 +37,11 @@
 
 QString debugLogDir;
 
-void enableDebugLogging(QString configPath);
+void enableDebugLogging(const QString &configPath);
 // void myMessageHandler(QtMsgType type, const char *msg);
 void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
-void help(void) {
+void help() {
   printf("\r\n%s\r\n\r\n"
          // " [Built at " __TIME__ " on " __DATE__ "]\r\n"
          "  -h --help                           - Display this help\r\n"
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]) {
   // configPath=QApplication::applicationDirPath();
   if (QFile::exists(configPath + "/UseHomeForConfigStore") == true) {
     QStringList tmp = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    if (tmp.size() >= 1) {
+    if (!tmp.empty()) {
       configPath = tmp.at(0);
       configPath += "/.I2PChat";
     }
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void enableDebugLogging(QString configPath) {
+void enableDebugLogging(const QString &configPath) {
   // is DebugPrint = enabled ?
   debugLogDir = configPath;
   QSettings settings(configPath + "/application.ini", QSettings::IniFormat);

@@ -41,8 +41,8 @@ public:
 
   void doConnect();
   void doDisconnect();
-  void doNamingLookUP(QString Name);
-  void doDestGenerate(const QString Options = "");
+  void doNamingLookUP(const QString &Name);
+  void doDestGenerate(const QString &Options = "");
 
 signals:
   void signDebugMessages(const QString Message);

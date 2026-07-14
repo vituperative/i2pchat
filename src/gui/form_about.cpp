@@ -20,10 +20,10 @@
 
 #include "form_about.h"
 
-form_About::form_About(QString ApplicationVersion,
-                       QString Protoclversion,
-                       QString FiletransferversionMin,
-                       QString FiletransferversionMax,
+form_About::form_About(const QString &ApplicationVersion,
+                       const QString &Protoclversion,
+                       const QString &FiletransferversionMin,
+                       const QString &FiletransferversionMax,
                        QWidget *parent)
   : QDialog(parent) {
   ui.setupUi(this);

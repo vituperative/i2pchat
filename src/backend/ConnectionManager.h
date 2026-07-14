@@ -51,7 +51,7 @@ public:
 
   void doStopp();
   void doReStart();
-  void doNamingLookUP(QString Name);
+  void doNamingLookUP(const QString &Name);
   bool doDestroyStreamObjectByID(qint32 ID);
   CI2PStream *doCreateNewStreamObject(StreamMode Mode, bool Silence = false,
                                       bool dontConnectSendStreamStatus = false);
@@ -61,7 +61,7 @@ public:
   QString getStreamControllerBridgeName() const;
   QString getSamPrivKey() const;
   CI2PStream *getStreamObjectByID(qint32 ID) const;
-  CI2PStream *getStreamObjectByDestination(QString Destination) const;
+  CI2PStream *getStreamObjectByDestination(const QString &Destination) const;
 
   const QMap<qint32, CI2PStream *> *getAllStreamObjects() const {
     return &allStreams;

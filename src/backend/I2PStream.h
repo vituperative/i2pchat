@@ -65,8 +65,8 @@ public:
   void setFIRSTPACKETCHAT_alreadySent(bool theValue);
   void setUsedFor(QString value) { mUsedFor = value; };
 
-  void operator<<(const QByteArray Data);
-  void operator<<(const QString Data);
+  void operator<<(const QByteArray &Data);
+  void operator<<(const QString &Data);
 
   void startUnlimintedReconnect(qint32 msec);
   void stopUnlimintedReconnect();

@@ -15,7 +15,8 @@ bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
       if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::NoModifier) {
         emit sendMessage();
         return true;
-      } else if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ControlModifier) {
+      }
+      if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ControlModifier) {
         emit sendMessage();
         return true;
       }
@@ -26,7 +27,8 @@ bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::FocusIn) {
     emit haveFocus(true);
     return true;
-  } else if (event->type() == QEvent::FocusOut) {
+  }
+  if (event->type() == QEvent::FocusOut) {
     emit haveFocus(false);
     return true;
   }
@@ -165,7 +167,7 @@ void form_ChatWidget::addAllMessages() {
   QStringList Messages = user.getAllChatMessages();
   int i = 0;
   while (i < Messages.count()) {
-    QString tmp = Messages.at(i);
+    const QString &tmp = Messages.at(i);
     this->addMessage(tmp);
     i++;
   }

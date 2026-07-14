@@ -22,7 +22,7 @@
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
-#include "LoadHTML.cpp"
+#include "LoadHTML.cpp" // NOLINT: intentional inclusion of inline functions
 #include "User.h"
 #include "UserManager.h"
 
@@ -47,7 +47,7 @@ void CProtocol::newConnectionChat(const qint32 ID) {
   }
 }
 
-void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
+void CProtocol::slotInputKnown(const qint32 ID, const QByteArray &Data) {
   using namespace Protocol_Info;
 
   if (Data.length() < 4)
@@ -275,7 +275,7 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray Data) {
   }
 }
 
-void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
+void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray &Data) {
   using namespace Protocol_Info;
 
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
@@ -317,21 +317,20 @@ void CProtocol::slotInputUnknown(const qint32 ID, const QByteArray Data) {
             send(CHATMESSAGE, ID, QString("You have been blocked, all packets will be ignored!"));
             mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
             return;
-          } else {
-            QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
-            settings.beginGroup("Security");
-            if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
-              send(CHATMESSAGE, ID, QString("You have been blocked, all packets will be ignored!"));
-              send(USER_BLOCK_NORMAL, ID, QString(""));
-            } else {
-              // Block-Style Invisible
-              send(USER_BLOCK_INVISIBLE, ID, QString(""));
-            }
-            settings.endGroup();
-            settings.sync();
-            mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-            return;
           }
+          QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
+          settings.beginGroup("Security");
+          if (settings.value("BlockStyle", "Normal").toString() == "Normal") {
+            send(CHATMESSAGE, ID, QString("You have been blocked, all packets will be ignored!"));
+            send(USER_BLOCK_NORMAL, ID, QString(""));
+          } else {
+            // Block-Style Invisible
+            send(USER_BLOCK_INVISIBLE, ID, QString(""));
+          }
+          settings.endGroup();
+          settings.sync();
+          mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+          return;
         }
       }
 
@@ -518,7 +517,7 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
   *(stream) << Data;
 }
 
-void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QString Data) const {
+void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, const QString &Data) const {
   QByteArray t = Data.toUtf8();
 
   send(TAG, ID, t);

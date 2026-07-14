@@ -50,7 +50,7 @@ class CPacketManager;
 class CCore : public QObject {
   Q_OBJECT
 public:
-  CCore(QString configPath);
+  CCore(const QString &configPath);
   ~CCore();
 
   // forbid some operators
@@ -89,13 +89,12 @@ public:
 
   void setUserProtocolVersionByStreamID(qint32 ID, QString Version);
   void setOnlineStatus(const ONLINESTATE newStatus);
-  void setStreamTypeToKnown(qint32 ID, const QByteArray Data,
-                            bool isFileTransfer_Receive = false);
-  void setMyDestinationB32(QString B32Dest);
+  void setStreamTypeToKnown(qint32 ID, const QByteArray &Data, bool isFileTransfer_Receive = false);
+  void setMyDestinationB32(const QString &B32Dest);
 
-  bool useThisChatConnection(const QString Destination, const qint32 ID);
+  bool useThisChatConnection(const QString &Destination, const qint32 ID);
 
-  void doNamingLookUP(QString Name) const;
+  void doNamingLookUP(const QString &Name) const;
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
                                      QString &outType,
                                      bool addStoOutType = true) const;
@@ -110,15 +109,15 @@ public:
 
 private slots:
   // <SIGNALS FROM CONNECTIONMANAGER>
-  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                                const qint32 ID, QString Message);
+  void slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message);
   void slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
-                               QString Name, QString Value = "",
-                               QString Message = "");
+                               const QString &Name,
+                               const QString &Value = "",
+                               const QString &Message = "");
   void slotStreamControllerStatusOK(bool Status);
   void slotReconnectAttempt();
   void slotIncomingStream(CI2PStream *stream);
-  void slotNewSamPrivKeyGenerated(const QString SamPrivKey);
+  void slotNewSamPrivKeyGenerated(const QString &SamPrivKey);
   // </SIGNALS FROM CONNECTIONMANAGER>
 
 signals:

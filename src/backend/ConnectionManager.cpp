@@ -22,10 +22,12 @@
 
 #include <QRandomGenerator>
 
+#include <utility>
+
 CConnectionManager::CConnectionManager(QString SamHost, QString SamPort, QString ConfigPath)
-  : mSamHost(SamHost)
-  , mSamPort(SamPort)
-  , mConfigPath(ConfigPath) {
+  : mSamHost(std::move(SamHost))
+  , mSamPort(std::move(SamPort))
+  , mConfigPath(std::move(ConfigPath)) {
   mComponentStateStopped = false;
   StreamController = NULL;
   mSessionStreamStatusOK = false;
@@ -40,8 +42,8 @@ bool CConnectionManager::doCreateSession(SESSION_ENUMS::SESSION_STYLEV3 SessionS
   QString BridgeName = generateBridgeName();
 
   if (SessionStyle == STREAM && StreamController == NULL) {
-    this->StreamController =
-      new CSessionController(mSamHost, mSamPort, BridgeName, SamPrivKey, mConfigPath, SessionOptions);
+    this->StreamController = new CSessionController(
+      mSamHost, mSamPort, BridgeName, std::move(SamPrivKey), mConfigPath, std::move(SessionOptions));
 
     connect(StreamController, SIGNAL(signDebugMessages(const QString)), this, SIGNAL(signDebugMessages(const QString)));
 
@@ -169,12 +171,11 @@ CConnectionManager::doCreateNewStreamObject(StreamMode Mode, bool Silence, bool 
     emit signDebugMessages(Message);
     allStreams.insert(IDforNewObject, t);
     return t;
-  } else {
-    return NULL;
   }
+  return NULL;
 }
 
-void CConnectionManager::doNamingLookUP(QString Name) {
+void CConnectionManager::doNamingLookUP(const QString &Name) {
   if (SessionStreamStatusOKCheck() == false)
     return;
 
@@ -186,9 +187,8 @@ void CConnectionManager::doNamingLookUP(QString Name) {
 CI2PStream *CConnectionManager::getStreamObjectByID(qint32 ID) const {
   if (allStreams.contains(ID) == false) {
     return NULL;
-  } else {
-    return *(allStreams.find(ID));
   }
+  return *(allStreams.find(ID));
 }
 
 QString CConnectionManager::getStreamControllerBridgeName() const {
@@ -198,7 +198,7 @@ QString CConnectionManager::getStreamControllerBridgeName() const {
   return 0;
 }
 
-CI2PStream *CConnectionManager::getStreamObjectByDestination(QString Destination) const {
+CI2PStream *CConnectionManager::getStreamObjectByDestination(const QString &Destination) const {
   QMapIterator<qint32, CI2PStream *> i(allStreams);
   while (i.hasNext()) {
     i.next();
@@ -261,9 +261,8 @@ CConnectionManager::~CConnectionManager() {
 QString CConnectionManager::getSamPrivKey() const {
   if (StreamController != NULL) {
     return StreamController->getSamPrivKey();
-  } else {
-    return "";
   }
+  return "";
 }
 
 QString CConnectionManager::generateBridgeName() const {

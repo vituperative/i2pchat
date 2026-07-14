@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "I2PStream.h"
 
+#include <utility>
+
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
 const int CONNECTIONTIMEOUT = 60 * 1000;
 
@@ -29,13 +31,13 @@ CI2PStream::CI2PStream(QString mSamHost,
                        StreamMode mMode,
                        bool mSilence,
                        QString UsedFor)
-  : mSamHost(mSamHost)
-  , mSamPort(mSamPort)
+  : mSamHost(std::move(mSamHost))
+  , mSamPort(std::move(mSamPort))
   , mID(mID)
-  , mStreamBridgeName(mStreamBridgeName)
+  , mStreamBridgeName(std::move(mStreamBridgeName))
   , mMode(mMode)
   , mSilence(mSilence)
-  , mUsedFor(UsedFor) {
+  , mUsedFor(std::move(UsedFor)) {
   mAnalyser = NULL;
   mIncomingPackets = NULL;
   mDoneDisconnect = false;
@@ -80,7 +82,7 @@ bool CI2PStream::doConnect(QString mDestination) {
     return false;
   }
 
-  this->mDestination = mDestination;
+  this->mDestination = std::move(mDestination);
   this->mModeStreamConnect = true;
   this->mModeStreamAccept = false;
 
@@ -115,12 +117,8 @@ void CI2PStream::slotConnected() {
   mDoneDisconnect = false;
   emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                          "] Outgoing ‣ " + SAM_HANDSHAKE_V3);
-  try {
-    if (mTcpSocket.isWritable()) {
-      mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
-      // mTcpSocket.flush();
-    }
-  } catch (...) {
+  if (mTcpSocket.isWritable()) {
+    mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
   }
 }
 
@@ -269,7 +267,7 @@ void CI2PStream::doDisconnect() {
   mTcpSocket.disconnectFromHost();
 }
 
-void CI2PStream::operator<<(const QByteArray Data) {
+void CI2PStream::operator<<(const QByteArray &Data) {
   QString smID = QString::number(mID, 10);
   QString timeNow = QString(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
@@ -277,19 +275,15 @@ void CI2PStream::operator<<(const QByteArray Data) {
     emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
                            "] Outgoing ‣ " + Data);
 
-    try {
-      if (mTcpSocket.isWritable()) {
-        mTcpSocket.write(Data);
-        // mTcpSocket.flush();
-      }
-    } catch (...) {
+    if (mTcpSocket.isWritable()) {
+      mTcpSocket.write(Data);
     }
   } else {
     QString Message = QStringLiteral(" • [Stream ID: %1] Controller ‣ Not connected").arg(smID);
     emit signDebugMessages(timeNow + " " + Message);
   }
 }
-void CI2PStream::operator<<(const QString Data) {
+void CI2PStream::operator<<(const QString &Data) {
   QByteArray t = Data.toUtf8();
 
   *(this) << t;

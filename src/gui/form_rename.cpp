@@ -22,12 +22,14 @@
 
 #include "UserManager.h"
 
-form_RenameWindow::form_RenameWindow(CCore &Core, QString OldNickname, QString Destination)
+#include <utility>
+
+form_RenameWindow::form_RenameWindow(CCore &Core, const QString &OldNickname, QString Destination)
   : Core(Core) {
   setupUi(this);
 
   this->setAttribute(Qt::WA_DeleteOnClose, true);
-  this->Destination = Destination;
+  this->Destination = std::move(Destination);
 
   QLineEdit *lineEdit = this->lineEdit;
   lineEdit->setText(OldNickname);

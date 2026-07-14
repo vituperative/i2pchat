@@ -23,12 +23,14 @@
 
 #include "UserManager.h"
 
+#include <utility>
+
 CFileTransferReceive::CFileTransferReceive(CCore &Core,
                                            CI2PStream &Stream,
                                            qint32 StreamID,
                                            QString FileName,
                                            quint64 FileSize,
-                                           QString Destination,
+                                           const QString &Destination,
                                            QString Protocolversion,
                                            double ProtocolversionD)
 
@@ -37,10 +39,10 @@ CFileTransferReceive::CFileTransferReceive(CCore &Core,
   , mStreamID(StreamID)
   , mFileSize(FileSize)
   , mDestination(Destination)
-  , mUsingProtocolVersion(Protocolversion)
+  , mUsingProtocolVersion(std::move(Protocolversion))
   , mUsingProtocolVersionD(ProtocolversionD) {
 
-  mFileName = FileName;
+  mFileName = std::move(FileName);
 
   mConnectionManager = mCore.getConnectionManager();
 
@@ -123,7 +125,7 @@ CFileTransferReceive::~CFileTransferReceive() {
 
 void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RESULT result,
                                                     const qint32 ID,
-                                                    QString Message) {
+                                                    const QString &Message) {
   if (mStreamID != ID) {
     qDebug() << "CFileTransferReceive::slotStreamStatusReceived\n"
              << "mStreamID!=ID WTF";
@@ -242,7 +244,7 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
   }
 }
 
-void CFileTransferReceive::slotDataReceived(const qint32 ID, QByteArray t) {
+void CFileTransferReceive::slotDataReceived(const qint32 ID, const QByteArray &t) {
 
   if (mStreamID != ID) {
     qDebug() << "CFileTransferReceive::slotDataReceived\n"
@@ -345,7 +347,7 @@ void CFileTransferReceive::slotAbbortFileReceive() {
   mCore.getFileTransferManager()->removeFileReceive(mStreamID);
 }
 
-void CFileTransferReceive::start(QString FilePath, bool Accepted) {
+void CFileTransferReceive::start(const QString &FilePath, bool Accepted) {
   if (Accepted == true) {
     // mFileForReceive= new QFile(FilePath);
     mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
@@ -397,7 +399,7 @@ void CFileTransferReceive::doConvertNumberToTransferSize(quint64 inNumber,
                                                          QString &outNumber,
                                                          QString &outType,
                                                          bool addStoOutType) {
-  return mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
+  mCore.doConvertNumberToTransferSize(inNumber, outNumber, outType, addStoOutType);
 }
 
 void CFileTransferReceive::CalcETA(quint64 speed) {

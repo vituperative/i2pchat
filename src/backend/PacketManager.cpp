@@ -24,6 +24,7 @@
 #include "I2PStream.h"
 
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
@@ -38,7 +39,7 @@ CPacketManager::~CPacketManager() {
   mData = NULL;
 }
 
-void CPacketManager::operator<<(const QByteArray t) {
+void CPacketManager::operator<<(const QByteArray &t) {
   if (mData != NULL) {
     mData->append(t);
     checkifOnePacketIsCompleate();
@@ -80,10 +81,9 @@ void CPacketManager::checkifOnePacketIsCompleate() {
       checkifOnePacketIsCompleate();
     }
   }
-  return;
 }
 
-void CPacketManager::slotDataInput(qint32 ID, QByteArray t) {
+void CPacketManager::slotDataInput(qint32 ID, const QByteArray &t) {
   if (ID == this->mID) {
     *(this) << t;
   }

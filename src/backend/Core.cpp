@@ -32,7 +32,9 @@
 #include <QStandardPaths>
 #include <QtGlobal>
 
-CCore::CCore(QString configPath) {
+#include <utility>
+
+CCore::CCore(const QString &configPath) {
   mConfigPath = configPath;
   mCurrentOnlineStatus = User::USEROFFLINE;
   mNextOnlineStatus = User::USEROFFLINE;
@@ -146,7 +148,7 @@ CCore::~CCore() {
   delete mFileTransferManager;
 }
 
-void CCore::doNamingLookUP(QString Name) const {
+void CCore::doNamingLookUP(const QString &Name) const {
   mConnectionManager->doNamingLookUP(Name);
 }
 
@@ -273,7 +275,7 @@ void CCore::init() {
   settings.sync();
 }
 
-void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, QString Message) {
+void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message) {
 
   CI2PStream *stream = mConnectionManager->getStreamObjectByID(ID);
   CUser *user = NULL;
@@ -297,15 +299,15 @@ void CCore::slotStreamStatusReceived(const SAM_Message_Types::RESULT result, con
     if (user == NULL) {
       mConnectionManager->doDestroyStreamObjectByID(ID);
       return;
-    } else {
-      if (user->getOnlineState() != USEROFFLINE && user->getOnlineState() != USERTRYTOCONNECT) {
-        user->slotIncomingMessageFromSystem(tr("The Connection is broken: %1\nConnection closed").arg(Message));
-      }
-      deletePacketManagerByID(ID);
-      user->setConnectionStatus(TRYTOCONNECT);
-      user->setOnlineState(USEROFFLINE);
-      // reconnect stream
     }
+    if (user->getOnlineState() != USEROFFLINE && user->getOnlineState() != USERTRYTOCONNECT) {
+      user->slotIncomingMessageFromSystem(tr("The Connection is broken: %1\nConnection closed").arg(Message));
+    }
+    deletePacketManagerByID(ID);
+    user->setConnectionStatus(TRYTOCONNECT);
+    user->setOnlineState(USEROFFLINE);
+    // reconnect stream
+
   } else if (result == SAM_Message_Types::CLOSED) {
     if (ID < 0) {
       // incoming stream
@@ -370,7 +372,7 @@ void CCore::setUserProtocolVersionByStreamID(qint32 ID, QString Version) {
   CUser *theUser = mUserManager->getUserByI2P_ID(ID);
 
   if (theUser != NULL) {
-    theUser->setProtocolVersion(Version);
+    theUser->setProtocolVersion(std::move(Version));
   }
 }
 
@@ -389,9 +391,9 @@ void CCore::closeAllActiveConnections() {
 }
 
 void CCore::slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
-                                    QString Name,
-                                    QString Value,
-                                    QString Message) {
+                                    const QString &Name,
+                                    const QString &Value,
+                                    const QString &Message) {
   if (result == SAM_Message_Types::OK && Name == "ME" && mMyDestination.isEmpty()) {
     this->mMyDestination = Value;
   } else if (result == SAM_Message_Types::OK) {
@@ -446,88 +448,87 @@ QString CCore::getConnectionDump() const {
   if (mConnectionManager->isComponentStopped() == true) {
     Message = "Not connected to network";
     return Message;
-  } else {
-    StreamControllerBridgeName = mConnectionManager->getStreamControllerBridgeName();
-
-    Message = "• Stream Controller\n";
-    Message += "\tNetwork:\t\tI2P\n";
-    Message += "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
-
-    const QMap<qint32, CI2PStream *> *allListener = mConnectionManager->getAllStreamIncomingListenerObjects();
-    const QList<CI2PStream *> allStreamsListenerList = allListener->values();
-    Message += "• Incoming Stream Listener\n";
-    for (int i = 0; i < allStreamsListenerList.count(); i++) {
-      CI2PStream *Stream = allStreamsListenerList.value(i);
-      Message += "\n\tStream ID:\t\t" + QString::number(Stream->getID()) + "\n";
-      // Print StreamMode
-      if (Stream->getStreamMode() == STREAMS::CONNECT) {
-        Message += "\tStream Mode:\tCONNECT\n";
-      } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
-        Message += "\tStream Mode:\tACCEPT\n";
-      } else {
-        Message += "\tStream Mode:\t???\n";
-      }
-    }
-
-    Message += "• Streams\n\n";
-    const QMap<qint32, CI2PStream *> *allStreams = mConnectionManager->getAllStreamObjects();
-    const QList<CI2PStream *> allStreamsList = allStreams->values();
-
-    for (int n = 0; n < allStreamsList.size(); n++) {
-
-      CI2PStream *Stream = allStreamsList.value(n);
-      QString StreamID;
-      CUser *theUser = NULL;
-
-      theUser = mUserManager->getUserByI2P_ID(Stream->getID());
-
-      if (theUser != NULL) {
-        Message += "\tUser:\t\t" + theUser->getName() + "\n";
-      }
-
-      StreamID.setNum(Stream->getID(), 10);
-
-      Message += "\tStream ID:\t\t" + StreamID + "\n";
-
-      // Print StreamMode
-      if (Stream->getStreamMode() == STREAMS::CONNECT) {
-        Message += "\tStream Mode:\tCONNECT\n";
-      } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
-        Message += "\tStream Mode:\tACCEPT\n";
-      } else {
-        Message += "\tStream Mode:\t???\n";
-      }
-
-      if (Stream->getUsedFor() != nullptr) {
-        Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n";
-      }
-
-      // Print ConnectionType
-      if (Stream->getConnectionType() == UNKNOWN) {
-        Message += "\n";
-      } else if (Stream->getConnectionType() == KNOWN) {
-        Message += "\tTrust:\t\tKNOWN\n";
-        if (Stream->getUsedFor() == "FileTransferSend")
-          Message += "\n";
-      } else {
-        Message += "\tTrust:\t\t???\n";
-      }
-
-      theUser = mUserManager->getUserByI2P_ID(Stream->getID());
-      if (theUser != NULL) {
-        if (theUser->getClientName() != nullptr) {
-          Message += "\tClient:\t\t" + theUser->getClientName();
-        }
-        if (theUser->getClientVersion() != nullptr) {
-          Message += " " + theUser->getClientVersion() + "\n";
-        }
-        if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
-          Message += "\tProtocol:\t\t" + theUser->getProtocolVersion() + "\n\n";
-        }
-      }
-    }
-    return Message;
   }
+  StreamControllerBridgeName = mConnectionManager->getStreamControllerBridgeName();
+
+  Message = "• Stream Controller\n";
+  Message += "\tNetwork:\t\tI2P\n";
+  Message += "\tStreamControllerBridgeName:\t" + StreamControllerBridgeName + "\n";
+
+  const QMap<qint32, CI2PStream *> *allListener = mConnectionManager->getAllStreamIncomingListenerObjects();
+  const QList<CI2PStream *> allStreamsListenerList = allListener->values();
+  Message += "• Incoming Stream Listener\n";
+  for (int i = 0; i < allStreamsListenerList.count(); i++) {
+    CI2PStream *Stream = allStreamsListenerList.value(i);
+    Message += "\n\tStream ID:\t\t" + QString::number(Stream->getID()) + "\n";
+    // Print StreamMode
+    if (Stream->getStreamMode() == STREAMS::CONNECT) {
+      Message += "\tStream Mode:\tCONNECT\n";
+    } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
+      Message += "\tStream Mode:\tACCEPT\n";
+    } else {
+      Message += "\tStream Mode:\t???\n";
+    }
+  }
+
+  Message += "• Streams\n\n";
+  const QMap<qint32, CI2PStream *> *allStreams = mConnectionManager->getAllStreamObjects();
+  const QList<CI2PStream *> allStreamsList = allStreams->values();
+
+  for (int n = 0; n < allStreamsList.size(); n++) {
+
+    CI2PStream *Stream = allStreamsList.value(n);
+    QString StreamID;
+    CUser *theUser = NULL;
+
+    theUser = mUserManager->getUserByI2P_ID(Stream->getID());
+
+    if (theUser != NULL) {
+      Message += "\tUser:\t\t" + theUser->getName() + "\n";
+    }
+
+    StreamID.setNum(Stream->getID(), 10);
+
+    Message += "\tStream ID:\t\t" + StreamID + "\n";
+
+    // Print StreamMode
+    if (Stream->getStreamMode() == STREAMS::CONNECT) {
+      Message += "\tStream Mode:\tCONNECT\n";
+    } else if (Stream->getStreamMode() == STREAMS::ACCEPT) {
+      Message += "\tStream Mode:\tACCEPT\n";
+    } else {
+      Message += "\tStream Mode:\t???\n";
+    }
+
+    if (Stream->getUsedFor() != nullptr) {
+      Message += "\tPurpose:\t\t" + Stream->getUsedFor() + "\n";
+    }
+
+    // Print ConnectionType
+    if (Stream->getConnectionType() == UNKNOWN) {
+      Message += "\n";
+    } else if (Stream->getConnectionType() == KNOWN) {
+      Message += "\tTrust:\t\tKNOWN\n";
+      if (Stream->getUsedFor() == "FileTransferSend")
+        Message += "\n";
+    } else {
+      Message += "\tTrust:\t\t???\n";
+    }
+
+    theUser = mUserManager->getUserByI2P_ID(Stream->getID());
+    if (theUser != NULL) {
+      if (theUser->getClientName() != nullptr) {
+        Message += "\tClient:\t\t" + theUser->getClientName();
+      }
+      if (theUser->getClientVersion() != nullptr) {
+        Message += " " + theUser->getClientVersion() + "\n";
+      }
+      if (theUser->getProtocolVersion() != nullptr && Stream->getConnectionType() != UNKNOWN) {
+        Message += "\tProtocol:\t\t" + theUser->getProtocolVersion() + "\n\n";
+      }
+    }
+  }
+  return Message;
 }
 
 ONLINESTATE CCore::getOnlineStatus() const {
@@ -687,7 +688,7 @@ void CCore::createStreamObjectsForAllUsers() {
   }
 }
 
-void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray Data, bool isFileTransfer_Receive) {
+void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray &Data, bool isFileTransfer_Receive) {
   CI2PStream *t = mConnectionManager->getStreamObjectByID(ID);
   t->setConnectionType(KNOWN);
   disconnect(t,
@@ -765,7 +766,7 @@ void CCore::createStreamObjectForUser(CUser &User) {
   delete settings;
 }
 
-void CCore::slotNewSamPrivKeyGenerated(const QString SamPrivKey) {
+void CCore::slotNewSamPrivKeyGenerated(const QString &SamPrivKey) {
   QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("Network");
   settings->setValue("SamPrivKey", SamPrivKey);
@@ -774,7 +775,7 @@ void CCore::slotNewSamPrivKeyGenerated(const QString SamPrivKey) {
   delete settings;
 }
 
-bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
+bool CCore::useThisChatConnection(const QString &Destination, const qint32 ID) {
   CUser *theUser = NULL;
 
   theUser = mUserManager->getUserByI2P_Destination(Destination);
@@ -785,7 +786,8 @@ bool CCore::useThisChatConnection(const QString Destination, const qint32 ID) {
         // close the new connection,- we have allready a connection to this user
         mConnectionManager->doDestroyStreamObjectByID(ID);
         return false;
-      } else if (theUser->getConnectionStatus() == TRYTOCONNECT) {
+      }
+      if (theUser->getConnectionStatus() == TRYTOCONNECT) {
         // use the new connection
         // close the TRYTOCONNECT connection
         deletePacketManagerByID(theUser->getI2PStreamID());
@@ -867,27 +869,26 @@ void CCore::doConvertNumberToTransferSize(quint64 inNumber,
     addStoOutType == true ? outType = "MB/s" : outType = "MB";
 
     return;
-  } else if (Size >= 1024) {
+  }
+  if (Size >= 1024) {
     // KB
     double dKB = double(Size) / double(1024);
     SSize = QString("%1").arg(dKB, 0, 'd', 2);
     outNumber = SSize;
     addStoOutType == true ? outType = "KB/s" : outType = "KB";
     return;
-  } else {
-    // Byte
-    SSize.setNum(Size, 10);
-    outNumber = SSize;
-    addStoOutType == true ? outType = "Bytes/s" : outType = "Bytes";
-    return;
   }
+  // Byte
+  SSize.setNum(Size, 10);
+  outNumber = SSize;
+  addStoOutType == true ? outType = "Bytes/s" : outType = "Bytes";
 }
 
 const QString CCore::getMyDestinationB32() const {
   return mMyDestinationB32;
 }
 
-void CCore::setMyDestinationB32(QString B32Dest) {
+void CCore::setMyDestinationB32(const QString &B32Dest) {
   if (mMyDestinationB32 == B32Dest)
     return;
 

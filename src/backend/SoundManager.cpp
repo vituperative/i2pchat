@@ -19,8 +19,10 @@
  ***************************************************************************/
 #include "SoundManager.h"
 
+#include <utility>
+
 CSoundManager::CSoundManager(QString ConfigPath)
-  : mConfigPath(ConfigPath) {
+  : mConfigPath(std::move(ConfigPath)) {
   mIsMute = false;
   reInit();
 }

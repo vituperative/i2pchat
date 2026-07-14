@@ -32,8 +32,10 @@ class form_About : public QDialog {
   Q_OBJECT
 
 public:
-  form_About(QString ApplicationVersion, QString Protoclversion,
-             QString FiletransferversionMin, QString FiletransferversionMax,
+  form_About(const QString &ApplicationVersion,
+             const QString &Protoclversion,
+             const QString &FiletransferversionMin,
+             const QString &FiletransferversionMax,
              QWidget *parent = 0);
   ~form_About();
 

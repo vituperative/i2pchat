@@ -53,9 +53,12 @@ class CFileTransferSend : public QObject {
   Q_OBJECT
 
 public:
-  CFileTransferSend(CCore &Core, CConnectionManager &ConnectionManager,
-                    QString FilePath, QString Destination,
-                    QString Protocolversion, double ProtocolversionD);
+  CFileTransferSend(CCore &Core,
+                    CConnectionManager &ConnectionManager,
+                    const QString &FilePath,
+                    const QString &Destination,
+                    QString Protocolversion,
+                    double ProtocolversionD);
   ~CFileTransferSend();
 
   // forbid some operators
@@ -69,7 +72,7 @@ public:
   QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
   quint64 getAlreadySentSize() { return mAlreadySentSize; };
   bool getAlreadyTransferAccepted() { return mFileTransferAccepted; };
-  bool getIsTransferring();
+  bool getIsTransferring() const;
   bool getIsTransferComplete() { return mAlreadyFinished; };
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
                                      QString &outType,
@@ -78,9 +81,8 @@ public slots:
   void slotAbbortFileSend();
 
 private slots:
-  void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID,
-                        QString Message);
-  void slotDataReceived(const qint32 ID, QByteArray t);
+  void slotStreamStatus(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message);
+  void slotDataReceived(const qint32 ID, const QByteArray &t);
   void slotCalcAverageTransferSpeed();
 
 signals:

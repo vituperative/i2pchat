@@ -29,7 +29,7 @@ class CDebugMessageManager : public QObject {
   Q_OBJECT
 
 public:
-  CDebugMessageManager(QString Group, QString configPath);
+  CDebugMessageManager(const QString &Group, const QString &configPath);
   ~CDebugMessageManager();
 
   // forbid some operators
@@ -41,7 +41,7 @@ public slots:
   const QStringList getAllMessages() const { return mMessages; }
 
 private slots:
-  void slotNewIncomingDebugMessage(const QString Message);
+  void slotNewIncomingDebugMessage(const QString &Message);
 
 signals:
   void signNewDebugMessage(QString Message);

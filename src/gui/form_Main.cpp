@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QSystemTrayIcon>
 
-form_MainWindow::form_MainWindow(QString configDir, QWidget *parent)
+form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
   : QMainWindow(parent) {
   setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
                  Qt::WindowCloseButtonHint);
@@ -863,14 +863,14 @@ void form_MainWindow::UserPositionUP() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() >= 1)
     Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
-                                                         listWidget->currentRow() / 3 - 1);
+                                                         (listWidget->currentRow() / 3) - 1);
 }
 
 void form_MainWindow::UserPositionDOWN() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() < (listWidget->count() / 3) - 1)
     Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
-                                                         listWidget->currentRow() / 3 + 1);
+                                                         (listWidget->currentRow() / 3) + 1);
 }
 
 void form_MainWindow::UserPositionTOP() {
@@ -901,7 +901,7 @@ void form_MainWindow::UserInvisible(bool b) {
   }
 }
 
-void form_MainWindow::eventChatWindowClosed(QString Destination) {
+void form_MainWindow::eventChatWindowClosed(const QString &Destination) {
   if (mAllOpenChatWindows.contains(Destination) == true) {
     mAllOpenChatWindows[Destination]->deleteLater();
     mAllOpenChatWindows.remove(Destination);
@@ -917,7 +917,7 @@ void form_MainWindow::eventTryIconDoubleClicked(enum QSystemTrayIcon::Activation
   }
 }
 
-void form_MainWindow::openChatWindow(QString Destination) {
+void form_MainWindow::openChatWindow(const QString &Destination) {
   CUser *User;
   User = Core->getUserManager()->getUserByI2P_Destination(Destination);
   if (User == NULL) {
@@ -1053,7 +1053,9 @@ form_userSearch(*Core,*(Core->getSeedlessManager()));
 }
 */
 
-void form_MainWindow::incomingUserAuthorizationRequest(QString destination, int streamID, QByteArray data) {
+void form_MainWindow::incomingUserAuthorizationRequest(const QString &destination,
+                                                       int streamID,
+                                                       const QByteArray &data) {
   QMessageBox msgBox;
   msgBox.setIcon(QMessageBox::Question);
   msgBox.setText(tr("Incoming connection from unknown user"));

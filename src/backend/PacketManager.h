@@ -35,11 +35,11 @@ public:
   CPacketManager(const CPacketManager &) = delete;
   CPacketManager &operator=(const CPacketManager &) = delete;
 
-  void operator<<(const QByteArray t);
+  void operator<<(const QByteArray &t);
   qint32 getID() const { return mID; }
 
 public slots:
-  void slotDataInput(qint32 ID, QByteArray t);
+  void slotDataInput(qint32 ID, const QByteArray &t);
 
 signals:
   void signAPacketIsCompleate(const qint32 ID, const QByteArray CurrentPacket);

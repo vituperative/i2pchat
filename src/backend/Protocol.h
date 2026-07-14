@@ -173,12 +173,12 @@ public:
   void newConnectionChat(const qint32 ID);
 
   void send(const MESSAGES_TAGS TAG, const qint32 ID, QByteArray Data) const;
-  void send(const MESSAGES_TAGS TAG, const qint32 ID, QString Data) const;
+  void send(const MESSAGES_TAGS TAG, const qint32 ID, const QString &Data) const;
   void send(const COMMANDS_TAGS TAG, const qint32 ID) const;
 
 public slots:
-  void slotInputUnknown(const qint32 ID, const QByteArray Data);
-  void slotInputKnown(const qint32 ID, const QByteArray Data);
+  void slotInputUnknown(const qint32 ID, const QByteArray &Data);
+  void slotInputKnown(const qint32 ID, const QByteArray &Data);
 
 private:
   CCore &mCore;

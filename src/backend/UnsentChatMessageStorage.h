@@ -27,7 +27,7 @@
 
 class CUnsentChatMessageStorage {
 public:
-  CUnsentChatMessageStorage(const QString FileNameWithPath);
+  CUnsentChatMessageStorage(const QString &FileNameWithPath);
   ~CUnsentChatMessageStorage();
 
   // forbid some operators
@@ -35,9 +35,8 @@ public:
   CUnsentChatMessageStorage &
   operator=(const CUnsentChatMessageStorage &) = delete;
 
-  QStringList getMessagesForDest(const QString I2PDest);
-  void saveChatMessagesForDest(const QString I2PDest,
-                               const QStringList Messages);
+  QStringList getMessagesForDest(const QString &I2PDest);
+  void saveChatMessagesForDest(const QString &I2PDest, const QStringList &Messages);
   void clearStorage();
 
 private:

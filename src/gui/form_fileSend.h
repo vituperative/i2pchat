@@ -48,7 +48,7 @@ private slots:
   void slot_FileTransferAccepted(bool t);
   void slot_FileTransferAborted();
   void slot_Button();
-  void slot_SpeedChanged(QString SNumber, QString Type);
+  void slot_SpeedChanged(const QString &SNumber, const QString &Type);
 
 private:
   void closeEvent(QCloseEvent *e);

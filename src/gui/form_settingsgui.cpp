@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "form_settingsgui.h"
 
-#include "Base.cpp"
+#include "Base.cpp" // NOLINT: intentional inclusion of base utilities
 #include "Core.h"
 #include "UserBlockManager.h"
 
@@ -879,7 +879,7 @@ void form_settingsgui::clicked_ClearAvatarImage() {
   ownavatar_label_2->setPixmap(tmpPixmap);
 }
 
-void form_settingsgui::setCustomStyleSheet(void) {
+void form_settingsgui::setCustomStyleSheet() {
 
   auto fileName =
     QFileDialog::getOpenFileName(this, tr("open your StyleSheet"), "", tr("StyleSheet(*.css *.qss *.txt)"));

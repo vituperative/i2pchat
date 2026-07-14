@@ -27,7 +27,7 @@
 class form_RenameWindow : public QDialog, private Ui::form_renameWindow {
   Q_OBJECT
 public:
-  form_RenameWindow(CCore &Core, QString OldNickname, QString Destination);
+  form_RenameWindow(CCore &Core, const QString &OldNickname, QString Destination);
   ~form_RenameWindow();
 
   // forbid some operators
