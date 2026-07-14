@@ -11,29 +11,6 @@
  * Optional, customizable b32.i2p web page to display profile
  * Emoticon support
 
-## Current news
-
-* July, 2026
-  * Fix message ordering — newest at bottom, oldest at top
-  * Set ECIES and ED25519 as default sigtype/encryption
-  * Add support for optional web page to display user profile at .b32 address
-  * Remove insecure DSA_SHA1 from Signature Types
-  * Add ECIES (Ratchet) encryption type to new profiles (UI option coming soon!)
-
-* June, 2020:
-   * Fixed crash of close chat window
-   * Fixed crash of url link in chat
-   * Added $HOME/.i2pchat/ directory support for using from /usr/bin
-   * Pre inited optarg
-   * Core changes
-   * Ci pre-inited. Works for windows now
-   * Created .deb package for ubuntu/debian x86_64
-   * Created Windows build for 32 bit, which will works on 64 bits
-   * Design changes
-   * Fix offline message crash
-* June, 2020: dr\|z3d starts work on renovating the user interface, WipedLife starts work on the backend
-* 5 Jan, 2017: Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
-
 ## Build instructions
 
  * Note: Qt 5.14 or later required (Qt 6 is not yet supported)
