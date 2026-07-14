@@ -14,6 +14,7 @@
 ## Current news
 
 * July, 2026
+  * Fix message ordering — newest at bottom, oldest at top
   * Set ECIES and ED25519 as default sigtype/encryption
   * Add support for optional web page to display user profile at .b32 address
   * Remove insecure DSA_SHA1 from Signature Types
