@@ -53,7 +53,6 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
 
   connect(Core, SIGNAL(signNicknameChanged()), this, SLOT(eventNicknameChanged()));
 
-  mUserSearchWindow = NULL;
   mTopicSubscribeWindow = NULL;
   mAboutWindow = NULL;
   mDebugWindow = NULL;
@@ -1050,11 +1049,6 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
     // Deny, close the connection
     Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
   }
-}
-
-void form_MainWindow::eventUserSearchWindowClosed() {
-  mUserSearchWindow->deleteLater();
-  mUserSearchWindow = NULL;
 }
 
 void form_MainWindow::eventTopicSubscribeWindowClosed() {

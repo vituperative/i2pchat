@@ -23,10 +23,7 @@
 #include "ConnectionManager.h"
 #include "I2PStream.h"
 
-#include <iostream>
 #include <utility>
-
-using namespace std;
 
 CPacketManager::CPacketManager(CConnectionManager &ConnectionManager, qint32 ID)
   : mConnectionManager(ConnectionManager)

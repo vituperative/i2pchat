@@ -20,6 +20,21 @@
 #ifndef FORM_MAIN_H
 #define FORM_MAIN_H
 
+#include "Core.h"
+#include "FileTransferReceive.h"
+#include "FileTransferSend.h"
+#include "User.h"
+#include "form_DebugMessages.h"
+#include "form_TopicSubscribe.h"
+#include "form_about.h"
+#include "form_chatwidget.h"
+#include "form_fileReceive.h"
+#include "form_fileSend.h"
+#include "form_newUser.h"
+#include "form_rename.h"
+#include "form_settingsgui.h"
+#include "gui_icons.h"
+#include "ui_form_Main.h"
 
 #include <QClipboard>
 #include <QContextMenuEvent>
@@ -33,25 +48,6 @@
 #include <QSettings>
 #include <QSystemTrayIcon>
 #include <QtGui>
-
-#include "form_DebugMessages.h"
-#include "form_TopicSubscribe.h"
-#include "form_UserSearch.h"
-#include "form_about.h"
-#include "form_chatwidget.h"
-#include "form_fileReceive.h"
-#include "form_fileSend.h"
-#include "form_newUser.h"
-#include "form_rename.h"
-#include "form_settingsgui.h"
-#include "gui_icons.h"
-#include "ui_form_Main.h"
-
-#include "Core.h"
-#include "User.h"
-
-#include "FileTransferReceive.h"
-#include "FileTransferSend.h"
 
 class form_MainWindow : public QMainWindow, private Ui::form_MainWindow {
   Q_OBJECT
@@ -76,7 +72,6 @@ public slots:
   void eventFileReceiveWindowClosed(qint32 StreamID);
   void eventFileSendWindowClosed(qint32 StreamID);
   void eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason);
-  void eventUserSearchWindowClosed();
   void eventTopicSubscribeWindowClosed();
   void eventDebugWindowClosed();
   void eventAvatarImageChanged();
@@ -92,7 +87,6 @@ private slots:
   void openChatWindow(const QString &Destination);
   void openFileReceiveWindow(qint32 StreamID);
   void openFileSendWindow(qint32 StreamID);
-  // void openUserSearchWindow();
   void openTopicSubscribeWindow();
 
   // Windows end
@@ -120,11 +114,11 @@ private slots:
   void onlineComboBoxChanged();
   void toggleVisibility(QSystemTrayIcon::ActivationReason e);
   void toggleVisibilitycontextmenu();
-   void OnlineStateChanged();
-   void incomingUserAuthorizationRequest(const QString &destination, int streamID, const QByteArray &data);
-   //
- signals:
-   void changeAllowIncoming(bool);
+  void OnlineStateChanged();
+  void incomingUserAuthorizationRequest(const QString &destination, int streamID, const QByteArray &data);
+  //
+signals:
+  void changeAllowIncoming(bool);
 
 private:
   void initStyle();
@@ -148,7 +142,6 @@ private:
   QMap<qint32, form_fileReceive *> mAllFileReceiveWindows;
   QMap<qint32, form_fileSend *> mAllFileSendWindows;
 
-  form_userSearch *mUserSearchWindow;
   form_topicSubscribe *mTopicSubscribeWindow;
   form_About *mAboutWindow;
   form_DebugMessages *mDebugWindow;

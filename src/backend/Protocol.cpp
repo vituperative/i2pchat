@@ -30,7 +30,6 @@
 #include <QSettings>
 
 #include <iostream>
-using namespace std;
 
 CProtocol::CProtocol(CCore &Core)
   : mCore(Core) {}

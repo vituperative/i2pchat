@@ -17,9 +17,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <QErrorMessage>
-#include <QSettings>
-
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
@@ -27,23 +24,22 @@
 #include "User.h"
 #include "UserManager.h"
 
-#include <iostream>
-using namespace std;
+#include <QErrorMessage>
+#include <QSettings>
 
 QString gethttpheader(QString pagedata) {
   QString header;
-  header =
-      "HTTP/1.0 200\r\nContent-Length: " + QString::number(pagedata.size()) +
-      "\r\n" +
-      "Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; "
-      "img-src data:\r\n" +
-      "X-XSS-Protection: 1; mode=block\r\n" +
-      "X-Content-Type-Options: nosniff\r\n" +
-      "Content-Type: text/html; charset=utf-8\r\n\r\n";
+  header = "HTTP/1.0 200\r\nContent-Length: " + QString::number(pagedata.size()) + "\r\n" +
+           "Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; "
+           "img-src data:\r\n" +
+           "X-XSS-Protection: 1; mode=block\r\n" + "X-Content-Type-Options: nosniff\r\n" +
+           "Content-Type: text/html; charset=utf-8\r\n\r\n";
   return header;
 }
 
-QString pngtobase64(QByteArray pngdata) { return pngdata.toBase64(); }
+QString pngtobase64(QByteArray pngdata) {
+  return pngdata.toBase64();
+}
 
 // QString processtags(QString htmldata) {
 //	htmldata.
