@@ -20,11 +20,11 @@
 #ifndef I2PSTREAM_H
 #define I2PSTREAM_H
 
+#include "I2PSamMessageAnalyser.h"
+
 #include <QSocketNotifier>
 #include <QTcpSocket>
 #include <QTimer>
-
-#include "I2PSamMessageAnalyser.h"
 
 namespace STREAMS {
 enum StreamMode { ACCEPT, CONNECT };
@@ -40,8 +40,12 @@ class CI2PStream : public QObject {
   Q_OBJECT
 
 public:
-  CI2PStream(QString SamHost, QString SamPort, qint32 ID,
-             QString StreamBridgeName, StreamMode Mode, bool Silence = false,
+  CI2PStream(QString SamHost,
+             QString SamPort,
+             qint32 ID,
+             QString StreamBridgeName,
+             StreamMode Mode,
+             bool Silence = false,
              QString UsedFor = "");
   ~CI2PStream();
 
@@ -57,13 +61,11 @@ public:
   qint32 getID() const { return mID; }
   StreamMode getStreamMode() const { return mMode; }
   Type getConnectionType() const { return mConnectionType; }
-  bool getFIRSTPACKETCHAT_alreadySent() const {
-    return mFIRSTPACKETCHAT_alreadySent;
-  }
-  QString getUsedFor() { return mUsedFor; };
+  bool getFIRSTPACKETCHAT_alreadySent() const { return mFIRSTPACKETCHAT_alreadySent; }
+  QString getUsedFor() const { return mUsedFor; };
   void setConnectionType(const Type newTyp);
   void setFIRSTPACKETCHAT_alreadySent(bool theValue);
-  void setUsedFor(QString value) { mUsedFor = value; };
+  void setUsedFor(const QString &value) { mUsedFor = value; };
 
   void operator<<(const QByteArray &Data);
   void operator<<(const QString &Data);
@@ -80,11 +82,9 @@ private slots:
 
 signals:
   void signDebugMessages(const QString Message);
-  void signStreamStatusReceived(const SAM_Message_Types::RESULT result,
-                                const qint32 ID, const QString Message);
+  void signStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, const QString Message);
   void signDataReceived(const qint32 ID, const QByteArray Data);
-  void signModeAcceptIncomingStream(
-      qint32 ID); // emit if Destination received (SILENCE=false)
+  void signModeAcceptIncomingStream(qint32 ID); // emit if Destination received (SILENCE=false)
 
 private:
   const QString mSamHost;

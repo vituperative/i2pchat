@@ -67,15 +67,15 @@ public:
   CFileTransferSend(const CFileTransferSend &) = delete;
   CFileTransferSend &operator=(const CFileTransferSend &) = delete;
 
-  quint64 getFileSize() { return mFileSize; };
-  qint32 getStreamID() { return mStreamID; };
-  QString getDestination() { return mDestination; };
-  QString getFileName() { return mFileName; };
-  QString getUsingProtocolVersion() { return mUsingProtocolVersion; };
-  quint64 getAlreadySentSize() { return mAlreadySentSize; };
-  bool getAlreadyTransferAccepted() { return mFileTransferAccepted; };
+  quint64 getFileSize() const { return mFileSize; };
+  qint32 getStreamID() const { return mStreamID; };
+  QString getDestination() const { return mDestination; };
+  QString getFileName() const { return mFileName; };
+  QString getUsingProtocolVersion() const { return mUsingProtocolVersion; };
+  quint64 getAlreadySentSize() const { return mAlreadySentSize; };
+  bool getAlreadyTransferAccepted() const { return mFileTransferAccepted; };
   bool getIsTransferring() const;
-  bool getIsTransferComplete() { return mAlreadyFinished; };
+  bool getIsTransferComplete() const { return mAlreadyFinished; };
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber, QString &outType, bool addStoOutType = true);
 public slots:
   void slotAbbortFileSend();
