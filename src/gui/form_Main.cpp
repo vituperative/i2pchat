@@ -1090,7 +1090,13 @@ void form_MainWindow::eventAvatarImageChanged() {
   if (Core->getUserInfos().AvatarImage.isEmpty() == false) {
     QPixmap avatar;
     avatar.loadFromData(Core->getUserInfos().AvatarImage);
-    avatar = avatar.scaled(avatarlabel->width(), avatarlabel->height(), Qt::KeepAspectRatio);
+    int w = avatarlabel->width();
+    int h = avatarlabel->height();
+    if (avatar.width() != w || avatar.height() != h) {
+      QImage img = avatar.toImage();
+      img = CCore::scaleImageLanczos(img, w, h);
+      avatar = QPixmap::fromImage(img);
+    }
     avatarlabel->setAlignment(Qt::AlignCenter);
     avatarlabel->setPixmap(avatar);
   }

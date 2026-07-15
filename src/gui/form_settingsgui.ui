@@ -3351,14 +3351,14 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QFrame" name="frame_18">
-      <property name="geometry">
-       <rect>
-        <x>2</x>
-        <y>40</y>
-        <width>384</width>
-        <height>360</height>
-       </rect>
-      </property>
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>40</y>
+         <width>384</width>
+         <height>390</height>
+        </rect>
+       </property>
       <property name="minimumSize">
        <size>
         <width>384</width>
@@ -3978,15 +3978,28 @@ p, li { white-space: pre-wrap; }
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="UserEvents">
-       <property name="geometry">
-        <rect>
-         <x>2</x>
-         <y>241</y>
-         <width>380</width>
-         <height>51</height>
-        </rect>
-       </property>
+       <widget class="QCheckBox" name="checkBox_DisplayImagesInline">
+        <property name="geometry">
+         <rect>
+          <x>16</x>
+          <y>239</y>
+          <width>358</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Display received images inline</string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="UserEvents">
+        <property name="geometry">
+         <rect>
+          <x>2</x>
+          <y>266</y>
+          <width>380</width>
+          <height>51</height>
+         </rect>
+        </property>
        <property name="maximumSize">
         <size>
          <width>380</width>
@@ -4049,18 +4062,18 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>2</x>
-         <y>298</y>
-         <width>380</width>
-         <height>57</height>
-        </rect>
-       </property>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>2</x>
+          <y>323</y>
+          <width>380</width>
+          <height>57</height>
+         </rect>
+        </property>
        <property name="title">
         <string/>
        </property>

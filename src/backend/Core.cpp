@@ -32,6 +32,7 @@
 #include <QStandardPaths>
 #include <QtGlobal>
 
+#include <cmath>
 #include <utility>
 
 CCore::CCore(const QString &configPath) {
@@ -931,4 +932,105 @@ QString CCore::canonicalizeTopicId(QString topicIdNonCanonicalized) {
 
 void CCore::changeAccessIncomingUsers(bool m) {
   m_access_anyone_incoming = m;
+}
+
+static double lanczosKernel(double x, double a) {
+  if (x == 0.0)
+    return 1.0;
+  double ax = std::abs(x);
+  if (ax >= a)
+    return 0.0;
+  double pix = M_PI * x;
+  return a * std::sin(pix) * std::sin(pix / a) / (pix * pix);
+}
+
+static void lanczosHorizontalPass(const QImage &src, QImage &dst, double a) {
+  int newWidth = dst.width();
+  for (int y = 0; y < src.height(); ++y) {
+    const QRgb *srcRow = reinterpret_cast<const QRgb *>(src.constScanLine(y));
+    QRgb *dstRow = reinterpret_cast<QRgb *>(dst.scanLine(y));
+    for (int x = 0; x < newWidth; ++x) {
+      double srcX = (double)x / newWidth * src.width();
+      int center = (int)srcX;
+      double r = 0, g = 0, b = 0, totalWeight = 0;
+      int start = std::max(0, center - (int)a + 1);
+      int end = std::min(src.width() - 1, center + (int)a);
+      for (int i = start; i <= end; ++i) {
+        double weight = lanczosKernel(srcX - i, a);
+        QRgb pixel = srcRow[i];
+        r += qRed(pixel) * weight;
+        g += qGreen(pixel) * weight;
+        b += qBlue(pixel) * weight;
+        totalWeight += weight;
+      }
+      if (totalWeight > 0) {
+        r /= totalWeight;
+        g /= totalWeight;
+        b /= totalWeight;
+      }
+      dstRow[x] = qRgb(std::min(255, std::max(0, (int)(r + 0.5))),
+                       std::min(255, std::max(0, (int)(g + 0.5))),
+                       std::min(255, std::max(0, (int)(b + 0.5))));
+    }
+  }
+}
+
+static void lanczosVerticalPass(const QImage &src, QImage &dst, double a) {
+  int newHeight = dst.height();
+  for (int y = 0; y < newHeight; ++y) {
+    double srcY = (double)y / newHeight * src.height();
+    int center = (int)srcY;
+    QRgb *dstRow = reinterpret_cast<QRgb *>(dst.scanLine(y));
+    int start = std::max(0, center - (int)a + 1);
+    int end = std::min(src.height() - 1, center + (int)a);
+    for (int x = 0; x < dst.width(); ++x) {
+      double r = 0, g = 0, b = 0, totalWeight = 0;
+      for (int i = start; i <= end; ++i) {
+        double weight = lanczosKernel(srcY - i, a);
+        QRgb pixel = reinterpret_cast<const QRgb *>(src.constScanLine(i))[x];
+        r += qRed(pixel) * weight;
+        g += qGreen(pixel) * weight;
+        b += qBlue(pixel) * weight;
+        totalWeight += weight;
+      }
+      if (totalWeight > 0) {
+        r /= totalWeight;
+        g /= totalWeight;
+        b /= totalWeight;
+      }
+      dstRow[x] = qRgb(std::min(255, std::max(0, (int)(r + 0.5))),
+                       std::min(255, std::max(0, (int)(g + 0.5))),
+                       std::min(255, std::max(0, (int)(b + 0.5))));
+    }
+  }
+}
+
+QImage CCore::scaleImageLanczos(const QImage &src, int maxWidth, int maxHeight) {
+  if (src.isNull())
+    return src;
+
+  int newWidth = src.width();
+  int newHeight = src.height();
+
+  if (maxHeight > 0 && newHeight > maxHeight) {
+    newWidth = newWidth * maxHeight / newHeight;
+    newHeight = maxHeight;
+  }
+  if (maxWidth > 0 && newWidth > maxWidth) {
+    newHeight = newHeight * maxWidth / newWidth;
+    newWidth = maxWidth;
+  }
+
+  if (newWidth == src.width() && newHeight == src.height())
+    return src;
+
+  const double a = 3.0;
+
+  QImage temp(newWidth, src.height(), QImage::Format_ARGB32_Premultiplied);
+  lanczosHorizontalPass(src, temp, a);
+
+  QImage result(newWidth, newHeight, QImage::Format_ARGB32_Premultiplied);
+  lanczosVerticalPass(temp, result, a);
+
+  return result;
 }

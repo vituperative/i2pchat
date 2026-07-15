@@ -291,6 +291,11 @@ void form_settingsgui::loadSettings() {
     tmpPixmap.load(":/icons/silhouette.svg");
   } else {
     tmpPixmap.loadFromData(avatarImageByteArray);
+    if (tmpPixmap.width() != ownavatar_label_2->width() || tmpPixmap.height() != ownavatar_label_2->height()) {
+      QImage img = tmpPixmap.toImage();
+      img = CCore::scaleImageLanczos(img, ownavatar_label_2->width(), ownavatar_label_2->height());
+      tmpPixmap = QPixmap::fromImage(img);
+    }
   }
 
   ownavatar_label->setAlignment(Qt::AlignCenter);
@@ -344,6 +349,7 @@ void form_settingsgui::loadSettings() {
   }
 
   checkboxUserEvents->setChecked(settings->value("LogOnlineStatesOfUsers", true).toBool());
+  checkBox_DisplayImagesInline->setChecked(settings->value("DisplayImagesInline", false).toBool());
 
   // TODO: Connection timeout from I2PStream.cpp or nuke ?
   // spinBox_maxACK->setMinimum(20);
@@ -500,6 +506,7 @@ void form_settingsgui::saveSettings() {
   settings->setValue("FontForOverwrite", txtOverrideRemote->currentFont().toString());
   settings->setValue("ColorForOverwrite", txtOverrideRemote->textColor().name());
   settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
+  settings->setValue("DisplayImagesInline", checkBox_DisplayImagesInline->isChecked());
   settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
   settings->endGroup();
 
@@ -878,7 +885,11 @@ void form_settingsgui::clicked_SelectAvatarImage() {
   QString tmp = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("Images (*.png *.svg *.jpg *.gif)"));
   if (tmp.isEmpty() == false && QFile::exists(tmp) == true) {
     tmpPixmap.load(tmp);
-    tmpPixmap = tmpPixmap.scaled(90, 90, Qt::KeepAspectRatio);
+    if (tmpPixmap.width() > 90 || tmpPixmap.height() > 90) {
+      QImage img = tmpPixmap.toImage();
+      img = CCore::scaleImageLanczos(img, 90, 90);
+      tmpPixmap = QPixmap::fromImage(img);
+    }
     avatarImageByteArray.clear();
 
     QBuffer buffer(&avatarImageByteArray);

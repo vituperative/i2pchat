@@ -453,7 +453,17 @@ void form_ChatWidget::showAvatarFrame(bool show) {
 
 void form_ChatWidget::remoteAvatarImageChanged() {
   if (user.getReceivedUserInfos().AvatarImage.size() > 0) {
-    mUserAvatar.loadFromData(user.getReceivedUserInfos().AvatarImage);
+    QPixmap pxm;
+    pxm.loadFromData(user.getReceivedUserInfos().AvatarImage);
+    int w = useravatar_label->width();
+    int h = useravatar_label->height();
+    if (pxm.width() != w || pxm.height() != h) {
+      QImage img = pxm.toImage();
+      img = CCore::scaleImageLanczos(img, w, h);
+      mUserAvatar = QPixmap::fromImage(img);
+    } else {
+      mUserAvatar = pxm;
+    }
     useravatar_label->setPixmap(mUserAvatar);
   }
 }
@@ -491,6 +501,16 @@ void form_ChatWidget::centerDialog() {
 
 void form_ChatWidget::slotLoadOwnAvatarImage() {
   ownavatar_label->setAlignment(Qt::AlignCenter);
-  mOwnAvatar.loadFromData(Core.getUserInfos().AvatarImage);
+  QPixmap pxm;
+  pxm.loadFromData(Core.getUserInfos().AvatarImage);
+  int w = ownavatar_label->width();
+  int h = ownavatar_label->height();
+  if (pxm.width() != w || pxm.height() != h) {
+    QImage img = pxm.toImage();
+    img = CCore::scaleImageLanczos(img, w, h);
+    mOwnAvatar = QPixmap::fromImage(img);
+  } else {
+    mOwnAvatar = pxm;
+  }
   ownavatar_label->setPixmap(mOwnAvatar);
 }

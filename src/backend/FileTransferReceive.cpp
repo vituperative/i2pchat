@@ -18,12 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-// #include "Core.h"
 #include "FileTransferReceive.h"
 
+#include "Core.h"
+#include "User.h"
 #include "UserManager.h"
 
+#include <QFileInfo>
+#include <QSettings>
+#include <QUrl>
+
+#include <cmath>
 #include <utility>
+
+static bool isImageExtension(const QString &fileName);
+static void tryDisplayImageInline(const QString &filePath, CUser *user);
 
 CFileTransferReceive::CFileTransferReceive(CCore &Core,
                                            CI2PStream &Stream,
@@ -175,8 +184,13 @@ void CFileTransferReceive::slotStreamStatusReceived(const SAM_Message_Types::RES
         SSize.setNum(mFileSize, 10);
         SizeName = "bytes";
       }
-      if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+      if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination)) {
         u->slotIncomingMessageFromSystem(tr("Download complete [%1 %2 %3]").arg(mFileName).arg(SSize).arg(SizeName));
+
+        QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
+        if (settings.value("Chat/DisplayImagesInline", false).toBool())
+          tryDisplayImageInline(mFileForReceive.fileName(), u);
+      }
     } else {
       emit signFileReceiveAborted();
       if (mRequestAccepted == true) {
@@ -312,8 +326,13 @@ void CFileTransferReceive::slotDataReceived(const qint32 ID, const QByteArray &t
       SSize.setNum(mFileSize, 10);
       SizeName = "Bytes";
     }
-    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination))
+    if (auto *u = mCore.getUserManager()->getUserByI2P_Destination(mDestination)) {
       u->slotIncomingMessageFromSystem("<br>Download complete [" + mFileName + " " + SSize + " " + SizeName + "]");
+
+      QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
+      if (settings.value("Chat/DisplayImagesInline", false).toBool())
+        tryDisplayImageInline(mFileForReceive.fileName(), u);
+    }
 
     mFileForReceive.close();
     mCore.getFileTransferManager()->removeFileReceive(mStreamID);
@@ -443,4 +462,32 @@ void CFileTransferReceive::CalcETA(quint64 speed) {
 
     signETA(EmitString);
   }
+}
+
+static bool isImageExtension(const QString &fileName) {
+  QString ext = QFileInfo(fileName).suffix().toLower();
+  return ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "gif" || ext == "bmp" || ext == "webp";
+}
+
+static void tryDisplayImageInline(const QString &filePath, CUser *user) {
+  if (!user || filePath.isEmpty())
+    return;
+  if (!isImageExtension(filePath))
+    return;
+
+  QImage img(filePath);
+  if (img.isNull())
+    return;
+
+  const int MAX_CHAT_WIDTH = 400;
+  QImage scaled = CCore::scaleImageLanczos(img, MAX_CHAT_WIDTH);
+
+  QDir().mkpath(QStringLiteral("/tmp/i2pchat"));
+  QString previewPath = QStringLiteral("/tmp/i2pchat/%1.jpg").arg(user->getName());
+  if (!scaled.save(previewPath, "JPEG"))
+    return;
+
+  QUrl url = QUrl::fromLocalFile(previewPath);
+  user->slotIncomingMessageFromSystem(
+    QStringLiteral("<br><img src=\"%1\" style=\"max-width:400px;\" />").arg(url.toString()));
 }

@@ -1,19 +1,20 @@
+#include "Base.h"
+
 #include <stdlib.h>
 #include <string.h>
-
-#include "Base.h"
 
 namespace i2p {
 namespace data {
 static const char T32[32] = {
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-    'w', 'x', 'y', 'z', '2', '3', '4', '5', '6', '7',
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+  'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '2', '3', '4', '5', '6', '7',
 };
 
-const char *GetBase32SubstitutionTable() { return T32; }
+const char *GetBase32SubstitutionTable() {
+  return T32;
+}
 
-static void iT64Build(void);
+static void iT64Build();
 
 /*
  *
@@ -23,14 +24,14 @@ static void iT64Build(void);
  * Direct Substitution Table
  */
 
-static const char T64[64] = {
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '~'};
+static const char T64[64] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                             'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                             'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '~'};
 
-const char *GetBase64SubstitutionTable() { return T64; }
+const char *GetBase64SubstitutionTable() {
+  return T64;
+}
 
 /*
  * Reverse Substitution Table (built in run time)
@@ -54,11 +55,11 @@ static char P64 = '=';
  *
  */
 
-size_t /* Number of bytes in the encoded buffer */
+size_t                                      /* Number of bytes in the encoded buffer */
 ByteStreamToBase64(const uint8_t *InBuffer, /* Input buffer, binary data */
-                   size_t InCount,  /* Number of bytes in the input buffer */
-                   char *OutBuffer, /* output buffer */
-                   size_t len       /* length of output buffer */
+                   size_t InCount,          /* Number of bytes in the input buffer */
+                   char *OutBuffer,         /* output buffer */
+                   size_t len               /* length of output buffer */
 )
 
 {
@@ -202,8 +203,7 @@ size_t Base64EncodingBufferSize(const size_t input_size) {
 std::string ToBase64Standard(const std::string &in) {
   auto len = Base64EncodingBufferSize(in.length());
   char *str = new char[len + 1];
-  auto l =
-      ByteStreamToBase64((const uint8_t *)in.c_str(), in.length(), str, len);
+  auto l = ByteStreamToBase64((const uint8_t *)in.c_str(), in.length(), str, len);
   str[l] = 0;
   // replace '-' by '+' and '~' by '/'
   for (size_t i = 0; i < l; i++)
@@ -235,8 +235,7 @@ static void iT64Build() {
   iT64[(int)P64] = 0;
 }
 
-size_t Base32ToByteStream(const char *inBuf, size_t len, uint8_t *outBuf,
-                          size_t outLen) {
+size_t Base32ToByteStream(const char *inBuf, size_t len, uint8_t *outBuf, size_t outLen) {
   int tmp = 0, bits = 0;
   size_t ret = 0;
   for (size_t i = 0; i < len; i++) {
@@ -262,8 +261,7 @@ size_t Base32ToByteStream(const char *inBuf, size_t len, uint8_t *outBuf,
   return ret;
 }
 
-size_t ByteStreamToBase32(const uint8_t *inBuf, size_t len, char *outBuf,
-                          size_t outLen) {
+size_t ByteStreamToBase32(const uint8_t *inBuf, size_t len, char *outBuf, size_t outLen) {
   size_t ret = 0, pos = 1;
   int bits = 8, tmp = inBuf[0];
   while (ret < outLen && (bits > 0 || pos < len)) {

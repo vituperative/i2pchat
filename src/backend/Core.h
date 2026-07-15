@@ -158,5 +158,7 @@ protected:
   bool m_access_anyone_incoming; // new users.
 public:
   bool getAccessAnyoneIncoming() { return m_access_anyone_incoming; }
+
+  static QImage scaleImageLanczos(const QImage &src, int maxWidth, int maxHeight = 0);
 };
 #endif
