@@ -101,18 +101,8 @@ void form_topicSubscribe::slot_showContextMenu(const QPoint &pos) {
 }
 
 void form_topicSubscribe::slot_openTopic() {
-  QTreeWidgetItem *item;
-  QTreeWidgetItem *parent;
-  QString topicId;
-  // QString Destination;
-
-  item = treeWidget_SubscribeResults->currentItem();
-  if (item != NULL) {
-    parent = item->parent();
-    if (parent == NULL) {
-      parent = item;
-    }
-  }
+  QTreeWidgetItem *item = treeWidget_SubscribeResults->currentItem();
+  Q_UNUSED(item);
 }
 void form_topicSubscribe::slot_onlineStateChanged() {
   ONLINESTATE status = mCore.getOnlineStatus();

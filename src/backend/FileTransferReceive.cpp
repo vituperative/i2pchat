@@ -482,12 +482,11 @@ static void tryDisplayImageInline(const QString &filePath, CUser *user) {
   const int MAX_CHAT_WIDTH = 400;
   QImage scaled = CCore::scaleImageLanczos(img, MAX_CHAT_WIDTH);
 
-  QDir().mkpath(QStringLiteral("/tmp/i2pchat"));
-  QString previewPath = QStringLiteral("/tmp/i2pchat/%1.jpg").arg(user->getName());
+  QDir().mkpath("/tmp/i2pchat");
+  QString previewPath = QString("/tmp/i2pchat/%1.jpg").arg(user->getName());
   if (!scaled.save(previewPath, "JPEG"))
     return;
 
   QUrl url = QUrl::fromLocalFile(previewPath);
-  user->slotIncomingMessageFromSystem(
-    QStringLiteral("<br><img src=\"%1\" style=\"max-width:400px;\" />").arg(url.toString()));
+  user->slotIncomingMessageFromSystem(QString("<br><img src=\"%1\" style=\"max-width:400px;\" />").arg(url.toString()));
 }

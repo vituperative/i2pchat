@@ -801,7 +801,7 @@ void form_MainWindow::copyB32() {
     qarraysha256hash.append((char)0);
   }
   QByteArray sha256hash = QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256);
-  outputcount = i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
+  i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
   b32buffer[52] = '\0';
   QString Address = "http://" + QString(b32buffer) + ".b32.i2p";
 

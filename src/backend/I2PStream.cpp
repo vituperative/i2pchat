@@ -270,7 +270,7 @@ void CI2PStream::operator<<(const QByteArray &Data) {
       mTcpSocket.write(Data);
     }
   } else {
-    QString Message = QStringLiteral(" • [Stream ID: %1] Controller ‣ Not connected").arg(smID);
+    QString Message = QString(" • [Stream ID: %1] Controller ‣ Not connected").arg(smID);
     emit signDebugMessages(timeNow + " " + Message);
   }
 }

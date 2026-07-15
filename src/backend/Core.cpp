@@ -968,9 +968,9 @@ static void lanczosHorizontalPass(const QImage &src, QImage &dst, double a) {
         g /= totalWeight;
         b /= totalWeight;
       }
-      dstRow[x] = qRgb(std::min(255, std::max(0, (int)(r + 0.5))),
-                       std::min(255, std::max(0, (int)(g + 0.5))),
-                       std::min(255, std::max(0, (int)(b + 0.5))));
+      dstRow[x] = qRgb(std::min(255, std::max(0, static_cast<int>(std::lround(r)))),
+                       std::min(255, std::max(0, static_cast<int>(std::lround(g)))),
+                       std::min(255, std::max(0, static_cast<int>(std::lround(b)))));
     }
   }
 }
@@ -981,8 +981,8 @@ static void lanczosVerticalPass(const QImage &src, QImage &dst, double a) {
     double srcY = (double)y / newHeight * src.height();
     int center = (int)srcY;
     QRgb *dstRow = reinterpret_cast<QRgb *>(dst.scanLine(y));
-    int start = std::max(0, center - (int)a + 1);
-    int end = std::min(src.height() - 1, center + (int)a);
+    int start = std::max(0, center - static_cast<int>(a) + 1);
+    int end = std::min(src.height() - 1, center + static_cast<int>(a));
     for (int x = 0; x < dst.width(); ++x) {
       double r = 0, g = 0, b = 0, totalWeight = 0;
       for (int i = start; i <= end; ++i) {
@@ -998,9 +998,9 @@ static void lanczosVerticalPass(const QImage &src, QImage &dst, double a) {
         g /= totalWeight;
         b /= totalWeight;
       }
-      dstRow[x] = qRgb(std::min(255, std::max(0, (int)(r + 0.5))),
-                       std::min(255, std::max(0, (int)(g + 0.5))),
-                       std::min(255, std::max(0, (int)(b + 0.5))));
+      dstRow[x] = qRgb(std::min(255, std::max(0, static_cast<int>(std::lround(r)))),
+                       std::min(255, std::max(0, static_cast<int>(std::lround(g)))),
+                       std::min(255, std::max(0, static_cast<int>(std::lround(b)))));
     }
   }
 }

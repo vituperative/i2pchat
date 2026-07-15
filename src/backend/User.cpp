@@ -172,7 +172,6 @@ void CUser::slotSendChatMessage(const QString &Message) {
     mLastCommunication = QDateTime::currentDateTime();
     emit signNewMessageReceived();
   } else {
-    int idx = mUnsentedMessages.size();
     mUnsentedMessages.push_back(Message);
 
     QString Nickname;

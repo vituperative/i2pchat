@@ -156,12 +156,11 @@ Base64ToByteStream(const char *InBuffer, /* BASE64 encoded buffer */
   if (InCount && !m)
     outCount = 3 * n;
   else {
-    outCount = 0;
     return 0;
   }
 
   ps = (unsigned char *)(InBuffer + InCount - 1);
-  while (*ps-- == P64)
+  while (*ps-- == static_cast<unsigned char>(P64))
     outCount--;
   ps = (unsigned char *)InBuffer;
 
@@ -231,8 +230,8 @@ static void iT64Build() {
   for (i = 0; i < 256; i++)
     iT64[i] = -1;
   for (i = 0; i < 64; i++)
-    iT64[(int)T64[i]] = i;
-  iT64[(int)P64] = 0;
+    iT64[static_cast<unsigned char>(T64[i])] = i;
+  iT64[static_cast<unsigned char>(P64)] = 0;
 }
 
 size_t Base32ToByteStream(const char *inBuf, size_t len, uint8_t *outBuf, size_t outLen) {
