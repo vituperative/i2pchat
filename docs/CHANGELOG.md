@@ -2,6 +2,10 @@
 
 ## July, 2026
 
+* Offline file-offer queuing — select files while offline, delivered automatically on reconnect via new protocol tags (FILE_OFFER / FILE_OFFER_ACCEPTED / FILE_OFFER_REJECTED)
+* Accept/Reject file offers inline in chat via clickable anchor links
+* Cancel icon (✕) on pending messages and file offers to remove them from the queue before they're sent
+* Persistent file-offer queue across restarts (INI storage alongside unsent text messages)
 * Add non-persistent (transient per-session) destination option
 * userlist: persist sort mode across restarts
 * implement auto-away with checkable group box in settings, Core timer, and global event filter
@@ -9,22 +13,12 @@
 * userlist: add real timestamp tracking for date added, last communication, and last online sort modes
 * about dialog: show short commit hash, collapse equal file-transfer versions
 * fix: implement copyB32 b32 address derivation
-* fix: doCreateSession now returns true on success path
-* fix: ChatmessageChanger color default uses valid hex string instead of QFont
-* fix: add null guards to getUserByI2P_Destination in file transfer handlers
-* fix: add null guard to listWidget item access in copyDestination/copyB32
-* fix: return QString() instead of 0 in getStreamControllerBridgeName
 * chat: fix message ordering — newest at bottom, oldest at top
-* remove inline editing for pending messages — plain text with (pending) tag only
-* Remove Offline tab; show pending messages inline with in-place editing
-* Fix memory leaks, threading UB, logic errors, and deprecated API usage
-* Add build script, linter config, and dev toolchain
-* Add ARCHITECTURE.md overview
-* Plug heap-memory leaks in QMessageBox dialogs
+* pending messages: show plain text with (pending) tag and remove Offline tab; inline editing removed
 * Set ECIES and ED25519 as default sigtype/encryption
 * Add support for optional web page to display user profile at .b32 address
 * Remove insecure DSA_SHA1 from Signature Types
-* Add ECIES (Ratchet) encryption type to new profiles (UI option coming soon!)
+* Add ECIES (Ratchet) encryption type to new profiles
 
 ## January, 2026
 

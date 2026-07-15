@@ -133,6 +133,11 @@ enum MESSAGES_TAGS {
   // Protocolversion >= 0.6
   AVATARIMAGE_CHANGED,
   //-----------------------
+  // Protocolversion >= 0.7
+  FILE_OFFER,
+  FILE_OFFER_ACCEPTED,
+  FILE_OFFER_REJECTED,
+  //-----------------------
 
 };
 

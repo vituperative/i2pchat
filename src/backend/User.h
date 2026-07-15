@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QMap>
 #include <QStringList>
 #include <QtGlobal>
 #include <QtGui>
@@ -84,6 +85,7 @@ public:
   bool getAutoDownloadEnabled() const { return mAutoDownloadEnabled; };
   const QString getOriginalB32Address() const { return mOriginalB32Address; };
   const QStringList getUnsentedMessages() const { return mUnsentedMessages; };
+  const QStringList getUnsentedFileOffers() const { return mUnsentedFileOffers; };
 
   void setConnectionStatus(CONNECTIONTOUSER Status);
   void setOnlineState(const ONLINESTATE newState);
@@ -103,14 +105,22 @@ public:
   void setReplaceB32WithB64(QString b64Dest);
   void setAvatarImage(QByteArray &avatarImage);
   void setUnsentedMessages(QStringList &newMessages);
+  void setUnsentedFileOffers(const QStringList &newOffers);
+  QString takeAcceptedFileOffer(const QString &fileName);
+  void removeFileOffer(const QString &fileName);
   void setDateAdded(const QDateTime &dt) { mDateAdded = dt; }
   void setLastCommunication(const QDateTime &dt) { mLastCommunication = dt; }
   void setLastOnline(const QDateTime &dt) { mLastOnline = dt; }
 
 public slots:
   void slotSendChatMessage(const QString &Message);
+  void slotSendFileOffer(const QString &fileName, quint64 fileSize, const QString &filePath);
+  void slotSendAllFileOffers();
+  void slotIncomingFileOffer(const QString &data);
   void slotIncomingNewChatMessage(QString newMessage);
   void slotIncomingMessageFromSystem(const QString &newMessage, bool indicateWithSoundAndIcon = false);
+  void cancelPendingMessage(qint32 id);
+  void cancelPendingFileOffer(qint32 id);
 
 signals:
   void signOnlineStateChanged();
@@ -121,6 +131,7 @@ signals:
   void signUserDeleted();
   void signNewAvatarImage();
   void signSaveUnsentMessages(QString I2PDest);
+  void signPendingCanceled();
 
 private:
   CCore &mCore;
@@ -144,6 +155,9 @@ private:
   QStringList mAllMessages;
   QStringList mNewMessages;
   QStringList mUnsentedMessages;
+  qint32 mNextCancelId;
+  QMap<qint32, int> mPendingMsgIdx;
+  QMap<qint32, int> mPendingFileIdx;
 
   CReceivedInfos mReceivedUserInfos;
   bool mUseB32Dest;
@@ -159,5 +173,7 @@ private:
   CChatMessageChanger &mChatMessageChanger;
   //</Settings for the chatwindow>
   void SendAllunsendedMessages();
+
+  QStringList mUnsentedFileOffers;
 };
 #endif

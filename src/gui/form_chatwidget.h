@@ -88,6 +88,7 @@ signals:
 
 public slots:
   void slotLoadOwnAvatarImage();
+  void slotPendingCanceled();
 
 private:
   void closeEvent(QCloseEvent *e);

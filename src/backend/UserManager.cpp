@@ -50,10 +50,23 @@ void CUserManager::loadUserList() {
       this->addNewUser(NickName, I2PDest, 0, false);
 
       // load unsent ChatMessages
-      QStringList message = mUnsentMessageStorage.getMessagesForDest(I2PDest);
-      for (int i = 0; i < message.count(); i++) {
-        if (message.at(i).isEmpty() == false) {
-          getUserByI2P_Destination(I2PDest)->slotSendChatMessage(message.at(i));
+      {
+        QStringList messages = mUnsentMessageStorage.getMessagesForDest(I2PDest);
+        CUser *u = getUserByI2P_Destination(I2PDest);
+        if (u != NULL) {
+          messages.erase(std::remove_if(messages.begin(), messages.end(), [](const QString &s) { return s.isEmpty(); }),
+                         messages.end());
+          if (!messages.isEmpty())
+            u->setUnsentedMessages(messages);
+        }
+      }
+
+      // load unsent file offers
+      {
+        QStringList offers = mUnsentMessageStorage.getFileOffersForDest(I2PDest);
+        CUser *u = getUserByI2P_Destination(I2PDest);
+        if (!offers.isEmpty() && u != NULL) {
+          u->setUnsentedFileOffers(offers);
         }
       }
     } else if (temp[0] == "Invisible:") {
@@ -109,10 +122,12 @@ void CUserManager::saveUserList() {
         << "LastCommunication:\t" << mUsers.at(i)->getLastCommunication().toString(Qt::ISODate) << Qt::endl
         << "LastOnline:\t" << mUsers.at(i)->getLastOnline().toString(Qt::ISODate) << Qt::endl;
 
-    // save unsent ChatMessages for this users
+    // save unsent items for this users
     const QString Dest = mUsers.at(i)->getI2PDestination();
     const QStringList Messages = mUsers.at(i)->getUnsentedMessages();
     mUnsentMessageStorage.saveChatMessagesForDest(Dest, Messages);
+    const QStringList Offers = mUsers.at(i)->getUnsentedFileOffers();
+    mUnsentMessageStorage.saveFileOffersForDest(Dest, Offers);
   }
   out.flush();
   file.close();

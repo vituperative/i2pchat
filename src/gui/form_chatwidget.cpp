@@ -63,6 +63,8 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   connect(&user, SIGNAL(signNewAvatarImage()), this, SLOT(remoteAvatarImageChanged()));
 
+  connect(&user, SIGNAL(signPendingCanceled()), this, SLOT(slotPendingCanceled()));
+
   connect(this, SIGNAL(sendChatMessage(QString)), &user, SLOT(slotSendChatMessage(QString)));
 
   connect(cmd_SendFile, SIGNAL(clicked()), this, SLOT(newFileTransfer()));
@@ -330,18 +332,58 @@ void form_ChatWidget::newFileTransfer() {
       startFileTransfer(FilePath);
 
   } else {
-    QMessageBox *msgBox = new QMessageBox(this);
-    msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(tr("\nCannot send files when contact is offline!"));
-    msgBox->setStandardButtons(QMessageBox::Ok);
-    msgBox->setDefaultButton(QMessageBox::Ok);
-    msgBox->setWindowModality(Qt::NonModal);
-    msgBox->setAttribute(Qt::WA_DeleteOnClose);
-    msgBox->show();
+    // Queue file offer for later delivery
+    QString FilePath = QFileDialog::getOpenFileName(
+      this, tr("Open File (will be sent when contact comes online)"), ".", tr("all Files (*)"));
+    if (FilePath.isEmpty() || FilePath.endsWith("/"))
+      return;
+
+    QFileInfo fi(FilePath);
+    if (!fi.exists() || !fi.isFile())
+      return;
+
+    user.slotSendFileOffer(fi.fileName(), fi.size(), FilePath);
   }
 }
 
 void form_ChatWidget::anchorClicked(const QUrl &link) {
+  if (link.scheme() == "cancelmsg") {
+    bool ok = false;
+    qint32 id = link.toString().mid(link.scheme().length() + 1).toInt(&ok);
+    if (ok)
+      user.cancelPendingMessage(id);
+    return;
+  }
+  if (link.scheme() == "cancelfile") {
+    bool ok = false;
+    qint32 id = link.toString().mid(link.scheme().length() + 1).toInt(&ok);
+    if (ok)
+      user.cancelPendingFileOffer(id);
+    return;
+  }
+
+  if (link.scheme() == "fileoffer") {
+    // Format: fileoffer:accept:filename or fileoffer:reject:filename
+    QStringList parts = link.toString().split(":");
+    if (parts.size() < 3)
+      return;
+
+    QString action = parts.at(1);
+    QString fileName = parts.mid(2).join(":"); // Restore filename if it contained colons
+
+    if (action == "accept") {
+      // Send acceptance over chat protocol
+      Core.getProtocol()->send(FILE_OFFER_ACCEPTED, user.getI2PStreamID(), fileName.toUtf8());
+      // Show confirmation in chat
+      user.slotIncomingMessageFromSystem(
+        tr("You accepted the file \"%1\". Waiting for sender to start transfer...").arg(fileName), true);
+    } else if (action == "reject") {
+      Core.getProtocol()->send(FILE_OFFER_REJECTED, user.getI2PStreamID(), fileName.toUtf8());
+      user.slotIncomingMessageFromSystem(tr("You rejected the file \"%1\".").arg(fileName), true);
+    }
+    return;
+  }
+
   // Open browser, after clicking to link? TODO: add WARNING MESSAGE!!!
   if (link.scheme() == "http" || link.scheme() == "https")
     QDesktopServices::openUrl(link);
@@ -360,6 +402,10 @@ void form_ChatWidget::focusEvent(bool b) {
   if (user.getHaveNewUnreadMessages() == true) {
     newMessageReceived();
   }
+}
+
+void form_ChatWidget::slotPendingCanceled() {
+  addAllMessages();
 }
 
 void form_ChatWidget::getFocus() {
@@ -416,14 +462,10 @@ void form_ChatWidget::startFileTransfer(const QString &filePath) {
   if (user.getConnectionStatus() == ONLINE) {
     Core.getFileTransferManager()->addNewFileTransfer(filePath, user.getI2PDestination());
   } else {
-    QMessageBox *msgBox = new QMessageBox(this);
-    msgBox->setIcon(QMessageBox::Information);
-    msgBox->setText(tr("\nCannot send files when contact is offline!"));
-    msgBox->setStandardButtons(QMessageBox::Ok);
-    msgBox->setDefaultButton(QMessageBox::Ok);
-    msgBox->setWindowModality(Qt::NonModal);
-    msgBox->setAttribute(Qt::WA_DeleteOnClose);
-    msgBox->show();
+    QFileInfo fi(filePath);
+    if (fi.exists() && fi.isFile()) {
+      user.slotSendFileOffer(fi.fileName(), fi.size(), filePath);
+    }
   }
 }
 

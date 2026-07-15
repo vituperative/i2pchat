@@ -1,4 +1,4 @@
-# I2PChat (formerly I2P-Messenger)
+#I2PChat(formerly I2P - Messenger)
 
 End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for anonymous, serverless communication with full file transfer support.
 
@@ -25,6 +25,8 @@ End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for an
 * Copy b32 address and raw destination with right-click
 * Move contacts to top/bottom of list via right-click menu
 * Offline message queue — messages are delivered when the contact comes online
+* Offline file-offer queue — select files while offline, recipient gets Accept/Reject links on reconnect; accepted offers start a live file transfer
+* Cancel pending messages and file offers before they're sent with a click
 * Configurable tunnel length, quantity, and backup quantities
 * ECIES (Ratchet) and EdDSA signature types for new destinations
 * Customizable chat appearance (font, color, style)
@@ -50,6 +52,16 @@ sudo apt-get install -y build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev 
 sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 ```
 </details>
+
+#### Optional build tools
+
+`build.sh` checks these dynamically — only needed when using the corresponding flag:
+
+| Tool                            | Flag           | Install                                                                        |
+| ------------------------------- | -------------- | ------------------------------------------------------------------------------ |
+| `clang-format`                  | `--format`     | `apt install clang-format` / `dnf install clang-tools-extra`                   |
+| `clang-tidy`, `run-clang-tidy`  | `--tidy`       | `apt install clang-tidy` / `dnf install clang-tools-extra`                     |
+| `wget` + linuxdeploy            | `--appimage`   | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically) |
 
 #### Quick build
 

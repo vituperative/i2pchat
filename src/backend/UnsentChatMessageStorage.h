@@ -18,6 +18,10 @@ public:
 
   QStringList getMessagesForDest(const QString &I2PDest);
   void saveChatMessagesForDest(const QString &I2PDest, const QStringList &Messages);
+
+  QStringList getFileOffersForDest(const QString &I2PDest);
+  void saveFileOffersForDest(const QString &I2PDest, const QStringList &Offers);
+
   void clearStorage();
 
 private:

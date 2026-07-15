@@ -34,6 +34,7 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PD
   settings.sync();
   this->mInvisible = false;
   this->mReceivedNicknameToUserNickname = false;
+  mNextCancelId = 0;
   this->mProtocolVersion = "0.2";
   this->mMaxProtocolVersionFiletransfer = "0.1";
   this->mMinProtocolVersionFiletransfer = "0.1";
@@ -132,6 +133,208 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
   emit signOnlineStateChanged();
 }
 
+void CUser::slotSendFileOffer(const QString &fileName, quint64 fileSize, const QString &filePath) {
+  QString sizeStr;
+  QString sizeType;
+  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+  QString offerStr = fileName + "\t" + QString::number(fileSize) + "\t" + filePath;
+
+  if (mConnectionStatus == ONLINE && mCurrentOnlineState != USEROFFLINE && mCurrentOnlineState != USERINVISIBLE) {
+    // Send offer via protocol
+    QByteArray payload = (fileName + "\t" + QString::number(fileSize)).toUtf8();
+    mProtocol.send(FILE_OFFER, mI2PStream_ID, payload);
+
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
+               tr("File offer: %1 (%2 %3) <i>(sent)</i><br>").arg(fileName, sizeStr, sizeType);
+    mAllMessages.push_back(msg);
+    mNewMessages.push_back(msg);
+  } else {
+    // Queue for later
+    mUnsentedFileOffers.push_back(offerStr);
+
+    qint32 cancelId = mNextCancelId++;
+    mPendingFileIdx[cancelId] = mUnsentedFileOffers.size() - 1;
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
+               tr("File offer: %1 (%2 %3) <i>(pending)</i>"
+                  "<a href=\"cancelfile:%4\">✕</a><br>")
+                 .arg(fileName, sizeStr, sizeType, QString::number(cancelId));
+    mAllMessages.push_back(msg);
+    mNewMessages.push_back(msg);
+  }
+
+  mHaveNewUnreadMessages = true;
+  mLastCommunication = QDateTime::currentDateTime();
+  emit signNewMessageReceived();
+  emit signSaveUnsentMessages(mI2PDestination);
+}
+
+void CUser::slotSendAllFileOffers() {
+  if (mUnsentedFileOffers.isEmpty())
+    return;
+
+  for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
+    QStringList parts = mUnsentedFileOffers.at(i).split("\t");
+    if (parts.size() >= 2) {
+      QByteArray payload = (parts.at(0) + "\t" + parts.at(1)).toUtf8();
+      mProtocol.send(FILE_OFFER, mI2PStream_ID, payload);
+    }
+  }
+
+  // Strip (pending) and cancel link from existing entries
+  QString cancelPrefix = "<i>(" + tr("pending") + ")</i><a href=\"cancelfile:";
+  for (int i = 0; i < mAllMessages.size(); i++) {
+    int idx = mAllMessages[i].indexOf(cancelPrefix);
+    if (idx != -1) {
+      int end = mAllMessages[i].indexOf("\">\u2715</a>", idx);
+      if (end != -1)
+        mAllMessages[i] = mAllMessages[i].left(idx) + mAllMessages[i].mid(end + 8);
+    }
+  }
+
+  mUnsentedFileOffers.clear();
+  mPendingFileIdx.clear();
+  mHaveNewUnreadMessages = true;
+  emit signNewMessageReceived();
+  emit signSaveUnsentMessages(mI2PDestination);
+}
+
+void CUser::slotIncomingFileOffer(const QString &data) {
+  // Format: "filename\tfilesize"
+  QStringList parts = data.split("\t");
+  if (parts.size() < 2)
+    return;
+
+  QString fileName = parts.at(0);
+  quint64 fileSize = parts.at(1).toULongLong();
+
+  QString sizeStr, sizeType;
+  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+
+  QString msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
+                tr("Offers file: %1 (%2 %3) "
+                   "<a href=\"fileoffer:accept:%4\">[Accept]</a> "
+                   "<a href=\"fileoffer:reject:%4\">[Reject]</a><br>")
+                  .arg(fileName, sizeStr, sizeType, fileName.toHtmlEscaped());
+
+  mAllMessages.push_back(msg);
+  mNewMessages.push_back(msg);
+
+  mHaveNewUnreadMessages = true;
+  mHaveNewUnreadChatmessage = true;
+  mLastCommunication = QDateTime::currentDateTime();
+  emit signNewMessageReceived();
+  emit signNewMessageSound();
+  emit signOnlineStateChanged();
+}
+
+QString CUser::takeAcceptedFileOffer(const QString &fileName) {
+  for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
+    QStringList parts = mUnsentedFileOffers.at(i).split("\t");
+    if (parts.size() >= 3 && parts.at(0) == fileName) {
+      QString filePath = parts.at(2);
+      mUnsentedFileOffers.removeAt(i);
+      emit signSaveUnsentMessages(mI2PDestination);
+      return filePath;
+    }
+  }
+  return QString();
+}
+
+void CUser::removeFileOffer(const QString &fileName) {
+  for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
+    QStringList parts = mUnsentedFileOffers.at(i).split("\t");
+    if (parts.size() >= 1 && parts.at(0) == fileName) {
+      mUnsentedFileOffers.removeAt(i);
+      emit signSaveUnsentMessages(mI2PDestination);
+      break;
+    }
+  }
+}
+
+void CUser::setUnsentedFileOffers(const QStringList &newOffers) {
+  mUnsentedFileOffers = newOffers;
+  mPendingFileIdx.clear();
+  for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
+    QStringList parts = mUnsentedFileOffers.at(i).split("\t");
+    if (parts.size() < 2)
+      continue;
+    QString fileName = parts.at(0);
+    quint64 fileSize = parts.at(1).toULongLong();
+    QString sizeStr, sizeType;
+    mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+    qint32 cancelId = mNextCancelId++;
+    mPendingFileIdx[cancelId] = i;
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
+               tr("File offer: %1 (%2 %3) <i>(pending)</i>"
+                  "<a href=\"cancelfile:%4\">✕</a><br>")
+                 .arg(fileName, sizeStr, sizeType, QString::number(cancelId));
+    mAllMessages.push_back(msg);
+    mNewMessages.push_back(msg);
+  }
+  emit signSaveUnsentMessages(mI2PDestination);
+}
+
+void CUser::cancelPendingMessage(qint32 id) {
+  if (!mPendingMsgIdx.contains(id))
+    return;
+  int idx = mPendingMsgIdx[id];
+  if (idx >= 0 && idx < mUnsentedMessages.size())
+    mUnsentedMessages.removeAt(idx);
+
+  QString cancelLink = QString("cancelmsg:%1").arg(id);
+  for (int i = mAllMessages.size() - 1; i >= 0; i--) {
+    if (mAllMessages[i].contains(cancelLink)) {
+      mAllMessages.removeAt(i);
+      break;
+    }
+  }
+  for (int i = mNewMessages.size() - 1; i >= 0; i--) {
+    if (mNewMessages[i].contains(cancelLink)) {
+      mNewMessages.removeAt(i);
+      break;
+    }
+  }
+  mPendingMsgIdx.remove(id);
+  // Shift indices for remaining entries
+  QList<qint32> keys = mPendingMsgIdx.keys();
+  for (qint32 k : keys) {
+    if (mPendingMsgIdx[k] > idx)
+      mPendingMsgIdx[k]--;
+  }
+  emit signSaveUnsentMessages(mI2PDestination);
+  emit signPendingCanceled();
+}
+
+void CUser::cancelPendingFileOffer(qint32 id) {
+  if (!mPendingFileIdx.contains(id))
+    return;
+  int idx = mPendingFileIdx[id];
+  if (idx >= 0 && idx < mUnsentedFileOffers.size())
+    mUnsentedFileOffers.removeAt(idx);
+
+  QString cancelLink = QString("cancelfile:%1").arg(id);
+  for (int i = mAllMessages.size() - 1; i >= 0; i--) {
+    if (mAllMessages[i].contains(cancelLink)) {
+      mAllMessages.removeAt(i);
+      break;
+    }
+  }
+  for (int i = mNewMessages.size() - 1; i >= 0; i--) {
+    if (mNewMessages[i].contains(cancelLink)) {
+      mNewMessages.removeAt(i);
+      break;
+    }
+  }
+  mPendingFileIdx.remove(id);
+  QList<qint32> keys = mPendingFileIdx.keys();
+  for (qint32 k : keys) {
+    if (mPendingFileIdx[k] > idx)
+      mPendingFileIdx[k]--;
+  }
+  emit signSaveUnsentMessages(mI2PDestination);
+  emit signPendingCanceled();
+}
+
 void CUser::slotSendChatMessage(const QString &Message) {
   using namespace PROTOCOL_TAGS;
   QString Nickname;
@@ -163,11 +366,13 @@ void CUser::slotSendChatMessage(const QString &Message) {
     else
       Nickname = mCore.getUserInfos().Nickname;
 
+    qint32 cancelId = mNextCancelId++;
     auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + Message + " <i>(" +
-               tr("pending") + ")</i><br>";
+               tr("pending") + ")</i><a href=\"cancelmsg:" + QString::number(cancelId) + "\">✕</a><br>";
 
     this->mAllMessages.push_back(msg);
     this->mNewMessages.push_back(msg);
+    mPendingMsgIdx[cancelId] = mUnsentedMessages.size() - 1;
     mHaveNewUnreadMessages = true;
     mLastCommunication = QDateTime::currentDateTime();
     emit signNewMessageReceived();
@@ -184,14 +389,28 @@ const QStringList &CUser::getAllChatMessages() {
 }
 void CUser::SendAllunsendedMessages() {
   using namespace PROTOCOL_TAGS;
-  if (mUnsentedMessages.empty())
-    return;
 
-  for (int i = 0; i < mUnsentedMessages.count(); i++)
-    mProtocol.send(CHATMESSAGE, mI2PStream_ID, mUnsentedMessages.at(i));
+  // Send queued text messages
+  if (!mUnsentedMessages.empty()) {
+    for (int i = 0; i < mUnsentedMessages.count(); i++)
+      mProtocol.send(CHATMESSAGE, mI2PStream_ID, mUnsentedMessages.at(i));
+    mUnsentedMessages.clear();
+    mPendingMsgIdx.clear();
+    // Strip (pending) and cancel link from chat entries
+    for (int i = 0; i < mAllMessages.size(); i++) {
+      int idx = mAllMessages[i].indexOf(" <i>(" + tr("pending") + ")</i><a href=\"cancelmsg:");
+      if (idx != -1) {
+        int end = mAllMessages[i].indexOf("\">✕</a>", idx);
+        if (end != -1)
+          mAllMessages[i] = mAllMessages[i].left(idx) + "<br>";
+      }
+    }
+    mNewMessages.clear();
+    slotIncomingMessageFromSystem("All previously unsent messages have been sent.", true);
+  }
 
-  mUnsentedMessages.clear();
-  slotIncomingMessageFromSystem("All previously unsent messages have been sent.", true);
+  // Send queued file offers
+  slotSendAllFileOffers();
 }
 
 void CUser::setClientName(QString Name) {
@@ -438,5 +657,19 @@ void CUser::setAvatarImage(QByteArray &avatarImage) {
 
 void CUser::setUnsentedMessages(QStringList &newMessages) {
   mUnsentedMessages = newMessages;
+  mPendingMsgIdx.clear();
+  for (int i = 0; i < mUnsentedMessages.count(); i++) {
+    qint32 cancelId = mNextCancelId++;
+    mPendingMsgIdx[cancelId] = i;
+    QString Nickname;
+    if (mCore.getUserInfos().Nickname.isEmpty())
+      Nickname = tr("Me ");
+    else
+      Nickname = mCore.getUserInfos().Nickname;
+    auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + Nickname + ":" + mUnsentedMessages.at(i) +
+               " <i>(" + tr("pending") + ")</i><a href=\"cancelmsg:" + QString::number(cancelId) + "\">✕</a><br>";
+    mAllMessages.push_back(msg);
+    mNewMessages.push_back(msg);
+  }
   emit signSaveUnsentMessages(mI2PDestination);
 }

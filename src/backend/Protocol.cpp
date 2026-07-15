@@ -47,7 +47,8 @@ void CProtocol::slotInputKnown(const qint32 ID, const QByteArray &Data) {
              ProtocolInfoTag == "0010" || ProtocolInfoTag == "0011" || ProtocolInfoTag == "0012" ||
              ProtocolInfoTag == "0013" || ProtocolInfoTag == "0014" || ProtocolInfoTag == "0015" ||
              ProtocolInfoTag == "0016" || ProtocolInfoTag == "0017" || ProtocolInfoTag == "0018" ||
-             ProtocolInfoTag == "0019") {
+             ProtocolInfoTag == "0019" || ProtocolInfoTag == "0020" || ProtocolInfoTag == "0021" ||
+             ProtocolInfoTag == "0022") {
     dispatchKnownMessage(ID, Data, ProtocolInfoTag);
   } else {
     qWarning() << "File\t" << __FILE__ << Qt::endl
@@ -235,6 +236,18 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QByteArray Data) 
     ProtocolInfoTag = "0019";
     break;
   }
+  case FILE_OFFER: {
+    ProtocolInfoTag = "0020";
+    break;
+  }
+  case FILE_OFFER_ACCEPTED: {
+    ProtocolInfoTag = "0021";
+    break;
+  }
+  case FILE_OFFER_REJECTED: {
+    ProtocolInfoTag = "0022";
+    break;
+  }
   default: {
     qCritical() << "File\t" << __FILE__ << Qt::endl
                 << "Line:\t" << __LINE__ << Qt::endl
@@ -370,10 +383,10 @@ void CProtocol::dispatchKnownMessage(const qint32 ID, const QByteArray &Data, co
   }
 
   // Protocol-level handlers (need mCore access)
-  using ProtoFn = void (*)(CProtocol &, qint32);
+  using ProtoFn = void (*)(CProtocol &, qint32, const QByteArray &);
   static const QHash<QString, ProtoFn> protoHandlers = {
     {"0015",
-     [](CProtocol &p, qint32 id) {
+     [](CProtocol &p, qint32 id, const QByteArray &) {
        CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
        if (u != NULL) {
          p.mCore.deletePacketManagerByID(id);
@@ -383,7 +396,7 @@ void CProtocol::dispatchKnownMessage(const qint32 ID, const QByteArray &Data, co
        }
      }},
     {"0016",
-     [](CProtocol &p, qint32 id) {
+     [](CProtocol &p, qint32 id, const QByteArray &) {
        CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
        if (u != NULL) {
          u->setOnlineState(USERBLOCKEDYOU);
@@ -393,12 +406,42 @@ void CProtocol::dispatchKnownMessage(const qint32 ID, const QByteArray &Data, co
            p.mCore.getConnectionManager()->doDestroyStreamObjectByID(id);
        }
      }},
-    {"0019", [](CProtocol &p, qint32 id) { p.send(GET_AVATARIMAGE, id); }},
+    {"0020",
+     [](CProtocol &p, qint32 id, const QByteArray &d) {
+       // FILE_OFFER — forward to user handler for display
+       CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
+       if (u != NULL) {
+         u->slotIncomingFileOffer(QString::fromUtf8(d.mid(4)));
+       }
+     }},
+    {"0019", [](CProtocol &p, qint32 id, const QByteArray &) { p.send(GET_AVATARIMAGE, id); }},
+    {"0021",
+     [](CProtocol &p, qint32 id, const QByteArray &d) {
+       // FILE_OFFER_ACCEPTED — recipient accepted; start the file transfer
+       QString fileName = QString::fromUtf8(d.mid(4));
+       CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
+       if (u == NULL)
+         return;
+       QString filePath = u->takeAcceptedFileOffer(fileName);
+       if (!filePath.isEmpty()) {
+         p.mCore.getFileTransferManager()->addNewFileTransfer(filePath, u->getI2PDestination());
+       }
+     }},
+    {"0022",
+     [](CProtocol &p, qint32 id, const QByteArray &d) {
+       // FILE_OFFER_REJECTED — recipient rejected
+       QString fileName = QString::fromUtf8(d.mid(4));
+       CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
+       if (u != NULL) {
+         u->slotIncomingMessageFromSystem(u->tr("File offer for \"%1\" was rejected by the recipient.").arg(fileName));
+         u->removeFileOffer(fileName);
+       }
+     }},
   };
 
   auto it2 = protoHandlers.constFind(tag);
   if (it2 != protoHandlers.constEnd())
-    it2.value()(*this, ID);
+    it2.value()(*this, ID, Data);
 }
 
 // ---- extracted protocol first-packet handlers ----
