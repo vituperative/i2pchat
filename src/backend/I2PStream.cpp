@@ -21,7 +21,7 @@
 
 #include <utility>
 
-const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.1\n";
+const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.3\n";
 const int CONNECTIONTIMEOUT = 60 * 1000;
 
 CI2PStream::CI2PStream(QString mSamHost,
