@@ -73,6 +73,8 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   connect(message, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
+  setAcceptDrops(true);
+
   chat->setOpenLinks(false);
 
   mCurrentFont = user.getTextFont();
@@ -319,15 +321,13 @@ void form_ChatWidget::changeWindowsTitle() {
 void form_ChatWidget::newFileTransfer() {
   if (user.getConnectionStatus() == ONLINE) {
     QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("all Files (*)"));
-    QString Destination = user.getI2PDestination();
 
     if (FilePath.endsWith("/") == true) {
-      // only a directory ,- dont send it
       return;
     }
 
     if (!FilePath.isEmpty())
-      Core.getFileTransferManager()->addNewFileTransfer(FilePath, Destination);
+      startFileTransfer(FilePath);
 
   } else {
     QMessageBox *msgBox = new QMessageBox(this);
@@ -385,6 +385,46 @@ void form_ChatWidget::setItalic(bool t) {
   message->setCurrentFont(mCurrentFont);
   message->setFont(mCurrentFont);
   message->setFocus();
+}
+
+void form_ChatWidget::dragEnterEvent(QDragEnterEvent *event) {
+  if (event->mimeData() && event->mimeData()->hasUrls()) {
+    event->acceptProposedAction();
+  }
+}
+
+void form_ChatWidget::dropEvent(QDropEvent *event) {
+  if (!event->mimeData() || !event->mimeData()->hasUrls())
+    return;
+
+  const auto urls = event->mimeData()->urls();
+  if (urls.isEmpty())
+    return;
+
+  QString filePath = urls.first().toLocalFile();
+  if (filePath.isEmpty())
+    return;
+
+  QFileInfo fi(filePath);
+  if (!fi.exists() || !fi.isFile())
+    return;
+
+  startFileTransfer(filePath);
+}
+
+void form_ChatWidget::startFileTransfer(const QString &filePath) {
+  if (user.getConnectionStatus() == ONLINE) {
+    Core.getFileTransferManager()->addNewFileTransfer(filePath, user.getI2PDestination());
+  } else {
+    QMessageBox *msgBox = new QMessageBox(this);
+    msgBox->setIcon(QMessageBox::Information);
+    msgBox->setText(tr("\nCannot send files when contact is offline!"));
+    msgBox->setStandardButtons(QMessageBox::Ok);
+    msgBox->setDefaultButton(QMessageBox::Ok);
+    msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
+    msgBox->show();
+  }
 }
 
 form_ChatWidget::~form_ChatWidget() {}

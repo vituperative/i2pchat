@@ -29,16 +29,21 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QColorDialog>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QFocusEvent>
 #include <QFontDialog>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QMouseEvent>
 #include <QPalette>
 #include <QPushButton>
 #include <QScreen>
 #include <QScrollBar>
 #include <QTextBrowser>
+#include <QUrl>
 #include <Qt>
 #include <QtGui>
 
@@ -68,7 +73,12 @@ public:
   form_ChatWidget(const form_ChatWidget &) = delete;
   form_ChatWidget &operator=(const form_ChatWidget &) = delete;
 
+  void startFileTransfer(const QString &filePath);
   void getFocus();
+
+protected:
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dropEvent(QDropEvent *event);
 
 private slots:
   void sendMessageSignal();
