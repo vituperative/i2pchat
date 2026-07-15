@@ -94,3 +94,38 @@ jobs:
           files: dist/I2PChat.exe
           name: I2PChat ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
+
+  build-macos:
+    runs-on: macos-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-linux
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt5
+        run: |
+          brew update > /dev/null
+          brew install qt@5
+          echo "/opt/homebrew/opt/qt@5/bin" >> $GITHUB_PATH
+
+      - name: Build
+        run: |
+          mkdir -p dist
+          qmake I2PChat.pro "CONFIG += release" DESTDIR=dist
+          make -j$(sysctl -n hw.logicalcpu)
+
+      - name: Bundle .app
+        run: macdeployqt dist/I2PChat.app -verbose=2
+
+      - name: Upload binary (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: I2PChat-macos
+          path: dist/I2PChat.app
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/I2PChat.app
+          name: I2PChat ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
