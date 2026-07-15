@@ -28,6 +28,8 @@
 #include "UserManager.h"
 
 #include <QApplication>
+#include <QDir>
+#include <QFileInfoList>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -237,6 +239,11 @@ QString CCore::calcSessionOptionString() const {
 
 void CCore::init() {
   using namespace SESSION_ENUMS;
+
+  // Clean up transient chat previews from previous session
+  QDir tmpDir("/tmp/i2pchat");
+  if (tmpDir.exists())
+    tmpDir.removeRecursively();
 
   qDebug() << "CCore::init() called";
   this->mMyDestination = "";
