@@ -21,6 +21,7 @@
 #define FILETRANSFERSEND_H
 #include "ConnectionManager.h"
 #include "I2PStream.h"
+
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QtGlobal>
@@ -44,8 +45,9 @@ const double MAXPROTOCOLVERSION_D = 0.3;
 //+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
-#define NORMPACKETSIZE 32768    // Increased from 4096 to 32KB
-#define MAXPACKETSIZE 262144    // Increased from 65536 to 256KB
+#define NORMPACKETSIZE 32768           // Increased from 4096 to 32KB
+#define MAXPACKETSIZE 262144           // Increased from 65536 to 256KB
+#define SEND_WINDOW 4                  // Chunks to send before yielding to event loop
 #define AVERAGETRANSFERSPEEDPERIOD 500 // 0.5 sec for faster updates
 
 class CCore;
@@ -74,9 +76,7 @@ public:
   bool getAlreadyTransferAccepted() { return mFileTransferAccepted; };
   bool getIsTransferring() const;
   bool getIsTransferComplete() { return mAlreadyFinished; };
-  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
-                                     QString &outType,
-                                     bool addStoOutType = true);
+  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber, QString &outType, bool addStoOutType = true);
 public slots:
   void slotAbbortFileSend();
 

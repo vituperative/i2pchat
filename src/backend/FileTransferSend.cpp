@@ -225,7 +225,7 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, const QByteArray &t) {
         CurrentPacket.remove('\n');
         mRemoteReceivedSize += CurrentPacket.toInt();
         emit signAlreadySentSizeChanged(mRemoteReceivedSize);
-        if ((mAlreadySentSize - mRemoteReceivedSize) <= 1024) {
+        if ((mAlreadySentSize - mRemoteReceivedSize) <= mCurrentPacketSize) {
           SendFile_v0dot3();
         }
       }
@@ -264,13 +264,19 @@ void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
 }
 
 void CFileTransferSend::SendFile_v0dot3() {
-  QByteArray Buffer;
-
-  // Use larger packet sizes for better performance
-  Buffer = mFileForSend.read(mCurrentPacketSize);
-  mAlreadySentSize += Buffer.length();
-
-  mStream->operator<<(Buffer);
+  // Send multiple chunks per call to keep the streaming pipeline full.
+  // The streaming lib handles reliability/ordering — the per-chunk ack from
+  // the receiver is only used for progress tracking, not for flow control.
+  int sentChunks = 0;
+  while (mAlreadySentSize < mFileSize && sentChunks < SEND_WINDOW) {
+    QByteArray Buffer = mFileForSend.read(mCurrentPacketSize);
+    if (Buffer.isEmpty())
+      break;
+    mAlreadySentSize += Buffer.length();
+    mStream->operator<<(Buffer);
+    emit signAlreadySentSizeChanged(mAlreadySentSize);
+    ++sentChunks;
+  }
 
   if (mAlreadySentSize == mFileSize && mAlreadyFinished == false) {
     emit signFileTransferFinishedOK();
