@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=I2PChat
+Comment=End-to-end encrypted peer-to-peer messenger over I2P
+Exec=I2PChat
+Icon=i2pchat
+Categories=Network;InstantMessaging;
+Terminal=false

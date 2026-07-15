@@ -20,7 +20,8 @@ End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for an
 * Emoticon support with punctuation-boundary detection
 * Automatic URL linking in chat messages
 * Optional b32.i2p web profile page with avatar, bio, and interests
-* File transfer with per-user auto-download configuration
+* File transfer with per-user auto-download configuration and pipelined transfers
+* Drag-and-drop image upload with inline display
 * Copy b32 address and raw destination with right-click
 * Move contacts to top/bottom of list via right-click menu
 * Offline message queue — messages are delivered when the contact comes online
@@ -56,7 +57,7 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 bash build.sh
 ```
 
-Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting).
+Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` to build a portable AppImage).
 
 #### Manual compilation
 
@@ -67,11 +68,13 @@ make -j$(nproc)
 
 ## Downloads
 
-* [Latest CI build (Linux)](https://github.com/vituperative/i2pchat/actions/workflows/build.yml)
+* [CI builds (all platforms)](https://github.com/vituperative/i2pchat/actions/workflows/build.yml) — Linux, Windows, macOS
 
 ## Running
 
-On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
+On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Run `bash build.sh --appimage` to produce a portable AppImage at `dist/I2PChat-x86_64.AppImage`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
+
+On macOS, the CI produces a bundled `.app` via `macdeployqt`. Run it by double-clicking `I2PChat.app`.
 
 * Enable the SAM application bridge in your router: Java I2P via [Client Configuration](http://127.0.0.1:7657/configclients), or i2pd via `i2pd.conf`'s `[SAM]` section.
 * Select **Online** from the dropdown menu on the main window. Your unique I2P destination is created automatically on first SAM connection.

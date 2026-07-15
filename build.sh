@@ -16,6 +16,7 @@ CLEAN=false
 FORMAT=false
 TIDY=false
 BUMP=false
+APPIMAGE=false
 JOBS=$(nproc)
 
 usage() {
@@ -25,6 +26,7 @@ usage() {
     echo "  --clean       Clean previous build artifacts before building"
     echo "  --format      Run clang-format (auto-fix sources)"
     echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
+    echo "  --appimage    Build portable AppImage (Linux only)"
     echo "  --bump        Bump patch version, update Core.h and create git tag"
     echo "  -j N          Use N parallel jobs (default: all cores)"
     echo "  -h, --help    Show this help"
@@ -36,6 +38,7 @@ while [[ $# -gt 0 ]]; do
     --clean) CLEAN=true ;;
     --format) FORMAT=true ;;
     --tidy) TIDY=true ;;
+    --appimage) APPIMAGE=true ;;
     --bump) BUMP=true ;;
     -j) JOBS="$2"; shift ;;
     -h|--help) usage ;;
@@ -62,9 +65,10 @@ BUILD_DIR="/tmp/build-i2pchat"
 DIST_DIR="$ROOT/dist"
 
 # --- dependency check ---
-DEPS=(g++ qmake make bear compiledb pkg-config)
+DEPS=(g++ qmake make bear compiledb pkg-config file)
 if $FORMAT; then DEPS+=(clang-format); fi
 if $TIDY; then DEPS+=(clang-tidy run-clang-tidy); fi
+if $APPIMAGE; then DEPS+=(wget); fi
 MISSING=()
 for dep in "${DEPS[@]}"; do
   command -v "$dep" &>/dev/null || MISSING+=("$dep")
@@ -83,6 +87,7 @@ BUILT_SOURCES=($(sed -n '/^SOURCES/,/^HEADERS/p' I2PChat.pro \
 TOTAL_STEPS=2
 if $FORMAT; then ((TOTAL_STEPS++)); fi
 if $TIDY; then ((TOTAL_STEPS++)); fi
+if $APPIMAGE; then ((TOTAL_STEPS++)); fi
 CUR_STEP=0
 
 next_step() {
@@ -146,3 +151,40 @@ echo -e "  ${GREEN}BUILD SUCCESSFUL${NC}"
 printf "     %-10s %s\n" "Binary:"    "${DIST_DIR}/I2PChat"
 printf "     %-10s %s\n" "Size:"      "${FILESIZE} bytes"
 printf "     %-10s %s\n" "Completed:" "$(date '+%Y-%m-%d %H:%M:%S') ($((SECONDS - SCRIPT_START))s)"
+
+# --- AppImage ---
+if $APPIMAGE; then
+next_step "Creating portable AppImage..."
+LINUXDEPLOY="$BUILD_DIR/linuxdeploy-x86_64.AppImage"
+PLUGIN_QT="$BUILD_DIR/linuxdeploy-plugin-qt-x86_64.AppImage"
+
+if [ ! -f "$LINUXDEPLOY" ]; then
+  wget -q "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage" -O "$LINUXDEPLOY"
+  chmod +x "$LINUXDEPLOY"
+fi
+if [ ! -f "$PLUGIN_QT" ]; then
+  wget -q "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage" -O "$PLUGIN_QT"
+  chmod +x "$PLUGIN_QT"
+fi
+
+APPDIR="$BUILD_DIR/AppDir"
+rm -rf "$APPDIR"
+mkdir -p "$APPDIR/usr/bin"
+mkdir -p "$APPDIR/usr/share/applications"
+mkdir -p "$APPDIR/usr/share/icons/hicolor/scalable/apps"
+
+cp "$DIST_DIR/I2PChat" "$APPDIR/usr/bin/"
+cp "$ROOT/packaging/I2PChat.desktop" "$APPDIR/usr/share/applications/"
+cp "$ROOT/src/gui/icons/avatar.svg" "$APPDIR/usr/share/icons/hicolor/scalable/apps/i2pchat.svg"
+
+export APPIMAGE_EXTRACT_AND_RUN=1
+export LINUXDEPLOY_OUTPUT_VERSION=
+
+"$LINUXDEPLOY" --appdir "$APPDIR" --plugin qt --output appimage 2>&1 || true
+APPIMAGE_PATH=$(ls I2PChat-*.AppImage 2>/dev/null | head -1 || true)
+if [ -n "$APPIMAGE_PATH" ]; then
+  mv "$APPIMAGE_PATH" "$DIST_DIR/"
+  APPIMAGE_SIZE=$(stat --format=%s "$DIST_DIR/$(basename "$APPIMAGE_PATH")" 2>/dev/null || stat -f%z "$DIST_DIR/$(basename "$APPIMAGE_PATH")" 2>/dev/null)
+  printf "     %-10s %s\n" "AppImage:" "$DIST_DIR/$(basename "$APPIMAGE_PATH") ($(numfmt --to=iec $APPIMAGE_SIZE 2>/dev/null || echo "$APPIMAGE_SIZE bytes"))"
+fi
+fi
