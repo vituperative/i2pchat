@@ -160,13 +160,13 @@ void CFileTransferManager::addNewFileReceive(qint32 ID,
                                             .arg(ProtocolVersion)
                                             .arg(FileTransferProtocol::MAXPROTOCOLVERSION)
                                             .arg(FileName));
-    }
 
-    if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
-        this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
-      qCritical() << "File is already in the transfer queue";
-      throw std::runtime_error("File is already in the transfer queue");
-      return;
+      if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
+          this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
+        qCritical() << "File is already in the transfer queue";
+        throw std::runtime_error("File is already in the transfer queue");
+        return;
+      }
     }
 
     // abort the Filereceive
