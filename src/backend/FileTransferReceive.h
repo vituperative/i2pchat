@@ -1,26 +1,10 @@
-/***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger                                   *
- *   Messenger-Dev@I2P-Messenger                                           *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #ifndef FILETRANSFER_H
 #define FILETRANSFER_H
 
 #include "I2PStream.h"
+
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QtGui>
@@ -58,9 +42,7 @@ public:
 
   bool checkIfRequestAccepted() { return mRequestAccepted; };
 
-  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber,
-                                     QString &outType,
-                                     bool addStoOutType = true);
+  void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber, QString &outType, bool addStoOutType = true);
 
 public slots:
   void slotAbbortFileReceive();
@@ -94,7 +76,7 @@ private:
   QTimer mTimerForActAverageTransferSpeed;
   QElapsedTimer mTimer;
   CConnectionManager *mConnectionManager;
-  
+
   // Performance improvements
   QByteArray mWriteBuffer;
   static const qint64 BUFFER_SIZE = 1024 * 1024; // 1MB buffer

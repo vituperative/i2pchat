@@ -1,37 +1,23 @@
-/***************************************************************************
- *   Copyright (C) 2008 by I2P-Messenger                                   *
- *   Messenger-Dev@I2P-Messenger                                           *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #ifndef SESSIONCONTROLLER_H
 #define SESSIONCONTROLLER_H
+
+#include "I2PSamMessageAnalyser.h"
 
 #include <QSocketNotifier>
 #include <QTcpSocket>
 #include <QTimer>
 #include <QtGui>
 
-#include "I2PSamMessageAnalyser.h"
-
 class CSessionController : public QObject {
   Q_OBJECT
 public:
-  CSessionController(QString SamHost, QString SamPort, QString BridgeName,
-                     QString SamPrivKey, QString ConfigPath,
+  CSessionController(QString SamHost,
+                     QString SamPort,
+                     QString BridgeName,
+                     QString SamPrivKey,
+                     QString ConfigPath,
                      QString SessionOptions = "");
 
   ~CSessionController();
@@ -49,15 +35,16 @@ signals:
   void signSessionStreamStatusOK(bool Status);
   void signReconnectAttempt();
   void signNamingReplyReceived(const SAM_Message_Types::RESULT result,
-                               QString Name, QString Value = "",
+                               QString Name,
+                               QString Value = "",
                                QString Message = "");
   void signNewSamPrivKeyGenerated(const QString SamPrivKey);
 
- private slots:
-   void slotConnected();
-   void slotDisconnected();
-   void slotReadFromSocket();
-   void slotReconnectTimeout();
+private slots:
+  void slotConnected();
+  void slotDisconnected();
+  void slotReadFromSocket();
+  void slotReconnectTimeout();
 
 private:
   void doSessionCreate();
@@ -69,18 +56,17 @@ private:
   const QString mConfigPath;
   const QString mSessionOptions;
 
-   QTcpSocket mTcpSocket;
-   CI2PSamMessageAnalyser *mAnalyser;
-   QByteArray *mIncomingPackets;
-   QTimer *mReconnectTimer;
+  QTcpSocket mTcpSocket;
+  CI2PSamMessageAnalyser *mAnalyser;
+  QByteArray *mIncomingPackets;
+  QTimer *mReconnectTimer;
 
-   bool mHandshakeSuccessful;
-   bool mSessionWasSuccesfullCreated;
-   bool mDoneDisconnect;
+  bool mHandshakeSuccessful;
+  bool mSessionWasSuccesfullCreated;
+  bool mDoneDisconnect;
 
   inline void ConnectionReadyCheck() {
-    if (mHandshakeSuccessful == false ||
-        mSessionWasSuccesfullCreated == false ||
+    if (mHandshakeSuccessful == false || mSessionWasSuccesfullCreated == false ||
         mTcpSocket.state() != QAbstractSocket::ConnectedState)
       return;
   }

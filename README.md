@@ -84,4 +84,4 @@ See [docs/CHANGELOG.md](docs/CHANGELOG.md).
 
 ## License
 
-Licensed under GPLv2.
+Licensed under AGPL-3.0-or-later. Originally forked from [I2P-Messenger](http://www.i2p-messenger.de/) (GPL-2.0-or-later).
