@@ -1,5 +1,7 @@
 #include "TextEmotionChanger.h"
 
+#include <QRegularExpression>
+
 CTextEmotionChanger *CTextEmotionChanger::instanz = NULL;
 
 CTextEmotionChanger *CTextEmotionChanger::exemplar() {
@@ -134,11 +136,11 @@ void CTextEmotionChanger::setEmoticonPath(const QString &path) {
       for (int i = 0; i < emoticonCount; i++) {
         if (emoticon.tagName() == "emoticon") {
           QString regexp = "(^";
-          regexp += QRegExp::escape(emoticon.attribute("file"));
+          regexp += QRegularExpression::escape(emoticon.attribute("file"));
           regexp += "\\.\\w+$)|(^";
-          regexp += QRegExp::escape(emoticon.attribute("file"));
+          regexp += QRegularExpression::escape(emoticon.attribute("file"));
           regexp += "$)";
-          QStringList fileName = fileList.filter(QRegExp(regexp));
+          QStringList fileName = fileList.filter(QRegularExpression(regexp));
           if (!fileName.isEmpty()) {
             QStringList strings;
             QPixmap tmp;

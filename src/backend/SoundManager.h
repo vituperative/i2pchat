@@ -4,7 +4,7 @@
 #define SOUND_MANAGER_H
 
 #include <QSettings>
-#include <QSound>
+#include <QSoundEffect>
 #include <QtGui>
 
 class CSoundManager : public QObject {
@@ -44,5 +44,6 @@ private:
   bool mEnable_eventFileReceive_Incoming;
   bool mEnable_eventFileReceive_Finished;
   bool mEnable_eventNewChatMessage;
+  QSoundEffect *mSoundEffect;
 };
 #endif

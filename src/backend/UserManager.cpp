@@ -280,7 +280,7 @@ bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PSt
   CProtocol &Protocol = *(mCore.getProtocol());
   if (!mCore.getAccessAnyoneIncoming())
     return false;
-  if (!nicknameRegExp.exactMatch(Name))
+  if (!nicknameRegExp.match(Name).hasMatch())
     Name = "NonValidNick";
 
   bool isValid = validateI2PDestination(I2PDestination);

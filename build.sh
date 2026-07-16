@@ -90,8 +90,8 @@ for dep in "${DEPS[@]}"; do
   command -v "$dep" &>/dev/null || MISSING+=("$dep")
 done
 
-if ! $WINDOWS && ! pkg-config --exists Qt5Core Qt5Widgets Qt5Network Qt5Multimedia Qt5Svg Qt5Xml 2>/dev/null; then
-  MISSING+=("Qt5 dev packages (qtbase5-dev, libqt5svg5-dev, qtmultimedia5-dev, libqt5xml5-dev)")
+if ! $WINDOWS && ! pkg-config --exists Qt6Core Qt6Widgets Qt6Network Qt6Multimedia Qt6Svg Qt6Xml 2>/dev/null; then
+  MISSING+=("Qt6 dev packages (qt6-base-dev, libqt6svg6-dev, qt6-multimedia-dev, libqt6xml6-dev)")
 fi
 
 [[ ${#MISSING[@]} -gt 0 ]] && die "Missing dependencies: ${MISSING[*]}"
@@ -99,15 +99,15 @@ fi
 if $WINDOWS; then
   MXE_DIR="$ROOT/tools/mxe"
   MXE_TARGET="x86_64-w64-mingw32.static"
-  MXE_QMAKE="$MXE_DIR/usr/bin/$MXE_TARGET-qmake-qt5"
+  MXE_QMAKE="$MXE_DIR/usr/bin/$MXE_TARGET-qmake-qt6"
 
   # Bootstrap MXE if not found via system or local
-  if [ ! -f "$MXE_QMAKE" ] && ! command -v "${MXE_TARGET}-qmake-qt5" &>/dev/null; then
+  if [ ! -f "$MXE_QMAKE" ] && ! command -v "${MXE_TARGET}-qmake-qt6" &>/dev/null; then
     if [ ! -d "$MXE_DIR" ]; then
       info "MXE not found at $MXE_DIR — cloning..."
       git clone --depth 1 https://github.com/mxe/mxe.git "$MXE_DIR"
     fi
-    info "Building MXE qt5 target (first build takes a while)..."
+    info "Building MXE qt6 target (first build takes a while)..."
     # Ensure `python` resolves (pyenv shim fails for bare `python`)
     PYTHON_REAL="$(python3 -c 'import sys; print(sys.executable)')"
     PYTHON_WRAPPER="$BUILD_DIR/mxe-python"
@@ -152,12 +152,12 @@ INTL_PC
       done
     done
     PATH="$MXE_CC_WRAPPER:$PYTHON_WRAPPER:$PATH" \
-      make qt5 MXE_TARGETS="$MXE_TARGET" JOBS="$JOBS" PYTHON=python3
+      make qt6 MXE_TARGETS="$MXE_TARGET" JOBS="$JOBS" PYTHON=python3
     popd >/dev/null
   fi
 
   if [ ! -f "$MXE_QMAKE" ]; then
-    die "MinGW Qt5 qmake not found (MXE build may have failed)"
+    die "MinGW Qt6 qmake not found (MXE build may have failed)"
   fi
 fi
 
@@ -231,7 +231,7 @@ next_step "Cross-compiling ${#BUILT_SOURCES[@]} source files for Windows..."
 if [ -n "$MXE_QMAKE" ] && [ -f "$MXE_QMAKE" ]; then
   CROSS_QMAKE="$MXE_QMAKE"
 else
-  CROSS_QMAKE="${MXE_TARGET%%.*}-qmake-qt5"
+  CROSS_QMAKE="${MXE_TARGET%%.*}-qmake-qt6"
 fi
 $CROSS_QMAKE -after "DESTDIR=$DIST_DIR/" "OBJECTS_DIR=$BUILD_DIR/obj/" "MOC_DIR=$BUILD_DIR/moc/" "RCC_DIR=$BUILD_DIR/qrc/" >/dev/null 2>&1
 PATH="$MXE_DIR/usr/bin:$PATH" make -j"$JOBS" >/dev/null 2>&1

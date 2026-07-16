@@ -665,13 +665,16 @@ void form_MainWindow::initStyle() {
   if(Style.isEmpty()==true)
   {
       //find default Style for this System
-      QRegExp regExp("Q(.*)Style");
+      QRegularExpression regExp("^Q(.*)Style$");
       Style = QApplication::style()->metaObject()->className();
 
       if (Style == QLatin1String("QMacStyle"))
           Style = QLatin1String("Macintosh (Aqua)");
-      else if (regExp.exactMatch(Style))
-          Style = regExp.cap(1);
+      else {
+          auto m = regExp.match(Style);
+          if (m.hasMatch())
+              Style = m.captured(1);
+      }
 
       //styleCombo->addItems(QStyleFactory::keys());
   }

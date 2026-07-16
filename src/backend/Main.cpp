@@ -201,7 +201,6 @@ int main(int argc, char *argv[]) {
            ".msg-sender { font-weight: bold; }\n");
 
   enableDebugLogging(configPath);
-  QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
   form_MainWindow *mainForm = new form_MainWindow(configPath);
 

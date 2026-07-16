@@ -852,7 +852,7 @@ void CCore::loadUserInfos() {
   settings.endGroup();
   settings.sync();
 
-  if (!nicknameRegExp.exactMatch(mUserInfos.Nickname)) {
+  if (!nicknameRegExp.match(mUserInfos.Nickname).hasMatch()) {
     mUserInfos.Nickname = "NonValidNick";
     emit signNicknameChanged();
   }

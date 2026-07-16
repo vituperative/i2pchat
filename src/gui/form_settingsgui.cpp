@@ -17,7 +17,6 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
   this->setAttribute(Qt::WA_DeleteOnClose, true);
 
   settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings->setIniCodec("UTF-8");
   settings->setDefaultFormat(QSettings::IniFormat);
 
   loadqss();
@@ -128,13 +127,16 @@ void form_settingsgui::loadSettings() {
     styleCombo->setCurrentIndex(styleCombo->findText(settings->value("current_Style", "").toString()));
   else {
     // find default Style for this System
-    QRegExp regExp("Q(.*)Style");
+    QRegularExpression regExp("^Q(.*)Style$");
     QString defaultStyle = QApplication::style()->metaObject()->className();
 
     if (defaultStyle == QLatin1String("QMacStyle"))
       defaultStyle = QLatin1String("Macintosh (Aqua)");
-    else if (regExp.exactMatch(defaultStyle))
-      defaultStyle = regExp.cap(1);
+    else {
+      auto m = regExp.match(defaultStyle);
+      if (m.hasMatch())
+        defaultStyle = m.captured(1);
+    }
 
     styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
   }

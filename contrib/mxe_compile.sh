@@ -5,8 +5,8 @@
 # cd mxe
 # make qtbase
 # make qtmultimedia
-# make qt5
-# // maybe one make qt5 try, but i did all
+# make qt6
+# // maybe one make qt6 try, but i did all
 # +++++++++++++++++++++++++++++++ 
 export MXE="/home/user/mxe/"
 export MXEBIN="$MXE/usr/bin/"

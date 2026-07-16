@@ -1,15 +1,15 @@
 CONFIG += qt
 
-greaterThan(QT_MAJOR_VERSION, 4): CONFIG += c++11
+CONFIG += c++17
 
 QT += network xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia core svg
+QT += widgets multimedia core svg
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++11
-QMAKE_LFLAGS   += -std=c++11
+QMAKE_CXXFLAGS += -std=c++17
+QMAKE_LFLAGS   += -std=c++17
 QMAKE_CXXFLAGS += -Wall
 # QMAKE_POST_LINK=$(STRIP) $(TARGET) // doesn't work with appveyor
 
