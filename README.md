@@ -53,6 +53,13 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 ```
 </details>
 
+<details><summary>Windows cross-compile (via MinGW-w64)</summary>
+
+`bash build.sh --windows` auto-clones [MXE](https://mxe.cc) to `tools/mxe/` and builds
+the `qt5` target on first run (static toolchain + Qt5, takes a while). Subsequent
+builds reuse the cached toolchain automatically.
+</details>
+
 #### Optional build tools
 
 `build.sh` checks these dynamically — only needed when using the corresponding flag:
@@ -62,6 +69,7 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 | `clang-format`                  | `--format`     | `apt install clang-format` / `dnf install clang-tools-extra`                   |
 | `clang-tidy`, `run-clang-tidy`  | `--tidy`       | `apt install clang-tidy` / `dnf install clang-tools-extra`                     |
 | `wget` + linuxdeploy            | `--appimage`   | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically) |
+| MXE + qt5 target                | `--windows`    | Auto-cloned to `tools/mxe/` — `build.sh --windows` handles everything          |
 
 #### Quick build
 
@@ -69,7 +77,7 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 bash build.sh
 ```
 
-Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` to build a portable AppImage).
+Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--windows` to cross-compile a Windows .exe).
 
 #### Manual compilation
 
@@ -85,6 +93,8 @@ make -j$(nproc)
 ## Running
 
 On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Run `bash build.sh --appimage` to produce a portable AppImage at `dist/I2PChat-x86_64.AppImage`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
+
+On Windows, cross-compile from Linux via `bash build.sh --windows` (requires [MXE](https://mxe.cc) with `qt5`). The `.exe` is written to `dist/I2PChat.exe`. No Windows SDK needed.
 
 On macOS, the CI produces a bundled `.app` via `macdeployqt`. Run it by double-clicking `I2PChat.app`.
 

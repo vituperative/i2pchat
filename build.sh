@@ -17,6 +17,7 @@ FORMAT=false
 TIDY=false
 BUMP=false
 APPIMAGE=false
+WINDOWS=false
 JOBS=$(nproc)
 
 usage() {
@@ -27,6 +28,7 @@ usage() {
     echo "  --format      Run clang-format (auto-fix sources)"
     echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
     echo "  --appimage    Build portable AppImage (Linux only)"
+    echo "  --windows     Cross-compile Windows .exe via MinGW-w64"
     echo "  --bump        Bump patch version, update Core.h and create git tag"
     echo "  -j N          Use N parallel jobs (default: all cores)"
     echo "  -h, --help    Show this help"
@@ -39,6 +41,7 @@ while [[ $# -gt 0 ]]; do
     --format) FORMAT=true ;;
     --tidy) TIDY=true ;;
     --appimage) APPIMAGE=true ;;
+    --windows) WINDOWS=true ;;
     --bump) BUMP=true ;;
     -j) JOBS="$2"; shift ;;
     -h|--help) usage ;;
@@ -70,6 +73,27 @@ if $FORMAT; then DEPS+=(clang-format); fi
 if $TIDY; then DEPS+=(clang-tidy run-clang-tidy); fi
 if $APPIMAGE; then DEPS+=(wget); fi
 MISSING=()
+if $WINDOWS; then
+  DEPS+=(git)
+  MXE_DIR="$ROOT/tools/mxe"
+  MXE_QMAKE="$MXE_DIR/usr/bin/x86_64-w64-mingw32.static-qmake-qt5"
+
+  # Bootstrap MXE if not found via system or local
+  if [ ! -f "$MXE_QMAKE" ] && ! command -v x86_64-w64-mingw32-qmake-qt5 &>/dev/null; then
+    if [ ! -d "$MXE_DIR" ]; then
+      info "MXE not found at $MXE_DIR — cloning..."
+      git clone --depth 1 https://github.com/mxe/mxe.git "$MXE_DIR"
+    fi
+    info "Building MXE qt5 target (first build takes a while)..."
+    pushd "$MXE_DIR" >/dev/null
+    make qt5 JOBS="$JOBS"
+    popd >/dev/null
+  fi
+
+  if [ ! -f "$MXE_QMAKE" ]; then
+    MISSING+=("MinGW Qt5 qmake (MXE build may have failed)")
+  fi
+fi
 for dep in "${DEPS[@]}"; do
   command -v "$dep" &>/dev/null || MISSING+=("$dep")
 done
@@ -88,6 +112,7 @@ TOTAL_STEPS=2
 if $FORMAT; then ((TOTAL_STEPS++)); fi
 if $TIDY; then ((TOTAL_STEPS++)); fi
 if $APPIMAGE; then ((TOTAL_STEPS++)); fi
+if $WINDOWS; then ((TOTAL_STEPS++)); fi
 CUR_STEP=0
 
 next_step() {
@@ -141,14 +166,28 @@ fi
 pass "clang-tidy clean"
 fi
 
+if $WINDOWS; then
+next_step "Cross-compiling ${#BUILT_SOURCES[@]} source files for Windows..."
+if [ -f "$MXE_QMAKE" ]; then
+  CROSS_QMAKE="$MXE_QMAKE"
+else
+  CROSS_QMAKE="x86_64-w64-mingw32-qmake-qt5"
+fi
+$CROSS_QMAKE -after "DESTDIR=$DIST_DIR/" "OBJECTS_DIR=$BUILD_DIR/obj/" "MOC_DIR=$BUILD_DIR/moc/" "RCC_DIR=$BUILD_DIR/qrc/" >/dev/null 2>&1
+make -j"$JOBS" >/dev/null 2>&1
+x86_64-w64-mingw32-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || true
+BINARY="${DIST_DIR}/I2PChat.exe"
+else
 next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
 bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
 strip "$DIST_DIR/I2PChat"
-FILESIZE=$(stat --format=%s "$DIST_DIR/I2PChat")
+BINARY="${DIST_DIR}/I2PChat"
+fi
+FILESIZE=$(stat --format=%s "$BINARY" 2>/dev/null || stat -f%z "$BINARY" 2>/dev/null)
 
 echo ""
 echo -e "  ${GREEN}BUILD SUCCESSFUL${NC}"
-printf "     %-10s %s\n" "Binary:"    "${DIST_DIR}/I2PChat"
+printf "     %-10s %s\n" "Binary:"    "$BINARY"
 printf "     %-10s %s\n" "Size:"      "${FILESIZE} bytes"
 printf "     %-10s %s\n" "Completed:" "$(date '+%Y-%m-%d %H:%M:%S') ($((SECONDS - SCRIPT_START))s)"
 
