@@ -211,6 +211,21 @@ void form_settingsgui::loadSettings() {
   comboBox_SigType->setCurrentIndex(
     comboBox_SigType->findText(settings->value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString()));
 
+  // Encryption type combo — store values as user data
+  comboBox_EncType->setItemData(0, "4");
+  comboBox_EncType->setItemData(1, "5,4");
+  comboBox_EncType->setItemData(2, "6,4");
+  comboBox_EncType->setItemData(3, "7,4");
+  {
+    QString savedEnc = settings->value("i2cp.leaseSetEncType", "6,4").toString();
+    for (int i = 0; i < comboBox_EncType->count(); i++) {
+      if (comboBox_EncType->itemData(i).toString() == savedEnc) {
+        comboBox_EncType->setCurrentIndex(i);
+        break;
+      }
+    }
+  }
+
   nonpersistdest->setChecked(settings->value("NonPersistentDestination", false).toBool());
   settings->endGroup();
 
@@ -435,6 +450,9 @@ void form_settingsgui::saveSettings() {
 
   // Signature_type
   settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());
+
+  // Encryption type
+  settings->setValue("i2cp.leaseSetEncType", comboBox_EncType->itemData(comboBox_EncType->currentIndex()).toString());
 
   settings->setValue("NonPersistentDestination", nonpersistdest->isChecked());
   settings->endGroup();

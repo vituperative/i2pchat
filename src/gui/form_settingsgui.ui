@@ -1108,130 +1108,113 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="Crypto">
-      <property name="geometry">
-       <rect>
-        <x>4</x>
-        <y>202</y>
-        <width>380</width>
-        <height>43</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>380</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>380</width>
-        <height>68</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Your existing destination will be deleted</string>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <widget class="QWidget" name="layoutWidget_9">
+      <widget class="QGroupBox" name="Crypto">
        <property name="geometry">
         <rect>
-         <x>14</x>
-         <y>12</y>
-         <width>356</width>
-         <height>23</height>
+         <x>4</x>
+         <y>202</y>
+         <width>380</width>
+         <height>43</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="Encryption">
-        <property name="horizontalSpacing">
-         <number>10</number>
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>380</width>
+         <height>68</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Your existing destination will be deleted</string>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QWidget" name="layoutWidget_9">
+        <property name="geometry">
+         <rect>
+          <x>14</x>
+          <y>12</y>
+          <width>356</width>
+          <height>23</height>
+         </rect>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="Encryption_label">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Encryption Type:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="ECIES">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>ECIES</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" alignment="Qt::AlignVCenter">
-         <widget class="QRadioButton" name="ECIES_ELG">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>ECIES + ElGamal</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <layout class="QGridLayout" name="Encryption">
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="Encryption_label">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>120</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Encryption Type:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QComboBox" name="comboBox_EncType">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>220</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>ECIES (X25519)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-512 + ECIES</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-768 + ECIES</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-1024 + ECIES</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
-     </widget>
      <widget class="QGroupBox" name="SigType">
       <property name="geometry">
        <rect>

@@ -184,17 +184,14 @@ void CUser::slotSendAllFileOffers() {
   QString cancelPrefix = "<i>(" + tr("pending") + ")</i><a href=\"cancelfile:";
   for (int i = 0; i < mAllMessages.size(); i++) {
     int idx = mAllMessages[i].indexOf(cancelPrefix);
-    if (idx != -1) {
-      int end = mAllMessages[i].indexOf("\">\u2715</a>", idx);
-      if (end != -1)
-        mAllMessages[i] = mAllMessages[i].left(idx) + mAllMessages[i].mid(end + 8);
-    }
+    if (idx != -1)
+      mAllMessages[i] = mAllMessages[i].left(idx) + "<br>";
   }
 
   mUnsentedFileOffers.clear();
   mPendingFileIdx.clear();
   mHaveNewUnreadMessages = true;
-  emit signNewMessageReceived();
+  emit signPendingCanceled();
   emit signSaveUnsentMessages(mI2PDestination);
 }
 
@@ -407,6 +404,7 @@ void CUser::SendAllunsendedMessages() {
     }
     mNewMessages.clear();
     slotIncomingMessageFromSystem("All previously unsent messages have been sent.", true);
+    emit signPendingCanceled();
   }
 
   // Send queued file offers

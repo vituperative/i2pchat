@@ -193,14 +193,11 @@ QString CCore::calcSessionOptionString() const {
   /// Maybe is fixed;
 
   // Encryption
-  // TODO: Enable in UI
-
   {
-    QStringList AllowEncTypes = {"4", "4,0", "4, 0"};
+    QStringList AllowEncTypes = {"4", "4,0", "4, 0", "5,4", "6,4", "7,4"};
 
-    // auto enc_type = settings.value("i2cp.leaseSetEncType=",
-    // "4,0").toString();
-    auto enc_type = settings.value("i2cp.leaseSetEncType=", "4").toString();
+    QString defEncType = "6,4";
+    auto enc_type = settings.value("i2cp.leaseSetEncType", defEncType).toString();
     auto encnotfound = true;
     for (int i = 0; i < AllowEncTypes.size(); ++i) {
       if (enc_type.contains(AllowEncTypes.at(i))) {
@@ -210,8 +207,7 @@ QString CCore::calcSessionOptionString() const {
       }
     }
     if (encnotfound)
-      SessionOptionString.append("i2cp.leaseSetEncType=" + settings.value("i2cp.leaseSetEncType=", "4").toString() +
-                                 " ");
+      SessionOptionString.append("i2cp.leaseSetEncType=" + defEncType + " ");
   }
 
   SessionOptionString.append("i2cp.leaseSetType=3 "); // i2pd fix
