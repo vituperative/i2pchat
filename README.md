@@ -64,12 +64,13 @@ builds reuse the cached toolchain automatically.
 
 `build.sh` checks these dynamically — only needed when using the corresponding flag:
 
-| Tool                            | Flag           | Install                                                                        |
-| ------------------------------- | -------------- | ------------------------------------------------------------------------------ |
-| `clang-format`                  | `--format`     | `apt install clang-format` / `dnf install clang-tools-extra`                   |
-| `clang-tidy`, `run-clang-tidy`  | `--tidy`       | `apt install clang-tidy` / `dnf install clang-tools-extra`                     |
-| `wget` + linuxdeploy            | `--appimage`   | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically) |
-| MXE + qt5 target                | `--windows`    | Auto-cloned to `tools/mxe/` — `build.sh --windows` handles everything          |
+| Tool                            | Flag                    | Install                                                                           |
+| ------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
+| `clang-format`                  | `--format`              | `apt install clang-format` / `dnf install clang-tools-extra`                      |
+| `clang-tidy`, `run-clang-tidy`  | `--tidy`                | `apt install clang-tidy` / `dnf install clang-tools-extra`                        |
+| `bear` or `compiledb`           | (compile_commands.json) | `apt install bear` / `pipx install compiledb` (for clang-tidy, clangd, etc.)      |
+| `wget` + linuxdeploy            | `--appimage`            | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically)    |
+| MXE + qt5 target                | `--windows`             | Auto-cloned — needs `gperf`, `libtool` + `libtool-bin` (Debian) on the host       |
 
 #### Quick build
 

@@ -74,7 +74,26 @@ if $TIDY; then DEPS+=(clang-tidy run-clang-tidy); fi
 if $APPIMAGE; then DEPS+=(wget); fi
 MISSING=()
 if $WINDOWS; then
-  DEPS+=(git)
+  DEPS+=(git gperf)
+  if ! command -v libtool &>/dev/null; then
+    if command -v libtoolize &>/dev/null; then
+      MISSING+=("libtool (try: apt install libtool-bin)")
+    else
+      MISSING+=("libtool (try: apt install libtool libtool-bin)")
+    fi
+  fi
+fi
+for dep in "${DEPS[@]}"; do
+  command -v "$dep" &>/dev/null || MISSING+=("$dep")
+done
+
+if ! $WINDOWS && ! pkg-config --exists Qt5Core Qt5Widgets Qt5Network Qt5Multimedia Qt5Svg Qt5Xml 2>/dev/null; then
+  MISSING+=("Qt5 dev packages (qtbase5-dev, libqt5svg5-dev, qtmultimedia5-dev, libqt5xml5-dev)")
+fi
+
+[[ ${#MISSING[@]} -gt 0 ]] && die "Missing dependencies: ${MISSING[*]}"
+
+if $WINDOWS; then
   MXE_DIR="$ROOT/tools/mxe"
   MXE_QMAKE="$MXE_DIR/usr/bin/x86_64-w64-mingw32.static-qmake-qt5"
 
@@ -85,24 +104,58 @@ if $WINDOWS; then
       git clone --depth 1 https://github.com/mxe/mxe.git "$MXE_DIR"
     fi
     info "Building MXE qt5 target (first build takes a while)..."
+    # Ensure `python` resolves (pyenv shim fails for bare `python`)
+    PYTHON_REAL="$(python3 -c 'import sys; print(sys.executable)')"
+    PYTHON_WRAPPER="$BUILD_DIR/mxe-python"
+    mkdir -p "$PYTHON_WRAPPER"
+    ln -sf "$PYTHON_REAL" "$PYTHON_WRAPPER/python"
     pushd "$MXE_DIR" >/dev/null
-    make qt5 JOBS="$JOBS"
+    # sccache clashes with mxe's nonetwork LD_PRELOAD (sccache calls
+    # connect() etc. which nonetwork blocks with EACCES).  Stub a
+    # pass-through sccache so meson/cmake/ninja don't use the real one.
+    MXE_CC_WRAPPER="$BUILD_DIR/mxe-cc"
+    mkdir -p "$MXE_CC_WRAPPER"
+    cat > "$MXE_CC_WRAPPER/sccache" << 'SCCACHE_STUB'
+#!/bin/bash
+exec "$@"
+SCCACHE_STUB
+    chmod +x "$MXE_CC_WRAPPER/sccache"
+    # Strip sccache refs from cmake toolchain files left by previous runs
+    find "$MXE_DIR/tmp-glib-"* -path '*/meson-private/*.cmake' \
+      -exec sed -i '/sccache/d' {} + 2>/dev/null || true
+    rm -rf "$MXE_DIR"/tmp-glib-* "$MXE_DIR"/log/glib*
+    # fontconfig's meson build links -lintl but not -liconv (needed for
+    # static).  fontconfig uses dependency('intl') without static: true,
+    # so Libs.private is ignored.  Put -liconv in Libs: unconditionally.
+    for T in i686-w64-mingw32.static x86_64-w64-mingw32.static; do
+      PCDIR="$MXE_DIR/usr/$T/lib/pkgconfig"
+      mkdir -p "$PCDIR"
+      # fontconfig queries `dependency('intl')` → looks for intl.pc,
+      # not libintl.pc.  Provide both names.
+      for pc in libintl intl; do
+        cat > "$PCDIR/$pc.pc" << 'INTL_PC'
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libintl
+Description: libintl from GNU gettext
+Version: 1.0
+Libs: -lintl -liconv
+Cflags: -I${includedir}
+INTL_PC
+      done
+    done
+    PATH="$MXE_CC_WRAPPER:$PYTHON_WRAPPER:$PATH" \
+      make qt5 JOBS="$JOBS" PYTHON=python3
     popd >/dev/null
   fi
 
   if [ ! -f "$MXE_QMAKE" ]; then
-    MISSING+=("MinGW Qt5 qmake (MXE build may have failed)")
+    die "MinGW Qt5 qmake not found (MXE build may have failed)"
   fi
 fi
-for dep in "${DEPS[@]}"; do
-  command -v "$dep" &>/dev/null || MISSING+=("$dep")
-done
-
-if ! pkg-config --exists Qt5Core Qt5Widgets Qt5Network Qt5Multimedia Qt5Svg Qt5Xml 2>/dev/null; then
-  MISSING+=("Qt5 dev packages (qtbase5-dev, libqt5svg5-dev, qtmultimedia5-dev, libqt5xml5-dev)")
-fi
-
-[[ ${#MISSING[@]} -gt 0 ]] && die "Missing dependencies: ${MISSING[*]}"
 
 # --- source list (only files that participate in the build) ---
 BUILT_SOURCES=($(sed -n '/^SOURCES/,/^HEADERS/p' I2PChat.pro \
