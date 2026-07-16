@@ -68,9 +68,9 @@ BUILD_DIR="/tmp/build-i2pchat"
 DIST_DIR="$ROOT/dist"
 
 # --- dependency check ---
-DEPS=(g++ qmake make bear compiledb pkg-config file)
+DEPS=(g++ qmake make pkg-config file)
 if $FORMAT; then DEPS+=(clang-format); fi
-if $TIDY; then DEPS+=(clang-tidy run-clang-tidy); fi
+if $TIDY; then DEPS+=(clang-tidy run-clang-tidy bear compiledb); fi
 if $APPIMAGE; then DEPS+=(wget); fi
 MISSING=()
 if $WINDOWS; then
@@ -185,9 +185,11 @@ for ui in src/gui/*.ui; do
   uic "$ui" -o "src/gui/ui_$(basename "${ui%.ui}").h"
 done
 pass "Generated $(ls src/gui/*.ui | wc -l) uic headers"
-compiledb make -n >/dev/null 2>&1
-mv compile_commands.json "$BUILD_DIR/"
-pass "compile_commands.json ready"
+if command -v compiledb &>/dev/null; then
+  compiledb make -n >/dev/null 2>&1
+  mv compile_commands.json "$BUILD_DIR/"
+  pass "compile_commands.json ready"
+fi
 
 if $FORMAT; then
 next_step "Formatting ${#BUILT_SOURCES[@]} sources with clang-format"
@@ -232,7 +234,11 @@ x86_64-w64-mingw32-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR
 BINARY="${DIST_DIR}/I2PChat.exe"
 else
 next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
-bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
+if command -v bear &>/dev/null; then
+  bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
+else
+  make -j"$JOBS" >/dev/null 2>&1
+fi
 strip "$DIST_DIR/I2PChat"
 BINARY="${DIST_DIR}/I2PChat"
 fi
