@@ -58,15 +58,40 @@ QStringList CUnsentChatMessageStorage::getFileOffersForDest(const QString &I2PDe
 }
 
 void CUnsentChatMessageStorage::saveFileOffersForDest(const QString &I2PDest, const QStringList &Offers) {
-  if (Offers.isEmpty())
-    return;
-
   QSettings settings(mFileNameWithPath, QSettings::IniFormat);
 
-  settings.beginWriteArray("FileOffers");
-  for (int i = 0; i < Offers.count(); i++) {
+  // Collect existing offers for other dests
+  QStringList otherDests, otherOffers;
+  int size = settings.beginReadArray("FileOffers");
+  for (int i = 0; i < size; i++) {
     settings.setArrayIndex(i);
-    settings.setValue(I2PDest, Offers.at(i));
+    const QStringList keys = settings.allKeys();
+    for (const QString &k : keys) {
+      if (k != I2PDest) {
+        QString val = settings.value(k).toString();
+        if (!val.isEmpty()) {
+          otherDests.append(k);
+          otherOffers.append(val);
+        }
+      }
+    }
+  }
+  settings.endArray();
+
+  settings.remove("FileOffers");
+
+  if (otherDests.isEmpty() && Offers.isEmpty())
+    return;
+
+  int idx = 0;
+  settings.beginWriteArray("FileOffers");
+  for (int i = 0; i < otherDests.size(); i++) {
+    settings.setArrayIndex(idx++);
+    settings.setValue(otherDests.at(i), otherOffers.at(i));
+  }
+  for (const QString &offer : Offers) {
+    settings.setArrayIndex(idx++);
+    settings.setValue(I2PDest, offer);
   }
   settings.endArray();
 }

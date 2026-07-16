@@ -459,6 +459,8 @@ void CUserManager::slotSaveUnsentMessageForDest(const QString &I2PDest) {
   if (theUser != NULL) {
     const QStringList Messages = theUser->getUnsentedMessages();
     mUnsentMessageStorage.saveChatMessagesForDest(I2PDest, Messages);
+    const QStringList Offers = theUser->getUnsentedFileOffers();
+    mUnsentMessageStorage.saveFileOffersForDest(I2PDest, Offers);
   } else {
     qWarning() << "File\t" << __FILE__ << Qt::endl
                << "Line:\t" << __LINE__ << Qt::endl
