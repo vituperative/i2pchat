@@ -176,7 +176,7 @@ QString CCore::calcSessionOptionString() const {
     QStringList AllowSignTypes = {
       "ECDSA_SHA256_P256", "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519", "RedDSA_SHA512_Ed25519"};
 
-    auto sign_type = settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString();
+    auto sign_type = settings.value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString();
     auto notfound = true;
     for (int i = 0; i < AllowSignTypes.size(); ++i) {
       if (sign_type.contains(AllowSignTypes.at(i))) {
@@ -748,21 +748,25 @@ void CCore::createStreamObjectForUser(CUser &User) {
   settings->endGroup();
 
   CI2PStream *t = mConnectionManager->doCreateNewStreamObject(CONNECT);
+  if (t == NULL) {
+    User.slotIncomingMessageFromSystem(
+      tr("Unable to create a new I2P stream — SAM session may not be ready or crypto types are incompatible.\n"
+         "Check your SAM bridge version and encryption type settings."));
+    return;
+  }
+
   connect(t,
           SIGNAL(signStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, const QString)),
           this,
           SLOT(slotStreamStatusReceived(const SAM_Message_Types::RESULT, const qint32, QString)));
 
   User.setI2PStreamID(t->getID());
-
-  if (t != NULL) {
-    connect(t,
-            SIGNAL(signDataReceived(const qint32, const QByteArray)),
-            mProtocol,
-            SLOT(slotInputUnknown(const qint32, const QByteArray)));
-    t->doConnect(User.getI2PDestination());
-    t->startUnlimintedReconnect(msec);
-  }
+  connect(t,
+          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+          mProtocol,
+          SLOT(slotInputUnknown(const qint32, const QByteArray)));
+  t->doConnect(User.getI2PDestination());
+  t->startUnlimintedReconnect(msec);
   settings->sync();
   delete settings;
 }

@@ -102,7 +102,7 @@ void CSessionController::slotReadFromSocket() {
           QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
           QString Signature = "SIGNATURE_TYPE=%s";
           settings.beginGroup("Network");
-          Signature.replace("%s", settings.value("Signature_Type", "EdDSA_SHA512_Ed25519").toString());
+          Signature.replace("%s", settings.value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString());
           this->doDestGenerate(Signature);
           settings.endGroup();
           settings.sync();
@@ -112,6 +112,19 @@ void CSessionController::slotReadFromSocket() {
         }
       } else {
         emit signSessionStreamStatusOK(false);
+        if (sam.result == NOVERSION) {
+          QString msg = sam.Message.isEmpty()
+                          ? tr("SAM version negotiation failed — your SAM bridge does not support protocol "
+                               "range 3.1–3.3. Check your SAM bridge version.")
+                          : tr("SAM version negotiation failed: %1").arg(sam.Message);
+          qCritical().noquote() << "SessionController: NOVERSION —" << msg;
+          emit signDebugMessages("NOVERSION — " + msg);
+        } else if (sam.result == I2P_ERROR) {
+          QString msg = sam.Message.isEmpty() ? tr("SAM handshake I2P error. Check your SAM bridge.")
+                                              : tr("SAM handshake error: %1").arg(sam.Message);
+          qCritical().noquote() << "SessionController: I2P_ERROR on HELLO —" << msg;
+          emit signDebugMessages("I2P_ERROR on HELLO — " + msg);
+        }
       }
 
       break;
