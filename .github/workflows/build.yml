@@ -75,7 +75,7 @@ jobs:
       - name: Build
         run: |
           mkdir -p dist
-          qmake I2PChat.pro "CONFIG += release" DESTDIR=dist
+          qmake-qt5 I2PChat.pro "CONFIG += release" DESTDIR=dist
           mingw32-make -j$(nproc)
 
       - name: Upload binary (artifact)
