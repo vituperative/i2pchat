@@ -133,5 +133,6 @@ private:
   QByteArray avatarImageByteArray2;
 
   bool Mute;
+  QMessageBox *mAuthDialog;
 };
 #endif

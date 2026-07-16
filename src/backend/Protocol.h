@@ -8,7 +8,7 @@
 
 /*
         First packet on connection must be:
-                CHATSYSTEM\tProtocolVersion\n
+                CHATSYSTEM\tProtocolVersion[\tCallerNickname]\n
    -> for normal Connection
                 CHATSYSTEMFILETRANSFER\tProtocolVersion\nSizeinBit\nFileName
    -> for FileTransfer else send <the html info-page > 	//maybe with information
@@ -22,9 +22,8 @@
 */
 
 namespace Protocol_Info {
-const QString PROTOCOLVERSION = "0.6";
-const double PROTOCOLVERSION_D = 0.6;
-const QString FIRSTPACKETCHAT = "CHATSYSTEM\t" + PROTOCOLVERSION + "\n";
+const QString PROTOCOLVERSION = "0.7";
+const double PROTOCOLVERSION_D = 0.7;
 const QString HTTPPAGE = "<!DOCTYPE HTML><html><head><title>[USERNAME] | I2PChat "
                          "Destination</title><meta http-equiv=\"Content-Type\" content=\"text/html; "
                          "charset=UTF-8\"><meta http-equiv=\"Content-Security-Policy\" "

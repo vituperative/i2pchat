@@ -23,11 +23,11 @@ void CProtocol::newConnectionChat(const qint32 ID) {
   if (stream == NULL)
     return;
 
-  // send the ChatSystem\tProtocolVersion
+  // send the ChatSystem\tProtocolVersion[\tCallerNickname]\n
   if (stream->getFIRSTPACKETCHAT_alreadySent() == false) {
-    // sometime StreamStatusReceived is called again with streamstatus Ok
     stream->setFIRSTPACKETCHAT_alreadySent(true);
-    *(stream) << (QString)FIRSTPACKETCHAT;
+    QString pkt = QStringLiteral("CHATSYSTEM\t%1\t%2\n").arg(PROTOCOLVERSION, mCore.getUserInfos().Nickname);
+    *(stream) << pkt;
   }
 }
 
@@ -450,8 +450,22 @@ void CProtocol::dispatchKnownMessage(const qint32 ID, const QByteArray &Data, co
 
 void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data, CI2PStream *stream) {
   using namespace Protocol_Info;
-  QByteArray temp = Data.mid(Data.indexOf("\t") + 1, Data.indexOf("\n") - Data.indexOf("\t") - 1);
-  QString version(temp);
+
+  // Parse: CHATSYSTEM\tVersion[\tCallerNickname]\n
+  int firstTab = Data.indexOf('\t');
+  int newlinePos = Data.indexOf('\n', firstTab + 1);
+  int secondTab = Data.indexOf('\t', firstTab + 1);
+
+  int versionStart = firstTab + 1;
+  int versionLen;
+  if (secondTab > firstTab && secondTab < newlinePos) {
+    versionLen = secondTab - versionStart;
+  } else {
+    versionLen = newlinePos - versionStart;
+  }
+  QByteArray versionStr = Data.mid(versionStart, versionLen);
+  QString version(versionStr);
+
   bool OK = false;
   double versiond = version.toDouble(&OK);
   if (OK == false) {
@@ -460,6 +474,12 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
                 << "\nMessage:\t"
                 << "Can't convert QString to double"
                 << "\nQString:\t" << version << Qt::endl;
+  }
+
+  // Extract caller nickname from handshake if present
+  QString callerNickname;
+  if (secondTab > firstTab && secondTab < newlinePos) {
+    callerNickname = QString::fromUtf8(Data.mid(secondTab + 1, newlinePos - secondTab - 1));
   }
 
   if (ID < 0) {
@@ -519,8 +539,11 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
       User->setProtocolVersion(version);
       User->setConnectionStatus(ONLINE);
       mCore.setStreamTypeToKnown(ID, Data2, false);
-      if (versiond >= 0.3)
+      if (!callerNickname.isEmpty()) {
+        User->setReceivedUserInfos(NICKNAME, callerNickname);
+      } else if (versiond >= 0.3) {
         User->setReceivedNicknameToUserNickname();
+      }
     }
   } else {
     if (mCore.useThisChatConnection(stream->getDestination(), ID) == true) {
@@ -528,6 +551,8 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
       if (User != NULL) {
         User->setI2PStreamID(ID);
         User->setProtocolVersion(version);
+        if (!callerNickname.isEmpty())
+          User->setReceivedUserInfos(NICKNAME, callerNickname);
         User->setConnectionStatus(ONLINE);
         mCore.setStreamTypeToKnown(ID, Data2, false);
       }

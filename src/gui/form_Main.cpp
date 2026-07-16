@@ -39,6 +39,7 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
   mTopicSubscribeWindow = NULL;
   mAboutWindow = NULL;
   mDebugWindow = NULL;
+  mAuthDialog = NULL;
 
   Mute = false;
   applicationIsClosing = false;
@@ -1008,52 +1009,75 @@ void form_MainWindow::addUserToBlockList() {
 void form_MainWindow::incomingUserAuthorizationRequest(const QString &destination,
                                                        int streamID,
                                                        const QByteArray &data) {
-  QMessageBox msgBox;
-  msgBox.setIcon(QMessageBox::Question);
-  msgBox.setText(tr("Incoming connection from unknown user"));
-  msgBox.setInformativeText(tr("Allow connection from %1?").arg(destination));
-  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::No);
-  int ret = msgBox.exec();
-
-  if (ret == QMessageBox::Yes) {
-    // Extract version
-    QByteArray temp = data.mid(data.indexOf("\t") + 1, data.indexOf("\n") - data.indexOf("\t") - 1);
-    QString version(temp);
-    bool OK = false;
-    double versiond = version.toDouble(&OK);
-    if (!OK)
-      versiond = 0.0;
-
-    // Add the user
-    bool added = false;
-    if (versiond >= 0.3) {
-      added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
-    } else {
-      added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
-    }
-
-    if (!added) {
-      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
-      return;
-    }
-    CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
-    if (User) {
-      User->setI2PStreamID(streamID);
-      User->setProtocolVersion(version);
-      User->setConnectionStatus(ONLINE);
-      // Remove first packet
-      QByteArray Data2 = data;
-      Data2 = Data2.remove(0, data.indexOf("\n") + 1);
-      Core->setStreamTypeToKnown(streamID, Data2, false);
-      if (versiond >= 0.3) {
-        User->setReceivedNicknameToUserNickname();
-      }
-    }
-  } else {
-    // Deny, close the connection
+  // Only one auth dialog at a time — deny new requests while one is pending
+  if (mAuthDialog != NULL) {
     Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+    mAuthDialog->raise();
+    mAuthDialog->activateWindow();
+    return;
   }
+
+  // Extract caller nickname from handshake: CHATSYSTEM\tVersion[\tNickname]\n
+  QString callerNickname;
+  int firstTab = data.indexOf('\t');
+  int secondTab = data.indexOf('\t', firstTab + 1);
+  int newlinePos = data.indexOf('\n', secondTab);
+  if (secondTab > firstTab && secondTab < newlinePos) {
+    callerNickname = QString::fromUtf8(data.mid(secondTab + 1, newlinePos - secondTab - 1));
+  }
+
+  QString displayName = callerNickname.isEmpty() ? destination : callerNickname;
+
+  mAuthDialog = new QMessageBox(this);
+  mAuthDialog->setAttribute(Qt::WA_DeleteOnClose);
+  mAuthDialog->setIcon(QMessageBox::Question);
+  mAuthDialog->setWindowTitle(tr("Incoming connection"));
+  mAuthDialog->setText(tr("Incoming connection from unknown user"));
+  mAuthDialog->setInformativeText(tr("Allow connection from %1?").arg(displayName));
+  mAuthDialog->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  mAuthDialog->setDefaultButton(QMessageBox::No);
+  connect(mAuthDialog, &QDialog::finished, this, [this, data, destination, streamID](int ret) {
+    mAuthDialog = NULL;
+    if (ret == QMessageBox::Yes) {
+      // Extract version
+      QByteArray temp = data.mid(data.indexOf("\t") + 1, data.indexOf("\n") - data.indexOf("\t") - 1);
+      QString version(temp);
+      bool OK = false;
+      double versiond = version.toDouble(&OK);
+      if (!OK)
+        versiond = 0.0;
+
+      // Add the user
+      bool added = false;
+      if (versiond >= 0.3) {
+        added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
+      } else {
+        added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
+      }
+
+      if (!added) {
+        Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+        return;
+      }
+      CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
+      if (User) {
+        User->setI2PStreamID(streamID);
+        User->setProtocolVersion(version);
+        User->setConnectionStatus(ONLINE);
+        // Remove first packet
+        QByteArray Data2 = data;
+        Data2 = Data2.remove(0, data.indexOf("\n") + 1);
+        Core->setStreamTypeToKnown(streamID, Data2, false);
+        if (versiond >= 0.3) {
+          User->setReceivedNicknameToUserNickname();
+        }
+      }
+    } else {
+      // Deny, close the connection
+      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+    }
+  });
+  mAuthDialog->show();
 }
 
 void form_MainWindow::eventTopicSubscribeWindowClosed() {
