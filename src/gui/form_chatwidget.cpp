@@ -179,11 +179,12 @@ void form_ChatWidget::loadChatStyle() {
   QString style = settings.value("Chat/ChatStyle", "classic").toString();
   mChatStyle = style;
   qDebug() << "loadChatStyle: style =" << style;
+  QString styleLower = style.toLower();
 
-  bool themed = (style != "classic");
-  if (style == "bubbles") {
+  bool themed = (styleLower != "classic");
+  if (styleLower == "bubbles") {
     mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 8, 3, 8, true};
-  } else if (style == "modern") {
+  } else if (styleLower == "modern") {
     mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 12, 3, 8, true};
   } else {
     mBubbleStyle = {"", "", "", "", "#888888", 0, 0, 0, false};
@@ -218,8 +219,11 @@ void form_ChatWidget::loadChatStyle() {
     mFileWatcher->removePath(f);
   if (themed) {
     QString cap = mChatStyle;
-    cap[0] = cap[0].toUpper();
     QString cssPath = Core.getConfigPath() + "/themes/chat/" + cap + ".css";
+    if (!QFile::exists(cssPath)) {
+      cap[0] = cap[0].toUpper();
+      cssPath = Core.getConfigPath() + "/themes/chat/" + cap + ".css";
+    }
     if (QFile::exists(cssPath))
       mFileWatcher->addPath(cssPath);
     // If file doesn't exist yet (atomic-save race), directoryChanged will retry
@@ -362,51 +366,39 @@ static QVector<BubbleShadow> parseShadows(const QString &val) {
 }
 
 void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, ChatDelegate::BubbleColors &dc) {
-  QString cap = style;
-  if (!cap.isEmpty())
-    cap[0] = cap[0].toUpper();
   QString dir = Core.getConfigPath() + "/themes/chat";
+  QString cap = style;
   QString path = dir + "/" + cap + ".css";
+  if (!QFile::exists(path)) {
+    if (!cap.isEmpty())
+      cap[0] = cap[0].toUpper();
+    path = dir + "/" + cap + ".css";
+  }
   QDir().mkpath(dir);
   QFile f(path);
   if (!f.exists()) {
+    qWarning() << "applyThemeCss:" << path << "not found, recreating with defaults";
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
       qWarning() << "applyThemeCss: cannot create" << path;
       return;
     }
     QTextStream out(&f);
-    out << "/* I2PChat " << style << " bubble theme */" << Qt::endl;
-    out << "/* Edit values — changes apply live via file watcher */" << Qt::endl;
-    out << Qt::endl;
-    out << ".bubble {" << Qt::endl;
-    out << "  border-radius: " << bs.radius << "px;" << Qt::endl;
-    out << "  padding: " << bs.padV << "px " << bs.padH << "px;" << Qt::endl;
-    out << "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);" << Qt::endl;
-    out << "}" << Qt::endl;
-    out << Qt::endl;
-    out << ".sent {" << Qt::endl;
-    out << "  background: " << bs.sentBg << ";" << Qt::endl;
-    out << "  color: " << bs.sentColor << ";" << Qt::endl;
-    out << "}" << Qt::endl;
-    out << Qt::endl;
-    out << ".received {" << Qt::endl;
-    out << "  background: " << bs.receivedBg << ";" << Qt::endl;
-    out << "  color: " << bs.receivedColor << ";" << Qt::endl;
-    out << "}" << Qt::endl;
-    out << Qt::endl;
-    out << ".system {" << Qt::endl;
-    out << "  background: #e8e8e8;" << Qt::endl;
-    out << "  color: " << bs.systemColor << ";" << Qt::endl;
-    out << "}" << Qt::endl;
-    out << Qt::endl;
-    out << "/* .msg-header { color: #888; font-size: 10pt; } */" << Qt::endl;
-    out << "/* .sent { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } */" << Qt::endl;
+    out << "/* I2PChat " << style << " — auto-generated fallback, overwritten at startup */\n";
+    out << ".bubble {\n";
+    out << "  border-radius: " << bs.radius << "px;\n";
+    out << "  padding: " << bs.padV << "px " << bs.padH << "px;\n";
+    out << "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);\n";
+    out << "}\n";
+    out << ".sent { background: " << bs.sentBg << "; color: " << bs.sentColor << "; }\n";
+    out << ".received { background: " << bs.receivedBg << "; color: " << bs.receivedColor << "; }\n";
+    out << ".system { background: #e8e8e8; color: " << bs.systemColor << "; }\n";
     f.close();
+    // Fall through to read the file we just wrote
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+      return;
+  } else if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
     return;
   }
-
-  if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
-    return;
   QTextStream in(&f);
 
   auto applyProp = [&](const QString &className, const QString &prop, const QString &val) {
@@ -642,13 +634,51 @@ void form_ChatWidget::addMessage(QString text) {
 
   int type = detectMsgType(text, Core.getUserInfos().Nickname);
 
-  // Wrap chat header (timestamp > sender) in a styled span for CSS targeting
-  if (type != MsgSystem) {
+  QString typeClass;
+  switch (type) {
+  case MsgSent:
+    typeClass = "sent";
+    break;
+  case MsgReceived:
+    typeClass = "received";
+    break;
+  case MsgSystem:
+    typeClass = "system";
+    break;
+  case MsgPending:
+    typeClass = "pending";
+    break;
+  case MsgFileOffer:
+    typeClass = "fileoffer";
+    break;
+  default:
+    typeClass = "received";
+    break;
+  }
+
+  if (type == MsgSystem || type == MsgFileOffer) {
+    text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
+  } else {
     int arrow = text.indexOf(" ‣ ");
     if (arrow != -1) {
-      QString header = text.left(arrow);
-      QString body = text.mid(arrow);
-      text = QStringLiteral("<span class=\"msg-header\">%1</span>%2").arg(header, body);
+      QString timePart = text.left(arrow);
+      QString rest = text.mid(arrow + 3);
+      int colon = rest.indexOf(':');
+      if (colon != -1) {
+        QString sender = rest.left(colon);
+        QString body = rest.mid(colon + 1);
+        text = QStringLiteral("<div class=\"msg msg-%1\">"
+                              "<span class=\"msg-time\">%2</span> ‣ "
+                              "<span class=\"msg-sender\">%3</span>:"
+                              "<div class=\"msg-body\">%4</div></div>")
+                 .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), body);
+      } else {
+        text = QStringLiteral("<div class=\"msg msg-%1\">"
+                              "<span class=\"msg-time\">%2</span>%3</div>")
+                 .arg(typeClass, timePart.toHtmlEscaped(), rest);
+      }
+    } else {
+      text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
     }
   }
 

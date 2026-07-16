@@ -100,6 +100,12 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
   // TODO: Add this button from ui file. (QtCreator, i dont have it)
   // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
   // setCustomStyleSheet() ) );
+
+  mThemeWatcher = new QFileSystemWatcher(this);
+  QString themesDir = mConfigPath + "/themes/chat";
+  if (QDir(themesDir).exists())
+    mThemeWatcher->addPath(themesDir);
+  connect(mThemeWatcher, &QFileSystemWatcher::directoryChanged, this, &form_settingsgui::slotThemeDirChanged);
 }
 
 form_settingsgui::~form_settingsgui() {
@@ -304,18 +310,19 @@ void form_settingsgui::loadSettings() {
   settings->endGroup();
 
   settings->beginGroup("Chat");
-  comboBoxChatStyle->addItem(tr("Classic"));
-  comboBoxChatStyle->addItem(tr("Modern"));
-  comboBoxChatStyle->addItem(tr("Bubbles"));
+  populateChatStyleCombo();
   {
     QString cfg = settings->value("ChatStyle", "classic").toString();
-    QStringList key = {"classic", "modern", "bubbles"};
-    int idx = key.indexOf(cfg);
-    QString qss = mConfigPath + "/chat.css";
-    if (QFile::exists(qss)) {
-      comboBoxChatStyle->addItem(tr("Custom (chat.css)"), "custom");
+    bool found = false;
+    for (int i = 0; i < comboBoxChatStyle->count(); ++i) {
+      if (comboBoxChatStyle->itemData(i).toString().toLower() == cfg.toLower()) {
+        comboBoxChatStyle->setCurrentIndex(i);
+        found = true;
+        break;
+      }
     }
-    comboBoxChatStyle->setCurrentIndex(idx < 0 ? 0 : idx);
+    if (!found)
+      comboBoxChatStyle->setCurrentIndex(0);
   }
 
   txtShowCurrentChatStyle->setText("Local settings preview");
@@ -517,13 +524,7 @@ void form_settingsgui::saveSettings() {
     int idx = comboBoxChatStyle->currentIndex();
     QString val = comboBoxChatStyle->itemData(idx).toString();
     if (val.isEmpty())
-      val = comboBoxChatStyle->currentText().toLower();
-    if (val == tr("Classic").toLower())
       val = "classic";
-    else if (val == tr("Modern").toLower())
-      val = "modern";
-    else if (val == tr("Bubbles").toLower())
-      val = "bubbles";
     settings->setValue("ChatStyle", val);
   }
   settings->sync();
@@ -634,6 +635,33 @@ void form_settingsgui::loadqss() {
     if (st.fileName() != "." && st.fileName() != ".." && st.isFile())
       styleSheetCombo->addItem(st.fileName().remove(".qss"));
   }
+}
+
+void form_settingsgui::populateChatStyleCombo() {
+  QString current = comboBoxChatStyle->currentData().toString();
+  comboBoxChatStyle->clear();
+  comboBoxChatStyle->addItem(tr("Classic"), "classic");
+  QDir themesDir(mConfigPath + "/themes/chat");
+  if (themesDir.exists()) {
+    QStringList filters;
+    filters << "*.css";
+    for (const QFileInfo &fi : themesDir.entryInfoList(filters, QDir::Files, QDir::Name)) {
+      QString name = fi.completeBaseName();
+      comboBoxChatStyle->addItem(name, name);
+    }
+  }
+  if (!current.isEmpty()) {
+    for (int i = 0; i < comboBoxChatStyle->count(); ++i) {
+      if (comboBoxChatStyle->itemData(i).toString() == current) {
+        comboBoxChatStyle->setCurrentIndex(i);
+        return;
+      }
+    }
+  }
+}
+
+void form_settingsgui::slotThemeDirChanged() {
+  populateChatStyleCombo();
 }
 
 void form_settingsgui::clicked_openFile() {

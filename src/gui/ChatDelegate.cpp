@@ -171,21 +171,22 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   }
 
   // Strip HTML color attributes so our foreground color takes effect
-  // Also replace <p> with <div> — QTextDocument's default p margin (~12px)
-  // creates excess bottom space even after stripBlockMargins in some Qt versions
+  // <p> and other block elements are kept intact — margins are zeroed via CSS
+  // and stripBlockMargins below to override Qt's QTextDocument defaults
   QString renderText = text;
   renderText.replace(
     QRegularExpression("<font\\s+color\\s*=\\s*\"[^\"]*\"\\s*>", QRegularExpression::CaseInsensitiveOption), "<font>");
   renderText.replace(
     QRegularExpression("\\bcolor\\s*:\\s*#[0-9a-fA-F]+;?\\s*", QRegularExpression::CaseInsensitiveOption), "");
-  renderText.replace(QRegularExpression("<p[^>]*>", QRegularExpression::CaseInsensitiveOption), "<div>");
-  renderText.replace("</p>", "</div>");
   renderText = QStringLiteral("<div style=\"color:%1;\">%2</div>").arg(fg.name(), renderText);
 
   auto *doc = new QTextDocument;
   doc->setDefaultFont(option.font);
   {
-    QString ss = "a { color: #0000ff; }";
+    QString ss = "a { color: #0000ff; }"
+                 "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li, dl, dd {"
+                 " margin: 0; padding: 0;"
+                 "}";
     if (!mColors.extraStylesheet.isEmpty())
       ss += "\n" + mColors.extraStylesheet;
     doc->setDefaultStyleSheet(ss);

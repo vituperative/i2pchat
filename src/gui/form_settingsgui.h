@@ -8,6 +8,7 @@
 
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QFileSystemWatcher>
 #include <QFontDialog>
 #include <QMap>
 #include <QMapIterator>
@@ -77,12 +78,15 @@ private slots:
   void clicked_AutoAwayEnabled(bool enabled);
   void clicked_nonPersistDest(bool checked);
   void setCustomStyleSheet();
+  void populateChatStyleCombo();
+  void slotThemeDirChanged();
 
 private:
   CCore &mCore;
   const QString mConfigPath;
   QSettings *settings;
   QByteArray avatarImageByteArray;
+  QFileSystemWatcher *mThemeWatcher;
 
   void loadStyleSheet(const QString &sheetName);
   void loadqss();
