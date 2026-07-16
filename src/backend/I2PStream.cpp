@@ -211,8 +211,22 @@ void CI2PStream::slotReadFromSocket() {
     QByteArray CurrentPacket;
     CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
 
-    mDestination = QString(CurrentPacket.data());
-    mDestination = mDestination.trimmed();
+    {
+      // Extract DESTINATION= from "STREAM STATUS RESULT=OK DESTINATION=<base64>\n"
+      QString line = QString::fromUtf8(CurrentPacket).trimmed();
+      int s = line.indexOf("DESTINATION=");
+      if (s != -1) {
+        s += 12; // length of "DESTINATION="
+        int e = line.indexOf(' ', s);
+        if (e == -1)
+          e = line.indexOf('\n', s);
+        if (e == -1)
+          e = line.size();
+        mDestination = line.mid(s, e - s).trimmed();
+      }
+      if (mDestination.isEmpty())
+        mDestination = line;
+    }
     mDestinationReceived = true;
 
     mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);

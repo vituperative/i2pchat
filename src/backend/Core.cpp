@@ -691,6 +691,8 @@ void CCore::createStreamObjectsForAllUsers() {
 
 void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray &Data, bool isFileTransfer_Receive) {
   CI2PStream *t = mConnectionManager->getStreamObjectByID(ID);
+  if (t == NULL)
+    return;
   t->setConnectionType(KNOWN);
   disconnect(t,
              SIGNAL(signDataReceived(const qint32, const QByteArray)),

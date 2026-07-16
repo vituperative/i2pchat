@@ -20,6 +20,8 @@ CProtocol::CProtocol(CCore &Core)
 void CProtocol::newConnectionChat(const qint32 ID) {
   using namespace Protocol_Info;
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
+  if (stream == NULL)
+    return;
 
   // send the ChatSystem\tProtocolVersion
   if (stream->getFIRSTPACKETCHAT_alreadySent() == false) {
@@ -507,19 +509,23 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
       mCore.getUserManager()->addNewUser("Unknown", stream->getDestination(), ID);
 
     CUser *User = mCore.getUserManager()->getUserByI2P_Destination(stream->getDestination());
-    User->setI2PStreamID(ID);
-    User->setProtocolVersion(version);
-    User->setConnectionStatus(ONLINE);
-    mCore.setStreamTypeToKnown(ID, Data2, false);
-    if (versiond >= 0.3)
-      User->setReceivedNicknameToUserNickname();
-  } else {
-    if (mCore.useThisChatConnection(stream->getDestination(), ID) == true) {
-      CUser *User = mCore.getUserManager()->getUserByI2P_Destination(stream->getDestination());
+    if (User != NULL) {
       User->setI2PStreamID(ID);
       User->setProtocolVersion(version);
       User->setConnectionStatus(ONLINE);
       mCore.setStreamTypeToKnown(ID, Data2, false);
+      if (versiond >= 0.3)
+        User->setReceivedNicknameToUserNickname();
+    }
+  } else {
+    if (mCore.useThisChatConnection(stream->getDestination(), ID) == true) {
+      CUser *User = mCore.getUserManager()->getUserByI2P_Destination(stream->getDestination());
+      if (User != NULL) {
+        User->setI2PStreamID(ID);
+        User->setProtocolVersion(version);
+        User->setConnectionStatus(ONLINE);
+        mCore.setStreamTypeToKnown(ID, Data2, false);
+      }
     }
   }
 }
