@@ -144,6 +144,50 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
+  QDir().mkpath(configPath + "/themes/chat");
+  QDir().mkpath(configPath + "/themes/app");
+
+  // Write default theme CSS files if they don't exist
+  auto writeCss = [&](const QString &name, const QString &content) {
+    QString path = configPath + "/themes/chat/" + name + ".css";
+    if (!QFile::exists(path)) {
+      QFile f(path);
+      if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&f);
+        out << content;
+        f.close();
+      }
+    }
+  };
+  writeCss("Bubbles",
+           "/* I2PChat Bubbles theme */\n"
+           "/* Edit values — changes apply live via file watcher */\n"
+           "\n"
+           ".bubble {\n"
+           "  border-radius: 8px;\n"
+           "  padding: 3px 8px;\n"
+           "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);\n"
+           "}\n"
+           ".sent { background: #075e54; color: #ffffff; }\n"
+           ".received { background: #e5e5ea; color: #1c1c1c; }\n"
+           ".system { background: #e8e8e8; color: #888888; }\n"
+           "/* .msg-header { color: #888; font-size: 10pt; } */\n"
+           "/* .sent { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } */\n");
+  writeCss("Modern",
+           "/* I2PChat Modern theme */\n"
+           "/* Edit values — changes apply live via file watcher */\n"
+           "\n"
+           ".bubble {\n"
+           "  border-radius: 12px;\n"
+           "  padding: 3px 8px;\n"
+           "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);\n"
+           "}\n"
+           ".sent { background: #8774e1; color: #ffffff; }\n"
+           ".received { background: #e8f0fe; color: #1c1c1c; }\n"
+           ".system { background: #e8e8e8; color: #888888; }\n"
+           "/* .msg-header { color: #888; font-size: 10pt; } */\n"
+           "/* .sent { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } */\n");
+
   enableDebugLogging(configPath);
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 

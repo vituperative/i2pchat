@@ -53,7 +53,8 @@ SOURCES += \
 	src/gui/form_settingsgui.cpp \
 	src/gui/form_UserSearch.cpp \
 	src/gui/form_about.cpp \
-	src/gui/form_TopicSubscribe.cpp
+	src/gui/form_TopicSubscribe.cpp \
+	src/gui/ChatDelegate.cpp
 
 
 HEADERS += \
@@ -87,7 +88,8 @@ HEADERS += \
 	src/gui/form_UserSearch.h \
 	src/gui/form_about.h \
 	src/gui/gui_icons.h \
-	src/gui/form_TopicSubscribe.h
+	src/gui/form_TopicSubscribe.h \
+	src/gui/ChatDelegate.h
 
 FORMS += \
 	src/gui/form_Main.ui \

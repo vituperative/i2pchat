@@ -1,10 +1,15 @@
 #include "form_chatwidget.h"
 
+#include "ChatDelegate.h"
 #include "User.h"
 
+#include <QDir>
 #include <QErrorMessage>
 #include <QFile>
-#include <QRegularExpression>
+#include <QMap>
+#include <QMenu>
+#include <QTextStream>
+#include <QVBoxLayout>
 #include <QXmlStreamReader>
 
 bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
@@ -42,11 +47,62 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   setupUi(this);
 
   QTextEdit *message = this->message;
-  QTextBrowser *chat = this->chat;
   QToolButton *txtBold = this->txtBold;
   QToolButton *txtItalic = this->txtItalic;
   QToolButton *txtUnder = this->txtUnder;
 
+  // Both widgets share the same chatPanel layout via a stacked widget
+  mChatModel = new QStandardItemModel(this);
+  mChatDelegate = new ChatDelegate(this);
+
+  mChatListView = new QListView;
+  mChatListView->setModel(mChatModel);
+  mChatListView->setItemDelegate(mChatDelegate);
+  mChatListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  mChatListView->setSelectionMode(QAbstractItemView::ContiguousSelection);
+  mChatListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  mChatListView->setResizeMode(QListView::Adjust);
+  mChatListView->setUniformItemSizes(false);
+  mChatListView->setSpacing(0);
+  mChatListView->setFont(chat->font());
+  mChatListView->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(
+    mChatListView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenu(const QPoint &)));
+  connect(mChatDelegate, SIGNAL(linkClicked(const QUrl &)), this, SLOT(anchorClicked(const QUrl &)));
+
+  chat->setOpenLinks(false);
+  connect(chat, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(anchorClicked(const QUrl &)));
+
+  mChatStack = new QStackedWidget;
+  auto *vlayout = qobject_cast<QVBoxLayout *>(chatPanel->layout());
+  for (int i = 0; i < vlayout->count(); i++) {
+    if (vlayout->itemAt(i)->widget() == chat) {
+      vlayout->removeWidget(chat);
+      break;
+    }
+  }
+  mChatStack->addWidget(chat);          // page 0 = classic
+  mChatStack->addWidget(mChatListView); // page 1 = themed
+  vlayout->insertWidget(0, mChatStack);
+  mFileWatcher = new QFileSystemWatcher(this);
+  {
+    QString themeDir = Core.getConfigPath() + "/themes/chat";
+    qDebug() << "theme dir:" << themeDir << "exists:" << QDir(themeDir).exists();
+    bool ok = mFileWatcher->addPath(themeDir);
+    qDebug() << "  addPath returned:" << ok;
+  }
+  mReloadTimer = new QTimer(this);
+  mReloadTimer->setSingleShot(true);
+  mReloadTimer->setInterval(200);
+  connect(mReloadTimer, &QTimer::timeout, this, &form_ChatWidget::loadChatStyle);
+  connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, [this](const QString &p) {
+    qDebug() << "fileChanged:" << p;
+    mReloadTimer->start();
+  });
+  connect(mFileWatcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString &p) {
+    qDebug() << "directoryChanged:" << p;
+    mReloadTimer->start();
+  });
   m_event_eater = new ChatEventEater(this);
 
   connect(m_event_eater, SIGNAL(sendMessage()), send, SLOT(click()));
@@ -69,15 +125,13 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   connect(cmd_SendFile, SIGNAL(clicked()), this, SLOT(newFileTransfer()));
 
-  connect(chat, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(anchorClicked(const QUrl &)));
+  connect(&Core, SIGNAL(signChatStyleChanged()), this, SLOT(loadChatStyle()));
 
   connect(avatarFrameButton, SIGNAL(toggled(bool)), this, SLOT(showAvatarFrame(bool)));
 
   connect(message, SIGNAL(textChanged()), this, SLOT(messageTextChanged()));
 
   setAcceptDrops(true);
-
-  chat->setOpenLinks(false);
 
   mCurrentFont = user.getTextFont();
   textColor = user.getTextColor();
@@ -107,10 +161,8 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   resize(480, 360); // maybe too from QSS?
   centerDialog();
 
+  loadChatStyle();
   changeWindowsTitle();
-  addAllMessages();
-  QScrollBar *sb = chat->verticalScrollBar();
-  sb->setValue(sb->maximum());
 
   slotLoadOwnAvatarImage();
 
@@ -122,84 +174,489 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   // timer->start();
 }
 
-void form_ChatWidget::newMessageReceived() { // TODO: qss add.
-  QTextEdit *chat = this->chat;
-  QScrollBar *sb = chat->verticalScrollBar();
-  // chat->setStyleSheet("#IncomingMessages{color:rgb(100,200,254);}"); // does
-  // not works;
+void form_ChatWidget::loadChatStyle() {
+  QSettings settings(Core.getConfigPath() + "/application.ini", QSettings::IniFormat);
+  QString style = settings.value("Chat/ChatStyle", "classic").toString();
+  mChatStyle = style;
+  qDebug() << "loadChatStyle: style =" << style;
 
-  /*QPalette pal = chat->palette();
-  pal.setBrush(QPalette::Window,QBrush(textColor));
-  chat->setPalette(pal);*/ // works, but not for text which will be changes though QSS.
-  // text+="<style>span{ background-color: yellow; }</style>"; // Too is NOT
-  // WORKS, because it not supportd.
-
-  int oldVerticalScrollBarValue = sb->value();
-  int VerticalScrollBarMax = sb->maximum();
-  bool restoreOldVerticalScrollBarValue = false;
-
-  if (VerticalScrollBarMax - oldVerticalScrollBarValue > 2) {
-    restoreOldVerticalScrollBarValue = true;
-  }
-
-  QStringList Messages = user.getNewMessages(mHaveFocus);
-  int i = 0;
-  QString temp;
-  while (i < Messages.count()) {
-    temp = Messages.at(i);
-    this->addMessage(temp);
-    i++;
-  }
-
-  if (restoreOldVerticalScrollBarValue == true) {
-    sb->setValue(oldVerticalScrollBarValue);
+  bool themed = (style != "classic");
+  if (style == "bubbles") {
+    mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 8, 3, 8, true};
+  } else if (style == "modern") {
+    mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 12, 3, 8, true};
   } else {
-    sb->setValue(sb->maximum());
+    mBubbleStyle = {"", "", "", "", "#888888", 0, 0, 0, false};
   }
 
-  //  this->raise(); // no, do not steal focus!
+  ChatDelegate::BubbleColors dc;
+  dc.sentBg = mBubbleStyle.sentBg;
+  dc.sentFg = mBubbleStyle.sentColor;
+  dc.receivedBg = mBubbleStyle.receivedBg;
+  dc.receivedFg = mBubbleStyle.receivedColor;
+  dc.systemColor = mBubbleStyle.systemColor;
+  dc.radius = mBubbleStyle.radius;
+  dc.padV = mBubbleStyle.padV;
+  dc.padH = mBubbleStyle.padH;
+  dc.pendingBg = "#fff3cd";
+  dc.pendingFg = "#856404";
+
+  if (themed)
+    applyThemeCss(style, mBubbleStyle, dc);
+
+  mChatStack->setCurrentIndex(themed ? 1 : 0);
+  mChatDelegate->setBubbleColors(dc);
+  if (themed)
+    addAllMessages();
+  else
+    addAllMessagesClassic();
+
+  // Watch the current theme CSS for live reload
+  // (directory is watched continuously from constructor — catches atomic-save recreation)
+  QStringList oldFiles = mFileWatcher->files();
+  for (const auto &f : oldFiles)
+    mFileWatcher->removePath(f);
+  if (themed) {
+    QString cap = mChatStyle;
+    cap[0] = cap[0].toUpper();
+    QString cssPath = Core.getConfigPath() + "/themes/chat/" + cap + ".css";
+    if (QFile::exists(cssPath))
+      mFileWatcher->addPath(cssPath);
+    // If file doesn't exist yet (atomic-save race), directoryChanged will retry
+  }
+}
+
+static QStringList cssSplit(const QString &s) {
+  QStringList parts;
+  int depth = 0, start = 0;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == '(')
+      depth++;
+    else if (s[i] == ')')
+      depth--;
+    else if (s[i] == ',' && depth == 0) {
+      parts << s.mid(start, i - start).trimmed();
+      start = i + 1;
+    }
+  }
+  parts << s.mid(start).trimmed();
+  return parts;
+}
+
+static QColor parseCSSColor(const QString &raw) {
+  QString s = raw.trimmed();
+  if (s.isEmpty())
+    return QColor();
+  // rgba(r,g,b,a) or rgb(r,g,b)
+  static QRegularExpression funRgb("rgba?\\((\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*(?:,\\s*([\\d.]+)\\s*)?\\)",
+                                   QRegularExpression::CaseInsensitiveOption);
+  auto m = funRgb.match(s);
+  if (m.hasMatch()) {
+    int r = m.captured(1).toInt(), g = m.captured(2).toInt(), b = m.captured(3).toInt();
+    int a = 255;
+    if (!m.captured(4).isEmpty())
+      a = qBound(0, qRound(m.captured(4).toDouble() * 255.0), 255);
+    return QColor(r, g, b, a);
+  }
+  return QColor(s); // hex/named (returns invalid if unparseable)
+}
+
+static BubbleGradient parseGradient(const QString &val) {
+  BubbleGradient g;
+  static QRegularExpression gradRx("linear-gradient\\s*\\(\\s*(.*)\\s*\\)",
+                                   QRegularExpression::CaseInsensitiveOption |
+                                     QRegularExpression::DotMatchesEverythingOption);
+  auto m = gradRx.match(val);
+  if (!m.hasMatch())
+    return g;
+
+  QString body = m.captured(1).trimmed();
+  // Extract angle/direction from start
+  double angle = -1;
+  static QRegularExpression degRx("^(\\d+(?:\\.\\d+)?)\\s*deg\\s*,\\s*", QRegularExpression::CaseInsensitiveOption);
+  auto dm = degRx.match(body);
+  if (dm.hasMatch()) {
+    angle = dm.captured(1).toDouble();
+    body = body.mid(dm.capturedLength()).trimmed();
+  } else {
+    static QRegularExpression toRx("^to\\s+(\\S+)\\s*,\\s*", QRegularExpression::CaseInsensitiveOption);
+    auto tm = toRx.match(body);
+    if (tm.hasMatch()) {
+      QString dir = tm.captured(1);
+      if (dir == "top")
+        angle = 0;
+      else if (dir == "bottom")
+        angle = 180;
+      else if (dir == "left")
+        angle = 270;
+      else
+        angle = 90; // right
+      body = body.mid(tm.capturedLength()).trimmed();
+    }
+  }
+  g.angle = (angle < 0) ? 180 : angle; // default bottom-to-top
+
+  // Split remaining by top-level commas
+  QStringList parts = cssSplit(body);
+  // Map named positions
+  static QRegularExpression pctRx("^(.+)\\s+(\\d+(?:\\.\\d+)?)%$");
+  int autoCount = parts.size();
+  for (const auto &p : parts) {
+    auto pm = pctRx.match(p);
+    if (pm.hasMatch()) {
+      double pos = pm.captured(2).toDouble() / 100.0;
+      QColor c = parseCSSColor(pm.captured(1));
+      if (c.isValid())
+        g.stops.append({pos, c});
+    } else {
+      QColor c = parseCSSColor(p);
+      if (c.isValid())
+        g.stops.append({-1, c}); // auto position
+    }
+  }
+  if (autoCount == g.stops.size()) {
+    // All auto: distribute evenly
+    for (int i = 0; i < g.stops.size(); i++)
+      g.stops[i].pos = (double)i / (g.stops.size() - 1);
+  }
+  return g;
+}
+
+static QVector<BubbleShadow> parseShadows(const QString &val) {
+  QVector<BubbleShadow> shadows;
+  QString v = val.trimmed().toLower();
+  if (v == "none" || v.isEmpty())
+    return shadows;
+  QStringList parts = cssSplit(val);
+  for (const auto &p : parts) {
+    QStringList tokens = p.trimmed().split(QRegularExpression("\\s+"));
+    if (tokens.isEmpty())
+      continue;
+    BubbleShadow sh = {};
+    int idx = 0;
+    // Parse numeric px values in order
+    for (; idx < tokens.size(); idx++) {
+      QString t = tokens[idx];
+      bool ok = false;
+      int n = t.left(t.size() - 2).toInt(&ok);
+      if (!ok || !t.endsWith("px", Qt::CaseInsensitive))
+        break;
+      if (sh.offsetX == 0 && sh.offsetY == 0)
+        sh.offsetX = n;
+      else if (sh.offsetY == 0)
+        sh.offsetY = n;
+      else if (sh.blurRadius == 0)
+        sh.blurRadius = n;
+    }
+    // Remaining tokens are color
+    QString colorStr;
+    int ci = 0;
+    for (; idx < tokens.size(); idx++, ci++)
+      colorStr += (ci > 0 ? " " : "") + tokens[idx];
+    sh.color = parseCSSColor(colorStr);
+    if (!sh.color.isValid())
+      sh.color = QColor(0, 0, 0, 77); // default semi-transparent black
+    shadows.append(sh);
+  }
+  return shadows;
+}
+
+void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, ChatDelegate::BubbleColors &dc) {
+  QString cap = style;
+  if (!cap.isEmpty())
+    cap[0] = cap[0].toUpper();
+  QString dir = Core.getConfigPath() + "/themes/chat";
+  QString path = dir + "/" + cap + ".css";
+  QDir().mkpath(dir);
+  QFile f(path);
+  if (!f.exists()) {
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      qWarning() << "applyThemeCss: cannot create" << path;
+      return;
+    }
+    QTextStream out(&f);
+    out << "/* I2PChat " << style << " bubble theme */" << Qt::endl;
+    out << "/* Edit values — changes apply live via file watcher */" << Qt::endl;
+    out << Qt::endl;
+    out << ".bubble {" << Qt::endl;
+    out << "  border-radius: " << bs.radius << "px;" << Qt::endl;
+    out << "  padding: " << bs.padV << "px " << bs.padH << "px;" << Qt::endl;
+    out << "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);" << Qt::endl;
+    out << "}" << Qt::endl;
+    out << Qt::endl;
+    out << ".sent {" << Qt::endl;
+    out << "  background: " << bs.sentBg << ";" << Qt::endl;
+    out << "  color: " << bs.sentColor << ";" << Qt::endl;
+    out << "}" << Qt::endl;
+    out << Qt::endl;
+    out << ".received {" << Qt::endl;
+    out << "  background: " << bs.receivedBg << ";" << Qt::endl;
+    out << "  color: " << bs.receivedColor << ";" << Qt::endl;
+    out << "}" << Qt::endl;
+    out << Qt::endl;
+    out << ".system {" << Qt::endl;
+    out << "  background: #e8e8e8;" << Qt::endl;
+    out << "  color: " << bs.systemColor << ";" << Qt::endl;
+    out << "}" << Qt::endl;
+    out << Qt::endl;
+    out << "/* .msg-header { color: #888; font-size: 10pt; } */" << Qt::endl;
+    out << "/* .sent { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } */" << Qt::endl;
+    f.close();
+    return;
+  }
+
+  if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+    return;
+  QTextStream in(&f);
+
+  auto applyProp = [&](const QString &className, const QString &prop, const QString &val) {
+    auto setBg = [&](QString &bg, BubbleGradient &grad) {
+      bg = val;
+      if (val.contains("linear-gradient", Qt::CaseInsensitive))
+        grad = parseGradient(val);
+      else
+        grad = BubbleGradient();
+    };
+    if (className == "bubble") {
+      if (prop == "border-radius" || prop == "radius")
+        bs.radius = val.toInt();
+      else if (prop == "padding") {
+        static QRegularExpression pRx("^(\\d+)\\s*px(?:\\s+(\\d+)\\s*px)?");
+        auto pm = pRx.match(val);
+        if (pm.hasMatch()) {
+          bs.padV = pm.captured(1).toInt();
+          bs.padH = pm.captured(2).isEmpty() ? bs.padV : pm.captured(2).toInt();
+        }
+      } else if (prop == "box-shadow")
+        dc.shadows = parseShadows(val);
+      return;
+    }
+    if (className == "pending") {
+      if (prop == "background" || prop == "background-color")
+        dc.pendingBg = val;
+      else if (prop == "color")
+        dc.pendingFg = val;
+      return;
+    }
+    // Per-type classes
+    QString *bg = nullptr, *fg = nullptr;
+    BubbleGradient *grad = nullptr;
+    if (className == "sent") {
+      bg = &bs.sentBg;
+      fg = &bs.sentColor;
+      grad = &dc.sentGradient;
+    } else if (className == "received" || className == "rcvd") {
+      bg = &bs.receivedBg;
+      fg = &bs.receivedColor;
+      grad = &dc.receivedGradient;
+    } else if (className == "system") {
+      bg = &bs.systemColor;
+      fg = &bs.systemColor;
+      grad = &dc.systemGradient;
+    }
+    if (!bg)
+      return;
+    if (prop == "background" || prop == "background-color")
+      setBg(*bg, *grad);
+    else if (prop == "color")
+      *fg = val;
+  };
+
+  static QRegularExpression classOpenRx("^\\s*\\.([\\w-]+)\\s*\\{\\s*$");
+  static QRegularExpression classCloseRx("^\\s*\\}\\s*$");
+  static QRegularExpression classPropRx("^\\s*([\\w-]+)\\s*:\\s*(.+)\\s*;\\s*$");
+
+  enum { StTop, StClass } state = StTop;
+  QString curClass;
+  QMap<QString, QString> curProps;
+
+  while (!in.atEnd()) {
+    QString line = in.readLine();
+
+    if (state == StTop) {
+      // Try standard variable syntax (backward compat)
+      static QRegularExpression varRx("^\\s*(?:--)?([\\w-]+)\\s*:\\s*(.+)\\s*;\\s*$");
+      auto m = varRx.match(line);
+      if (m.hasMatch()) {
+        QString name = m.captured(1);
+        QString val = m.captured(2).trimmed();
+        if (name == "sent-bg") {
+          bs.sentBg = val;
+          dc.sentGradient = parseGradient(val);
+        } else if (name == "sent-fg")
+          bs.sentColor = val;
+        else if (name == "received-bg") {
+          bs.receivedBg = val;
+          dc.receivedGradient = parseGradient(val);
+        } else if (name == "received-fg")
+          bs.receivedColor = val;
+        else if (name == "system-color") {
+          bs.systemColor = val;
+          dc.systemGradient = parseGradient(val);
+        } else if (name == "radius" || name == "border-radius")
+          bs.radius = val.remove("px").trimmed().toInt();
+        else if (name == "pad-v" || name == "padding-top" || name == "padding-bottom")
+          bs.padV = val.remove("px").trimmed().toInt();
+        else if (name == "pad-h" || name == "padding-left" || name == "padding-right")
+          bs.padH = val.remove("px").trimmed().toInt();
+        else if (name == "padding") {
+          static QRegularExpression pRx("^(\\d+)\\s*px(?:\\s+(\\d+)\\s*px)?");
+          auto pm = pRx.match(val);
+          if (pm.hasMatch()) {
+            bs.padV = pm.captured(1).toInt();
+            bs.padH = pm.captured(2).isEmpty() ? bs.padV : pm.captured(2).toInt();
+          }
+        } else if (name == "box-shadow")
+          dc.shadows = parseShadows(val);
+        continue;
+      }
+
+      auto cm = classOpenRx.match(line);
+      if (cm.hasMatch()) {
+        curClass = cm.captured(1);
+        state = StClass;
+      }
+    } else if (state == StClass) {
+      if (classCloseRx.match(line).hasMatch()) {
+        // Class block ended — apply known bubble classes or collect as stylesheet
+        static const QStringList bubbleClasses = {"bubble", "sent", "received", "rcvd", "system", "pending"};
+        if (bubbleClasses.contains(curClass)) {
+          for (auto it = curProps.begin(); it != curProps.end(); ++it)
+            applyProp(curClass, it.key(), it.value());
+        } else {
+          // Generic CSS class → pass through to QTextDocument stylesheet
+          QString rule = "." + curClass + " {";
+          for (auto it = curProps.begin(); it != curProps.end(); ++it)
+            rule += " " + it.key() + ": " + it.value() + ";";
+          rule += " }\n";
+          dc.extraStylesheet += rule;
+        }
+        curProps.clear();
+        state = StTop;
+        continue;
+      }
+      auto pm = classPropRx.match(line);
+      if (pm.hasMatch())
+        curProps[pm.captured(1)] = pm.captured(2).trimmed();
+    }
+  }
+  f.close();
+}
+
+void form_ChatWidget::newMessageReceived() {
+  QStringList messages = user.getNewMessages(mHaveFocus);
+
+  if (mChatStyle == "classic") {
+    QScrollBar *sb = chat->verticalScrollBar();
+    int oldVal = sb->value();
+    bool restore = (sb->maximum() - oldVal > 2);
+    for (const auto &tmp : messages)
+      addMessage(tmp);
+    if (restore)
+      sb->setValue(oldVal);
+    else
+      sb->setValue(sb->maximum());
+    return;
+  }
+
+  QScrollBar *sb = mChatListView->verticalScrollBar();
+  int oldVal = sb->value();
+  bool restore = (sb->maximum() - oldVal > 2);
+  for (const auto &tmp : messages)
+    addMessage(tmp);
+  if (restore)
+    sb->setValue(oldVal);
+  else
+    mChatListView->scrollToBottom();
+}
+
+static int detectMsgType(const QString &text, const QString &selfName) {
+  if (text.contains("[System]"))
+    return MsgSystem;
+  if (text.contains("(pending)"))
+    return MsgPending;
+  if (text.contains("[Accept]") || text.contains("[Reject]"))
+    return MsgFileOffer;
+  int arrow = text.indexOf(" ‣ ");
+  if (arrow != -1) {
+    int after = arrow + 3;
+    int colon = text.indexOf(':', after);
+    if (colon != -1) {
+      if (text.mid(after, colon - after).trimmed() == selfName)
+        return MsgSent;
+    }
+  }
+  return MsgReceived;
+}
+
+void form_ChatWidget::addAllMessagesClassic() {
+  chat->clear();
+  QTextCursor cursor(chat->document());
+  cursor.movePosition(QTextCursor::End);
+
+  QStringList messages = user.getAllChatMessages();
+  if (messages.isEmpty())
+    return;
+
+  cursor.beginEditBlock();
+  // First message just sets HTML; subsequent ones insert at end
+  bool first = true;
+  for (const auto &tmp : messages) {
+    QString t = tmp;
+    CTextEmotionChanger::exemplar()->checkMessageForEmoticons(t);
+    if (first) {
+      cursor.insertHtml(t);
+      first = false;
+    } else {
+      cursor.insertHtml(t);
+    }
+  }
+  cursor.endEditBlock();
+  chat->verticalScrollBar()->setValue(chat->verticalScrollBar()->maximum());
 }
 
 void form_ChatWidget::addAllMessages() {
-  QTextBrowser *chat = this->chat;
-  QScrollBar *sb = chat->verticalScrollBar();
-  chat->clear();
-
-  QStringList Messages = user.getAllChatMessages();
-  int i = 0;
-  while (i < Messages.count()) {
-    const QString &tmp = Messages.at(i);
-    this->addMessage(tmp);
-    i++;
+  if (mChatStyle == "classic") {
+    addAllMessagesClassic();
+    return;
   }
-
-  sb->setValue(sb->maximum());
+  mChatModel->clear();
+  QStringList messages = user.getAllChatMessages();
+  for (const auto &tmp : messages)
+    addMessage(tmp);
+  mChatListView->scrollToBottom();
 }
 
 void form_ChatWidget::addMessage(QString text) {
-  QTextBrowser *chat = this->chat;
-
-  // Process emoticons in received messages
   CTextEmotionChanger::exemplar()->checkMessageForEmoticons(text);
 
-  // append HTML
-  {
-    auto cursor = QTextCursor(chat->document());
+  if (mChatStyle == "classic") {
+    QTextCursor cursor(chat->document());
     cursor.movePosition(QTextCursor::End);
-    if (cursor.isNull()) {
-      auto msg = "Error appending to chatLog: cursor is null";
-      qDebug() << msg;
-      QErrorMessage *box = new QErrorMessage(this);
-      box->showMessage(msg);
-      return;
-    }
-    // Optimize with edit block for better performance
     cursor.beginEditBlock();
     cursor.insertHtml(text);
     cursor.endEditBlock();
+    chat->verticalScrollBar()->setValue(chat->verticalScrollBar()->maximum());
+    return;
   }
 
-  chat->update();
+  int type = detectMsgType(text, Core.getUserInfos().Nickname);
+
+  // Wrap chat header (timestamp > sender) in a styled span for CSS targeting
+  if (type != MsgSystem) {
+    int arrow = text.indexOf(" ‣ ");
+    if (arrow != -1) {
+      QString header = text.left(arrow);
+      QString body = text.mid(arrow);
+      text = QStringLiteral("<span class=\"msg-header\">%1</span>%2").arg(header, body);
+    }
+  }
+
+  auto *item = new QStandardItem(text);
+  item->setEditable(false);
+  item->setData(type, MsgTypeRole);
+  mChatModel->appendRow(item);
+  mChatListView->scrollToBottom();
 }
 
 void form_ChatWidget::setTextColor() {
@@ -246,6 +703,22 @@ void form_ChatWidget::closeEvent(QCloseEvent *e) {
   e->ignore();
 }
 
+static QString minifyChatHtml(const QString &html) {
+  QString out = html;
+  // Strip DOCTYPE, <html>, <head>...</head>, <body...> and </body>
+  out.remove(QRegularExpression("<!DOCTYPE[^>]*>", QRegularExpression::CaseInsensitiveOption));
+  out.remove(QRegularExpression("<html[^>]*>", QRegularExpression::CaseInsensitiveOption));
+  out.remove("</html>");
+  out.remove(QRegularExpression("<head>[^<]*</head>", QRegularExpression::CaseInsensitiveOption));
+  out.remove(QRegularExpression("<body[^>]*>", QRegularExpression::CaseInsensitiveOption));
+  out.remove("</body>");
+  // Strip Qt-internal margin/padding from <p> inline styles (keep font/size/color)
+  out.replace(QRegularExpression("margin-[a-z]+:0px;?"), "");
+  out.replace(QRegularExpression("-qt-block-indent:0;?"), "");
+  out.replace(QRegularExpression("text-indent:0px;?"), "");
+  return out.trimmed();
+}
+
 void form_ChatWidget::sendMessageSignal() {
   QTextEdit *message = this->message;
   if (message->toPlainText().length() == 0)
@@ -260,7 +733,7 @@ void form_ChatWidget::sendMessageSignal() {
   mControllForChange.setFontUnderline(mCurrentFont.underline());
   mControllForChange.setFontItalic(mCurrentFont.italic());
 
-  QString NewMessage = mControllForChange.toHtml();
+  QString NewMessage = minifyChatHtml(mControllForChange.toHtml());
 
   if (NewMessage.length() < 65535) {
     user.slotSendChatMessage(NewMessage);
@@ -406,6 +879,26 @@ void form_ChatWidget::focusEvent(bool b) {
 
 void form_ChatWidget::slotPendingCanceled() {
   addAllMessages();
+}
+
+void form_ChatWidget::showContextMenu(const QPoint &pos) {
+  QModelIndex idx = mChatListView->indexAt(pos);
+  if (!idx.isValid())
+    return;
+  QString msg = idx.data(Qt::DisplayRole).toString();
+  if (msg.isEmpty())
+    return;
+  QTextDocument doc;
+  doc.setHtml(msg);
+  QString plain = doc.toPlainText();
+  // Strip technical markers: (pending), ✕
+  plain.remove(QRegularExpression("\\(pending\\)"));
+  plain.remove(QChar(0x2715));
+  plain = plain.trimmed();
+  QMenu menu;
+  QAction *copyAct = menu.addAction(tr("Copy message"));
+  if (menu.exec(mChatListView->mapToGlobal(pos)) == copyAct)
+    QApplication::clipboard()->setText(plain);
 }
 
 void form_ChatWidget::getFocus() {

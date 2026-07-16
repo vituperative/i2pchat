@@ -103,6 +103,7 @@ signals:
   void signOwnAvatarImageChanged();
   void signNicknameChanged();
   void signIncomingUserAuthorizationRequest(QString destination, qint32 streamID, QByteArray data);
+  void signChatStyleChanged();
 
 private:
   CConnectionManager *mConnectionManager;

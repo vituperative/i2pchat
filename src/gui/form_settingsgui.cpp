@@ -304,6 +304,20 @@ void form_settingsgui::loadSettings() {
   settings->endGroup();
 
   settings->beginGroup("Chat");
+  comboBoxChatStyle->addItem(tr("Classic"));
+  comboBoxChatStyle->addItem(tr("Modern"));
+  comboBoxChatStyle->addItem(tr("Bubbles"));
+  {
+    QString cfg = settings->value("ChatStyle", "classic").toString();
+    QStringList key = {"classic", "modern", "bubbles"};
+    int idx = key.indexOf(cfg);
+    QString qss = mConfigPath + "/chat.css";
+    if (QFile::exists(qss)) {
+      comboBoxChatStyle->addItem(tr("Custom (chat.css)"), "custom");
+    }
+    comboBoxChatStyle->setCurrentIndex(idx < 0 ? 0 : idx);
+  }
+
   txtShowCurrentChatStyle->setText("Local settings preview");
   txtOverrideRemote->setText("Remote override preview");
 
@@ -499,6 +513,21 @@ void form_settingsgui::saveSettings() {
   qDebug() << "saveSettings: sync complete";
 
   settings->beginGroup("Chat");
+  {
+    int idx = comboBoxChatStyle->currentIndex();
+    QString val = comboBoxChatStyle->itemData(idx).toString();
+    if (val.isEmpty())
+      val = comboBoxChatStyle->currentText().toLower();
+    if (val == tr("Classic").toLower())
+      val = "classic";
+    else if (val == tr("Modern").toLower())
+      val = "modern";
+    else if (val == tr("Bubbles").toLower())
+      val = "bubbles";
+    settings->setValue("ChatStyle", val);
+  }
+  settings->sync();
+  emit mCore.signChatStyleChanged();
   settings->setValue("DefaultFont", txtShowCurrentChatStyle->currentFont().toString());
   settings->setValue("DefaultColor", txtShowCurrentChatStyle->textColor().name());
 

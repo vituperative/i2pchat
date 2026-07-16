@@ -2,6 +2,7 @@ build*
 .cproject
 I2PChat
 I2P-Messenger
+/i2pchat_plugin_import.cpp
 /i2p-messenger_plugin_import.cpp
 /Makefile*
 NUL
