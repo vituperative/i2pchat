@@ -53,11 +53,11 @@ sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
 ```
 </details>
 
-<details><summary>Windows cross-compile (via MinGW-w64)</summary>
+<details><summary>Windows cross-compile (x86_64 / 64-bit only, via MinGW-w64)</summary>
 
 `bash build.sh --windows` auto-clones [MXE](https://mxe.cc) to `tools/mxe/` and builds
-the `qt5` target on first run (static toolchain + Qt5, takes a while). Subsequent
-builds reuse the cached toolchain automatically.
+the `qt5` target (x86_64-w64-mingw32.static) on first run (static toolchain + Qt5,
+takes a while). Subsequent builds reuse the cached toolchain automatically.
 </details>
 
 #### Optional build tools
@@ -70,6 +70,7 @@ builds reuse the cached toolchain automatically.
 | `clang-tidy`, `run-clang-tidy`  | `--tidy`                | `apt install clang-tidy` / `dnf install clang-tools-extra`                        |
 | `bear` or `compiledb`           | (compile_commands.json) | `apt install bear` / `pipx install compiledb` (for clang-tidy, clangd, etc.)      |
 | `wget` + linuxdeploy            | `--appimage`            | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically)    |
+| `upx`                           | `--upx`                 | `apt install upx` / `dnf install upx`                                             |
 | MXE + qt5 target                | `--windows`             | Auto-cloned — needs `gperf`, `libtool` + `libtool-bin` (Debian) on the host       |
 
 #### Quick build
@@ -78,7 +79,7 @@ builds reuse the cached toolchain automatically.
 bash build.sh
 ```
 
-Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--windows` to cross-compile a Windows .exe).
+Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--windows` to cross-compile a Windows .exe, `--upx` to compress the binary with UPX).
 
 #### Manual compilation
 
@@ -95,7 +96,7 @@ make -j$(nproc)
 
 On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Run `bash build.sh --appimage` to produce a portable AppImage at `dist/I2PChat-x86_64.AppImage`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
 
-On Windows, cross-compile from Linux via `bash build.sh --windows` (requires [MXE](https://mxe.cc) with `qt5`). The `.exe` is written to `dist/I2PChat.exe`. No Windows SDK needed.
+On Windows, cross-compile from Linux via `bash build.sh --windows` (64‑bit only, requires [MXE](https://mxe.cc) with `qt5`). The `.exe` is written to `dist/I2PChat.exe`. No Windows SDK needed.
 
 On macOS, the CI produces a bundled `.app` via `macdeployqt`. Run it by double-clicking `I2PChat.app`.
 

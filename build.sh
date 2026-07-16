@@ -18,6 +18,7 @@ TIDY=false
 BUMP=false
 APPIMAGE=false
 WINDOWS=false
+UPX=false
 JOBS=$(nproc)
 
 usage() {
@@ -29,6 +30,7 @@ usage() {
     echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
     echo "  --appimage    Build portable AppImage (Linux only)"
     echo "  --windows     Cross-compile Windows .exe via MinGW-w64"
+    echo "  --upx         Compress binary with UPX (reduces size, all platforms)"
     echo "  --bump        Bump patch version, update Core.h and create git tag"
     echo "  -j N          Use N parallel jobs (default: all cores)"
     echo "  -h, --help    Show this help"
@@ -42,6 +44,7 @@ while [[ $# -gt 0 ]]; do
     --tidy) TIDY=true ;;
     --appimage) APPIMAGE=true ;;
     --windows) WINDOWS=true ;;
+    --upx) UPX=true ;;
     --bump) BUMP=true ;;
     -j) JOBS="$2"; shift ;;
     -h|--help) usage ;;
@@ -95,10 +98,11 @@ fi
 
 if $WINDOWS; then
   MXE_DIR="$ROOT/tools/mxe"
-  MXE_QMAKE="$MXE_DIR/usr/bin/x86_64-w64-mingw32.static-qmake-qt5"
+  MXE_TARGET="x86_64-w64-mingw32.static"
+  MXE_QMAKE="$MXE_DIR/usr/bin/$MXE_TARGET-qmake-qt5"
 
   # Bootstrap MXE if not found via system or local
-  if [ ! -f "$MXE_QMAKE" ] && ! command -v x86_64-w64-mingw32-qmake-qt5 &>/dev/null; then
+  if [ ! -f "$MXE_QMAKE" ] && ! command -v "${MXE_TARGET}-qmake-qt5" &>/dev/null; then
     if [ ! -d "$MXE_DIR" ]; then
       info "MXE not found at $MXE_DIR — cloning..."
       git clone --depth 1 https://github.com/mxe/mxe.git "$MXE_DIR"
@@ -127,7 +131,7 @@ SCCACHE_STUB
     # fontconfig's meson build links -lintl but not -liconv (needed for
     # static).  fontconfig uses dependency('intl') without static: true,
     # so Libs.private is ignored.  Put -liconv in Libs: unconditionally.
-    for T in i686-w64-mingw32.static x86_64-w64-mingw32.static; do
+    for T in "$MXE_TARGET"; do
       PCDIR="$MXE_DIR/usr/$T/lib/pkgconfig"
       mkdir -p "$PCDIR"
       # fontconfig queries `dependency('intl')` → looks for intl.pc,
@@ -148,7 +152,7 @@ INTL_PC
       done
     done
     PATH="$MXE_CC_WRAPPER:$PYTHON_WRAPPER:$PATH" \
-      make qt5 JOBS="$JOBS" PYTHON=python3
+      make qt5 MXE_TARGETS="$MXE_TARGET" JOBS="$JOBS" PYTHON=python3
     popd >/dev/null
   fi
 
@@ -166,6 +170,7 @@ if $FORMAT; then ((TOTAL_STEPS++)); fi
 if $TIDY; then ((TOTAL_STEPS++)); fi
 if $APPIMAGE; then ((TOTAL_STEPS++)); fi
 if $WINDOWS; then ((TOTAL_STEPS++)); fi
+if $UPX; then ((TOTAL_STEPS++)); fi
 CUR_STEP=0
 
 next_step() {
@@ -223,14 +228,14 @@ fi
 
 if $WINDOWS; then
 next_step "Cross-compiling ${#BUILT_SOURCES[@]} source files for Windows..."
-if [ -f "$MXE_QMAKE" ]; then
+if [ -n "$MXE_QMAKE" ] && [ -f "$MXE_QMAKE" ]; then
   CROSS_QMAKE="$MXE_QMAKE"
 else
-  CROSS_QMAKE="x86_64-w64-mingw32-qmake-qt5"
+  CROSS_QMAKE="${MXE_TARGET%%.*}-qmake-qt5"
 fi
 $CROSS_QMAKE -after "DESTDIR=$DIST_DIR/" "OBJECTS_DIR=$BUILD_DIR/obj/" "MOC_DIR=$BUILD_DIR/moc/" "RCC_DIR=$BUILD_DIR/qrc/" >/dev/null 2>&1
-make -j"$JOBS" >/dev/null 2>&1
-x86_64-w64-mingw32-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || true
+PATH="$MXE_DIR/usr/bin:$PATH" make -j"$JOBS" >/dev/null 2>&1
+${MXE_TARGET}-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || true
 BINARY="${DIST_DIR}/I2PChat.exe"
 else
 next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
@@ -249,6 +254,18 @@ echo -e "  ${GREEN}BUILD SUCCESSFUL${NC}"
 printf "     %-10s %s\n" "Binary:"    "$BINARY"
 printf "     %-10s %s\n" "Size:"      "${FILESIZE} bytes"
 printf "     %-10s %s\n" "Completed:" "$(date '+%Y-%m-%d %H:%M:%S') ($((SECONDS - SCRIPT_START))s)"
+
+# --- UPX compression ---
+if $UPX; then
+next_step "Compressing with UPX..."
+if command -v upx &>/dev/null; then
+  upx --best "$BINARY" 2>&1
+  FILESIZE=$(stat --format=%s "$BINARY" 2>/dev/null || stat -f%z "$BINARY" 2>/dev/null)
+  printf "     %-10s %s\n" "Compressed:" "${FILESIZE} bytes"
+else
+  fail "upx not found — install with: apt install upx"
+fi
+fi
 
 # --- AppImage ---
 if $APPIMAGE; then
