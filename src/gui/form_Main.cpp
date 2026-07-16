@@ -461,6 +461,8 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnu.addAction(CopyDestination);
     contextMnu.addAction(CopyB32);
     contextMnu.addAction(UserRename);
+    contextMnu.addAction(UserDelete);
+    contextMnu.addAction(UserToBlockList);
 
     // Enable Copy B32 only if user is online (can do naming lookup)
     if (User->getConnectionStatus() == ONLINE) {
