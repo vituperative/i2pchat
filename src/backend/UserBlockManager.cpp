@@ -129,7 +129,7 @@ void CUserBlockManager::removeBlockEntity(const QString &Destination, bool Creat
     delete mUserBlockMap.value(Destination);
     mUserBlockMap.remove(Destination);
     if (CreateUser == true) {
-      mCore.getUserManager()->addNewUser(Nickname, Destination, true);
+      mCore.getUserManager()->addNewUser(Nickname, Destination);
     }
 
   } else {

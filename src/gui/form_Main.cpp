@@ -1026,12 +1026,17 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
       versiond = 0.0;
 
     // Add the user
+    bool added = false;
     if (versiond >= 0.3) {
-      Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
+      added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
     } else {
-      Core->getUserManager()->addNewUser("Unknown", destination, streamID);
+      added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
     }
 
+    if (!added) {
+      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+      return;
+    }
     CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
     if (User) {
       User->setI2PStreamID(streamID);

@@ -503,11 +503,16 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
       return;
     }
 
+    bool added = false;
     if (versiond >= 0.3)
-      mCore.getUserManager()->addNewUser("...identifying...", stream->getDestination(), ID);
+      added = mCore.getUserManager()->addNewUser("...identifying...", stream->getDestination(), ID);
     else
-      mCore.getUserManager()->addNewUser("Unknown", stream->getDestination(), ID);
+      added = mCore.getUserManager()->addNewUser("Unknown", stream->getDestination(), ID);
 
+    if (!added) {
+      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+      return;
+    }
     CUser *User = mCore.getUserManager()->getUserByI2P_Destination(stream->getDestination());
     if (User != NULL) {
       User->setI2PStreamID(ID);

@@ -411,12 +411,9 @@ bool CUserManager::deleteUserByI2PDestination(const QString &I2PDestination) {
     return false;
   if (Him->getConnectionStatus() == ONLINE || Him->getConnectionStatus() == TRYTOCONNECT) {
     mCore.deletePacketManagerByID(Him->getI2PStreamID());
-    mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
   }
-
-  if (mCore.getConnectionManager()->isComponentStopped() == false) {
+  if (mCore.getConnectionManager()->isComponentStopped() == false)
     mCore.getConnectionManager()->doDestroyStreamObjectByID(Him->getI2PStreamID());
-  }
   Him->deleteLater();
   this->deleteUserByI2P_Destination(I2PDestination);
   saveUserList();
