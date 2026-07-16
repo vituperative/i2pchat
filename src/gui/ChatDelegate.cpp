@@ -171,11 +171,15 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   }
 
   // Strip HTML color attributes so our foreground color takes effect
+  // Also replace <p> with <div> — QTextDocument's default p margin (~12px)
+  // creates excess bottom space even after stripBlockMargins in some Qt versions
   QString renderText = text;
   renderText.replace(
     QRegularExpression("<font\\s+color\\s*=\\s*\"[^\"]*\"\\s*>", QRegularExpression::CaseInsensitiveOption), "<font>");
   renderText.replace(
     QRegularExpression("\\bcolor\\s*:\\s*#[0-9a-fA-F]+;?\\s*", QRegularExpression::CaseInsensitiveOption), "");
+  renderText.replace(QRegularExpression("<p[^>]*>", QRegularExpression::CaseInsensitiveOption), "<div>");
+  renderText.replace("</p>", "</div>");
   renderText = QStringLiteral("<div style=\"color:%1;\">%2</div>").arg(fg.name(), renderText);
 
   auto *doc = new QTextDocument;
@@ -236,19 +240,33 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   if (tw < 50)
     tw = 50;
 
-  // Strip HTML tags and measure plain text with font metrics
-  QString plain = text;
-  plain.replace(QRegularExpression("<br\\s*/?>", QRegularExpression::CaseInsensitiveOption), "\n");
-  plain.remove(QRegularExpression("<[^>]*>"));
-  plain = plain.trimmed();
-  if (plain.isEmpty())
-    plain = " ";
+  // Measure height with QTextDocument as paint() does so heights match exactly
+  QString renderText = text;
+  renderText.replace(
+    QRegularExpression("<font\\s+color\\s*=\\s*\"[^\"]*\"\\s*>", QRegularExpression::CaseInsensitiveOption), "<font>");
+  renderText.replace(
+    QRegularExpression("\\bcolor\\s*:\\s*#[0-9a-fA-F]+;?\\s*", QRegularExpression::CaseInsensitiveOption), "");
+  renderText.replace(QRegularExpression("<p[^>]*>", QRegularExpression::CaseInsensitiveOption), "<div>");
+  renderText.replace("</p>", "</div>");
+  renderText = QStringLiteral("<div style=\"color:#000;\">%1</div>").arg(renderText);
 
-  QFontMetrics fm(option.font);
-  QRect br = fm.boundingRect(QRect(0, 0, tw, 0), Qt::AlignLeft | Qt::TextWordWrap, plain);
-  int textH = br.height() + 2; // small allowance for descenders
+  auto *doc = new QTextDocument;
+  doc->setDefaultFont(option.font);
+  doc->setDocumentMargin(0);
+  {
+    QString ss = "a { color: #0000ff; }";
+    if (!mColors.extraStylesheet.isEmpty())
+      ss += "\n" + mColors.extraStylesheet;
+    doc->setDefaultStyleSheet(ss);
+  }
+  doc->setHtml(renderText);
+  stripBlockMargins(doc);
+  doc->setTextWidth(tw);
+  QSizeF ds = doc->documentLayout()->documentSize();
+  int textH = qMax((int)(ds.height() + 0.5), 1);
+  delete doc;
 
-  int h = textH + mColors.padV * 2 + 2;
+  int h = textH + mColors.padV * 2;
   if (type == MsgSystem && mColors.radius > 0)
     h = qMin(h, textH + 12);
   return QSize(w, h);
