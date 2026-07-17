@@ -958,15 +958,31 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
   if (link.scheme() == "cancelmsg") {
     bool ok = false;
     qint32 id = link.toString().mid(link.scheme().length() + 1).toInt(&ok);
-    if (ok)
+    if (ok) {
       user.cancelPendingMessage(id);
+      // Remove the canceled row from the model directly (slotPendingCanceled
+      // no longer fires for individual cancels — it only fires for batch send)
+      if (mChatStyle == "classic")
+        addAllMessagesClassic();
+      else
+        for (int i = 0; i < mChatModel->rowCount(); ++i)
+          if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
+            mChatModel->removeRow(i);
+    }
     return;
   }
   if (link.scheme() == "cancelfile") {
     bool ok = false;
     qint32 id = link.toString().mid(link.scheme().length() + 1).toInt(&ok);
-    if (ok)
+    if (ok) {
       user.cancelPendingFileOffer(id);
+      if (mChatStyle == "classic")
+        addAllMessagesClassic();
+      else
+        for (int i = 0; i < mChatModel->rowCount(); ++i)
+          if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
+            mChatModel->removeRow(i);
+    }
     return;
   }
 

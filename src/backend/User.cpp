@@ -299,7 +299,6 @@ void CUser::cancelPendingMessage(qint32 id) {
       mPendingMsgIdx[k]--;
   }
   emit signSaveUnsentMessages(mI2PDestination);
-  emit signPendingCanceled();
 }
 
 void CUser::cancelPendingFileOffer(qint32 id) {
@@ -329,7 +328,6 @@ void CUser::cancelPendingFileOffer(qint32 id) {
       mPendingFileIdx[k]--;
   }
   emit signSaveUnsentMessages(mI2PDestination);
-  emit signPendingCanceled();
 }
 
 void CUser::slotSendChatMessage(const QString &Message) {
