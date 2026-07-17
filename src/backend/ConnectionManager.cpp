@@ -2,6 +2,7 @@
 
 #include "ConnectionManager.h"
 
+#include <QDateTime>
 #include <QRandomGenerator>
 
 #include <utility>
@@ -13,7 +14,7 @@ CConnectionManager::CConnectionManager(QString SamHost, QString SamPort, QString
   mComponentStateStopped = false;
   StreamController = NULL;
   mSessionStreamStatusOK = false;
-  emit signDebugMessages("• I2PChat Connection Manager started");
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • I2PChat Connection Manager started");
 }
 
 bool CConnectionManager::doCreateSession(SESSION_ENUMS::SESSION_STYLEV3 SessionStyle,
@@ -119,7 +120,7 @@ bool CConnectionManager::doDestroyStreamObjectByID(qint32 ID) {
 
   t->deleteLater();
 
-  emit signDebugMessages(Message);
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " " + Message);
   return true;
 }
 
@@ -271,7 +272,7 @@ void CConnectionManager::doReStart() {
   mComponentStateStopped = false;
   StreamController = NULL;
   mSessionStreamStatusOK = false;
-  emit signDebugMessages("• I2PChat: Connection Manager restarted");
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • I2PChat: Connection Manager restarted");
 }
 
 void CConnectionManager::stopp() {
@@ -294,5 +295,5 @@ void CConnectionManager::stopp() {
   // close all StreamContoller
   delete StreamController;
   StreamController = NULL;
-  emit signDebugMessages("• I2PChat: Connection Manager stopped");
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • I2PChat: Connection Manager stopped");
 }

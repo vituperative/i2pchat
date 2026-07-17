@@ -2,6 +2,7 @@
 
 #include "I2PStream.h"
 
+#include <QRegularExpression>
 #include <utility>
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.3\n";
@@ -106,11 +107,13 @@ void CI2PStream::slotConnected() {
 }
 
 void CI2PStream::slotDisconnected() {
+  if (mDoneDisconnect)
+    return;
+  mDoneDisconnect = true;
   QString smID = QString::number(mID, 10);
 
   mStatusReceived = false;
   mDestinationReceived = false;
-  mDoneDisconnect = false;
   mHandshakeSuccessful = false;
   mFIRSTPACKETCHAT_alreadySent = false;
 
@@ -131,8 +134,12 @@ void CI2PStream::slotReadFromSocket() {
     return;
   }
 
-  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
-                         "] Incoming ‣ " + newData);
+  {
+    QString dbg = QString::fromUtf8(newData);
+    dbg.replace(QRegularExpression("DESTINATION=[A-Za-z0-9~_-]{50,}"), "DESTINATION=…");
+    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                           "] Incoming ‣ " + dbg);
+  }
 
   if (mHandshakeSuccessful == false) {
 
@@ -260,8 +267,12 @@ void CI2PStream::operator<<(const QByteArray &Data) {
   QString timeNow = QString(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
   if (mTcpSocket.state() == QTcpSocket::ConnectedState && mHandshakeSuccessful) {
-    emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
-                           "] Outgoing ‣ " + Data);
+    {
+      QString dbg = QString::fromUtf8(Data);
+      dbg.replace(QRegularExpression("DESTINATION=[A-Za-z0-9~_-]{50,}"), "DESTINATION=…");
+      emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
+                             "] Outgoing ‣ " + dbg);
+    }
 
     if (mTcpSocket.isWritable()) {
       mTcpSocket.write(Data);
