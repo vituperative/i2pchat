@@ -239,34 +239,28 @@ void form_settingsgui::loadSettings() {
 
   settings->beginGroup("Sound");
   settings->beginGroup("SoundFilePath");
-  txt_SoundFile->setText(settings->value("User_go_Online", "./sounds/Startup.wav").toString());
-  txt_SoundFile2->setText(settings->value("User_go_Offline", "").toString());
-  txt_SoundFile3->setText(settings->value("FileSend_Finished", "").toString());
-  txt_SoundFile4->setText(settings->value("FileReceive_Incoming", "./sounds/File.wav").toString());
-  txt_SoundFile5->setText(settings->value("FileReceive_Finished", "").toString());
-  txt_SoundFile6->setText(settings->value("NewChatMessage", "./sounds/Notify.wav").toString());
+  txt_SoundFile->setText(settings->value("User_go_Online", "./sounds/online.wav").toString());
+  txt_SoundFile2->setText(settings->value("User_go_Offline", "./sounds/offline.wav").toString());
+  txt_SoundFile3->setText(settings->value("FileSend_Finished", "./sounds/complete.wav").toString());
+  txt_SoundFile4->setText(settings->value("FileReceive_Incoming", "./sounds/fileincoming.wav").toString());
+  txt_SoundFile5->setText(settings->value("FileReceive_Finished", "./sounds/complete.wav").toString());
+  txt_SoundFile6->setText(settings->value("NewChatMessage", "./sounds/newmessage.wav").toString());
 
-  if (!txt_SoundFile->text().isEmpty())
-    checkBoxSound->setEnabled(true);
-  if (!txt_SoundFile2->text().isEmpty())
-    checkBoxSound_2->setEnabled(true);
-  if (!txt_SoundFile3->text().isEmpty())
-    checkBoxSound_3->setEnabled(true);
-  if (!txt_SoundFile4->text().isEmpty())
-    checkBoxSound_4->setEnabled(true);
-  if (!txt_SoundFile5->text().isEmpty())
-    checkBoxSound_5->setEnabled(true);
-  if (!txt_SoundFile6->text().isEmpty())
-    checkBoxSound_6->setEnabled(true);
+  checkBoxSound->setEnabled(!txt_SoundFile->text().isEmpty());
+  checkBoxSound_2->setEnabled(!txt_SoundFile2->text().isEmpty());
+  checkBoxSound_3->setEnabled(!txt_SoundFile3->text().isEmpty());
+  checkBoxSound_4->setEnabled(!txt_SoundFile4->text().isEmpty());
+  checkBoxSound_5->setEnabled(!txt_SoundFile5->text().isEmpty());
+  checkBoxSound_6->setEnabled(!txt_SoundFile6->text().isEmpty());
 
   settings->endGroup();
 
   settings->beginGroup("Enable");
   checkBoxSound->setChecked(settings->value("User_go_Online", true).toBool());
-  checkBoxSound_2->setChecked(settings->value("User_go_Offline", false).toBool());
-  checkBoxSound_3->setChecked(settings->value("FileSend_Finished", false).toBool());
+  checkBoxSound_2->setChecked(settings->value("User_go_Offline", true).toBool());
+  checkBoxSound_3->setChecked(settings->value("FileSend_Finished", true).toBool());
   checkBoxSound_4->setChecked(settings->value("FileReceive_Incoming", true).toBool());
-  checkBoxSound_5->setChecked(settings->value("FileReceive_Finished", false).toBool());
+  checkBoxSound_5->setChecked(settings->value("FileReceive_Finished", true).toBool());
   checkBoxSound_6->setChecked(settings->value("NewChatMessage", true).toBool());
   settings->endGroup();
 
@@ -530,6 +524,7 @@ void form_settingsgui::saveSettings() {
     settings->setValue("ChatStyle", val);
   }
   settings->sync();
+  mCore.getSoundManager()->reInit();
   emit mCore.signChatStyleChanged();
   settings->setValue("DefaultFont", txtShowCurrentChatStyle->currentFont().toString());
   settings->setValue("DefaultColor", txtShowCurrentChatStyle->textColor().name());
