@@ -49,6 +49,7 @@ ChatDelegate::ChatDelegate(QObject *parent)
   c.radius = 3;
   c.padV = 4;
   c.padH = 8;
+  c.padVInner = 0;
   c.pendingBg = "#fff3cd";
   c.pendingFg = "#856404";
   mColors = c;
@@ -336,7 +337,7 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     int rightPad = mColors.padH;
     if (hasCancel)
       rightPad += kCancelIconSize + kCancelIconMargin;
-    QRect textRect = bubbleRect.adjusted(mColors.padH, 0, -rightPad, 0);
+    QRect textRect = bubbleRect.adjusted(mColors.padH, mColors.padVInner, -rightPad, -mColors.padVInner);
     doc->setTextWidth(textRect.width());
     painter->translate(textRect.topLeft());
     doc->drawContents(painter);
@@ -421,7 +422,7 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   int textH = qMax((int)(ds.height() + 0.5), 1);
   delete doc;
 
-  int h = textH + mColors.padV * 2;
+  int h = textH + mColors.padV * 2 + mColors.padVInner * 2;
   if (type == MsgSystem && mColors.radius > 0)
     h = qMin(h, textH + 12);
   return QSize(w, h);

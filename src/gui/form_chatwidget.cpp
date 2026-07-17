@@ -183,11 +183,11 @@ void form_ChatWidget::loadChatStyle() {
 
   bool themed = (styleLower != "classic");
   if (styleLower == "bubbles") {
-    mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 3, 2, 6, true};
+    mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 3, 2, 6, 0, true};
   } else if (styleLower == "modern") {
-    mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 3, 2, 6, true};
+    mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 3, 2, 6, 0, true};
   } else {
-    mBubbleStyle = {"", "", "", "", "#888888", 0, 0, 0, false};
+    mBubbleStyle = {"", "", "", "", "#888888", 0, 0, 0, 0, false};
   }
 
   ChatDelegate::BubbleColors dc;
@@ -199,6 +199,7 @@ void form_ChatWidget::loadChatStyle() {
   dc.radius = mBubbleStyle.radius;
   dc.padV = mBubbleStyle.padV;
   dc.padH = mBubbleStyle.padH;
+  dc.padVInner = mBubbleStyle.padVInner;
   dc.pendingBg = "#fff3cd";
   dc.pendingFg = "#856404";
 
@@ -445,13 +446,9 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
         grad = BubbleGradient();
     };
     if (className == "bubble") {
-      qDebug() << "    applyProp bubble: prop=" << prop << "val=" << val;
       if (prop == "border-radius" || prop == "radius") {
         QString v = val;
-        int r = v.remove("px", Qt::CaseInsensitive).trimmed().toInt();
-        qDebug() << "    applyProp bubble radius: parsed=" << r;
-        dc.radius = bs.radius = r;
-        qDebug() << "    applyProp bubble radius: dc.radius=" << dc.radius << "bs.radius=" << bs.radius;
+        dc.radius = bs.radius = v.remove("px", Qt::CaseInsensitive).trimmed().toInt();
       } else if (prop == "padding") {
         static QRegularExpression pRx("^(\\d+)\\s*px(?:\\s+(\\d+)\\s*px)?");
         auto pm = pRx.match(val);
@@ -461,6 +458,10 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
         }
       } else if (prop == "box-shadow")
         dc.shadows = parseShadows(val);
+      else if (prop == "pad-v-inner" || prop == "padding-inner") {
+        QString vv = val;
+        dc.padVInner = bs.padVInner = vv.remove("px", Qt::CaseInsensitive).trimmed().toInt();
+      }
       return;
     }
     if (className == "pending") {
@@ -507,13 +508,11 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
   // Extract inline properties from remainder of a class-open line
   static QRegularExpression inlinePropRx("([\\w-]+)\\s*:\\s*([^;}]+)");
 
-  qDebug() << "applyThemeCss: starting parse of" << path;
   enum { StTop, StClass } state = StTop;
   QString curClass;
   QMap<QString, QString> curProps;
 
   auto flushClass = [&] {
-    qDebug() << "  flushClass:" << curClass << "props:" << curProps;
     static const QStringList bubbleClasses = {"bubble", "sent", "received", "rcvd", "system", "pending"};
     if (bubbleClasses.contains(curClass)) {
       for (auto it = curProps.begin(); it != curProps.end(); ++it)
@@ -545,7 +544,6 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
 
   while (!in.atEnd()) {
     QString line = in.readLine();
-    qDebug() << "  parse line:" << line << "state=" << (state == StTop ? "StTop" : "StClass");
 
     if (state == StTop) {
       // Try standard variable syntax (backward compat)
@@ -569,11 +567,12 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
           dc.systemGradient = parseGradient(val);
         } else if (name == "radius" || name == "border-radius") {
           bs.radius = val.remove("px").trimmed().toInt();
-          qDebug() << "    varRx radius: val=" << val << "set bs.radius=" << bs.radius;
         } else if (name == "pad-v" || name == "padding-top" || name == "padding-bottom")
           bs.padV = val.remove("px").trimmed().toInt();
         else if (name == "pad-h" || name == "padding-left" || name == "padding-right")
           bs.padH = val.remove("px").trimmed().toInt();
+        else if (name == "pad-v-inner" || name == "padding-inner")
+          bs.padVInner = val.remove("px").trimmed().toInt();
         else if (name == "padding") {
           static QRegularExpression pRx("^(\\d+)\\s*px(?:\\s+(\\d+)\\s*px)?");
           auto pm = pRx.match(val);
@@ -587,21 +586,17 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
       }
 
       auto cm = classOpenRx.match(line);
-      qDebug() << "    classOpenRx match:" << cm.hasMatch() << "class:" << cm.captured(1);
       if (cm.hasMatch()) {
         curClass = cm.captured(1);
         curProps.clear();
         // Extract any inline properties on the same line after the {
         QString rest = line.mid(cm.capturedEnd(0));
-        qDebug() << "    rest after {: " << rest;
         auto ip = inlinePropRx.globalMatch(rest);
         while (ip.hasNext()) {
           auto im = ip.next();
-          qDebug() << "    inline prop:" << im.captured(1).trimmed() << "=" << im.captured(2).trimmed();
           curProps[im.captured(1).trimmed()] = im.captured(2).trimmed();
         }
         bool hasClose = rest.contains('}');
-        qDebug() << "    hasClose:" << hasClose;
         if (hasClose) {
           flushClass();
         } else {
@@ -617,10 +612,6 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
     }
   }
   f.close();
-  qDebug() << "applyThemeCss: radius=" << dc.radius << "padV=" << dc.padV << "padH=" << dc.padH
-           << "sentBg=" << dc.sentBg << "sentFg=" << dc.sentFg << "receivedBg=" << dc.receivedBg
-           << "receivedFg=" << dc.receivedFg << "shadows.count=" << dc.shadows.size()
-           << "extraStylesheet.length=" << dc.extraStylesheet.length();
 }
 
 void form_ChatWidget::newMessageReceived() {
