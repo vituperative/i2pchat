@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QSvgRenderer>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QUrl>
@@ -14,6 +15,28 @@
 #include <cmath>
 
 static constexpr double kPi = 3.14159265358979323846;
+static constexpr int kCancelIconSize = 10;
+static constexpr int kCancelIconMargin = 4;
+
+static QPixmap cancelIconPixmap() {
+  static QPixmap pix;
+  if (pix.isNull()) {
+    QSvgRenderer r(QString(":/icons/cancel.svg"));
+    pix = QPixmap(kCancelIconSize, kCancelIconSize);
+    pix.fill(Qt::transparent);
+    QPainter p(&pix);
+    r.render(&p);
+    p.end();
+  }
+  return pix;
+}
+
+static QRect cancelIconRect(const QRect &bubbleRect) {
+  return QRect(bubbleRect.right() - kCancelIconSize - kCancelIconMargin,
+               bubbleRect.top() + kCancelIconMargin,
+               kCancelIconSize,
+               kCancelIconSize);
+}
 
 ChatDelegate::ChatDelegate(QObject *parent)
   : QStyledItemDelegate(parent) {
@@ -23,9 +46,9 @@ ChatDelegate::ChatDelegate(QObject *parent)
   c.receivedBg = "#e5e5ea";
   c.receivedFg = "#1c1c1c";
   c.systemColor = "#888888";
-  c.radius = 8;
-  c.padV = 6;
-  c.padH = 12;
+  c.radius = 3;
+  c.padV = 4;
+  c.padH = 8;
   c.pendingBg = "#fff3cd";
   c.pendingFg = "#856404";
   mColors = c;
@@ -46,15 +69,87 @@ void ChatDelegate::setBubbleColors(const BubbleColors &c) {
   mColors = c;
 }
 
+// Sliding-window box blur preserving shape (image dimensions unchanged)
+static void boxBlurImage(QImage &img, int radius) {
+  if (radius <= 0 || img.isNull()) return;
+  int w = img.width(), h = img.height();
+  if (w < 1 || h < 1) return;
+
+  QImage tmp(w, h, QImage::Format_ARGB32_Premultiplied);
+  tmp.fill(Qt::transparent);
+
+  // Horizontal pass
+  for (int y = 0; y < h; y++) {
+    const QRgb *src = (const QRgb *)img.constScanLine(y);
+    unsigned int *dst = (unsigned int *)tmp.scanLine(y);
+    int sumR = 0, sumG = 0, sumB = 0, sumA = 0;
+    // Initial window
+    for (int x = -radius; x <= radius; x++) {
+      int xi = qBound(0, x, w - 1);
+      QRgb px = src[xi];
+      sumR += qRed(px);
+      sumG += qGreen(px);
+      sumB += qBlue(px);
+      sumA += qAlpha(px);
+    }
+    for (int x = 0; x < w; x++) {
+      int outX = x - radius - 1;
+      int inX = x + radius;
+      if (outX >= 0) {
+        QRgb px = src[outX];
+        sumR -= qRed(px);
+        sumG -= qGreen(px);
+        sumB -= qBlue(px);
+        sumA -= qAlpha(px);
+      }
+      if (inX < w) {
+        QRgb px = src[inX];
+        sumR += qRed(px);
+        sumG += qGreen(px);
+        sumB += qBlue(px);
+        sumA += qAlpha(px);
+      }
+      int count = qMin(x + radius, w - 1) - qMax(x - radius, 0) + 1;
+      dst[x] = qRgba(sumR / count, sumG / count, sumB / count, sumA / count);
+    }
+  }
+
+  // Vertical pass (read from tmp, write back to img)
+  for (int x = 0; x < w; x++) {
+    int sumR = 0, sumG = 0, sumB = 0, sumA = 0;
+    for (int y = -radius; y <= radius; y++) {
+      int yi = qBound(0, y, h - 1);
+      QRgb px = ((const unsigned int *)tmp.constScanLine(yi))[x];
+      sumR += qRed(px);
+      sumG += qGreen(px);
+      sumB += qBlue(px);
+      sumA += qAlpha(px);
+    }
+    for (int y = 0; y < h; y++) {
+      int outY = y - radius - 1;
+      int inY = y + radius;
+      if (outY >= 0) {
+        QRgb px = ((const unsigned int *)tmp.constScanLine(outY))[x];
+        sumR -= qRed(px);
+        sumG -= qGreen(px);
+        sumB -= qBlue(px);
+        sumA -= qAlpha(px);
+      }
+      if (inY < h) {
+        QRgb px = ((const unsigned int *)tmp.constScanLine(inY))[x];
+        sumR += qRed(px);
+        sumG += qGreen(px);
+        sumB += qBlue(px);
+        sumA += qAlpha(px);
+      }
+      int count = qMin(y + radius, h - 1) - qMax(y - radius, 0) + 1;
+      ((unsigned int *)img.scanLine(y))[x] = qRgba(sumR / count, sumG / count, sumB / count, sumA / count);
+    }
+  }
+}
+
 static void drawShadow(QPainter *p, const QPainterPath &path, const BubbleShadow &shadow) {
   p->save();
-  p->translate(shadow.offsetX, shadow.offsetY);
-
-  if (shadow.blurRadius <= 0) {
-    p->fillPath(path, shadow.color);
-    p->restore();
-    return;
-  }
 
   QRectF bounds = path.boundingRect();
   int bx = (int)std::floor(bounds.x()) - 1;
@@ -66,29 +161,59 @@ static void drawShadow(QPainter *p, const QPainterPath &path, const BubbleShadow
     return;
   }
 
-  // Render at target res
-  QImage render(bw, bh, QImage::Format_ARGB32_Premultiplied);
-  render.fill(Qt::transparent);
-  QPainter rp(&render);
-  rp.setRenderHint(QPainter::Antialiasing);
-  rp.translate(-bx, -by);
-  rp.setPen(Qt::NoPen);
-  rp.setBrush(shadow.color);
-  rp.drawPath(path);
-  rp.end();
+  if (shadow.inset) {
+    // Inset shadow: clip to the bubble path, draw shadow inside
+    p->setClipPath(path);
+    p->translate(shadow.offsetX, shadow.offsetY);
 
-  // Downsample → box blur, then upsample → smooth interpolation
-  int factor = qMax(shadow.blurRadius, 2);
-  int sw = qMax(bw / factor, 1), sh = qMax(bh / factor, 1);
-  QImage blurred;
-  if (sw < bw || sh < bh) {
-    QImage small = render.scaled(sw, sh, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    blurred = small.scaled(bw, bh, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-  } else {
-    blurred = render;
+    if (shadow.blurRadius <= 0) {
+      // Unblurred inset: just fill the whole area with shadow color
+      // so it only shows inside the clip (at the offset position)
+      QRectF r = bounds.translated(-shadow.offsetX, -shadow.offsetY);
+      p->fillRect(r, shadow.color);
+    } else {
+      // Blurred inset: render at target res, blur, draw
+      QImage render(bw, bh, QImage::Format_ARGB32);
+      render.fill(Qt::transparent);
+      {
+        QPainter rp(&render);
+        rp.setRenderHint(QPainter::Antialiasing);
+        rp.translate(-bx, -by);
+        rp.setPen(Qt::NoPen);
+        rp.setBrush(shadow.color);
+        rp.drawRect(bounds);
+        rp.end();
+      }
+      boxBlurImage(render, shadow.blurRadius);
+      p->drawImage(bx, by, render);
+    }
+    p->restore();
+    return;
   }
 
-  p->drawImage(bx, by, blurred);
+  // Outer shadow
+  p->translate(shadow.offsetX, shadow.offsetY);
+
+  if (shadow.blurRadius <= 0) {
+    p->fillPath(path, shadow.color);
+    p->restore();
+    return;
+  }
+
+  QImage render(bw, bh, QImage::Format_ARGB32);
+  render.fill(Qt::transparent);
+  {
+    QPainter rp(&render);
+    rp.setRenderHint(QPainter::Antialiasing);
+    rp.translate(-bx, -by);
+    rp.setPen(Qt::NoPen);
+    rp.setBrush(shadow.color);
+    rp.drawPath(path);
+    rp.end();
+  }
+
+  boxBlurImage(render, shadow.blurRadius);
+  p->drawImage(bx, by, render);
   p->restore();
 }
 
@@ -194,11 +319,24 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   doc->setHtml(renderText);
   stripBlockMargins(doc);
 
+  QString cancelUrl;
+  bool hasCancel = (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty());
+  if (hasCancel)
+    cancelUrl = index.data(CancelUrlRole).toString();
+
+  QRectF iconRect;
+  if (hasCancel)
+    iconRect = cancelIconRect(bubbleRect);
+
   if (drawBubble) {
-    QRect textRect = bubbleRect.adjusted(mColors.padH, 1, -mColors.padH, -1);
+    int rightPad = mColors.padH;
+    if (hasCancel)
+      rightPad += kCancelIconSize + kCancelIconMargin;
+    QRect textRect = bubbleRect.adjusted(mColors.padH, 1, -rightPad, -1);
     doc->setTextWidth(textRect.width());
     painter->translate(textRect.topLeft());
     doc->drawContents(painter, QRectF(0, 0, textRect.width(), textRect.height()));
+    painter->translate(-textRect.topLeft());
   } else {
     int availW = r.width() - 8;
     doc->setTextWidth(availW);
@@ -206,6 +344,13 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     int xOff = qMax(0, (r.width() - (int)ds.width()) / 2);
     painter->translate(r.x() + xOff, r.y() + 2);
     doc->drawContents(painter);
+    painter->translate(-(r.x() + xOff), -(r.y() + 2));
+  }
+
+  if (hasCancel) {
+    QPixmap pix = cancelIconPixmap();
+    if (!pix.isNull())
+      painter->drawPixmap(iconRect.topLeft(), pix);
   }
 
   delete doc;
@@ -238,6 +383,8 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   } else {
     tw = w - margin - 4 - mColors.padH * 2;
   }
+  if (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty())
+    tw -= kCancelIconSize + kCancelIconMargin;
   if (tw < 50)
     tw = 50;
 
@@ -286,16 +433,27 @@ bool ChatDelegate::editorEvent(QEvent *event,
 
   auto *doc = new QTextDocument;
   doc->setDefaultFont(option.font);
+  {
+    QString ss = "a { color: #0000ff; }"
+                 "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li, dl, dd {"
+                 " margin: 0; padding: 0;"
+                 "}";
+    if (!mColors.extraStylesheet.isEmpty())
+      ss += "\n" + mColors.extraStylesheet;
+    doc->setDefaultStyleSheet(ss);
+  }
   doc->setHtml(text);
+  stripBlockMargins(doc);
 
   int margin = qMax(option.rect.width() / 5, 80);
+  QRect bubbleRect;
   QPointF docOrigin;
 
   if (type == MsgSystem) {
     if (mColors.radius > 0) {
       int bw = qMin(option.rect.width() * 3 / 4, 320);
       int bx = option.rect.x() + (option.rect.width() - bw) / 2;
-      QRect bubbleRect(bx, option.rect.y() + 4, bw, option.rect.height() - 8);
+      bubbleRect = QRect(bx, option.rect.y() + 4, bw, option.rect.height() - 8);
       docOrigin = bubbleRect.topLeft() + QPoint(4, 2);
       doc->setTextWidth(bubbleRect.width() - 8);
     } else {
@@ -306,17 +464,17 @@ bool ChatDelegate::editorEvent(QEvent *event,
       docOrigin = QPointF(option.rect.x() + xOff, option.rect.y() + 2);
     }
   } else if (type == MsgSent || type == MsgPending) {
-    QRect bubbleRect(option.rect.x() + margin,
-                     option.rect.y() + mColors.padV,
-                     option.rect.width() - margin - 4,
-                     option.rect.height() - mColors.padV * 2);
+    bubbleRect = QRect(option.rect.x() + margin,
+                       option.rect.y() + mColors.padV,
+                       option.rect.width() - margin - 4,
+                       option.rect.height() - mColors.padV * 2);
     docOrigin = bubbleRect.topLeft() + QPoint(mColors.padH, 2);
     doc->setTextWidth(bubbleRect.width() - mColors.padH * 2);
   } else {
-    QRect bubbleRect(option.rect.x() + 4,
-                     option.rect.y() + mColors.padV,
-                     option.rect.width() - margin - 4,
-                     option.rect.height() - mColors.padV * 2);
+    bubbleRect = QRect(option.rect.x() + 4,
+                       option.rect.y() + mColors.padV,
+                       option.rect.width() - margin - 4,
+                       option.rect.height() - mColors.padV * 2);
     docOrigin = bubbleRect.topLeft() + QPoint(mColors.padH, 2);
     doc->setTextWidth(bubbleRect.width() - mColors.padH * 2);
   }
@@ -328,6 +486,15 @@ bool ChatDelegate::editorEvent(QEvent *event,
   if (!anchor.isEmpty()) {
     emit linkClicked(QUrl(anchor));
     return true;
+  }
+
+  // Check cancel icon click for pending messages
+  if (type == MsgPending) {
+    QString cancelUrl = index.data(CancelUrlRole).toString();
+    if (!cancelUrl.isEmpty() && cancelIconRect(bubbleRect).contains(me->pos())) {
+      emit linkClicked(QUrl(cancelUrl));
+      return true;
+    }
   }
 
   return QStyledItemDelegate::editorEvent(event, model, option, index);
