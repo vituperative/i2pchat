@@ -66,7 +66,7 @@ void CTextEmotionChanger::checkMessageForEmoticons(QString &message) {
           if (compareEmoticon(chars, (*it).first) &&
               (!m_check_space ||
                ((chars + length)->isNull() || (chars + length)->isSpace() || (chars + length)->isPunct()))) {
-            appendEmoticon(result, (*it).second, QStringRef(&message, chars - begin, (*it).first.length()));
+            appendEmoticon(result, (*it).second, QStringView(message).sliced(chars - begin, (*it).first.length()));
             found = true;
             at_amp = false;
             chars += length;
@@ -98,14 +98,14 @@ bool CTextEmotionChanger::compareEmoticon(const QChar *c, const QString &smile) 
   return s->isNull();
 }
 
-void CTextEmotionChanger::appendEmoticon(QString &text, const QString &url, const QStringRef &emo) const {
+void CTextEmotionChanger::appendEmoticon(QString &text, const QString &url, QStringView emo) const {
   int i = 0, last = 0;
   while ((i = url.indexOf(QLatin1String("%4"), last)) != -1) {
-    text += QStringRef(&url, last, i - last);
+    text += QStringView(url).sliced(last, i - last);
     text += emo;
     last = i + 2;
   }
-  text += QStringRef(&url, last, url.length() - last);
+  text += QStringView(url).sliced(last);
 }
 
 bool CTextEmotionChanger::lengthLessThan(const QString &s1, const QString &s2) {

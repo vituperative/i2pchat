@@ -44,7 +44,7 @@ private:
   CTextEmotionChanger();
   CTextEmotionChanger(const CTextEmotionChanger &);
   void setEmoticonPath(const QString &path);
-  void appendEmoticon(QString &text, const QString &url, const QStringRef &emo) const;
+  void appendEmoticon(QString &text, const QString &url, QStringView emo) const;
   bool compareEmoticon(const QChar *c, const QString &smile) const;
 
   QString m_profile_name;
