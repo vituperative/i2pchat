@@ -23,6 +23,7 @@ struct BubbleShadow {
   int offsetX, offsetY;
   int blurRadius;
   QColor color;
+  bool inset = false;
 };
 
 class ChatDelegate : public QStyledItemDelegate {
@@ -72,5 +73,6 @@ enum MsgType {
 };
 
 static const int MsgTypeRole = Qt::UserRole + 1;
+static const int CancelUrlRole = Qt::UserRole + 5;
 
 #endif
