@@ -2,11 +2,21 @@
 
 #include "SessionController.h"
 
+#include <QDateTime>
 #include <QIcon>
+#include <QRegularExpression>
 
 #include <utility>
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.3\n";
+
+static QString ts() { return QDateTime::currentDateTime().toString("hh:mm:ss"); }
+static QString truncateDbg(const QString &msg) {
+  QString r = msg;
+  r.replace(QRegularExpression("DESTINATION=[A-Za-z0-9~_-]{50,}"), "DESTINATION=…");
+  r.replace(QRegularExpression("PRIV=[A-Za-z0-9~_-]{50,}"), "PRIV=…");
+  return ts() + " • " + r;
+}
 
 CSessionController::CSessionController(QString SamHost,
                                        QString SamPort,
@@ -40,7 +50,7 @@ CSessionController::CSessionController(QString SamHost,
 
   connect(mReconnectTimer, SIGNAL(timeout()), this, SLOT(slotReconnectTimeout()), Qt::DirectConnection);
 
-  emit signDebugMessages("• I2P Stream Controller started");
+  emit signDebugMessages(truncateDbg("I2P Stream Controller started"));
 }
 
 CSessionController::~CSessionController() {
@@ -49,13 +59,13 @@ CSessionController::~CSessionController() {
   delete mReconnectTimer;
   delete mAnalyser;
   delete mIncomingPackets;
-  emit signDebugMessages("• I2P Stream Controller stopped");
+  emit signDebugMessages(truncateDbg("I2P Stream Controller stopped"));
 }
 
 void CSessionController::slotConnected() {
-  emit signDebugMessages("• I2P Stream Controller connected");
+  emit signDebugMessages(truncateDbg("I2P Stream Controller connected"));
   mReconnectTimer->stop();
-  emit signDebugMessages(SAM_HANDSHAKE_V3);
+  emit signDebugMessages(truncateDbg(SAM_HANDSHAKE_V3.trimmed()));
   if (mTcpSocket.state() == QAbstractSocket::ConnectedState) {
     mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
     mTcpSocket.flush();
@@ -65,14 +75,13 @@ void CSessionController::slotConnected() {
 void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
-    emit signDebugMessages("• I2P Stream Controller disconnected ‣ SAM or I2P "
-                           "unavailable [SAM Host: " +
-                           mSamHost + ":" + mSamPort + "]");
+    emit signDebugMessages(truncateDbg("I2P Stream Controller disconnected ‣ SAM unavailable [" +
+                                       mSamHost + ":" + mSamPort + "]"));
     emit signSessionStreamStatusOK(false);
 
     // Start auto-reconnect timer
     if (!mReconnectTimer->isActive()) {
-      emit signDebugMessages("• I2P Stream Controller ‣ Scheduling reconnect in 60 seconds");
+      emit signDebugMessages(truncateDbg("I2P Stream Controller ‣ Scheduling reconnect in 60 seconds"));
       mReconnectTimer->start(60000); // 60 seconds
     }
 
@@ -95,7 +104,7 @@ void CSessionController::slotReadFromSocket() {
     SAM_MESSAGE sam = mAnalyser->Analyse(t);
     switch (sam.type) { // emit the signals
     case HELLO_REPLAY: {
-      emit signDebugMessages(t);
+      emit signDebugMessages(truncateDbg(t));
       if (sam.result == OK) {
         this->mHandshakeSuccessful = true;
         if (mSamPrivKey == "" || mSamPrivKey.length() <= 0) {
@@ -118,19 +127,19 @@ void CSessionController::slotReadFromSocket() {
                                "range 3.1–3.3. Check your SAM bridge version.")
                           : tr("SAM version negotiation failed: %1").arg(sam.Message);
           qCritical().noquote() << "SessionController: NOVERSION —" << msg;
-          emit signDebugMessages("NOVERSION — " + msg);
+          emit signDebugMessages(truncateDbg("NOVERSION — " + msg));
         } else if (sam.result == I2P_ERROR) {
           QString msg = sam.Message.isEmpty() ? tr("SAM handshake I2P error. Check your SAM bridge.")
                                               : tr("SAM handshake error: %1").arg(sam.Message);
           qCritical().noquote() << "SessionController: I2P_ERROR on HELLO —" << msg;
-          emit signDebugMessages("I2P_ERROR on HELLO — " + msg);
+          emit signDebugMessages(truncateDbg("I2P_ERROR on HELLO — " + msg));
         }
       }
 
       break;
     }
     case SESSION_STATUS: {
-      emit signDebugMessages(t);
+      emit signDebugMessages(truncateDbg(t));
       if (sam.result == OK) {
         mSessionWasSuccesfullCreated = true;
         emit signSessionStreamStatusOK(true);
@@ -163,17 +172,17 @@ void CSessionController::slotReadFromSocket() {
       break;
     }
     case STREAM_STATUS: {
-      emit signDebugMessages(t);
+      emit signDebugMessages(truncateDbg(t));
       // emit StreamStatusReceived(sam.result,sam.ID,sam.Message);
       break;
     }
     case NAMING_REPLY: {
-      emit signDebugMessages(t);
+      emit signDebugMessages(truncateDbg(t));
       emit signNamingReplyReceived(sam.result, sam.Name, sam.Value, sam.Message);
       break;
     }
     case DEST_REPLY: {
-      emit signDebugMessages(t);
+      emit signDebugMessages(truncateDbg(t));
       mSamPrivKey = sam.PRIV;
       emit signNewSamPrivKeyGenerated(mSamPrivKey);
       if (mSessionWasSuccesfullCreated == false) {
@@ -182,11 +191,11 @@ void CSessionController::slotReadFromSocket() {
       break;
     }
     case ERROR_IN_ANALYSE: {
-      emit signDebugMessages("CStreamController: <ERROR_IN_ANALYSE>\n" + t);
+      emit signDebugMessages(truncateDbg("CStreamController: ERROR_IN_ANALYSE " + t));
       break;
     }
     default: {
-      emit signDebugMessages("CStreamController: <Unknown Packet>\n" + t);
+      emit signDebugMessages(truncateDbg("CStreamController: Unknown Packet " + t));
       break;
     }
     }
@@ -212,9 +221,9 @@ void CSessionController::doDisconnect() {
 
   if (mTcpSocket.state() != 0) {
     mTcpSocket.disconnectFromHost();
-    emit signDebugMessages("• I2P Stream Controller: Socket disconnected");
+    emit signDebugMessages(truncateDbg("I2P Stream Controller: Socket disconnected"));
   } else if (mTcpSocket.state() == QAbstractSocket::UnconnectedState) {
-    emit signDebugMessages("• I2P Stream Controller: Socket unavailable");
+    emit signDebugMessages(truncateDbg("I2P Stream Controller: Socket unavailable"));
   }
 }
 
@@ -223,7 +232,7 @@ void CSessionController::doNamingLookUP(const QString &Name) {
 
   QByteArray Message;
   Message += "NAMING LOOKUP NAME=" + Name.toUtf8() + '\n';
-  emit signDebugMessages(Message);
+  emit signDebugMessages(truncateDbg(QString::fromUtf8(Message)));
   mTcpSocket.write(Message);
   mTcpSocket.flush();
 }
@@ -241,7 +250,7 @@ void CSessionController::doSessionCreate() {
   }
 
   Message += '\n';
-  emit signDebugMessages(Message);
+  emit signDebugMessages(truncateDbg(QString::fromUtf8(Message)));
   mTcpSocket.write(Message);
   mTcpSocket.flush();
 }
@@ -254,7 +263,7 @@ void CSessionController::doDestGenerate(const QString &Options) {
   }
   Message += '\n';
 
-  emit signDebugMessages(Message);
+  emit signDebugMessages(truncateDbg(QString::fromUtf8(Message)));
 
   mTcpSocket.write(Message);
   mTcpSocket.flush();
@@ -262,7 +271,7 @@ void CSessionController::doDestGenerate(const QString &Options) {
 
 void CSessionController::slotReconnectTimeout() {
   mReconnectTimer->stop();
-  emit signDebugMessages("• I2P Stream Controller ‣ Attempting to reconnect to SAM");
+  emit signDebugMessages(truncateDbg("I2P Stream Controller ‣ Attempting to reconnect to SAM"));
   emit signReconnectAttempt();
   doConnect();
 }
