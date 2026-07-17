@@ -37,12 +37,18 @@ End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for an
 
 #### Dependencies
 
-Qt 5.14 or later (Qt 6 is not yet supported).
+Qt 5.14 or later (Qt 6.5+ supported when using the `qt6` branch).
 
 <details><summary>Debian / Ubuntu (including 24.04+, trixie+)</summary>
 
 ```
 sudo apt-get install -y build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+```
+
+For Qt 6 builds (`qt6` branch), use:
+
+```
+sudo apt-get install -y build-essential qt6-base-dev qt6-multimedia-dev libqt6svg6-dev
 ```
 </details>
 
@@ -50,6 +56,12 @@ sudo apt-get install -y build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev 
 
 ```
 sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
+```
+
+For Qt 6 builds (`qt6` branch), use:
+
+```
+sudo dnf install make qt6-qtmultimedia-devel qt6-qtsvg-devel qt6-qtbase-devel
 ```
 </details>
 
@@ -87,6 +99,8 @@ Run `bash build.sh --help` for all options (incremental by default, `--clean` fo
 qmake I2PChat.pro "CONFIG += release"
 make -j$(nproc)
 ```
+
+On the `qt6` branch, replace `qmake` with `qmake6` in the commands above.
 
 ## Downloads
 
