@@ -180,9 +180,11 @@ int main(int argc, char *argv[]) {
            ".sent { background: #075e54; color: #ffffff; }\n"
            ".received { background: #e5e5ea; color: #1c1c1c; }\n"
            ".system { background: #e8e8e8; color: #888888; }\n"
+           ".pending { background: #fff3cd; color: #856404; }\n"
            "\n"
            "/* Semantic message component classes */\n"
            "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
+           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
            ".msg-time { font-size: smaller; opacity: 0.8; }\n"
            ".msg-sender { font-weight: bold; }\n");
   writeCss("Modern",
@@ -194,9 +196,11 @@ int main(int argc, char *argv[]) {
            ".sent { background: #8774e1; color: #ffffff; }\n"
            ".received { background: #e8f0fe; color: #1c1c1c; }\n"
            ".system { background: #e8e8e8; color: #888888; }\n"
+           ".pending { background: #fff3cd; color: #856404; }\n"
            "\n"
            "/* Semantic message component classes */\n"
            "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
+           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
            ".msg-time { font-size: smaller; opacity: 0.8; }\n"
            ".msg-sender { font-weight: bold; }\n");
 

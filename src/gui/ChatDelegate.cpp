@@ -71,9 +71,11 @@ void ChatDelegate::setBubbleColors(const BubbleColors &c) {
 
 // Sliding-window box blur preserving shape (image dimensions unchanged)
 static void boxBlurImage(QImage &img, int radius) {
-  if (radius <= 0 || img.isNull()) return;
+  if (radius <= 0 || img.isNull())
+    return;
   int w = img.width(), h = img.height();
-  if (w < 1 || h < 1) return;
+  if (w < 1 || h < 1)
+    return;
 
   QImage tmp(w, h, QImage::Format_ARGB32_Premultiplied);
   tmp.fill(Qt::transparent);
@@ -295,18 +297,20 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     }
   }
 
-  // Strip HTML color attributes so our foreground color takes effect
-  // <p> and other block elements are kept intact — margins are zeroed via CSS
-  // and stripBlockMargins below to override Qt's QTextDocument defaults
+  // Strip HTML color attributes; convert <p> to <div> so the
+  // div { margin:0; padding:0; } CSS guarantees zero block spacing
   QString renderText = text;
   renderText.replace(
     QRegularExpression("<font\\s+color\\s*=\\s*\"[^\"]*\"\\s*>", QRegularExpression::CaseInsensitiveOption), "<font>");
   renderText.replace(
     QRegularExpression("\\bcolor\\s*:\\s*#[0-9a-fA-F]+;?\\s*", QRegularExpression::CaseInsensitiveOption), "");
+  renderText.replace(QRegularExpression("<p[^>]*>", QRegularExpression::CaseInsensitiveOption), "<div>");
+  renderText.replace("</p>", "</div>");
   renderText = QStringLiteral("<div style=\"color:%1;\">%2</div>").arg(fg.name(), renderText);
 
   auto *doc = new QTextDocument;
   doc->setDefaultFont(option.font);
+  doc->setDocumentMargin(0);
   {
     QString ss = "a { color: #0000ff; }"
                  "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li, dl, dd {"
@@ -332,10 +336,10 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     int rightPad = mColors.padH;
     if (hasCancel)
       rightPad += kCancelIconSize + kCancelIconMargin;
-    QRect textRect = bubbleRect.adjusted(mColors.padH, 1, -rightPad, -1);
+    QRect textRect = bubbleRect.adjusted(mColors.padH, 0, -rightPad, 0);
     doc->setTextWidth(textRect.width());
     painter->translate(textRect.topLeft());
-    doc->drawContents(painter, QRectF(0, 0, textRect.width(), textRect.height()));
+    doc->drawContents(painter);
     painter->translate(-textRect.topLeft());
   } else {
     int availW = r.width() - 8;
@@ -402,7 +406,10 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   doc->setDefaultFont(option.font);
   doc->setDocumentMargin(0);
   {
-    QString ss = "a { color: #0000ff; }";
+    QString ss = "a { color: #0000ff; }"
+                 "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li, dl, dd {"
+                 " margin: 0; padding: 0;"
+                 "}";
     if (!mColors.extraStylesheet.isEmpty())
       ss += "\n" + mColors.extraStylesheet;
     doc->setDefaultStyleSheet(ss);
