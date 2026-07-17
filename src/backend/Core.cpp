@@ -99,7 +99,7 @@ CCore::CCore(const QString &configPath) {
   connect(&mAutoAwayTimer, SIGNAL(timeout()), this, SLOT(slotAutoAwayTimeout()));
   QSettings autoSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   mAutoAwayMinutes = autoSettings.value("General/AutoAwayMinutes", 0).toInt();
-  if (mAutoAwayMinutes > 0)
+  if (mAutoAwayMinutes > 0 && autoSettings.value("General/AutoAwayEnabled", false).toBool())
     mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
 }
 
