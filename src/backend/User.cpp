@@ -403,7 +403,10 @@ void CUser::SendAllunsendedMessages() {
       }
     }
     mNewMessages.clear();
-    slotIncomingMessageFromSystem("All previously unsent messages have been sent.", true);
+    // Push to mAllMessages for persistence but don't emit new-message notification
+    // (the themed mode updates pending bubbles to sent color in-place instead)
+    this->mAllMessages.push_back(QDateTime::currentDateTime().toString("hh:mm:ss") + tr(" ‣ [System] ") +
+                                 tr("All previously unsent messages have been sent.") + "<br><br>");
     emit signPendingCanceled();
   }
 
