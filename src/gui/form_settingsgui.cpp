@@ -1055,8 +1055,7 @@ void form_settingsgui::clicked_sortByLastOnline(bool checked) {
 void form_settingsgui::clicked_AutoAwayEnabled(bool enabled) {
   AutoAwaySpinBox->setEnabled(enabled);
   NoActivityLabel->setEnabled(enabled);
-  if (enabled)
-    mCore.resetAutoAway();
+  mCore.applyAutoAwaySettings(enabled ? AutoAwaySpinBox->value() : 0);
 }
 
 void form_settingsgui::clicked_nonPersistDest(bool checked) {
