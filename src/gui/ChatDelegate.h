@@ -37,6 +37,7 @@ public:
     QString extraStylesheet;
     int radius;
     int padV, padH;
+    int padVInner;
     BubbleGradient sentGradient;
     BubbleGradient receivedGradient;
     BubbleGradient systemGradient;

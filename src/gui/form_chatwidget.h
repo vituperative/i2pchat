@@ -68,6 +68,7 @@ public:
     QString systemColor;
     int radius;
     int padV, padH;
+    int padVInner;
     bool alignRight;
   };
 
