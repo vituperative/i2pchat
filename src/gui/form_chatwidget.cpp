@@ -183,9 +183,9 @@ void form_ChatWidget::loadChatStyle() {
 
   bool themed = (styleLower != "classic");
   if (styleLower == "bubbles") {
-    mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 8, 3, 8, true};
+    mBubbleStyle = {"#075e54", "#ffffff", "#e5e5ea", "#1c1c1c", "#888888", 3, 2, 6, true};
   } else if (styleLower == "modern") {
-    mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 12, 3, 8, true};
+    mBubbleStyle = {"#8774e1", "#ffffff", "#e8f0fe", "#1c1c1c", "#888888", 3, 2, 6, true};
   } else {
     mBubbleStyle = {"", "", "", "", "#888888", 0, 0, 0, false};
   }
@@ -204,6 +204,9 @@ void form_ChatWidget::loadChatStyle() {
 
   if (themed)
     applyThemeCss(style, mBubbleStyle, dc);
+
+  txtColor->setVisible(!themed);
+  txtFont->setVisible(!themed);
 
   mChatStack->setCurrentIndex(themed ? 1 : 0);
   mChatDelegate->setBubbleColors(dc);
@@ -261,6 +264,24 @@ static QColor parseCSSColor(const QString &raw) {
     if (!m.captured(4).isEmpty())
       a = qBound(0, qRound(m.captured(4).toDouble() * 255.0), 255);
     return QColor(r, g, b, a);
+  }
+  // 8-digit hex: #RRGGBBAA
+  if (s.startsWith('#') && s.length() == 9) {
+    bool ok;
+    QRgb rgba = s.mid(1).toUInt(&ok, 16);
+    if (ok)
+      return QColor(qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
+  }
+  // 4-digit hex shorthand: #RGBA → #RRGGBBAA
+  if (s.startsWith('#') && s.length() == 5) {
+    QString rr = QString(2, s[1]);
+    QString gg = QString(2, s[2]);
+    QString bb = QString(2, s[3]);
+    QString aa = QString(2, s[4]);
+    bool ok;
+    QRgb rgba = (rr + gg + bb + aa).toUInt(&ok, 16);
+    if (ok)
+      return QColor(qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
   }
   return QColor(s); // hex/named (returns invalid if unparseable)
 }
@@ -338,13 +359,22 @@ static QVector<BubbleShadow> parseShadows(const QString &val) {
       continue;
     BubbleShadow sh = {};
     int idx = 0;
-    // Parse numeric px values in order
+    if (!tokens.isEmpty() && tokens[0].toLower() == "inset") {
+      sh.inset = true;
+      idx = 1;
+    }
+    // Parse numeric px values in order (accept unitless 0)
     for (; idx < tokens.size(); idx++) {
       QString t = tokens[idx];
       bool ok = false;
-      int n = t.left(t.size() - 2).toInt(&ok);
-      if (!ok || !t.endsWith("px", Qt::CaseInsensitive))
-        break;
+      int n;
+      if (t == "0") {
+        n = 0; ok = true;
+      } else {
+        n = t.left(t.size() - 2).toInt(&ok);
+        if (!ok || !t.endsWith("px", Qt::CaseInsensitive))
+          break;
+      }
       if (sh.offsetX == 0 && sh.offsetY == 0)
         sh.offsetX = n;
       else if (sh.offsetY == 0)
@@ -383,7 +413,7 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
       return;
     }
     QTextStream out(&f);
-    out << "/* I2PChat " << style << " — auto-generated fallback, overwritten at startup */\n";
+    out << "/* I2PChat " << style << " */\n";
     out << ".bubble {\n";
     out << "  border-radius: " << bs.radius << "px;\n";
     out << "  padding: " << bs.padV << "px " << bs.padH << "px;\n";
@@ -391,7 +421,11 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
     out << "}\n";
     out << ".sent { background: " << bs.sentBg << "; color: " << bs.sentColor << "; }\n";
     out << ".received { background: " << bs.receivedBg << "; color: " << bs.receivedColor << "; }\n";
-    out << ".system { background: #e8e8e8; color: " << bs.systemColor << "; }\n";
+    out << ".system { background: #f5f5f5; color: " << bs.systemColor << "; }\n";
+    out << ".pending { background: #fafafa; color: #999; }\n";
+    out << ".msg-header { background-color: rgba(0,0,0,0.04); padding: 1px 6px; }\n";
+    out << ".msg-time { font-size: smaller; color: #888; }\n";
+    out << ".msg-sender { font-weight: bold; }\n";
     f.close();
     // Fall through to read the file we just wrote
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -402,22 +436,28 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
   QTextStream in(&f);
 
   auto applyProp = [&](const QString &className, const QString &prop, const QString &val) {
-    auto setBg = [&](QString &bg, BubbleGradient &grad) {
-      bg = val;
+    auto setBg = [&](QString &bsBg, QString &dcBg, BubbleGradient &grad) {
+      bsBg = dcBg = val;
       if (val.contains("linear-gradient", Qt::CaseInsensitive))
         grad = parseGradient(val);
       else
         grad = BubbleGradient();
     };
     if (className == "bubble") {
-      if (prop == "border-radius" || prop == "radius")
-        bs.radius = val.toInt();
+      qDebug() << "    applyProp bubble: prop=" << prop << "val=" << val;
+      if (prop == "border-radius" || prop == "radius") {
+        QString v = val;
+        int r = v.remove("px", Qt::CaseInsensitive).trimmed().toInt();
+        qDebug() << "    applyProp bubble radius: parsed=" << r;
+        dc.radius = bs.radius = r;
+        qDebug() << "    applyProp bubble radius: dc.radius=" << dc.radius << "bs.radius=" << bs.radius;
+      }
       else if (prop == "padding") {
         static QRegularExpression pRx("^(\\d+)\\s*px(?:\\s+(\\d+)\\s*px)?");
         auto pm = pRx.match(val);
         if (pm.hasMatch()) {
-          bs.padV = pm.captured(1).toInt();
-          bs.padH = pm.captured(2).isEmpty() ? bs.padV : pm.captured(2).toInt();
+          dc.padV = bs.padV = pm.captured(1).toInt();
+          dc.padH = bs.padH = pm.captured(2).isEmpty() ? bs.padV : pm.captured(2).toInt();
         }
       } else if (prop == "box-shadow")
         dc.shadows = parseShadows(val);
@@ -430,40 +470,77 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
         dc.pendingFg = val;
       return;
     }
-    // Per-type classes
-    QString *bg = nullptr, *fg = nullptr;
+    // Per-type classes — update BOTH bs (mBubbleStyle) and dc (what paint() reads)
+    QString *bsBg = nullptr, *bsFg = nullptr;
+    QString *dcBg = nullptr, *dcFg = nullptr;
     BubbleGradient *grad = nullptr;
     if (className == "sent") {
-      bg = &bs.sentBg;
-      fg = &bs.sentColor;
+      bsBg = &bs.sentBg;     dcBg = &dc.sentBg;
+      bsFg = &bs.sentColor;  dcFg = &dc.sentFg;
       grad = &dc.sentGradient;
     } else if (className == "received" || className == "rcvd") {
-      bg = &bs.receivedBg;
-      fg = &bs.receivedColor;
+      bsBg = &bs.receivedBg;  dcBg = &dc.receivedBg;
+      bsFg = &bs.receivedColor; dcFg = &dc.receivedFg;
       grad = &dc.receivedGradient;
     } else if (className == "system") {
-      bg = &bs.systemColor;
-      fg = &bs.systemColor;
+      bsBg = &bs.systemColor; dcBg = &dc.systemColor;
+      bsFg = &bs.systemColor; dcFg = &dc.systemColor;
       grad = &dc.systemGradient;
     }
-    if (!bg)
+    if (!bsBg)
       return;
     if (prop == "background" || prop == "background-color")
-      setBg(*bg, *grad);
+      setBg(*bsBg, *dcBg, *grad);
     else if (prop == "color")
-      *fg = val;
+      *bsFg = *dcFg = val;
   };
 
-  static QRegularExpression classOpenRx("^\\s*\\.([\\w-]+)\\s*\\{\\s*$");
+  static QRegularExpression classOpenRx("^\\s*\\.([\\w-]+)\\s*\\{");
   static QRegularExpression classCloseRx("^\\s*\\}\\s*$");
   static QRegularExpression classPropRx("^\\s*([\\w-]+)\\s*:\\s*(.+)\\s*;\\s*$");
+  // Extract inline properties from remainder of a class-open line
+  static QRegularExpression inlinePropRx("([\\w-]+)\\s*:\\s*([^;}]+)");
 
+  qDebug() << "applyThemeCss: starting parse of" << path;
   enum { StTop, StClass } state = StTop;
   QString curClass;
   QMap<QString, QString> curProps;
 
+  auto flushClass = [&] {
+    qDebug() << "  flushClass:" << curClass << "props:" << curProps;
+    static const QStringList bubbleClasses = {"bubble", "sent", "received", "rcvd", "system", "pending"};
+    if (bubbleClasses.contains(curClass)) {
+      for (auto it = curProps.begin(); it != curProps.end(); ++it)
+        applyProp(curClass, it.key(), it.value());
+    } else {
+      QString rule = "." + curClass + " {";
+      for (auto it = curProps.begin(); it != curProps.end(); ++it) {
+        QString p = it.key();
+        QString v = it.value().trimmed();
+        // Convert #RGBA / #RRGGBBAA to rgba() — QTextDocument doesn't support alpha hex
+        if (v.startsWith('#') && (v.length() == 5 || v.length() == 9)) {
+          QColor c = parseCSSColor(v);
+          if (c.isValid())
+            v = QStringLiteral("rgba(%1,%2,%3,%4)")
+                  .arg(c.red()).arg(c.green()).arg(c.blue())
+                  .arg(c.alphaF(), 0, 'f', 6);
+        }
+        // QTextDocument supports background-color but not the background shorthand
+        if (p == "background")
+          p = "background-color";
+        rule += " " + p + ": " + v + ";";
+      }
+      rule += " }\n";
+      dc.extraStylesheet += rule;
+    }
+    curProps.clear();
+    curClass.clear();
+    state = StTop;
+  };
+
   while (!in.atEnd()) {
     QString line = in.readLine();
+    qDebug() << "  parse line:" << line << "state=" << (state == StTop ? "StTop" : "StClass");
 
     if (state == StTop) {
       // Try standard variable syntax (backward compat)
@@ -485,8 +562,10 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
         else if (name == "system-color") {
           bs.systemColor = val;
           dc.systemGradient = parseGradient(val);
-        } else if (name == "radius" || name == "border-radius")
+        } else if (name == "radius" || name == "border-radius") {
           bs.radius = val.remove("px").trimmed().toInt();
+          qDebug() << "    varRx radius: val=" << val << "set bs.radius=" << bs.radius;
+        }
         else if (name == "pad-v" || name == "padding-top" || name == "padding-bottom")
           bs.padV = val.remove("px").trimmed().toInt();
         else if (name == "pad-h" || name == "padding-left" || name == "padding-right")
@@ -504,35 +583,41 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
       }
 
       auto cm = classOpenRx.match(line);
+      qDebug() << "    classOpenRx match:" << cm.hasMatch() << "class:" << cm.captured(1);
       if (cm.hasMatch()) {
         curClass = cm.captured(1);
-        state = StClass;
+        curProps.clear();
+        // Extract any inline properties on the same line after the {
+        QString rest = line.mid(cm.capturedEnd(0));
+        qDebug() << "    rest after {: " << rest;
+        auto ip = inlinePropRx.globalMatch(rest);
+        while (ip.hasNext()) {
+          auto im = ip.next();
+          qDebug() << "    inline prop:" << im.captured(1).trimmed() << "=" << im.captured(2).trimmed();
+          curProps[im.captured(1).trimmed()] = im.captured(2).trimmed();
+        }
+        bool hasClose = rest.contains('}');
+        qDebug() << "    hasClose:" << hasClose;
+        if (hasClose) {
+          flushClass();
+        } else {
+          state = StClass;
+        }
       }
     } else if (state == StClass) {
-      if (classCloseRx.match(line).hasMatch()) {
-        // Class block ended — apply known bubble classes or collect as stylesheet
-        static const QStringList bubbleClasses = {"bubble", "sent", "received", "rcvd", "system", "pending"};
-        if (bubbleClasses.contains(curClass)) {
-          for (auto it = curProps.begin(); it != curProps.end(); ++it)
-            applyProp(curClass, it.key(), it.value());
-        } else {
-          // Generic CSS class → pass through to QTextDocument stylesheet
-          QString rule = "." + curClass + " {";
-          for (auto it = curProps.begin(); it != curProps.end(); ++it)
-            rule += " " + it.key() + ": " + it.value() + ";";
-          rule += " }\n";
-          dc.extraStylesheet += rule;
-        }
-        curProps.clear();
-        state = StTop;
-        continue;
-      }
       auto pm = classPropRx.match(line);
       if (pm.hasMatch())
         curProps[pm.captured(1)] = pm.captured(2).trimmed();
+      if (classCloseRx.match(line).hasMatch())
+        flushClass();
     }
   }
   f.close();
+  qDebug() << "applyThemeCss: radius=" << dc.radius << "padV=" << dc.padV << "padH=" << dc.padH
+           << "sentBg=" << dc.sentBg << "sentFg=" << dc.sentFg
+           << "receivedBg=" << dc.receivedBg << "receivedFg=" << dc.receivedFg
+           << "shadows.count=" << dc.shadows.size()
+           << "extraStylesheet.length=" << dc.extraStylesheet.length();
 }
 
 void form_ChatWidget::newMessageReceived() {
@@ -634,6 +719,19 @@ void form_ChatWidget::addMessage(QString text) {
 
   int type = detectMsgType(text, Core.getUserInfos().Nickname);
 
+  // Extract cancel URL from pending/file-offer messages and strip status badges
+  QString cancelUrl;
+  if (type == MsgPending) {
+    QRegularExpression re("<a\\s+href=\"(cancel(?:msg|file):\\d+)\">[^<]*</a>");
+    QRegularExpressionMatch m = re.match(text);
+    if (m.hasMatch()) {
+      cancelUrl = m.captured(1);
+      text.remove(m.capturedStart(0), m.capturedLength(0));
+    }
+    // Strip ugly <i>(pending)</i> / <i>(sent)</i> badges
+    text.remove(QRegularExpression("<i>[^<]*</i>"));
+  }
+
   QString typeClass;
   switch (type) {
   case MsgSent:
@@ -667,14 +765,19 @@ void form_ChatWidget::addMessage(QString text) {
       if (colon != -1) {
         QString sender = rest.left(colon);
         QString body = rest.mid(colon + 1);
+        QString sep = (type == MsgPending) ? QString::fromUtf8(" …") : ":";
         text = QStringLiteral("<div class=\"msg msg-%1\">"
+                              "<div class=\"msg-header\">"
                               "<span class=\"msg-time\">%2</span> ‣ "
-                              "<span class=\"msg-sender\">%3</span>:"
-                              "<div class=\"msg-body\">%4</div></div>")
-                 .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), body);
+                              "<span class=\"msg-sender\">%3</span>%4"
+                              "</div>"
+                              "<div class=\"msg-body\">%5</div></div>")
+                 .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), sep, body);
       } else {
         text = QStringLiteral("<div class=\"msg msg-%1\">"
-                              "<span class=\"msg-time\">%2</span>%3</div>")
+                              "<div class=\"msg-header\">"
+                              "<span class=\"msg-time\">%2</span>%3"
+                              "</div></div>")
                  .arg(typeClass, timePart.toHtmlEscaped(), rest);
       }
     } else {
@@ -685,6 +788,8 @@ void form_ChatWidget::addMessage(QString text) {
   auto *item = new QStandardItem(text);
   item->setEditable(false);
   item->setData(type, MsgTypeRole);
+  if (!cancelUrl.isEmpty())
+    item->setData(cancelUrl, CancelUrlRole);
   mChatModel->appendRow(item);
   mChatListView->scrollToBottom();
 }
@@ -908,7 +1013,21 @@ void form_ChatWidget::focusEvent(bool b) {
 }
 
 void form_ChatWidget::slotPendingCanceled() {
-  addAllMessages();
+  if (mChatStyle == "classic") {
+    addAllMessages();
+    return;
+  }
+  // Themed mode: update pending items to sent in-place instead of
+  // rebuilding the entire model (which would also re-add the system
+  // notification about messages being sent).
+  for (int i = 0; i < mChatModel->rowCount(); ++i) {
+    auto *item = mChatModel->item(i);
+    if (item && item->data(MsgTypeRole).toInt() == MsgPending) {
+      item->setData(static_cast<int>(MsgSent), MsgTypeRole);
+      item->setData(QVariant(), CancelUrlRole);
+    }
+  }
+  mChatListView->viewport()->update();
 }
 
 void form_ChatWidget::showContextMenu(const QPoint &pos) {
