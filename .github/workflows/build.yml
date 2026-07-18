@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches: [master]
-    tags: ['*']
+    tags: ['v*']
   pull_request:
     branches: [master]
 
@@ -24,10 +24,19 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y qt6-base-dev qt6-multimedia-dev libqt6svg6-dev
-          # qmake6 is provided by qt6-base-dev, symlink as qmake if needed
+          # Ubuntu provides qmake6 — symlink so build.sh finds qmake
+          if ! command -v qmake &>/dev/null && command -v qmake6 &>/dev/null; then
+            sudo ln -sf "$(command -v qmake6)" /usr/local/bin/qmake
+          fi
 
       - name: Build
-        run: bash build.sh
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            sudo apt-get install -y -qq upx
+            bash build.sh --upx
+          else
+            bash build.sh
+          fi
 
       - name: Build AppImage
         run: bash build.sh --appimage
