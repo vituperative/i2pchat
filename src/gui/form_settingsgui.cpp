@@ -306,7 +306,7 @@ void form_settingsgui::loadSettings() {
   settings->beginGroup("Chat");
   populateChatStyleCombo();
   {
-    QString cfg = settings->value("ChatStyle", "classic").toString();
+    QString cfg = settings->value("ChatStyle", "Minimal").toString();
     bool found = false;
     for (int i = 0; i < comboBoxChatStyle->count(); ++i) {
       if (comboBoxChatStyle->itemData(i).toString().toLower() == cfg.toLower()) {
