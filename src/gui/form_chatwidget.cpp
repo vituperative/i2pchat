@@ -760,13 +760,14 @@ void form_ChatWidget::addMessage(QString text) {
     } else {
       body = text;
     }
+    static const QString robotIcon = QString::fromUtf8("\xf0\x9f\xa4\x96");
     text = QStringLiteral("<div class=\"msg msg-system\">"
                           "<div class=\"msg-header\">"
-                          "<span class=\"msg-icon system-icon\">🤖</span> "
+                          "<span class=\"msg-icon system-icon\">%3</span> "
                           "<span class=\"msg-time\">%1</span>"
                           "</div>"
                           "<div class=\"msg-body\">%2</div></div>")
-             .arg(timePart.toHtmlEscaped(), body);
+             .arg(timePart.toHtmlEscaped(), body, robotIcon);
   } else if (type == MsgFileOffer) {
     text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
     text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
