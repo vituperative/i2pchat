@@ -1041,53 +1041,56 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
   mAuthDialog->addButton(QMessageBox::Yes);
   mAuthDialog->addButton(QMessageBox::No);
   mAuthDialog->setDefaultButton(QMessageBox::No);
-  connect(mAuthDialog, &QDialog::finished, this, [this, data, destination, streamID, displayName, callerNickname, btnBlock](int ret) {
-    QAbstractButton *clicked = mAuthDialog ? mAuthDialog->clickedButton() : nullptr;
-    mAuthDialog = NULL;
-    if (ret == QMessageBox::Yes) {
-      // Extract version
-      QByteArray temp = data.mid(data.indexOf("\t") + 1, data.indexOf("\n") - data.indexOf("\t") - 1);
-      QString version(temp);
-      bool OK = false;
-      double versiond = version.toDouble(&OK);
-      if (!OK)
-        versiond = 0.0;
+  connect(mAuthDialog,
+          &QDialog::finished,
+          this,
+          [this, data, destination, streamID, displayName, callerNickname, btnBlock](int ret) {
+            QAbstractButton *clicked = mAuthDialog ? mAuthDialog->clickedButton() : nullptr;
+            mAuthDialog = NULL;
+            if (ret == QMessageBox::Yes) {
+              // Extract version
+              QByteArray temp = data.mid(data.indexOf("\t") + 1, data.indexOf("\n") - data.indexOf("\t") - 1);
+              QString version(temp);
+              bool OK = false;
+              double versiond = version.toDouble(&OK);
+              if (!OK)
+                versiond = 0.0;
 
-      // Add the user
-      bool added = false;
-      if (versiond >= 0.3) {
-        added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
-      } else {
-        added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
-      }
+              // Add the user
+              bool added = false;
+              if (versiond >= 0.3) {
+                added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
+              } else {
+                added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
+              }
 
-      if (!added) {
-        Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
-        return;
-      }
-      CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
-      if (User) {
-        User->setI2PStreamID(streamID);
-        User->setProtocolVersion(version);
-        User->setConnectionStatus(ONLINE);
-        // Remove first packet
-        QByteArray Data2 = data;
-        Data2 = Data2.remove(0, data.indexOf("\n") + 1);
-        Core->setStreamTypeToKnown(streamID, Data2, false);
-        if (!callerNickname.isEmpty()) {
-          User->setReceivedUserInfos(NICKNAME, callerNickname);
-        } else if (versiond >= 0.3) {
-          User->setReceivedNicknameToUserNickname();
-        }
-      }
-    } else if (clicked == btnBlock) {
-      Core->getUserBlockManager()->addNewBlockEntity(displayName, destination);
-      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
-    } else {
-      // Deny, close the connection
-      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
-    }
-  });
+              if (!added) {
+                Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+                return;
+              }
+              CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
+              if (User) {
+                User->setI2PStreamID(streamID);
+                User->setProtocolVersion(version);
+                User->setConnectionStatus(ONLINE);
+                // Remove first packet
+                QByteArray Data2 = data;
+                Data2 = Data2.remove(0, data.indexOf("\n") + 1);
+                Core->setStreamTypeToKnown(streamID, Data2, false);
+                if (!callerNickname.isEmpty()) {
+                  User->setReceivedUserInfos(NICKNAME, callerNickname);
+                } else if (versiond >= 0.3) {
+                  User->setReceivedNicknameToUserNickname();
+                }
+              }
+            } else if (clicked == btnBlock) {
+              Core->getUserBlockManager()->addNewBlockEntity(displayName, destination);
+              Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+            } else {
+              // Deny, close the connection
+              Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
+            }
+          });
   mAuthDialog->show();
 }
 

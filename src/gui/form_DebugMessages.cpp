@@ -59,8 +59,8 @@ void form_DebugMessages::newDebugMessage() {
   Sam_txt->clear();
 
   QStringList temp = DebugMessageManager->getAllMessages();
-  Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" +
-                   temp.join('\n').toHtmlEscaped() + "</div>");
+  Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" + temp.join('\n').toHtmlEscaped() +
+                   "</div>");
 
   QTextCursor cursor(Sam_txt->textCursor());
   cursor.movePosition(QTextCursor::Start);

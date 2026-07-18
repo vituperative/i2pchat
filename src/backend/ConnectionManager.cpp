@@ -272,7 +272,8 @@ void CConnectionManager::doReStart() {
   mComponentStateStopped = false;
   StreamController = NULL;
   mSessionStreamStatusOK = false;
-  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • I2PChat: Connection Manager restarted");
+  emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                         " • I2PChat: Connection Manager restarted");
 }
 
 void CConnectionManager::stopp() {
