@@ -20,12 +20,10 @@
 QString debugLogDir;
 
 void enableDebugLogging(const QString &configPath);
-// void myMessageHandler(QtMsgType type, const char *msg);
 void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 void help() {
   printf("\r\n%s\r\n\r\n"
-         // " [Built at " __TIME__ " on " __DATE__ "]\r\n"
          "  -h --help                           - Display this help\r\n"
          "  -p --profile <path to profile dir>  - Use specified profile dir (creates a new profile if non-existent)\r\n"
          "  -s --stylesheet <path to qss file>  - Use specified qss stylesheet\r\n"
@@ -67,24 +65,6 @@ int main(int argc, char *argv[]) {
     app.closeAllWindows();
     return 1;
   }
-  /*
-  {
-      QSettings settings(configPath+"/application.ini",QSettings::IniFormat);
-      settings.beginGroup("General");
-      settings.setValue("dummy","1");
-      settings.endGroup();
-      settings.sync();
-      QString status = QString("status=(%1),
-  folder=(%2).").arg((int)settings.status()).arg(configPath);
-      QMessageBox::information(
-          NULL,
-          "I2P-Messenger status",
-          status);
-      app.exec();
-      app.closeAllWindows();
-      return 1;
-  }
-  */
 #else
 
 #ifdef _WIN32
@@ -134,7 +114,6 @@ int main(int argc, char *argv[]) {
       configdir.mkpath(".");
   }
 
-  // configPath=QApplication::applicationDirPath();
   if (QFile::exists(configPath + "/UseHomeForConfigStore") == true) {
     QStringList tmp = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
     if (!tmp.empty()) {
@@ -215,7 +194,6 @@ int main(int argc, char *argv[]) {
   {
 
     QSettings settings(configPath + "/application.ini", QSettings::IniFormat);
-    // OKEY, OLD AUTHOR SET CURRENT_STYLE IN GENERAL SECTION. COOL.
     settings.beginGroup("General");
     auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
     auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
