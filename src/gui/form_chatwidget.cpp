@@ -736,6 +736,8 @@ static int detectMsgType(const QString &text, const QString &selfName) {
     return MsgPending;
   if (text.contains("[Accept]") || text.contains("[Reject]"))
     return MsgFileOffer;
+  if (text.contains("msg-filetransfer"))
+    return MsgFileTransfer;
   int arrow = text.indexOf(" ‣ ");
   if (arrow != -1) {
     int after = arrow + 3;
@@ -831,6 +833,9 @@ void form_ChatWidget::addMessage(QString text) {
   case MsgFileOffer:
     typeClass = "fileoffer";
     break;
+  case MsgFileTransfer:
+    typeClass = "filetransfer";
+    break;
   default:
     typeClass = "received";
     break;
@@ -852,6 +857,8 @@ void form_ChatWidget::addMessage(QString text) {
   } else if (type == MsgFileOffer) {
     text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
     text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
+  } else if (type == MsgFileTransfer) {
+    // File transfer HTML already has the full structure — pass through as-is
   } else {
     int arrow = text.indexOf(" ‣ ");
     if (arrow != -1) {
