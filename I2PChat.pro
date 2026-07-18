@@ -38,7 +38,6 @@ SOURCES += \
 	src/backend/I2PStream.cpp \
 	src/backend/ChatmessageChanger.cpp \
 	src/backend/UserBlockManager.cpp \
-	src/backend/HttpOverStreamObject.cpp \
 	src/backend/UserManager.cpp \
 	src/backend/FileTransferManager.cpp \
 	src/backend/TextEmotionChanger.cpp \
@@ -72,7 +71,6 @@ HEADERS += \
 	src/backend/I2PStream.h \
 	src/backend/ChatmessageChanger.h \
 	src/backend/UserBlockManager.h \
-	src/backend/HttpOverStreamObject.h \
 	src/backend/UserManager.h \
 	src/backend/FileTransferManager.h \
 	src/backend/TextEmotionChanger.h \
