@@ -12,6 +12,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
+#include <algorithm>
 #include <cmath>
 
 static constexpr double kPi = 3.14159265358979323846;
@@ -390,8 +391,7 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   }
   if (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty())
     tw -= kCancelIconSize + kCancelIconMargin;
-  if (tw < 50)
-    tw = 50;
+  tw = std::max(tw, 50);
 
   // Measure height with QTextDocument as paint() does so heights match exactly
   QString renderText = text;
@@ -420,7 +420,7 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   stripBlockMargins(doc);
   doc->setTextWidth(tw);
   QSizeF ds = doc->documentLayout()->documentSize();
-  int textH = qMax((int)(ds.height() + 0.5), 1);
+  int textH = qMax(static_cast<int>(std::lround(ds.height())), 1);
 
   int h = textH + mColors.padV * 2 + mColors.padVInner * 2;
   if (type == MsgSystem && mColors.radius == 0 && !mColors.systemGradient.isValid())
