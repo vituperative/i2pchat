@@ -185,9 +185,10 @@ int main(int argc, char *argv[]) {
            "\n"
            "/* Semantic message component classes */\n"
            "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
-           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
-           ".msg-time { font-size: smaller; opacity: 0.8; }\n"
-           ".msg-sender { font-weight: bold; }\n");
+            ".msg-header { font-size: smaller; padding: 1px 0; }\n"
+            ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n"
+            ".msg-time { font-size: smaller; opacity: 0.8; }\n"
+            ".msg-sender { font-weight: bold; }\n");
   writeCss("Modern",
            ".bubble {\n"
            "  border-radius: 12px;\n"
@@ -202,9 +203,10 @@ int main(int argc, char *argv[]) {
            "\n"
            "/* Semantic message component classes */\n"
            "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
-           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
-           ".msg-time { font-size: smaller; opacity: 0.8; }\n"
-           ".msg-sender { font-weight: bold; }\n");
+            ".msg-header { font-size: smaller; padding: 1px 0; }\n"
+            ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n"
+            ".msg-time { font-size: smaller; opacity: 0.8; }\n"
+            ".msg-sender { font-weight: bold; }\n");
 
   enableDebugLogging(configPath);
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));

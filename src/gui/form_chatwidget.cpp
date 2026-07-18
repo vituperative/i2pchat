@@ -426,6 +426,7 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
     out << ".system { background: #f5f5f5; color: " << bs.systemColor << "; }\n";
     out << ".pending { background: #fafafa; color: #999; }\n";
     out << ".msg-header { background-color: rgba(0,0,0,0.04); padding: 1px 6px; }\n";
+    out << ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n";
     out << ".msg-time { font-size: smaller; color: #888; }\n";
     out << ".msg-sender { font-weight: bold; }\n";
     f.close();
@@ -748,7 +749,25 @@ void form_ChatWidget::addMessage(QString text) {
     break;
   }
 
-  if (type == MsgSystem || type == MsgFileOffer) {
+  if (type == MsgSystem) {
+    text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
+    int arrow = text.indexOf(" ‣ ");
+    QString timePart, body;
+    if (arrow != -1) {
+      timePart = text.left(arrow);
+      body = text.mid(arrow + 3);
+      body.remove(QRegularExpression("^\\s*\\[System\\]\\s*"));
+    } else {
+      body = text;
+    }
+    text = QStringLiteral("<div class=\"msg msg-system\">"
+                          "<div class=\"msg-header\">"
+                          "<span class=\"msg-icon system-icon\">🤖</span> "
+                          "<span class=\"msg-time\">%1</span>"
+                          "</div>"
+                          "<div class=\"msg-body\">%2</div></div>")
+             .arg(timePart.toHtmlEscaped(), body);
+  } else if (type == MsgFileOffer) {
     text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
     text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
   } else {
@@ -761,14 +780,17 @@ void form_ChatWidget::addMessage(QString text) {
         QString sender = rest.left(colon);
         QString body = rest.mid(colon + 1);
         body.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
-        QString sep = (type == MsgPending) ? QString::fromUtf8(" …") : ":";
+        QString sep = ":";
+        QString headerIcon;
+        if (type == MsgPending)
+          headerIcon = QStringLiteral("<span class=\"msg-icon pending-icon\">⏳</span> ");
         text = QStringLiteral("<div class=\"msg msg-%1\">"
                               "<div class=\"msg-header\">"
-                              "<span class=\"msg-time\">%2</span> ‣ "
+                              "%6<span class=\"msg-time\">%2</span> ‣ "
                               "<span class=\"msg-sender\">%3</span>%4"
                               "</div>"
                               "<div class=\"msg-body\">%5</div></div>")
-                 .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), sep, body);
+                 .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), sep, body, headerIcon);
       } else {
         text = QStringLiteral("<div class=\"msg msg-%1\">"
                               "<div class=\"msg-header\">"
