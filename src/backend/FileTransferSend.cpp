@@ -310,13 +310,6 @@ CFileTransferSend::~CFileTransferSend() {
   mTimerForActAverageTransferSpeed.stop();
 }
 
-bool CFileTransferSend::getIsTransferring() const {
-  if (mFileTransferAccepted == true && mAlreadyFinished == false) {
-    return true;
-  }
-  return false;
-}
-
 void CFileTransferSend::slotCalcAverageTransferSpeed() {
   QString speedSize;
   QString speedType;
@@ -345,60 +338,16 @@ void CFileTransferSend::doConvertNumberToTransferSize(quint64 inNumber,
 }
 
 void CFileTransferSend::CalcETA(qint64 speed) {
-  QString EmitString;
-  qint64 secLeft;
-
-  if (speed > 0) {
-    if (mUsingProtocolVersionD <= 0.2) {
-      secLeft = (mFileSize - mAlreadySentSize) / speed;
-    } else {
-      secLeft = (mFileSize - mRemoteReceivedSize) / speed;
-    }
+  qint64 remaining;
+  if (mUsingProtocolVersionD <= 0.2) {
+    remaining = mFileSize - mAlreadySentSize;
   } else {
-    if (mUsingProtocolVersionD <= 0.2) {
-      secLeft = mFileSize - mAlreadySentSize;
-    } else {
-      secLeft = mFileSize - mRemoteReceivedSize;
-    }
+    remaining = mFileSize - mRemoteReceivedSize;
   }
 
-  if (secLeft > 86400) {
-    //> 24h
-    emit signETA(tr("Over a day..."));
+  if (speed <= 0) {
+    emit signETA(CCore::formatETA(static_cast<quint64>(remaining)));
   } else {
-    int hours = 0;
-    int minutes = 0;
-    int secs = 0;
-
-    if (secLeft >= 3600) {
-      // hours
-      hours = secLeft / 3600;
-      secLeft -= hours * 3600;
-    }
-    if (secLeft >= 60) {
-      minutes = secLeft / 60;
-      secLeft -= minutes * 60;
-    }
-    secs = secLeft;
-
-    // hours
-    if (hours <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(hours, 10) + ":");
-    //---------------------------------------------------------
-    // minutes
-    if (minutes <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(minutes, 10) + ":");
-    //---------------------------------------------------------
-    // secs
-    if (secs <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(secs, 10));
-
-    signETA(EmitString);
+    emit signETA(CCore::formatETA(static_cast<quint64>(remaining / speed)));
   }
 }

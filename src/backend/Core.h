@@ -75,6 +75,7 @@ public:
                                      QString &outNumber,
                                      QString &outType,
                                      bool addStoOutType = true) const;
+  static QString formatETA(quint64 secLeft);
 
   void deletePacketManagerByID(qint32 ID);
   void createStreamObjectsForAllUsers();

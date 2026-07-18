@@ -5,9 +5,8 @@
 
 #include <QColor>
 #include <QStyledItemDelegate>
+#include <QTextDocument>
 #include <QVector>
-
-class QTextDocument;
 
 struct BubbleGradient {
   double angle; // CSS degrees (0 = to top)
@@ -63,6 +62,7 @@ protected:
 
 private:
   BubbleColors mColors;
+  mutable QTextDocument mDoc;
 };
 
 enum MsgType {

@@ -43,7 +43,6 @@ using namespace User;
 class CCore;
 class CProtocol;
 class CChatMessageChanger;
-class CCMessageAckManager;
 class CUser : public QObject {
   Q_OBJECT
 public:
@@ -155,6 +154,9 @@ private:
   QStringList mAllMessages;
   QStringList mNewMessages;
   QStringList mUnsentedMessages;
+  /* Cancel mechanism: mNextCancelId increments for each cancelP* call.
+     mPendingMsgIdx / mPendingFileIdx map cancelId → index into mAllMessages
+     so the caller can identify which pending msg/file-offer was cancelled. */
   qint32 mNextCancelId;
   QMap<qint32, int> mPendingMsgIdx;
   QMap<qint32, int> mPendingFileIdx;
@@ -173,6 +175,8 @@ private:
   CChatMessageChanger &mChatMessageChanger;
   //</Settings for the chatwindow>
   void SendAllunsendedMessages();
+  void
+  removePendingByCancelId(qint32 id, const QString &linkPrefix, QMap<qint32, int> &idxMap, QStringList &unsentList);
 
   QStringList mUnsentedFileOffers;
 };

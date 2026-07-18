@@ -26,6 +26,9 @@ void CPacketManager::operator<<(const QByteArray &t) {
 }
 
 void CPacketManager::checkifOnePacketIsCompleate() {
+  /* Wire format: first 4 bytes = hex-encoded payload length, followed by
+     the payload itself. Recursively extracts all complete packets from
+     the accumulation buffer mData. */
   if (mData == NULL) {
     return;
   }
