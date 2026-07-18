@@ -5,9 +5,6 @@
 form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
   : FileTransfer(FileTransfer) {
   setupUi(this);
-  // this->setAttribute(Qt::WA_DeleteOnClose,true);
-  // TODO: add recipient's name to titlebar
-  // this->setWindowTitle("File Upload to " + recipient);
 
   QPushButton *pushButton = this->pushButton;
 
@@ -43,11 +40,9 @@ void form_fileSend::init() {
   QString SSize;
   QLabel *labelFilename = this->labelFilename;
   QLabel *labelFilesize = this->labelFilesize;
-  // QLabel *label_7 = this->label_7;
   QProgressBar *progressBar = this->progressBar;
   QString sType;
 
-  // labelFilename->setText(FileTransfer.getFileName());
   QString file = FileTransfer.getFileName();
   ElideLabel(labelFilename, file);
 
@@ -59,8 +54,6 @@ void form_fileSend::init() {
   progressBar->setMinimum(0);
   progressBar->setMaximum(FileTransfer.getFileSize());
   progressBar->setValue(FileTransfer.getAlreadySentSize());
-
-  //  label_10->setText(FileTransfer.getUsingProtocolVersion());
 
   slot_FileTransferAccepted(FileTransfer.getAlreadyTransferAccepted());
 

@@ -57,7 +57,6 @@ public:
   QString getUsingProtocolVersion() const { return mUsingProtocolVersion; };
   quint64 getAlreadySentSize() const { return mAlreadySentSize; };
   bool getAlreadyTransferAccepted() const { return mFileTransferAccepted; };
-  bool getIsTransferring() const;
   bool getIsTransferComplete() const { return mAlreadyFinished; };
   void doConvertNumberToTransferSize(quint64 inNumber, QString &outNumber, QString &outType, bool addStoOutType = true);
 public slots:
