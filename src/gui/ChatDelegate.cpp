@@ -246,7 +246,7 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
       fg = QColor("#888888");
     int bw = qMin(r.width() * 3 / 4, 320);
     int bx = r.x() + (r.width() - bw) / 2;
-    bubbleRect = QRect(bx, r.y() + 4, bw, r.height() - 8);
+    bubbleRect = QRect(bx, r.y() + mColors.padV, bw, r.height() - mColors.padV * 2);
     if (mColors.systemGradient.isValid())
       grad = &mColors.systemGradient;
   } else if (type == MsgSent || type == MsgPending) {
@@ -423,8 +423,8 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   delete doc;
 
   int h = textH + mColors.padV * 2 + mColors.padVInner * 2;
-  if (type == MsgSystem && mColors.radius > 0)
-    h = qMin(h, textH + 12);
+  if (type == MsgSystem && mColors.radius == 0 && !mColors.systemGradient.isValid())
+    h = textH + 12;
   return QSize(w, h);
 }
 
