@@ -25,7 +25,11 @@ form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
   setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
                  Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
   setupUi(this);
-  // this->setAttribute(Qt::WA_DeleteOnClose,true);
+
+  QFont mono("monospace");
+  mono.setStyleHint(QFont::Monospace);
+  mono.setPointSize(8);
+  Sam_txt->setFont(mono);
 
   DebugMessageManager = core.getDebugMessageHandler();
 
@@ -55,11 +59,10 @@ void form_DebugMessages::newDebugMessage() {
   Sam_txt->clear();
 
   QStringList temp = DebugMessageManager->getAllMessages();
-  for (int i = 0; i < temp.count(); i++) {
-    this->Sam_txt->append(temp[i]);
-  }
+  Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" +
+                   temp.join('\n').toHtmlEscaped() + "</div>");
 
-  QTextCursor cursor = Sam_txt->textCursor();
+  QTextCursor cursor(Sam_txt->textCursor());
   cursor.movePosition(QTextCursor::Start);
   Sam_txt->setTextCursor(cursor);
 }
