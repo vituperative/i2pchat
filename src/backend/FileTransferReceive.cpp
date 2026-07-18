@@ -396,53 +396,11 @@ void CFileTransferReceive::doConvertNumberToTransferSize(quint64 inNumber,
 }
 
 void CFileTransferReceive::CalcETA(quint64 speed) {
-  QString EmitString;
-  quint64 secLeft;
-
-  if (speed > 0) {
-    secLeft = (mFileSize - mAlreadyReceivedSize) / speed;
+  quint64 remaining = mFileSize - mAlreadyReceivedSize;
+  if (speed <= 0) {
+    emit signETA(CCore::formatETA(remaining));
   } else {
-    secLeft = mFileSize - mAlreadyReceivedSize;
-  }
-
-  if (secLeft > 86400) {
-    //> 24h
-    emit signETA(tr("Over a day..."));
-  } else {
-    int hours = 0;
-    int minutes = 0;
-    int secs = 0;
-
-    if (secLeft >= 3600) {
-      // hours
-      hours = secLeft / 3600;
-      secLeft -= hours * 3600;
-    }
-    if (secLeft >= 60) {
-      minutes = secLeft / 60;
-      secLeft -= minutes * 60;
-    }
-    secs = secLeft;
-
-    // hours
-    if (hours <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(hours, 10) + ":");
-    //---------------------------------------------------------
-    // minutes
-    if (minutes <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(minutes, 10) + ":");
-    //---------------------------------------------------------
-    // secs
-    if (secs <= 9) {
-      EmitString.append("0");
-    }
-    EmitString.append(QString::number(secs, 10));
-
-    signETA(EmitString);
+    emit signETA(CCore::formatETA(remaining / speed));
   }
 }
 

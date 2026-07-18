@@ -70,7 +70,7 @@ private:
   QString generateBridgeName() const;
   void stopp();
 
-  QMap<qint32, CI2PStream *> StreamIncomingListener;
+  QMap<qint32, CI2PStream *> StreamIncomingListener; // listeners waiting for incoming streams (ACCEPT mode)
   CSessionController *StreamController;
 
   bool mSessionStreamStatusOK;
@@ -81,6 +81,6 @@ private:
   const QString mConfigPath;
 
   inline bool SessionStreamStatusOKCheck() { return mSessionStreamStatusOK; }
-  QMap<qint32, CI2PStream *> allStreams;
+  QMap<qint32, CI2PStream *> allStreams; // all active streams (both CONNECT and ACCEPT), keyed by stream ID
 };
 #endif

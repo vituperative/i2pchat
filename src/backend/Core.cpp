@@ -131,6 +131,9 @@ void CCore::doNamingLookUP(const QString &Name) const {
 }
 
 QString CCore::calcSessionOptionString() const {
+  /* Builds SAM session options string from QSettings.
+     Keys are passed through as i2cp/i2p.streaming parameters — anything
+     not recognized by the router is silently ignored. */
   QString SessionOptionString = "";
   QString Signature_Type = "";
 
@@ -147,7 +150,6 @@ QString CCore::calcSessionOptionString() const {
 
   SessionOptionString.append(
     "inbound.nickname=" + settings.value("TunnelName", "I2PChat").toString().replace(" ", "_") + " ");
-  /// FIXME TunnelName no whitespace allowed...; UPD: Maybe is fixed;
 
   // inbound options
   SessionOptionString.append("inbound.quantity=" + settings.value("inbound.quantity", "1").toString() + " ");
@@ -188,9 +190,6 @@ QString CCore::calcSessionOptionString() const {
     if (notfound)
       SessionOptionString.append("SIGNATURE_TYPE=" + QString("EdDSA_SHA512_Ed25519") + " ");
   }
-
-  /// TODO check for valid string match DSA_SHA1 || ECDSA_SHA256_P256 ... ; UPD:
-  /// Maybe is fixed;
 
   // Encryption
   {
@@ -515,6 +514,11 @@ ONLINESTATE CCore::getOnlineStatus() const {
 }
 
 void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
+  /* State machine:
+     - OFFLINE → transition through TRYTOCONNECT (triggers init())
+     - TRYTOCONNECT → re-init connection
+     - OFFLINE explicitly → stopCore() + kill keepalive
+     - all other states → broadcast to connected peers */
   qDebug() << "setOnlineStatus: newStatus =" << newStatus << "currentStatus =" << mCurrentOnlineStatus;
 
   if (mCurrentOnlineStatus == newStatus)
@@ -889,6 +893,18 @@ void CCore::doConvertNumberToTransferSize(quint64 inNumber,
   SSize.setNum(Size, 10);
   outNumber = SSize;
   addStoOutType == true ? outType = "Bytes/s" : outType = "Bytes";
+}
+
+QString CCore::formatETA(quint64 secLeft) {
+  if (secLeft > 86400)
+    return QObject::tr("Over a day...");
+
+  int hours = static_cast<int>(secLeft / 3600);
+  secLeft %= 3600;
+  int minutes = static_cast<int>(secLeft / 60);
+  int secs = static_cast<int>(secLeft % 60);
+
+  return QString("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(secs, 2, 10, QChar('0'));
 }
 
 const QString CCore::getMyDestinationB32() const {

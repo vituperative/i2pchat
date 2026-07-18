@@ -74,6 +74,11 @@ void CUser::setConnectionStatus(CONNECTIONTOUSER Status) {
   mConnectionStatus = Status;
   mLastOnline = QDateTime::currentDateTime();
 
+  /* On transition to ONLINE, query peer capabilities by protocol version.
+     Each version adds more queries:
+       v0.3  → file-transfer caps + user info
+       v0.4  → min file-transfer version
+       v0.5  → avatar (if not already cached) */
   if (Status == ONLINE) {
     if (getUsedB32Dest() == true) {
       mCore.doNamingLookUP(mI2PDestination);
@@ -271,14 +276,17 @@ void CUser::setUnsentedFileOffers(const QStringList &newOffers) {
   emit signSaveUnsentMessages(mI2PDestination);
 }
 
-void CUser::cancelPendingMessage(qint32 id) {
-  if (!mPendingMsgIdx.contains(id))
+void CUser::removePendingByCancelId(qint32 id,
+                                    const QString &linkPrefix,
+                                    QMap<qint32, int> &idxMap,
+                                    QStringList &unsentList) {
+  if (!idxMap.contains(id))
     return;
-  int idx = mPendingMsgIdx[id];
-  if (idx >= 0 && idx < mUnsentedMessages.size())
-    mUnsentedMessages.removeAt(idx);
+  int idx = idxMap[id];
+  if (idx >= 0 && idx < unsentList.size())
+    unsentList.removeAt(idx);
 
-  QString cancelLink = QString("cancelmsg:%1").arg(id);
+  QString cancelLink = linkPrefix.arg(id);
   for (int i = mAllMessages.size() - 1; i >= 0; i--) {
     if (mAllMessages[i].contains(cancelLink)) {
       mAllMessages.removeAt(i);
@@ -291,43 +299,21 @@ void CUser::cancelPendingMessage(qint32 id) {
       break;
     }
   }
-  mPendingMsgIdx.remove(id);
-  // Shift indices for remaining entries
-  QList<qint32> keys = mPendingMsgIdx.keys();
+  idxMap.remove(id);
+  QList<qint32> keys = idxMap.keys();
   for (qint32 k : keys) {
-    if (mPendingMsgIdx[k] > idx)
-      mPendingMsgIdx[k]--;
+    if (idxMap[k] > idx)
+      idxMap[k]--;
   }
   emit signSaveUnsentMessages(mI2PDestination);
 }
 
-void CUser::cancelPendingFileOffer(qint32 id) {
-  if (!mPendingFileIdx.contains(id))
-    return;
-  int idx = mPendingFileIdx[id];
-  if (idx >= 0 && idx < mUnsentedFileOffers.size())
-    mUnsentedFileOffers.removeAt(idx);
+void CUser::cancelPendingMessage(qint32 id) {
+  removePendingByCancelId(id, QString("cancelmsg:%1"), mPendingMsgIdx, mUnsentedMessages);
+}
 
-  QString cancelLink = QString("cancelfile:%1").arg(id);
-  for (int i = mAllMessages.size() - 1; i >= 0; i--) {
-    if (mAllMessages[i].contains(cancelLink)) {
-      mAllMessages.removeAt(i);
-      break;
-    }
-  }
-  for (int i = mNewMessages.size() - 1; i >= 0; i--) {
-    if (mNewMessages[i].contains(cancelLink)) {
-      mNewMessages.removeAt(i);
-      break;
-    }
-  }
-  mPendingFileIdx.remove(id);
-  QList<qint32> keys = mPendingFileIdx.keys();
-  for (qint32 k : keys) {
-    if (mPendingFileIdx[k] > idx)
-      mPendingFileIdx[k]--;
-  }
-  emit signSaveUnsentMessages(mI2PDestination);
+void CUser::cancelPendingFileOffer(qint32 id) {
+  removePendingByCancelId(id, QString("cancelfile:%1"), mPendingFileIdx, mUnsentedFileOffers);
 }
 
 void CUser::slotSendChatMessage(const QString &Message) {

@@ -309,7 +309,8 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   renderText.replace("</p>", "</div>");
   renderText = QStringLiteral("<div style=\"color:%1;\">%2</div>").arg(fg.name(), renderText);
 
-  auto *doc = new QTextDocument;
+  auto *doc = &mDoc;
+  doc->clear();
   doc->setDefaultFont(option.font);
   doc->setDocumentMargin(0);
   {
@@ -358,7 +359,6 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
       painter->drawPixmap(iconRect.topLeft(), pix);
   }
 
-  delete doc;
   painter->restore();
 }
 
@@ -403,7 +403,8 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   renderText.replace("</p>", "</div>");
   renderText = QStringLiteral("<div style=\"color:#000;\">%1</div>").arg(renderText);
 
-  auto *doc = new QTextDocument;
+  auto *doc = &mDoc;
+  doc->clear();
   doc->setDefaultFont(option.font);
   doc->setDocumentMargin(0);
   {
@@ -420,7 +421,6 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   doc->setTextWidth(tw);
   QSizeF ds = doc->documentLayout()->documentSize();
   int textH = qMax((int)(ds.height() + 0.5), 1);
-  delete doc;
 
   int h = textH + mColors.padV * 2 + mColors.padVInner * 2;
   if (type == MsgSystem && mColors.radius == 0 && !mColors.systemGradient.isValid())
@@ -439,7 +439,8 @@ bool ChatDelegate::editorEvent(QEvent *event,
   QString text = index.data(Qt::DisplayRole).toString();
   int type = index.data(MsgTypeRole).toInt();
 
-  auto *doc = new QTextDocument;
+  auto *doc = &mDoc;
+  doc->clear();
   doc->setDefaultFont(option.font);
   {
     QString ss = "a { color: #0000ff; }"
@@ -489,7 +490,6 @@ bool ChatDelegate::editorEvent(QEvent *event,
 
   QPointF clickInDoc = QPointF(me->pos()) - docOrigin;
   QString anchor = doc->documentLayout()->anchorAt(clickInDoc);
-  delete doc;
 
   if (!anchor.isEmpty()) {
     emit linkClicked(QUrl(anchor));

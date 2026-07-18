@@ -47,7 +47,7 @@ public:
 
   void readBlockListe();
 
-  const QMap<QString, CUserBlockEntity *> getBlockList() const { return mUserBlockMap; };
+  const QMap<QString, CUserBlockEntity *> &getBlockList() const { return mUserBlockMap; };
 
 private:
   CCore &mCore;

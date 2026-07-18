@@ -7,7 +7,13 @@
 
 #include <QIcon>
 #include <QMessageBox>
+#include <QPixmap>
 #include <QSystemTrayIcon>
+
+static const QPixmap &avatarPixmap() {
+  static QPixmap pix(":/icons/avatar.svg");
+  return pix;
+}
 
 form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
   : QMainWindow(parent) {
@@ -44,7 +50,6 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
   Mute = false;
   applicationIsClosing = false;
 
-  initStyle();
   initTryIconMenu();
   initTryIcon();
   initToolBars();
@@ -168,7 +173,7 @@ void form_MainWindow::openDebugMessagesWindow() {
 void form_MainWindow::namingMe() {
   QClipboard *clipboard = QApplication::clipboard();
   QString Destination = Core->getMyDestination();
-  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  const QPixmap& pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
   if (Destination != "") {
     clipboard->setText(Destination);
@@ -181,7 +186,7 @@ void form_MainWindow::closeApplication() {
   if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
     QMessageBox msgBox(this);
-    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    const QPixmap& pixmap = avatarPixmap();
     msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Question);
     msgBox.setText(tr("\nAre you sure you wish to quit?"));
@@ -204,7 +209,7 @@ void form_MainWindow::closeApplication() {
     this->close();
   } else {
     QMessageBox msgBox(NULL);
-    QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+    const QPixmap& pixmap = avatarPixmap();
     msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setText(tr("\nFile transfer in progress...\nCancel transfer first!"));
@@ -275,6 +280,10 @@ void form_MainWindow::eventUserChanged() {
     QFont currentFont = newItem->font();
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+    /* Each user occupies 3 rows in the list widget:
+       row+0: visible display name + status icon
+       row+1: hidden destination string (for copyDestination / lookups)
+       row+2: hidden type marker ("U"=user, "FS"=file-send, "FR"=file-receive) */
     if (users.at(i)->getIsInvisible() == true) {
       currentFont.setItalic(true);
       newItem->setFont(currentFont);
@@ -286,9 +295,9 @@ void form_MainWindow::eventUserChanged() {
     newItem->setText(users.at(i)->getName());
 
     ChildWidthI2PDestinationAsText->setText(users.at(i)->getI2PDestination());
-    ChildWidthI2PDestinationAsText->setHidden(true); // DEBUG
+    ChildWidthI2PDestinationAsText->setHidden(true);
     ChildWidthTyp->setText("U");
-    ChildWidthTyp->setHidden(true); // DEBUG
+    ChildWidthTyp->setHidden(true);
   }
 
   for (int i = 0; i < FileReceives.size(); i++) {
@@ -340,7 +349,7 @@ void form_MainWindow::eventUserChanged() {
 
 void form_MainWindow::openUserListeClicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
-  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  const QPixmap& pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
 
   if (t->text() == "U") {
@@ -500,7 +509,7 @@ void form_MainWindow::deleteUserClicked() {
 
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
-  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  const QPixmap& pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
 
   QMessageBox msgBox(this);
@@ -653,49 +662,6 @@ void form_MainWindow::openAboutDialog() {
   }
 }
 
-void form_MainWindow::initStyle() {
-  // commented out the style stuff as styles on "ubuntu 14.04 mate" make the
-  // tray icon not appear
-  /*
-  QSettings * settings=new
-  QSettings(Core->getConfigPath()+"/application.ini",QSettings::IniFormat);
-  settings->beginGroup("General");
-  //Load Style
-  QString Style=(settings->value("current_Style","")).toString();
-  if(Style.isEmpty()==true)
-  {
-      //find default Style for this System
-      QRegularExpression regExp("^Q(.*)Style$");
-      Style = QApplication::style()->metaObject()->className();
-
-      if (Style == QLatin1String("QMacStyle"))
-          Style = QLatin1String("Macintosh (Aqua)");
-      else {
-          auto m = regExp.match(Style);
-          if (m.hasMatch())
-              Style = m.captured(1);
-      }
-
-      //styleCombo->addItems(QStyleFactory::keys());
-  }
-
-  qApp->setStyle(Style);
-  //Load Style end
-
-  //Load Stylesheet
-  QFile file(Core->getConfigPath() + "/qss/" +
-             settings->value("current_Style_sheet","Default").toString() +
-  ".qss");
-
-  file.open(QFile::ReadOnly);
-  QString styleSheet = QLatin1String(file.readAll());
-  qApp->setStyleSheet(styleSheet);
-  //load Stylesheet end
-  settings->endGroup();
-      settings->sync();
-  delete settings;
-  */
-}
 
 void form_MainWindow::initTryIconMenu() {
   // Tray icon Menu
@@ -731,33 +697,6 @@ void form_MainWindow::initTryIcon() {
           SLOT(eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason)));
 
   trayIcon->show();
-}
-
-void form_MainWindow::SendFile() {
-  QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
-  QString Destination = t->text();
-  QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("all Files (*)"));
-
-  if (FilePath.endsWith("/") == true) {
-    // only a directory ,- dont send it
-    return;
-  }
-
-  if (Destination.length() == 516) {
-    if (!FilePath.isEmpty())
-      try {
-        Core->getFileTransferManager()->addNewFileTransfer(FilePath, Destination);
-      } catch (std::exception &e) {
-        qWarning() << "\nform_MainWindow::SendFile()\n"
-                   << e.what() << "Destination: " << Destination << "\n"
-                   << "\nFile send aborted!";
-      }
-  } else {
-    qWarning() << "\nform_MainWindow::SendFile()\n"
-               << "Destination.length!=516\n"
-               << "Destination: " << Destination << "\n"
-               << "\nFile send aborted!";
-  }
 }
 
 void form_MainWindow::copyDestination() {
@@ -832,7 +771,7 @@ void form_MainWindow::showUserInfos() {
   } else {
     msgBox.setIconPixmap(avatar);
   }
-  QPixmap pixmap = QPixmap(":/icons/avatar.svg");
+  const QPixmap& pixmap = avatarPixmap();
   msgBox.setWindowIcon(QIcon(pixmap));
   msgBox.setText("\n" + UserInfos);
   msgBox.setStandardButtons(QMessageBox::Ok);
@@ -1178,7 +1117,7 @@ void form_MainWindow::slotLoadOwnAvatarImage() {
               if (User->getReceivedUserInfos().AvatarImage.isEmpty() == false) {
                 avatar.loadFromData(User->getReceivedUserInfos().AvatarImage);
               } else {
-                avatar = QPixmap(":/icons/avatar.svg");
+                avatar = avatarPixmap();
               }
               iconItem->setIcon(QIcon(avatar));
             }
