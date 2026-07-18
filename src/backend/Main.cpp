@@ -126,8 +126,8 @@ int main(int argc, char *argv[]) {
   QDir().mkpath(configPath + "/themes/chat");
   QDir().mkpath(configPath + "/themes/app");
 
-  // Write default theme CSS files — always overwrite on startup so defaults stay fresh.
-  // Users who want custom themes should copy to a new .css file (file picker TBD).
+  // Write the default Minimal theme CSS — always overwritten on startup so defaults stay fresh.
+  // Users who want custom themes should copy Minimal.css to a new name in themes/chat/.
   auto writeCss = [&](const QString &name, const QString &content) {
     QString path = configPath + "/themes/chat/" + name + ".css";
     QFile f(path);
@@ -150,44 +150,23 @@ int main(int argc, char *argv[]) {
       f.close();
     }
   };
-  writeCss("Bubbles",
+  writeCss("Minimal",
            ".bubble {\n"
-           "  border-radius: 8px;\n"
-           "  padding: 3px 8px;\n"
-           "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);\n"
+           "  border-radius: 4px;\n"
+           "  padding: 2px 6px;\n"
            "  pad-v-inner: 2px;\n"
            "}\n"
-           ".sent { background: #075e54; color: #ffffff; }\n"
-           ".received { background: #e5e5ea; color: #1c1c1c; }\n"
-           ".system { background: #e8e8e8; color: #888888; }\n"
-           ".pending { background: #fff3cd; color: #856404; }\n"
+           ".sent { background: #d4f1db; color: #555; }\n"
+           ".received { background: #ffffff; color: #444; }\n"
+           ".system { background: #f0f0f0; color: #777; }\n"
+           ".pending { background: #bbb; color: #555; }\n"
            "\n"
-           "/* Semantic message component classes */\n"
            "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
-           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
+           ".msg-header { font-size: smaller; padding: 1px 6px; color: #666; }\n"
            ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n"
            "img.msg-icon { width: 12px; height: 12px; vertical-align: -2px; }\n"
-           ".msg-time { font-size: smaller; opacity: 0.8; }\n"
-           ".msg-sender { font-weight: bold; }\n");
-  writeCss("Modern",
-           ".bubble {\n"
-           "  border-radius: 12px;\n"
-           "  padding: 3px 8px;\n"
-           "  box-shadow: 0 1px 2px rgba(0,0,0,0.15);\n"
-           "  pad-v-inner: 2px;\n"
-           "}\n"
-           ".sent { background: #8774e1; color: #ffffff; }\n"
-           ".received { background: #e8f0fe; color: #1c1c1c; }\n"
-           ".system { background: #e8e8e8; color: #888888; }\n"
-           ".pending { background: #fff3cd; color: #856404; }\n"
-           "\n"
-           "/* Semantic message component classes */\n"
-           "p, div, h1, h2, h3, h4, h5, h6, blockquote, pre, ul, ol, li { margin: 0; padding: 0; }\n"
-           ".msg-header { font-size: smaller; padding: 1px 0; }\n"
-           ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n"
-           "img.msg-icon { width: 12px; height: 12px; vertical-align: -2px; }\n"
-           ".msg-time { font-size: smaller; opacity: 0.8; }\n"
-           ".msg-sender { font-weight: bold; }\n");
+           ".msg-time { opacity: 0.7; }\n"
+           ".msg-sender { font-weight: 600; }\n");
 
   enableDebugLogging(configPath);
 

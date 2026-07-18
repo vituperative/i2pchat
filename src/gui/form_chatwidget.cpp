@@ -179,7 +179,7 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
 void form_ChatWidget::loadChatStyle() {
   QSettings settings(Core.getConfigPath() + "/application.ini", QSettings::IniFormat);
-  QString style = settings.value("Chat/ChatStyle", "classic").toString();
+  QString style = settings.value("Chat/ChatStyle", "Minimal").toString();
   mChatStyle = style;
   qDebug() << "loadChatStyle: style =" << style;
   QString styleLower = style.toLower();
@@ -391,7 +391,7 @@ static QVector<BubbleShadow> parseShadows(const QString &val) {
     }
     // Parse numeric px values in order (accept unitless 0)
     for (; idx < tokens.size(); idx++) {
-      const QString& t = tokens[idx];
+      const QString &t = tokens[idx];
       bool ok = false;
       int n;
       if (t == "0") {
@@ -1031,7 +1031,7 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
     if (parts.size() < 3)
       return;
 
-    const QString& action = parts.at(1);
+    const QString &action = parts.at(1);
     QString fileName = parts.mid(2).join(":"); // Restore filename if it contained colons
 
     if (action == "accept") {
