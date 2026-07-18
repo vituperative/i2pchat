@@ -519,6 +519,13 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
       return;
     }
     if (requestAuth) {
+      // Disconnect data signal while dialog is open — prevents
+      // slotInputUnknown from routing subsequent data to
+      // handleWebProfileProtocolPacket and destroying the stream.
+      QObject::disconnect(stream,
+                          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+                          this,
+                          SLOT(slotInputUnknown(const qint32, const QByteArray)));
       emit mCore.signIncomingUserAuthorizationRequest(stream->getDestination(), ID, Data);
       return;
     }
