@@ -144,6 +144,9 @@ void CUser::slotSendFileOffer(const QString &fileName, quint64 fileSize, const Q
   mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
   QString offerStr = fileName + "\t" + QString::number(fileSize) + "\t" + filePath;
 
+  // Always persist to mUnsentedFileOffers so the offer survives app restart
+  mUnsentedFileOffers.push_back(offerStr);
+
   if (mConnectionStatus == ONLINE && mCurrentOnlineState != USEROFFLINE && mCurrentOnlineState != USERINVISIBLE) {
     // Send offer via protocol
     QByteArray payload = (fileName + "\t" + QString::number(fileSize)).toUtf8();
@@ -155,8 +158,6 @@ void CUser::slotSendFileOffer(const QString &fileName, quint64 fileSize, const Q
     mNewMessages.push_back(msg);
   } else {
     // Queue for later
-    mUnsentedFileOffers.push_back(offerStr);
-
     qint32 cancelId = mNextCancelId++;
     mPendingFileIdx[cancelId] = mUnsentedFileOffers.size() - 1;
     auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
