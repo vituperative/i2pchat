@@ -16,7 +16,7 @@ jobs:
       - name: Install Qt5
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev
+          sudo apt-get install -y qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
 
       - name: Install build tools
         run: |
