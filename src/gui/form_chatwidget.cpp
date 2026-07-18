@@ -3,11 +3,14 @@
 #include "ChatDelegate.h"
 #include "User.h"
 
+#include <QBuffer>
 #include <QDir>
 #include <QErrorMessage>
 #include <QFile>
 #include <QMap>
 #include <QMenu>
+#include <QPainter>
+#include <QSvgRenderer>
 #include <QTextStream>
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
@@ -234,6 +237,28 @@ void form_ChatWidget::loadChatStyle() {
   }
 }
 
+static QString aboutIconHtml() {
+  static const QString html = []() {
+    QSizeF srcSize(48, 48);
+    QPixmap big(srcSize.toSize());
+    big.fill(Qt::transparent);
+    QPainter p(&big);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    QSvgRenderer(QStringLiteral(":/icons/about.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
+    p.end();
+    QPixmap small = big.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QByteArray bytes;
+    QBuffer buf(&bytes);
+    buf.open(QIODevice::WriteOnly);
+    small.save(&buf, "PNG");
+    return QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
+                          "class=\"msg-icon system-icon\"> ")
+      .arg(QString::fromLatin1(bytes.toBase64()));
+  }();
+  return html;
+}
+
 static QStringList cssSplit(const QString &s) {
   QStringList parts;
   int depth = 0, start = 0;
@@ -366,7 +391,7 @@ static QVector<BubbleShadow> parseShadows(const QString &val) {
     }
     // Parse numeric px values in order (accept unitless 0)
     for (; idx < tokens.size(); idx++) {
-      QString t = tokens[idx];
+      const QString& t = tokens[idx];
       bool ok = false;
       int n;
       if (t == "0") {
@@ -427,6 +452,7 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
     out << ".pending { background: #fafafa; color: #999; }\n";
     out << ".msg-header { background-color: rgba(0,0,0,0.04); padding: 1px 6px; }\n";
     out << ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n";
+    out << "img.msg-icon { width: 12px; height: 12px; vertical-align: -2px; }\n";
     out << ".msg-time { font-size: smaller; color: #888; }\n";
     out << ".msg-sender { font-weight: bold; }\n";
     f.close();
@@ -760,14 +786,8 @@ void form_ChatWidget::addMessage(QString text) {
     } else {
       body = text;
     }
-    static const QString robotIcon = QString::fromUtf8("\xf0\x9f\xa4\x96");
-    text = QStringLiteral("<div class=\"msg msg-system\">"
-                          "<div class=\"msg-header\">"
-                          "<span class=\"msg-icon system-icon\">%3</span> "
-                          "<span class=\"msg-time\">%1</span>"
-                          "</div>"
-                          "<div class=\"msg-body\">%2</div></div>")
-             .arg(timePart.toHtmlEscaped(), body, robotIcon);
+    text = QStringLiteral("<div class=\"msg msg-system\">%1<span class=\"msg-time\">%2</span>: %3</div>")
+             .arg(aboutIconHtml(), timePart.toHtmlEscaped(), body);
   } else if (type == MsgFileOffer) {
     text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
     text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
@@ -1011,7 +1031,7 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
     if (parts.size() < 3)
       return;
 
-    QString action = parts.at(1);
+    const QString& action = parts.at(1);
     QString fileName = parts.mid(2).join(":"); // Restore filename if it contained colons
 
     if (action == "accept") {
