@@ -1060,6 +1060,10 @@ void form_ChatWidget::slotPendingCanceled() {
     if (item && item->data(MsgTypeRole).toInt() == MsgPending) {
       item->setData(static_cast<int>(MsgSent), MsgTypeRole);
       item->setData(QVariant(), CancelUrlRole);
+      QString html = item->text();
+      html.replace(QRegularExpression("<span\\s+class=\"msg-icon\\s+pending-icon\"[^>]*>[^<]*</span>\\s*"), QString());
+      html.replace(QStringLiteral("msg-pending"), QStringLiteral("msg-sent"));
+      item->setText(html);
     }
   }
   mChatListView->viewport()->update();
