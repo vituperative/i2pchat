@@ -223,7 +223,7 @@ void form_settingsgui::loadSettings() {
   comboBox_EncType->setItemData(2, "6,4");
   comboBox_EncType->setItemData(3, "7,4");
   {
-    QString savedEnc = settings->value("i2cp.leaseSetEncType", "6,4").toString();
+    QString savedEnc = settings->value("i2cp.leaseSetEncType", "4").toString();
     for (int i = 0; i < comboBox_EncType->count(); i++) {
       if (comboBox_EncType->itemData(i).toString() == savedEnc) {
         comboBox_EncType->setCurrentIndex(i);

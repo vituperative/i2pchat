@@ -195,7 +195,7 @@ QString CCore::calcSessionOptionString() const {
   {
     QStringList AllowEncTypes = {"4", "4,0", "4, 0", "5,4", "6,4", "7,4"};
 
-    QString defEncType = "6,4";
+    QString defEncType = "4";
     auto enc_type = settings.value("i2cp.leaseSetEncType", defEncType).toString();
     auto encnotfound = true;
     for (int i = 0; i < AllowEncTypes.size(); ++i) {
