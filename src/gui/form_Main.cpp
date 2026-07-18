@@ -173,7 +173,7 @@ void form_MainWindow::openDebugMessagesWindow() {
 void form_MainWindow::namingMe() {
   QClipboard *clipboard = QApplication::clipboard();
   QString Destination = Core->getMyDestination();
-  const QPixmap& pixmap = avatarPixmap();
+  const QPixmap &pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
   if (Destination != "") {
     clipboard->setText(Destination);
@@ -186,7 +186,7 @@ void form_MainWindow::closeApplication() {
   if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
     QMessageBox msgBox(this);
-    const QPixmap& pixmap = avatarPixmap();
+    const QPixmap &pixmap = avatarPixmap();
     msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Question);
     msgBox.setText(tr("\nAre you sure you wish to quit?"));
@@ -209,7 +209,7 @@ void form_MainWindow::closeApplication() {
     this->close();
   } else {
     QMessageBox msgBox(NULL);
-    const QPixmap& pixmap = avatarPixmap();
+    const QPixmap &pixmap = avatarPixmap();
     msgBox.setWindowIcon(QIcon(pixmap));
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setText(tr("\nFile transfer in progress...\nCancel transfer first!"));
@@ -349,7 +349,7 @@ void form_MainWindow::eventUserChanged() {
 
 void form_MainWindow::openUserListeClicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
-  const QPixmap& pixmap = avatarPixmap();
+  const QPixmap &pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
 
   if (t->text() == "U") {
@@ -509,7 +509,7 @@ void form_MainWindow::deleteUserClicked() {
 
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
-  const QPixmap& pixmap = avatarPixmap();
+  const QPixmap &pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
 
   QMessageBox msgBox(this);
@@ -770,7 +770,7 @@ void form_MainWindow::showUserInfos() {
   } else {
     msgBox.setIconPixmap(avatar);
   }
-  const QPixmap& pixmap = avatarPixmap();
+  const QPixmap &pixmap = avatarPixmap();
   msgBox.setWindowIcon(QIcon(pixmap));
   msgBox.setText("\n" + UserInfos);
   msgBox.setStandardButtons(QMessageBox::Ok);

@@ -63,8 +63,7 @@ void form_DebugMessages::newDebugMessage() {
   escaped.reserve(temp.size());
   for (const auto &msg : temp)
     escaped << msg.trimmed().toHtmlEscaped();
-  Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" +
-                   escaped.join("<br>") + "</div>");
+  Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" + escaped.join("<br>") + "</div>");
 
   QTextCursor cursor(Sam_txt->textCursor());
   cursor.movePosition(QTextCursor::Start);

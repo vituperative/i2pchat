@@ -10,7 +10,9 @@
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.3\n";
 
-static QString ts() { return QDateTime::currentDateTime().toString("hh:mm:ss"); }
+static QString ts() {
+  return QDateTime::currentDateTime().toString("hh:mm:ss");
+}
 static QString truncateDbg(const QString &msg) {
   QString r = msg;
   r.replace(QRegularExpression("DESTINATION=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}"), "DESTINATION=\\1…");
@@ -75,8 +77,8 @@ void CSessionController::slotConnected() {
 void CSessionController::slotDisconnected() {
   if (mDoneDisconnect == false) {
     mTcpSocket.close();
-    emit signDebugMessages(truncateDbg("I2P Stream Controller disconnected ‣ SAM unavailable [" +
-                                       mSamHost + ":" + mSamPort + "]"));
+    emit signDebugMessages(
+      truncateDbg("I2P Stream Controller disconnected ‣ SAM unavailable [" + mSamHost + ":" + mSamPort + "]"));
     emit signSessionStreamStatusOK(false);
 
     // Start auto-reconnect timer

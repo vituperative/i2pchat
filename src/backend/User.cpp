@@ -245,7 +245,7 @@ QString CUser::takeAcceptedFileOffer(const QString &fileName) {
 void CUser::removeFileOffer(const QString &fileName) {
   for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
     QStringList parts = mUnsentedFileOffers.at(i).split("\t");
-    if (parts.size() >= 1 && parts.at(0) == fileName) {
+    if (!parts.empty() && parts.at(0) == fileName) {
       mUnsentedFileOffers.removeAt(i);
       emit signSaveUnsentMessages(mI2PDestination);
       break;
