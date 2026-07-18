@@ -3,6 +3,7 @@
 #include "I2PStream.h"
 
 #include <QRegularExpression>
+
 #include <utility>
 
 const QString SAM_HANDSHAKE_V3 = "HELLO VERSION MIN=3.1 MAX=3.3\n";
@@ -22,13 +23,10 @@ CI2PStream::CI2PStream(QString mSamHost,
   , mMode(mMode)
   , mSilence(mSilence)
   , mUsedFor(std::move(UsedFor)) {
-  mAnalyser = NULL;
-  mIncomingPackets = NULL;
   mDoneDisconnect = false;
   mStatusReceived = false;
   mHandshakeSuccessful = false;
   mConnectionType = UNKNOWN;
-  mIncomingPackets = new QByteArray();
   mDestinationReceived = false;
   mFIRSTPACKETCHAT_alreadySent = false;
   mTimer = NULL;
@@ -51,14 +49,6 @@ CI2PStream::~CI2PStream() {
   doDisconnect();
 
   mTcpSocket.deleteLater();
-
-  if (mAnalyser != NULL) {
-    delete mAnalyser;
-  }
-
-  if (mIncomingPackets != NULL) {
-    delete mIncomingPackets;
-  }
 }
 
 bool CI2PStream::doConnect(QString mDestination) {
@@ -125,6 +115,12 @@ void CI2PStream::slotDisconnected() {
 }
 
 void CI2PStream::slotReadFromSocket() {
+  /* Three-stage SAM handshake:
+     1. HELLO reply      → mHandshakeSuccessful
+     2. STREAM STATUS    → mStatusReceived
+     3. (ACCEPT only)    → mDestinationReceived
+     After stage 3, raw data emissions are suppressed and all data
+     forwarded to the stream consumer via signDataReceived. */
   using namespace SAM_Message_Types;
   QString smID = QString::number(mID, 10);
   QByteArray newData;
@@ -143,25 +139,22 @@ void CI2PStream::slotReadFromSocket() {
 
   if (mHandshakeSuccessful == false) {
 
-    mIncomingPackets->append(newData);
-    if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Incomplete packet received???
+    mIncomingPackets.append(newData);
+    if (mIncomingPackets.indexOf("\n", 0) == -1) {
       return;
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets.left(mIncomingPackets.indexOf("\n", 0) + 1);
 
-    mAnalyser = new CI2PSamMessageAnalyser("CI2PStream");
+    CI2PSamMessageAnalyser analyser("CI2PStream");
 
     QString t(CurrentPacket.data());
-    SAM_MESSAGE sam = mAnalyser->Analyse(t);
+    SAM_MESSAGE sam = analyser.Analyse(t);
     if (sam.type == HELLO_REPLAY && sam.result == OK) {
       mHandshakeSuccessful = true;
     }
 
-    delete mAnalyser;
-    mAnalyser = NULL;
     QByteArray Data;
 
     if (mMode == ACCEPT) {
@@ -176,47 +169,43 @@ void CI2PStream::slotReadFromSocket() {
       Data.append(" Silence=false\n");
     }
 
-    mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
+    mIncomingPackets.remove(0, mIncomingPackets.indexOf("\n", 0) + 1);
     *(this) << Data;
   } else if (mStatusReceived == false) {
-    mIncomingPackets->append(newData);
-    if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Incomplete packet received???
+    mIncomingPackets.append(newData);
+    if (mIncomingPackets.indexOf("\n", 0) == -1) {
       return;
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets.left(mIncomingPackets.indexOf("\n", 0) + 1);
 
     // Get Stream Status
-    mAnalyser = new CI2PSamMessageAnalyser("CI2PStream");
+    CI2PSamMessageAnalyser analyser("CI2PStream");
 
     QString t(CurrentPacket.data());
 
-    SAM_MESSAGE sam = mAnalyser->Analyse(t);
+    SAM_MESSAGE sam = analyser.Analyse(t);
     emit signStreamStatusReceived(sam.result, mID, sam.Message);
 
-    delete mAnalyser;
-    mAnalyser = NULL;
     mStatusReceived = true;
 
-    mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
+    mIncomingPackets.remove(0, mIncomingPackets.indexOf("\n", 0) + 1);
     if (mModeStreamConnect == true) {
-      if (mIncomingPackets->length() != 0) {
-        emit signDataReceived(mID, *(mIncomingPackets));
+      if (mIncomingPackets.length() != 0) {
+        emit signDataReceived(mID, mIncomingPackets);
       }
     }
 
   } else if (mStatusReceived == true && mModeStreamAccept == true && mDestinationReceived == false) {
     // get Destination
-    mIncomingPackets->append(newData);
-    if (mIncomingPackets->indexOf("\n", 0) == -1) {
-      // Incomplete packet received???
+    mIncomingPackets.append(newData);
+    if (mIncomingPackets.indexOf("\n", 0) == -1) {
       return;
     }
 
     QByteArray CurrentPacket;
-    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+    CurrentPacket = mIncomingPackets.left(mIncomingPackets.indexOf("\n", 0) + 1);
 
     {
       // Extract DESTINATION= from "STREAM STATUS RESULT=OK DESTINATION=<base64>\n"
@@ -236,12 +225,12 @@ void CI2PStream::slotReadFromSocket() {
     }
     mDestinationReceived = true;
 
-    mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
+    mIncomingPackets.remove(0, mIncomingPackets.indexOf("\n", 0) + 1);
 
     emit signModeAcceptIncomingStream(mID);
 
-    if (mIncomingPackets->length() != 0) {
-      emit signDataReceived(mID, *(mIncomingPackets));
+    if (mIncomingPackets.length() != 0) {
+      emit signDataReceived(mID, mIncomingPackets);
     }
 
     // start mUnKnownConnectionTimeout

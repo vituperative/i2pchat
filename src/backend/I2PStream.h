@@ -86,10 +86,9 @@ private:
   bool mHandshakeSuccessful;
   bool mDestinationReceived;
   bool mFIRSTPACKETCHAT_alreadySent;
-  QByteArray *mIncomingPackets;
+  QByteArray mIncomingPackets;
   QTcpSocket mTcpSocket;
   QTimer *mTimer;
   QTimer mUnKnownConnectionTimeout;
-  CI2PSamMessageAnalyser *mAnalyser;
 };
 #endif
