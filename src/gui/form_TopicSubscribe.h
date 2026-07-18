@@ -36,7 +36,6 @@ private slots:
 
 private:
   CCore &mCore;
-  void init();
   void closeEvent(QCloseEvent *e);
   void keyPressEvent(QKeyEvent *event);
 };

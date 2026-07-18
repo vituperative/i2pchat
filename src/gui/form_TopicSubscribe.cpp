@@ -33,60 +33,14 @@ void form_topicSubscribe::slot_cmdSubscribe() {
   label_ResultCount->setText("0");
   label_SubscribeState->setText(tr("Starting"));
 
-  // subscribeStruct.topicId=mCore.canonicalizeTopicId(inputField_topicId->text());
-
   cmd_subscribe->setEnabled(false);
-  inputField_topicId->setEnabled(false); // FIXME queue subscription requests
-  // mSeedlessManager.doSeedlessSubscribeToTopic(subscribeStruct);
+  inputField_topicId->setEnabled(false);
 }
 
-void form_topicSubscribe::init() {}
 void form_topicSubscribe::closeEvent(QCloseEvent *e) {
   e->ignore();
   emit signClosingTopicSubscribeWindow();
 }
-/*
-void form_topicSubscribe::slot_SeedlessTopicSubscribeFinished(
-        CSeedlessManager::SeedlessTopicSubscribeStruct SubscribeResult)
-{
-    QString TTLS;
-    CSeedlessManager::SeedlessTopicSubscribeStruct &
-currentResult(SubscribeResult); mSubscribeResult=SubscribeResult;
-    treeWidget_SubscribeResults->clear();
-
-    label_ResultCount->setText("1");
-
-    QTreeWidgetItem* itemTopLevel= 	new QTreeWidgetItem;
-    QTreeWidgetItem* itemTopicId= 	new QTreeWidgetItem;
-    QTreeWidgetItem* itemTTL=       new QTreeWidgetItem;
-    //QTreeWidgetItem* itemB32Dest = 	new QTreeWidgetItem;
-
-    itemTopLevel->setText(0,currentResult.topicId);
-
-    itemTopicId->setText(0,tr("Topic Id"));
-    itemTopicId->setText(1,currentResult.topicId);
-
-    TTLS.setNum(currentResult.ttl);
-    itemTTL->setText(0,tr("TTL"));
-    itemTTL->setText(1,TTLS);
-
-    //itemB32Dest->setText(0,tr("b32"));
-    //itemB32Dest->setText(1,currentResult.b32Dest);
-    ////itemB32Dest->setHidden(true);
-
-    itemTopLevel->addChild(itemTopicId);
-    itemTopLevel->addChild(itemTTL);
-    //itemTopLevel->addChild(itemB32Dest);
-
-    treeWidget_SubscribeResults->addTopLevelItem(itemTopLevel);
-
-    if(!cmd_subscribe->isEnabled()){
-        cmd_subscribe->setEnabled(true);
-        inputField_topicId->setEnabled(true);
-    }
-    treeWidget_SubscribeResults->sortByColumn(0,Qt::AscendingOrder);
-}
-*/
 void form_topicSubscribe::slot_showContextMenu(const QPoint &pos) {
   QTreeWidgetItem *item = treeWidget_SubscribeResults->itemAt(pos);
   if (!item)
