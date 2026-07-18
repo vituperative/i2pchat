@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
            ".msg-filetransfer .msg-header .cancel-icon { color: #cc0000; font-weight: bold; }\n"
            ".progress-bar { background: #e9ecef; border-radius: 3px; height: 16px; margin-top: 3px; }\n"
            ".progress-fill { background-color: #4caf50; height: 16px; border-radius: 3px; text-align: center; "
-           "font-size: 10px; color: #fff; font-weight: 600; }\n"
+           "font-size: 10px; color: #fff; font-weight: 600; overflow: hidden; }\n"
            ".transfer-icon { vertical-align: middle; }\n");
 
   enableDebugLogging(configPath);

@@ -311,7 +311,7 @@ QString form_ChatWidget::transferProgressHtml(const QString &timePart,
   QString cancelLink = QStringLiteral("<a href=\"canceltransfer:%1\" class=\"cancel-icon\">✕</a>").arg(streamID);
   QString header =
     QStringLiteral("<div class=\"msg-header\">%1<span class=\"msg-time\">%2</span> ‣ "
-                   "<span class=\"msg-sender\">%3</span>"
+                   "<span class=\"msg-sender\">%3</span> "
                    "<span class=\"msg-stats\">%4</span>%5</div>")
       .arg(transferIconHtml(isSend), timePart.toHtmlEscaped(), fileName.toHtmlEscaped(), stats, cancelLink);
   QString fill =
