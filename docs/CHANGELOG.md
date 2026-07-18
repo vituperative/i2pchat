@@ -2,23 +2,17 @@
 
 ## July, 2026
 
-* Offline file-offer queuing — select files while offline, delivered automatically on reconnect via new protocol tags (FILE_OFFER / FILE_OFFER_ACCEPTED / FILE_OFFER_REJECTED)
-* Accept/Reject file offers inline in chat via clickable anchor links
-* Cancel icon (✕) on pending messages and file offers to remove them from the queue before they're sent
-* Persistent file-offer queue across restarts (INI storage alongside unsent text messages)
-* Add non-persistent (transient per-session) destination option
-* userlist: persist sort mode across restarts
-* implement auto-away with checkable group box in settings, Core timer, and global event filter
-* userlist: re-sort dynamically on online state changes and new messages
-* userlist: add real timestamp tracking for date added, last communication, and last online sort modes
-* about dialog: show short commit hash, collapse equal file-transfer versions
-* fix: implement copyB32 b32 address derivation
-* chat: fix message ordering — newest at bottom, oldest at top
-* pending messages: show plain text with (pending) tag and remove Offline tab; inline editing removed
-* Set ECIES and ED25519 as default sigtype/encryption
-* Add support for optional web page to display user profile at .b32 address
-* Remove insecure DSA_SHA1 from Signature Types
-* Add ECIES (Ratchet) encryption type to new profiles
+* Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
+* Transient (non-persistent) destination option
+* Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
+* Auto-away with settings toggle
+* Chat: 🤖⏳ header icons, ⏳ removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
+* ECIES/ED25519 defaults; ECIES (Ratchet) for new profiles; DSA_SHA1 removed
+* Optional profile web page at .b32 address
+* Auth dialog: Block button, immediate nickname apply
+* Debug Messages: monospace 8pt, single-div HTML layout
+* Minimal theme as sole default; log display improvements (newline trim, 9pt)
+* Sound defaults aligned with real files; pending→send notification suppressed
 
 ## January, 2026
 
