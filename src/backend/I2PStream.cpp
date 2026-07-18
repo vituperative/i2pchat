@@ -134,7 +134,7 @@ void CI2PStream::slotReadFromSocket() {
     return;
   }
 
-  {
+  if (!mHandshakeSuccessful || !mStatusReceived) {
     QString dbg = QString::fromUtf8(newData);
     dbg.replace(QRegularExpression("DESTINATION=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}"), "DESTINATION=\\1…");
     emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
@@ -267,7 +267,7 @@ void CI2PStream::operator<<(const QByteArray &Data) {
   QString timeNow = QString(QDateTime::currentDateTime().toString("hh:mm:ss"));
 
   if (mTcpSocket.state() == QTcpSocket::ConnectedState && mHandshakeSuccessful) {
-    {
+    if (!mStatusReceived) {
       QString dbg = QString::fromUtf8(Data);
       dbg.replace(QRegularExpression("DESTINATION=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}"), "DESTINATION=\\1…");
       emit signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") + " • [Stream ID: " + smID +
