@@ -28,7 +28,7 @@ form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
 
   QFont mono("monospace");
   mono.setStyleHint(QFont::Monospace);
-  mono.setPointSize(8);
+  mono.setPointSize(9);
   Sam_txt->setFont(mono);
 
   DebugMessageManager = core.getDebugMessageHandler();
@@ -58,9 +58,13 @@ void form_DebugMessages::connectionDump() {
 void form_DebugMessages::newDebugMessage() {
   Sam_txt->clear();
 
-  QStringList temp = DebugMessageManager->getAllMessages();
+  const QStringList temp = DebugMessageManager->getAllMessages();
+  QStringList escaped;
+  escaped.reserve(temp.size());
+  for (const auto &msg : temp)
+    escaped << msg.trimmed().toHtmlEscaped();
   Sam_txt->setHtml("<div style='white-space:pre-wrap;margin:0;padding:0'>" +
-                   temp.join('\n').toHtmlEscaped() + "</div>");
+                   escaped.join("<br>") + "</div>");
 
   QTextCursor cursor(Sam_txt->textCursor());
   cursor.movePosition(QTextCursor::Start);
