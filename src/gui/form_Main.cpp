@@ -1032,11 +1032,14 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
   mAuthDialog->setAttribute(Qt::WA_DeleteOnClose);
   mAuthDialog->setIcon(QMessageBox::Question);
   mAuthDialog->setWindowTitle(tr("Incoming connection"));
-  mAuthDialog->setText(tr("Incoming connection from unknown user"));
+  mAuthDialog->setText(tr("Incoming connection from unauthorized user"));
   mAuthDialog->setInformativeText(tr("Allow connection from %1?").arg(displayName));
-  mAuthDialog->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  auto *btnBlock = mAuthDialog->addButton(tr("Block"), QMessageBox::DestructiveRole);
+  mAuthDialog->addButton(QMessageBox::Yes);
+  mAuthDialog->addButton(QMessageBox::No);
   mAuthDialog->setDefaultButton(QMessageBox::No);
-  connect(mAuthDialog, &QDialog::finished, this, [this, data, destination, streamID](int ret) {
+  connect(mAuthDialog, &QDialog::finished, this, [this, data, destination, streamID, displayName, callerNickname, btnBlock](int ret) {
+    QAbstractButton *clicked = mAuthDialog ? mAuthDialog->clickedButton() : nullptr;
     mAuthDialog = NULL;
     if (ret == QMessageBox::Yes) {
       // Extract version
@@ -1068,10 +1071,15 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
         QByteArray Data2 = data;
         Data2 = Data2.remove(0, data.indexOf("\n") + 1);
         Core->setStreamTypeToKnown(streamID, Data2, false);
-        if (versiond >= 0.3) {
+        if (!callerNickname.isEmpty()) {
+          User->setReceivedUserInfos(NICKNAME, callerNickname);
+        } else if (versiond >= 0.3) {
           User->setReceivedNicknameToUserNickname();
         }
       }
+    } else if (clicked == btnBlock) {
+      Core->getUserBlockManager()->addNewBlockEntity(displayName, destination);
+      Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
     } else {
       // Deny, close the connection
       Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
