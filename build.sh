@@ -227,25 +227,41 @@ pass "clang-tidy clean"
 fi
 
 if $WINDOWS; then
-next_step "Cross-compiling ${#BUILT_SOURCES[@]} source files for Windows..."
-if [ -n "$MXE_QMAKE" ] && [ -f "$MXE_QMAKE" ]; then
-  CROSS_QMAKE="$MXE_QMAKE"
+  BINARY="${DIST_DIR}/I2PChat.exe"
 else
-  CROSS_QMAKE="${MXE_TARGET%%.*}-qmake-qt5"
+  BINARY="${DIST_DIR}/I2PChat"
 fi
-$CROSS_QMAKE -after "DESTDIR=$DIST_DIR/" "OBJECTS_DIR=$BUILD_DIR/obj/" "MOC_DIR=$BUILD_DIR/moc/" "RCC_DIR=$BUILD_DIR/qrc/" >/dev/null 2>&1
-PATH="$MXE_DIR/usr/bin:$PATH" make -j"$JOBS" >/dev/null 2>&1
-${MXE_TARGET}-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || true
-BINARY="${DIST_DIR}/I2PChat.exe"
-else
-next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
-if command -v bear &>/dev/null; then
-  bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
-else
-  make -j"$JOBS" >/dev/null 2>&1
+
+if ! $CLEAN && test -f "$BINARY"; then
+  NEWER=$(find src/ \( -name '*.cpp' -o -name '*.h' -o -name '*.ui' -o -name '*.pro' \) -newer "$BINARY" -print -quit 2>/dev/null)
+  if [[ -n "$NEWER" ]]; then
+    info "Source files changed — recompiling"
+  else
+    info "No source changes — skipping compilation"
+    SKIP_BUILD=true
+  fi
 fi
-strip "$DIST_DIR/I2PChat"
-BINARY="${DIST_DIR}/I2PChat"
+
+if [[ -z "${SKIP_BUILD:-}" ]]; then
+  if $WINDOWS; then
+  next_step "Cross-compiling ${#BUILT_SOURCES[@]} source files for Windows..."
+  if [ -n "$MXE_QMAKE" ] && [ -f "$MXE_QMAKE" ]; then
+    CROSS_QMAKE="$MXE_QMAKE"
+  else
+    CROSS_QMAKE="${MXE_TARGET%%.*}-qmake-qt5"
+  fi
+  $CROSS_QMAKE -after "DESTDIR=$DIST_DIR/" "OBJECTS_DIR=$BUILD_DIR/obj/" "MOC_DIR=$BUILD_DIR/moc/" "RCC_DIR=$BUILD_DIR/qrc/" >/dev/null 2>&1
+  PATH="$MXE_DIR/usr/bin:$PATH" make -j"$JOBS" >/dev/null 2>&1
+  ${MXE_TARGET}-strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || strip "$DIST_DIR/I2PChat.exe" 2>/dev/null || true
+  else
+  next_step "Compiling ${#BUILT_SOURCES[@]} source files..."
+  if command -v bear &>/dev/null; then
+    bear --output "$BUILD_DIR/compile_commands.json" -- make -j"$JOBS" >/dev/null 2>&1
+  else
+    make -j"$JOBS" >/dev/null 2>&1
+  fi
+  strip "$DIST_DIR/I2PChat"
+  fi
 fi
 FILESIZE=$(stat --format=%s "$BINARY" 2>/dev/null || stat -f%z "$BINARY" 2>/dev/null)
 
