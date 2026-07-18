@@ -4,6 +4,9 @@
 
 #include "UserManager.h"
 
+#include <QFile>
+#include <QStandardPaths>
+
 CFileTransferManager::CFileTransferManager(CCore &Core)
   : mCore(Core) {}
 
@@ -69,6 +72,7 @@ void CFileTransferManager::addNewFileTransfer(const QString &FilePath, const QSt
   connect(t, SIGNAL(signFileTransferFinishedOK()), mCore.getSoundManager(), SLOT(slotFileSendFinished()));
 
   mFileSends.append(t);
+  emit signFileTransferCreated(t->getStreamID(), t->getFileName(), t->getFileSize(), true, Destination);
   emit signUserStatusChanged();
 }
 
@@ -177,7 +181,18 @@ void CFileTransferManager::addNewFileReceive(qint32 ID,
   connect(t, SIGNAL(signFileNameChanged()), this, SIGNAL(signUserStatusChanged()));
 
   mFileReceives.append(t);
+  emit signFileTransferCreated(ID, FileName, Size, false, Destination);
   emit signUserStatusChanged();
+
+  // auto-start with default download path
+  QString dir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+  QString filePath = dir + "/" + FileName;
+  int counter = 1;
+  while (QFile::exists(filePath)) {
+    filePath = dir + "/" + FileName + "." + QString::number(counter);
+    counter++;
+  }
+  t->start(filePath, true);
 }
 
 bool CFileTransferManager::isThisID_a_FileSendID(qint32 ID) const {

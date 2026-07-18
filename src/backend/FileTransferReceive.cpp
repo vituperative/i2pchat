@@ -341,6 +341,8 @@ void CFileTransferReceive::slotAbbortFileReceive() {
 }
 
 void CFileTransferReceive::start(const QString &FilePath, bool Accepted) {
+  if (mRequestAccepted)
+    return;
   if (Accepted == true) {
     // mFileForReceive= new QFile(FilePath);
     mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);

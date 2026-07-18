@@ -166,7 +166,16 @@ int main(int argc, char *argv[]) {
            ".msg-icon { font-size: 12px; margin-right: 3px; vertical-align: middle; }\n"
            "img.msg-icon { width: 12px; height: 12px; vertical-align: -2px; }\n"
            ".msg-time { opacity: 0.7; }\n"
-           ".msg-sender { font-weight: 600; }\n");
+           ".msg-sender { font-weight: 600; }\n"
+           ".msg-filetransfer { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 4px 8px; "
+           "margin: 2px 0; }\n"
+           ".msg-filetransfer .msg-header { font-size: small; padding: 1px 0; color: #555; }\n"
+           ".msg-filetransfer .msg-header .msg-stats { font-size: 11px; color: #888; }\n"
+           ".msg-filetransfer .msg-header .cancel-icon { color: #cc0000; font-weight: bold; }\n"
+           ".progress-bar { background: #e9ecef; border-radius: 3px; height: 16px; margin-top: 3px; }\n"
+           ".progress-fill { background-color: #4caf50; height: 16px; border-radius: 3px; text-align: center; "
+           "font-size: 10px; color: #fff; font-weight: 600; }\n"
+           ".transfer-icon { vertical-align: middle; }\n");
 
   enableDebugLogging(configPath);
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));

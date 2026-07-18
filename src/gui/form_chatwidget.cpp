@@ -15,6 +15,8 @@
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 
+#include <algorithm>
+
 bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
@@ -129,6 +131,10 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   connect(cmd_SendFile, SIGNAL(clicked()), this, SLOT(newFileTransfer()));
 
   connect(&Core, SIGNAL(signChatStyleChanged()), this, SLOT(loadChatStyle()));
+  connect(&Core,
+          SIGNAL(signFileTransferCreated(qint32, QString, quint64, bool, QString)),
+          this,
+          SLOT(slotFileTransferCreated(qint32, QString, quint64, bool, QString)));
 
   connect(avatarFrameButton, SIGNAL(toggled(bool)), this, SLOT(showAvatarFrame(bool)));
 
@@ -257,6 +263,61 @@ static QString aboutIconHtml() {
       .arg(QString::fromLatin1(bytes.toBase64()));
   }();
   return html;
+}
+
+QString form_ChatWidget::transferIconHtml(bool isSend) {
+  static QString cached[2];
+  int idx = isSend ? 1 : 0;
+  if (cached[idx].isEmpty()) {
+    QSizeF srcSize(48, 48);
+    QPixmap big(srcSize.toSize());
+    big.fill(Qt::transparent);
+    QPainter p(&big);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    QSvgRenderer(QString(isSend ? ":/icons/upload.svg" : ":/icons/download.svg"))
+      .render(&p, QRectF(QPointF(0, 0), srcSize));
+    p.end();
+    QPixmap small = big.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QByteArray bytes;
+    QBuffer buf(&bytes);
+    buf.open(QIODevice::WriteOnly);
+    small.save(&buf, "PNG");
+    cached[idx] = QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
+                                 "class=\"msg-icon transfer-icon\"> ")
+                    .arg(QString::fromLatin1(bytes.toBase64()));
+  }
+  return cached[idx];
+}
+
+QString form_ChatWidget::transferProgressHtml(const QString &timePart,
+                                              const QString &fileName,
+                                              quint64 transferred,
+                                              quint64 total,
+                                              const QString &speed,
+                                              const QString &eta,
+                                              qint32 streamID,
+                                              bool isSend) {
+  int pct = total > 0 ? static_cast<int>(transferred * 100 / total) : 0;
+  pct = std::min(pct, 100);
+  QString stats;
+  if (!speed.isEmpty())
+    stats += speed;
+  if (!eta.isEmpty()) {
+    if (!stats.isEmpty())
+      stats += QStringLiteral(" · ");
+    stats += eta;
+  }
+  QString cancelLink = QStringLiteral("<a href=\"canceltransfer:%1\" class=\"cancel-icon\">✕</a>").arg(streamID);
+  QString header =
+    QStringLiteral("<div class=\"msg-header\">%1<span class=\"msg-time\">%2</span> ‣ "
+                   "<span class=\"msg-sender\">%3</span>"
+                   "<span class=\"msg-stats\">%4</span>%5</div>")
+      .arg(transferIconHtml(isSend), timePart.toHtmlEscaped(), fileName.toHtmlEscaped(), stats, cancelLink);
+  QString fill =
+    QStringLiteral("<div class=\"progress-fill\" style=\"width:%1%%2\">%1%</div>").arg(pct).arg(pct > 0 ? "" : "");
+  QString body = QStringLiteral("<div class=\"msg-body\"><div class=\"progress-bar\">%1</div></div>").arg(fill);
+  return QStringLiteral("<div class=\"msg msg-filetransfer\">%1%2</div>").arg(header, body);
 }
 
 static QStringList cssSplit(const QString &s) {
@@ -1047,6 +1108,18 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
     return;
   }
 
+  if (link.scheme() == "canceltransfer") {
+    bool ok = false;
+    qint32 streamID = link.toString().mid(15).toInt(&ok); // "canceltransfer:" = 15 chars
+    if (ok) {
+      if (auto *send = Core.getFileTransferManager()->getFileSendByID(streamID))
+        send->slotAbbortFileSend();
+      else if (auto *recv = Core.getFileTransferManager()->getFileReceiveByID(streamID))
+        recv->slotAbbortFileReceive();
+    }
+    return;
+  }
+
   // Open browser, after clicking to link? TODO: add WARNING MESSAGE!!!
   if (link.scheme() == "http" || link.scheme() == "https")
     QDesktopServices::openUrl(link);
@@ -1056,6 +1129,256 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
     QString newAddress = link.toString();
     newAddress.prepend("http://");
     QDesktopServices::openUrl(QUrl(newAddress));
+  }
+}
+
+static QString extractTimeFromHtml(const QString &html) {
+  static QRegularExpression re(QStringLiteral("<span class=\"msg-time\">([^<]+)</span>"));
+  auto m = re.match(html);
+  return m.hasMatch() ? m.captured(1) : QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+}
+
+void form_ChatWidget::slotFileTransferCreated(qint32 streamID,
+                                              const QString &fileName,
+                                              quint64 fileSize,
+                                              bool isSend,
+                                              const QString &destination) {
+  if (destination != user.getI2PDestination())
+    return;
+
+  QString fnameEsc = fileName.toHtmlEscaped();
+
+  // Search from bottom (most recent) for any message mentioning this file
+  int foundRow = -1;
+  for (int i = mChatModel->rowCount() - 1; i >= 0; --i) {
+    auto *item = mChatModel->item(i);
+    if (!item)
+      continue;
+    QString text = item->text();
+    if (text.contains(fnameEsc, Qt::CaseInsensitive)) {
+      foundRow = i;
+      break;
+    }
+  }
+
+  if (foundRow == -1) {
+    // No existing mention — append a new progress row
+    addMessage(transferProgressHtml(QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")),
+                                    fileName,
+                                    0,
+                                    fileSize,
+                                    QString(),
+                                    tr("starting..."),
+                                    streamID,
+                                    isSend));
+    foundRow = mChatModel->rowCount() - 1;
+  }
+
+  auto *item = mChatModel->item(foundRow);
+  if (!item)
+    return;
+
+  QString timePart = extractTimeFromHtml(item->text());
+
+  item->setText(transferProgressHtml(timePart, fileName, 0, fileSize, QString(), tr("starting..."), streamID, isSend));
+  item->setData(streamID, TransferStreamIdRole);
+
+  if (isSend) {
+    if (auto *ft = Core.getFileTransferManager()->getFileSendByID(streamID)) {
+      connect(ft, SIGNAL(signAlreadySentSizeChanged(quint64)), this, SLOT(slotTransferUpdate()));
+      connect(ft, SIGNAL(signAverageTransferSpeed(QString, QString)), this, SLOT(slotTransferSpeed(QString, QString)));
+      connect(ft, SIGNAL(signETA(QString)), this, SLOT(slotTransferETA(QString)));
+      connect(ft, SIGNAL(signFileTransferFinishedOK()), this, SLOT(slotTransferCompleted()));
+      connect(ft, SIGNAL(signFileTransferAborted()), this, SLOT(slotTransferAborted()));
+    }
+  } else if (auto *ft = Core.getFileTransferManager()->getFileReceiveByID(streamID)) {
+    connect(ft, SIGNAL(signgetTransferredSizeChanged(quint64)), this, SLOT(slotTransferUpdate()));
+    connect(ft, SIGNAL(signAverageReceiveSpeed(QString, QString)), this, SLOT(slotTransferSpeed(QString, QString)));
+    connect(ft, SIGNAL(signETA(QString)), this, SLOT(slotTransferETA(QString)));
+    connect(ft, SIGNAL(signFileReceivedFinishedOK()), this, SLOT(slotTransferCompleted()));
+    connect(ft, SIGNAL(signFileReceiveAborted()), this, SLOT(slotTransferAborted()));
+  }
+}
+
+void form_ChatWidget::updateTransferItem(QObject *s) {
+  qint32 streamID;
+  quint64 transferred = 0, total = 0;
+  bool isSend = false;
+  if (auto *ft = qobject_cast<CFileTransferSend *>(s)) {
+    streamID = ft->getStreamID();
+    transferred = ft->getAlreadySentSize();
+    total = ft->getFileSize();
+    isSend = true;
+  } else if (auto *ft = qobject_cast<CFileTransferReceive *>(s)) {
+    streamID = ft->getStreamID();
+    transferred = ft->getTransferredSize();
+    total = ft->getFileSize();
+  } else {
+    return;
+  }
+
+  for (int i = 0; i < mChatModel->rowCount(); ++i) {
+    auto *item = mChatModel->item(i);
+    if (!item || item->data(TransferStreamIdRole).toInt() != streamID)
+      continue;
+    QString html = item->text();
+    QString timePart = extractTimeFromHtml(html);
+
+    // Try to get filename from the item text
+    int sBegin = html.indexOf(QStringLiteral("msg-sender\">"));
+    QString fileName;
+    if (sBegin != -1) {
+      sBegin += 12;
+      int sEnd = html.indexOf(QStringLiteral("<"), sBegin);
+      if (sEnd != -1)
+        fileName = html.mid(sBegin, sEnd - sBegin);
+    }
+    if (fileName.isEmpty())
+      fileName = tr("File");
+
+    QString speed = item->data(TransferSpeedRole).toString();
+    QString eta = item->data(TransferETARole).toString();
+    item->setText(transferProgressHtml(timePart, fileName, transferred, total, speed, eta, streamID, isSend));
+    break;
+  }
+}
+
+void form_ChatWidget::slotTransferUpdate() {
+  updateTransferItem(sender());
+}
+
+void form_ChatWidget::slotTransferETA(const QString &eta) {
+  if (auto *s = sender()) {
+    qint32 streamID = 0;
+    if (auto *ft = qobject_cast<CFileTransferSend *>(s))
+      streamID = ft->getStreamID();
+    else if (auto *ft = qobject_cast<CFileTransferReceive *>(s))
+      streamID = ft->getStreamID();
+    if (streamID) {
+      for (int i = 0; i < mChatModel->rowCount(); ++i) {
+        auto *item = mChatModel->item(i);
+        if (item && item->data(TransferStreamIdRole).toInt() == streamID) {
+          item->setData(eta, TransferETARole);
+          break;
+        }
+      }
+    }
+  }
+  updateTransferItem(sender());
+}
+
+void form_ChatWidget::slotTransferSpeed(const QString &speed, const QString &type) {
+  if (auto *s = sender()) {
+    qint32 streamID = 0;
+    if (auto *ft = qobject_cast<CFileTransferSend *>(s))
+      streamID = ft->getStreamID();
+    else if (auto *ft = qobject_cast<CFileTransferReceive *>(s))
+      streamID = ft->getStreamID();
+    if (streamID) {
+      QString full = speed + QStringLiteral(" ") + type;
+      for (int i = 0; i < mChatModel->rowCount(); ++i) {
+        auto *item = mChatModel->item(i);
+        if (item && item->data(TransferStreamIdRole).toInt() == streamID) {
+          item->setData(full, TransferSpeedRole);
+          break;
+        }
+      }
+    }
+  }
+  updateTransferItem(sender());
+}
+
+void form_ChatWidget::slotTransferCompleted() {
+  auto *s = sender();
+  qint32 streamID = 0;
+  QString fileName;
+  quint64 totalBytes = 0, elapsedSec = 0;
+  bool isSend = false;
+
+  if (auto *ft = qobject_cast<CFileTransferSend *>(s)) {
+    streamID = ft->getStreamID();
+    fileName = ft->getFileName();
+    totalBytes = ft->getFileSize();
+    isSend = true;
+  } else if (auto *ft = qobject_cast<CFileTransferReceive *>(s)) {
+    streamID = ft->getStreamID();
+    fileName = ft->getFileName();
+    totalBytes = ft->getTransferredSize();
+  }
+
+  if (!streamID)
+    return;
+
+  for (int i = 0; i < mChatModel->rowCount(); ++i) {
+    auto *item = mChatModel->item(i);
+    if (!item || item->data(TransferStreamIdRole).toInt() != streamID)
+      continue;
+
+    QString html = item->text();
+    int arrow = html.indexOf(QStringLiteral(" ‣ "));
+    QString timePart =
+      (arrow != -1) ? html.left(arrow) : QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+
+    // Build compact stats message like system messages
+    QString sizeStr, sizeType;
+    Core.doConvertNumberToTransferSize(totalBytes, sizeStr, sizeType);
+    QString elapsed;
+    if (elapsedSec < 60)
+      elapsed = QString::number(elapsedSec) + QStringLiteral("s");
+    else if (elapsedSec < 3600)
+      elapsed = QString::number(elapsedSec / 60) + QStringLiteral("m ") + QString::number(elapsedSec % 60) +
+                QStringLiteral("s");
+    else
+      elapsed = QString::number(elapsedSec / 3600) + QStringLiteral("h ") + QString::number((elapsedSec % 3600) / 60) +
+                QStringLiteral("m");
+
+    QString statsMsg =
+      tr("File \"%1\" %2: %3 %4 in %5").arg(fileName, isSend ? tr("sent") : tr("received"), sizeStr, sizeType, elapsed);
+
+    QString systemMsg = QStringLiteral("<div class=\"msg msg-system\">%1<span class=\"msg-time\">%2</span>: %3</div>")
+                          .arg(transferIconHtml(isSend), timePart.toHtmlEscaped(), statsMsg.toHtmlEscaped());
+
+    item->setText(systemMsg);
+    item->setData(static_cast<int>(MsgSystem), MsgTypeRole);
+    item->setData(QVariant(), TransferStreamIdRole);
+    break;
+  }
+}
+
+void form_ChatWidget::slotTransferAborted() {
+  auto *s = sender();
+  qint32 streamID = 0;
+  QString fileName;
+  if (auto *ft = qobject_cast<CFileTransferSend *>(s)) {
+    streamID = ft->getStreamID();
+    fileName = ft->getFileName();
+  } else if (auto *ft = qobject_cast<CFileTransferReceive *>(s)) {
+    streamID = ft->getStreamID();
+    fileName = ft->getFileName();
+  }
+
+  if (!streamID)
+    return;
+
+  for (int i = 0; i < mChatModel->rowCount(); ++i) {
+    auto *item = mChatModel->item(i);
+    if (!item || item->data(TransferStreamIdRole).toInt() != streamID)
+      continue;
+
+    QString html = item->text();
+    int arrow = html.indexOf(QStringLiteral(" ‣ "));
+    QString timePart =
+      (arrow != -1) ? html.left(arrow) : QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+
+    QString systemMsg = QStringLiteral("<div class=\"msg msg-system\">%1<span class=\"msg-time\">%2</span>: %3</div>")
+                          .arg(transferIconHtml(false),
+                               timePart.toHtmlEscaped(),
+                               tr("File \"%1\" — transfer aborted").arg(fileName).toHtmlEscaped());
+
+    item->setText(systemMsg);
+    item->setData(static_cast<int>(MsgSystem), MsgTypeRole);
+    item->setData(QVariant(), TransferStreamIdRole);
+    break;
   }
 }
 

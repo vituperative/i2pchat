@@ -5,11 +5,14 @@
 
 #include "ChatDelegate.h"
 #include "Core.h"
+#include "FileTransferReceive.h"
+#include "FileTransferSend.h"
 #include "TextEmotionChanger.h"
 #include "gui_icons.h"
 #include "ui_form_chatwidget.h"
 
 #include <QApplication>
+#include <QBuffer>
 #include <QClipboard>
 #include <QColorDialog>
 #include <QDragEnterEvent>
@@ -23,6 +26,7 @@
 #include <QListView>
 #include <QMimeData>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QPalette>
 #include <QPushButton>
 #include <QScreen>
@@ -30,6 +34,7 @@
 #include <QSettings>
 #include <QStackedWidget>
 #include <QStandardItemModel>
+#include <QSvgRenderer>
 #include <QTextBrowser>
 #include <QTimer>
 #include <QUrl>
@@ -110,10 +115,34 @@ signals:
 public slots:
   void slotLoadOwnAvatarImage();
   void slotPendingCanceled();
+  void slotFileTransferCreated(qint32 streamID,
+                               const QString &fileName,
+                               quint64 fileSize,
+                               bool isSend,
+                               const QString &destination);
+  void slotTransferUpdate();
+  void slotTransferETA(const QString &eta);
+  void slotTransferSpeed(const QString &speed, const QString &type);
+  void slotTransferCompleted();
+  void slotTransferAborted();
 
 private:
+  static const int TransferStreamIdRole = Qt::UserRole + 6;
+  static const int TransferETARole = Qt::UserRole + 9;
+  static const int TransferSpeedRole = Qt::UserRole + 10;
+
   void closeEvent(QCloseEvent *e);
   void centerDialog();
+  static QString transferIconHtml(bool isSend);
+  static QString transferProgressHtml(const QString &timePart,
+                                      const QString &fileName,
+                                      quint64 transferred,
+                                      quint64 total,
+                                      const QString &speed,
+                                      const QString &eta,
+                                      qint32 streamID,
+                                      bool isSend);
+  void updateTransferItem(QObject *s);
 
   ChatBubbleStyle mBubbleStyle;
 

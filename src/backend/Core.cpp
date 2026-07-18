@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <QtGlobal>
 
+#include <algorithm>
 #include <cmath>
 #include <utility>
 
@@ -88,11 +89,14 @@ CCore::CCore(const QString &configPath) {
 
   mFileTransferManager = new CFileTransferManager(*this);
   connect(mFileTransferManager, SIGNAL(signUserStatusChanged()), this, SIGNAL(signUserStatusChanged()));
+  connect(mFileTransferManager,
+          SIGNAL(signFileTransferCreated(qint32, QString, quint64, bool, QString)),
+          this,
+          SIGNAL(signFileTransferCreated(qint32, QString, quint64, bool, QString)));
 
   QSettings keepAliveSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   int keepAliveInterval = keepAliveSettings.value("General/KeepAliveIntervalSecs", 20).toInt();
-  if (keepAliveInterval < 5)
-    keepAliveInterval = 5;
+  keepAliveInterval = std::max(keepAliveInterval, 5);
   mKeepAliveTimer.setInterval(keepAliveInterval * 1000);
   connect(&mKeepAliveTimer, SIGNAL(timeout()), this, SLOT(slotPingClients()));
 

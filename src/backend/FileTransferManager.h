@@ -43,6 +43,11 @@ public:
 
 signals:
   void signUserStatusChanged();
+  void signFileTransferCreated(qint32 streamID,
+                               const QString &fileName,
+                               quint64 fileSize,
+                               bool isSend,
+                               const QString &destination);
 
 private:
   CCore &mCore;
