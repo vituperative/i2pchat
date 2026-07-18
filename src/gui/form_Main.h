@@ -78,7 +78,6 @@ private slots:
   void copyDestination();
   void copyB32();
   void UserAutoDownload(bool enabled);
-  void SendFile();
   void closeApplication();
   void eventUserChanged();
   void muteSound();
@@ -105,7 +104,6 @@ signals:
   void changeAllowIncoming(bool);
 
 private:
-  void initStyle();
   void initTryIconMenu();
   void initTryIcon();
   void initToolBars();
@@ -129,8 +127,6 @@ private:
   form_topicSubscribe *mTopicSubscribeWindow;
   form_About *mAboutWindow;
   form_DebugMessages *mDebugWindow;
-
-  QByteArray avatarImageByteArray2;
 
   bool Mute;
   QMessageBox *mAuthDialog;

@@ -47,63 +47,6 @@ void form_userSearch::closeEvent(QCloseEvent *e) {
   emit signClosingUserSearchWindow();
 }
 
-/*void form_userSearch::slot_SeedlessSearchFinished(QMap< QString,
-CSeedlessManager::SeedlessSearchStruct > SearchResults)
-{
-    QString TTLS;
-    QList<CSeedlessManager::SeedlessSearchStruct>
-ListResults=SearchResults.values(); CSeedlessManager::SeedlessSearchStruct
-currentResult; mSearchResults=SearchResults; treeWidget_SearchResults->clear();
-
-    label_ResultCount->setText(QString::number(SearchResults.count()));
-
-    for(int i=0;i<ListResults.count();i++){
-        currentResult=ListResults.at(i);
-        QTreeWidgetItem* itemTopLevel= 	new QTreeWidgetItem;
-        QTreeWidgetItem* itemNickname= 	new QTreeWidgetItem;
-        QTreeWidgetItem* itemAge= 	new QTreeWidgetItem;
-        QTreeWidgetItem* itemGender= 	new QTreeWidgetItem;
-        QTreeWidgetItem* itemInterests=	new QTreeWidgetItem;
-        QTreeWidgetItem* itemTTL= 	new QTreeWidgetItem;
-        QTreeWidgetItem* itemB32Dest = 	new QTreeWidgetItem;
-
-        itemTopLevel->setText(0,currentResult.NickName);
-
-        itemNickname->setText(0,tr("Nickname"));
-        itemNickname->setText(1,currentResult.NickName);
-
-        itemAge->setText(0,tr("Age"));
-        itemAge->setText(1,QString::number(currentResult.Age));
-
-        itemGender->setText(0,tr("Gender"));
-        itemGender->setText(1,currentResult.Gender);
-
-        itemInterests->setText(0,tr("Interests"));
-        itemInterests->setText(1,currentResult.Interests);
-
-        TTLS.setNum(currentResult.TTL);
-        itemTTL->setText(0,tr("TTL"));
-        itemTTL->setText(1,TTLS);
-
-        itemB32Dest->setText(0,tr("b32"));
-        itemB32Dest->setText(1,currentResult.b32Dest);
-        //itemB32Dest->setHidden(true);
-
-        itemTopLevel->addChild(itemNickname);
-        itemTopLevel->addChild(itemAge);
-        itemTopLevel->addChild(itemGender);
-        itemTopLevel->addChild(itemInterests);
-        itemTopLevel->addChild(itemTTL);
-        itemTopLevel->addChild(itemB32Dest);
-
-        treeWidget_SearchResults->addTopLevelItem(itemTopLevel);
-    }
-    if(cmd_search->isEnabled()==false){
-        cmd_search->setEnabled(true);
-    }
-    treeWidget_SearchResults->sortByColumn(0,Qt::AscendingOrder);
-}
-*/
 void form_userSearch::slot_showContextMenu(const QPoint &pos) {
   QTreeWidgetItem *item = treeWidget_SearchResults->itemAt(pos);
   if (!item)
