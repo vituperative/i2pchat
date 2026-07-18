@@ -3,126 +3,49 @@ name: build
 on:
   push:
     branches: [master]
-    tags: ['*']
+    tags: ['v*']
   pull_request:
     branches: [master]
 
-permissions:
-  contents: write
-
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Qt5
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+          sudo apt-get install -y qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev
+
+      - name: Install build tools
+        run: |
+          sudo apt-get install -y g++ make bear clang-format clang-tidy pipx
+          pipx install compiledb
 
       - name: Build
-        run: bash build.sh
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            bash build.sh --upx
+          else
+            bash build.sh
+          fi
 
-      - name: Build AppImage
-        run: bash build.sh --appimage
+      - name: Check formatting
+        run: bash build.sh --format
 
-      - name: Upload binary (artifact)
+      - name: Static analysis
+        run: bash build.sh --tidy
+
+      - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: I2PChat-linux
-          path: |-
-            dist/I2PChat
-            dist/I2PChat-*.AppImage
+          path: dist/I2PChat
 
-      - name: Upload to release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: |-
-            dist/I2PChat
-            dist/I2PChat-*.AppImage
-          name: I2PChat ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          files: dist/I2PChat
           generate_release_notes: true
-
-  build-windows:
-    runs-on: windows-latest
-    needs: build-linux
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: msys2/setup-msys2@v2
-        with:
-          msystem: UCRT64
-          update: true
-          install: >-
-            mingw-w64-ucrt-x86_64-gcc
-            mingw-w64-ucrt-x86_64-qt5-base
-            mingw-w64-ucrt-x86_64-qt5-tools
-            mingw-w64-ucrt-x86_64-qt5-svg
-            mingw-w64-ucrt-x86_64-qt5-multimedia
-            mingw-w64-ucrt-x86_64-make
-            git
-
-      - name: Build
-        run: |
-          mkdir -p dist
-          qmake-qt5 I2PChat.pro "CONFIG += release" DESTDIR=dist
-          mingw32-make -j$(nproc)
-
-      - name: Upload binary (artifact)
-        uses: actions/upload-artifact@v4
-        with:
-          name: I2PChat-windows
-          path: dist/I2PChat.exe
-
-      - name: Upload to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/I2PChat.exe
-          name: I2PChat ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-
-  build-macos:
-    runs-on: macos-latest
-    needs: build-linux
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Qt5
-        run: |
-          brew update > /dev/null
-          brew install qt@5
-          echo "/opt/homebrew/opt/qt@5/bin" >> $GITHUB_PATH
-
-      - name: Build
-        run: |
-          mkdir -p dist
-          qmake I2PChat.pro "CONFIG += release" DESTDIR=dist
-          make -j$(sysctl -n hw.logicalcpu)
-
-      - name: Bundle .app
-        run: macdeployqt dist/I2PChat.app -verbose=2
-
-      - name: Upload binary (artifact)
-        uses: actions/upload-artifact@v4
-        with:
-          name: I2PChat-macos
-          path: dist/I2PChat.app
-
-      - name: Upload to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/I2PChat.app
-          name: I2PChat ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
