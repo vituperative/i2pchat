@@ -265,6 +265,35 @@ static QString aboutIconHtml() {
   return html;
 }
 
+// Leading header icon for (sent) file offers: a vertically-flipped download
+// glyph so an outgoing transfer reads as the mirror of an incoming one. Resampled
+// with Lanczos to keep the small 12px icon crisp.
+static QString sentOfferIconHtml() {
+  static const QString html = []() {
+    QSizeF srcSize(48, 48);
+    QPixmap big(srcSize.toSize());
+    big.fill(Qt::transparent);
+    QPainter p(&big);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    QSvgRenderer(QStringLiteral(":/icons/download.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
+    p.end();
+
+    QImage img = big.toImage();
+    img = img.mirrored(false, true);
+    img = CCore::scaleImageLanczos(img, 12, 12);
+
+    QByteArray bytes;
+    QBuffer buf(&bytes);
+    buf.open(QIODevice::WriteOnly);
+    QPixmap::fromImage(img).save(&buf, "PNG");
+    return QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
+                          "class=\"msg-icon sentoffer-icon\"> ")
+      .arg(QString::fromLatin1(bytes.toBase64()));
+  }();
+  return html;
+}
+
 QString form_ChatWidget::transferIconHtml(bool isSend) {
   static QString cached[2];
   int idx = isSend ? 1 : 0;
@@ -715,6 +744,7 @@ void form_ChatWidget::newMessageReceived() {
       sb->setValue(oldVal);
     else
       sb->setValue(sb->maximum());
+    changeWindowsTitle();
     return;
   }
 
@@ -727,6 +757,7 @@ void form_ChatWidget::newMessageReceived() {
     sb->setValue(oldVal);
   else
     mChatListView->scrollToBottom();
+  changeWindowsTitle();
 }
 
 static int detectMsgType(const QString &text, const QString &selfName) {
@@ -736,6 +767,8 @@ static int detectMsgType(const QString &text, const QString &selfName) {
     return MsgPending;
   if (text.contains("[Accept]") || text.contains("[Reject]"))
     return MsgFileOffer;
+  if (text.contains("File offer:") && text.contains("(sent)"))
+    return MsgSentFileOffer;
   if (text.contains("msg-filetransfer"))
     return MsgFileTransfer;
   int arrow = text.indexOf(" ‣ ");
@@ -833,6 +866,9 @@ void form_ChatWidget::addMessage(QString text) {
   case MsgFileOffer:
     typeClass = "fileoffer";
     break;
+  case MsgSentFileOffer:
+    typeClass = "fileoffer sent";
+    break;
   case MsgFileTransfer:
     typeClass = "filetransfer";
     break;
@@ -854,9 +890,24 @@ void form_ChatWidget::addMessage(QString text) {
     }
     text = QStringLiteral("<div class=\"msg msg-system\">%1<span class=\"msg-time\">%2</span>: %3</div>")
              .arg(aboutIconHtml(), timePart.toHtmlEscaped(), body);
-  } else if (type == MsgFileOffer) {
+  } else if (type == MsgFileOffer || type == MsgSentFileOffer) {
     text.remove(QRegularExpression("(?:<br\\s*/?>\\s*)+$", QRegularExpression::CaseInsensitiveOption));
-    text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
+    if (type == MsgSentFileOffer) {
+      // Outgoing offer: drop the (sent) badge and lead with a flipped download icon.
+      text.remove(QRegularExpression("<i>[^<]*</i>"));
+      int arrow = text.indexOf(" ‣ ");
+      QString timePart, body;
+      if (arrow != -1) {
+        timePart = text.left(arrow);
+        body = text.mid(arrow + 3);
+      } else {
+        body = text;
+      }
+      text = QStringLiteral("<div class=\"msg msg-fileoffer sent\">%1<span class=\"msg-time\">%2</span>: %3</div>")
+               .arg(sentOfferIconHtml(), timePart.toHtmlEscaped(), body);
+    } else {
+      text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
+    }
   } else if (type == MsgFileTransfer) {
     // File transfer HTML already has the full structure — pass through as-is
   } else {
@@ -993,72 +1044,92 @@ void form_ChatWidget::sendMessageSignal() {
   }
 }
 
+static QPixmap statusIconWithBadge(const QString &statusIconPath);
+
 void form_ChatWidget::changeWindowsTitle() {
   QString OnlineStatus;
+  QString statusIconPath;
   switch (user.getOnlineState()) {
 
   case USERTRYTOCONNECT:
   case USERINVISIBLE:
   case USEROFFLINE: {
     OnlineStatus = tr("Offline");
-    this->setWindowIcon(QIcon(ICON_USER_OFFLINE));
+    statusIconPath = ICON_USER_OFFLINE;
     break;
   }
   case USERONLINE: {
     OnlineStatus = tr("Online");
-    this->setWindowIcon(QIcon(ICON_USER_ONLINE));
+    statusIconPath = ICON_USER_ONLINE;
     break;
   }
   case USERWANTTOCHAT: {
     OnlineStatus = tr("Want to chat");
-    this->setWindowIcon(QIcon(ICON_USER_WANTTOCHAT));
+    statusIconPath = ICON_USER_WANTTOCHAT;
     break;
   }
   case USERAWAY: {
     OnlineStatus = tr("Away");
-    this->setWindowIcon(QIcon(ICON_USER_AWAY));
+    statusIconPath = ICON_USER_AWAY;
     break;
   }
   case USERDONT_DISTURB: {
     OnlineStatus = tr("Do not disturb");
-    this->setWindowIcon(QIcon(ICON_USER_DONT_DISTURB));
+    statusIconPath = ICON_USER_DONT_DISTURB;
     break;
   }
   case USERBLOCKEDYOU: {
     OnlineStatus = tr("You have been blocked");
-    this->setWindowIcon(QIcon(ICON_USER_BLOCKED_YOU));
+    statusIconPath = ICON_USER_BLOCKED_YOU;
     break;
   }
   default:
     break;
   }
+
+  if (statusIconPath.isEmpty() == false) {
+    if (user.getHaveNewUnreadChatmessages() == true)
+      this->setWindowIcon(QIcon(statusIconWithBadge(statusIconPath)));
+    else
+      this->setWindowIcon(QIcon(statusIconPath));
+  }
   this->setWindowTitle(user.getName() + " [" + OnlineStatus + "]");
 }
 
-void form_ChatWidget::newFileTransfer() {
-  if (user.getConnectionStatus() == ONLINE) {
-    QString FilePath = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("all Files (*)"));
+// Composite a scaled-down newmail badge onto a status icon so the taskbar
+// button shows both the contact's status and the unread/reply-pending state.
+// The badge is rasterized via QSvgRenderer and resampled with Lanczos so the
+// small overlay stays crisp with no aliasing.
+static QPixmap statusIconWithBadge(const QString &statusIconPath) {
+  const int baseSize = 22;
+  const int badgeSize = 12;
 
-    if (FilePath.endsWith("/") == true) {
-      return;
-    }
-
-    if (!FilePath.isEmpty())
-      startFileTransfer(FilePath);
-
-  } else {
-    // Queue file offer for later delivery
-    QString FilePath = QFileDialog::getOpenFileName(
-      this, tr("Open File (will be sent when contact comes online)"), ".", tr("all Files (*)"));
-    if (FilePath.isEmpty() || FilePath.endsWith("/"))
-      return;
-
-    QFileInfo fi(FilePath);
-    if (!fi.exists() || !fi.isFile())
-      return;
-
-    user.slotSendFileOffer(fi.fileName(), fi.size(), FilePath);
+  QPixmap base(baseSize, baseSize);
+  base.fill(Qt::transparent);
+  {
+    QPainter p(&base);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    QSvgRenderer(statusIconPath).render(&p, QRectF(0, 0, baseSize, baseSize));
   }
+
+  QImage badge = QIcon(":/icons/newmail.svg").pixmap(badgeSize, badgeSize).toImage();
+  badge = CCore::scaleImageLanczos(badge, badgeSize, badgeSize);
+
+  QPainter p(&base);
+  p.setRenderHint(QPainter::Antialiasing);
+  p.setRenderHint(QPainter::SmoothPixmapTransform);
+  p.drawImage(QRectF(baseSize - badgeSize, baseSize - badgeSize, badgeSize, badgeSize), badge);
+  return base;
+}
+
+void form_ChatWidget::newFileTransfer() {
+  QString title =
+    user.getConnectionStatus() == ONLINE ? tr("Open File") : tr("Open File (will be sent when contact comes online)");
+  QString FilePath = QFileDialog::getOpenFileName(this, title, ".", tr("all Files (*)"));
+  if (FilePath.isEmpty() || FilePath.endsWith("/"))
+    return;
+  startFileTransfer(FilePath);
 }
 
 void form_ChatWidget::anchorClicked(const QUrl &link) {
@@ -1490,14 +1561,9 @@ void form_ChatWidget::dropEvent(QDropEvent *event) {
 }
 
 void form_ChatWidget::startFileTransfer(const QString &filePath) {
-  if (user.getConnectionStatus() == ONLINE) {
-    Core.getFileTransferManager()->addNewFileTransfer(filePath, user.getI2PDestination());
-  } else {
-    QFileInfo fi(filePath);
-    if (fi.exists() && fi.isFile()) {
-      user.slotSendFileOffer(fi.fileName(), fi.size(), filePath);
-    }
-  }
+  QFileInfo fi(filePath);
+  if (fi.exists() && fi.isFile())
+    user.slotSendFileOffer(fi.fileName(), fi.size(), filePath);
 }
 
 form_ChatWidget::~form_ChatWidget() {}
