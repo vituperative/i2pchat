@@ -903,9 +903,34 @@ void form_ChatWidget::addMessage(QString text) {
       } else {
         body = text;
       }
-      text = QStringLiteral("<div class=\"msg msg-fileoffer sent\">%1<span class=\"msg-time\">%2</span>: %3</div>")
-               .arg(sentOfferIconHtml(), timePart.toHtmlEscaped(), body);
+      // Extract the file name so the sender can cancel the not-yet-accepted offer.
+      QString fileName;
+      static QRegularExpression fileRe(QStringLiteral("File offer:\\s*([^\\(]+)\\s*\\("));
+      QRegularExpressionMatch fm = fileRe.match(body);
+      if (fm.hasMatch())
+        fileName = fm.captured(1).trimmed();
+      QString cancelLink;
+      if (!fileName.isEmpty())
+        cancelLink =
+          QStringLiteral("<a href=\"cancelsentfile:%1\" class=\"cancel-icon\">✕</a>").arg(fileName.toHtmlEscaped());
+      text = QStringLiteral("<div class=\"msg msg-fileoffer sent\">%1<span class=\"msg-time\">%2</span>: %3%4</div>")
+               .arg(sentOfferIconHtml(), timePart.toHtmlEscaped(), body, cancelLink);
+      if (!fileName.isEmpty())
+        cancelUrl = QStringLiteral("cancelsentfile:%1").arg(fileName);
     } else {
+      // Incoming offer: the raw text already carries [Accept][Reject] links.
+      // Append a cancel ✕ so the receiver can back out before accepting.
+      QString fileName;
+      static QRegularExpression accRe(QStringLiteral("fileoffer:accept:([^\"]+)"));
+      QRegularExpressionMatch am = accRe.match(text);
+      if (am.hasMatch())
+        fileName = QUrl::fromPercentEncoding(am.captured(1).toUtf8());
+      static QRegularExpression rejRe(QStringLiteral("(</a>\\s*<br\\s*/?>?)"));
+      if (!fileName.isEmpty()) {
+        QString cancelLink =
+          QStringLiteral("<a href=\"cancelfileoffer:%1\" class=\"cancel-icon\">✕</a>").arg(fileName.toHtmlEscaped());
+        text.replace(rejRe, QStringLiteral("\\1%1").arg(cancelLink));
+      }
       text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
     }
   } else if (type == MsgFileTransfer) {
@@ -1161,6 +1186,35 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
           if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
             mChatModel->removeRow(i);
     }
+    return;
+  }
+
+  if (link.scheme() == "cancelsentfile") {
+    // Sender cancels a not-yet-accepted outgoing offer (mirrors the old
+    // transfer dialog where either party could cancel before completion).
+    QString fileName = link.toString().mid(link.scheme().length() + 1);
+    user.cancelSentFileOffer(fileName);
+    if (mChatStyle == "classic")
+      addAllMessagesClassic();
+    else
+      for (int i = 0; i < mChatModel->rowCount(); ++i)
+        if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
+          mChatModel->removeRow(i);
+    return;
+  }
+
+  if (link.scheme() == "cancelfileoffer") {
+    // Receiver backs out of an incoming offer before accepting: notify the
+    // sender (same wire message as a reject) and drop the row locally.
+    QString fileName = link.toString().mid(link.scheme().length() + 1);
+    Core.getProtocol()->send(FILE_OFFER_REJECTED, user.getI2PStreamID(), fileName.toUtf8());
+    user.slotIncomingMessageFromSystem(tr("You cancelled the file \"%1\".").arg(fileName), true);
+    if (mChatStyle == "classic")
+      addAllMessagesClassic();
+    else
+      for (int i = 0; i < mChatModel->rowCount(); ++i)
+        if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
+          mChatModel->removeRow(i);
     return;
   }
 

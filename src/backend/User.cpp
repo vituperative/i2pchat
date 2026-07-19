@@ -253,6 +253,17 @@ QString CUser::takeAcceptedFileOffer(const QString &fileName) {
   return QString();
 }
 
+void CUser::cancelSentFileOffer(const QString &fileName) {
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (!parts.empty() && parts.at(0) == fileName) {
+      mSentOfferStrs.removeAt(i);
+      emit signSaveUnsentMessages(mI2PDestination);
+      return;
+    }
+  }
+}
+
 void CUser::removeFileOffer(const QString &fileName) {
   for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
     QStringList parts = mUnsentedFileOffers.at(i).split("\t");

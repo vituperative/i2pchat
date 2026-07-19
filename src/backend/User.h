@@ -107,6 +107,7 @@ public:
   void setUnsentedFileOffers(const QStringList &newOffers);
   QString takeAcceptedFileOffer(const QString &fileName);
   void removeFileOffer(const QString &fileName);
+  void cancelSentFileOffer(const QString &fileName);
   void setDateAdded(const QDateTime &dt) { mDateAdded = dt; }
   void setLastCommunication(const QDateTime &dt) { mLastCommunication = dt; }
   void setLastOnline(const QDateTime &dt) { mLastOnline = dt; }
