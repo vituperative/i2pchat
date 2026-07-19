@@ -194,6 +194,8 @@ void CUser::slotSendAllFileOffers() {
       mAllMessages[i] = mAllMessages[i].left(idx) + "<br>";
   }
 
+  // Keep file paths in sent pool so takeAcceptedFileOffer can still find them
+  mSentOfferStrs.append(mUnsentedFileOffers);
   mUnsentedFileOffers.clear();
   mPendingFileIdx.clear();
   mHaveNewUnreadMessages = true;
@@ -240,6 +242,14 @@ QString CUser::takeAcceptedFileOffer(const QString &fileName) {
       return filePath;
     }
   }
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (parts.size() >= 3 && parts.at(0) == fileName) {
+      QString filePath = parts.at(2);
+      mSentOfferStrs.removeAt(i);
+      return filePath;
+    }
+  }
   return QString();
 }
 
@@ -249,7 +259,14 @@ void CUser::removeFileOffer(const QString &fileName) {
     if (!parts.empty() && parts.at(0) == fileName) {
       mUnsentedFileOffers.removeAt(i);
       emit signSaveUnsentMessages(mI2PDestination);
-      break;
+      return;
+    }
+  }
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (!parts.empty() && parts.at(0) == fileName) {
+      mSentOfferStrs.removeAt(i);
+      return;
     }
   }
 }

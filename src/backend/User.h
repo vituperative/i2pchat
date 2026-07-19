@@ -179,5 +179,6 @@ private:
   removePendingByCancelId(qint32 id, const QString &linkPrefix, QMap<qint32, int> &idxMap, QStringList &unsentList);
 
   QStringList mUnsentedFileOffers;
+  QStringList mSentOfferStrs;
 };
 #endif
