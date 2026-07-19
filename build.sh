@@ -179,10 +179,16 @@ next_step() {
 }
 
 next_step "Preparing build directory & generated headers"
-if $CLEAN && test -f Makefile; then
-    echo "  Cleaning previous build..."
-    make distclean >/dev/null 2>&1
+if $CLEAN; then
+  echo "  Cleaning previous build..."
+  if test -f Makefile; then
+    make distclean >/dev/null 2>&1 || true
     rm -f Makefile
+  fi
+  # Purge all per-target artifacts so a later mixed Targets run doesn't
+  # trip the skip-build gate on a stale binary from another platform.
+  rm -f "$DIST_DIR"/I2PChat "$DIST_DIR"/I2PChat.exe "$DIST_DIR"/I2PChat-*.AppImage
+  rm -rf "$BUILD_DIR"/AppDir
 fi
 mkdir -p "$BUILD_DIR" "$DIST_DIR"
 qmake -after DESTDIR=dist/ OBJECTS_DIR="$BUILD_DIR/obj/" MOC_DIR="$BUILD_DIR/moc/" RCC_DIR="$BUILD_DIR/qrc/" >/dev/null 2>&1
@@ -271,18 +277,6 @@ printf "     %-10s %s\n" "Binary:"    "$BINARY"
 printf "     %-10s %s\n" "Size:"      "${FILESIZE} bytes"
 printf "     %-10s %s\n" "Completed:" "$(date '+%Y-%m-%d %H:%M:%S') ($((SECONDS - SCRIPT_START))s)"
 
-# --- UPX compression ---
-if $UPX; then
-next_step "Compressing with UPX..."
-if command -v upx &>/dev/null; then
-  upx --best "$BINARY" 2>&1
-  FILESIZE=$(stat --format=%s "$BINARY" 2>/dev/null || stat -f%z "$BINARY" 2>/dev/null)
-  printf "     %-10s %s\n" "Compressed:" "${FILESIZE} bytes"
-else
-  fail "upx not found — install with: apt install upx"
-fi
-fi
-
 # --- AppImage ---
 if $APPIMAGE; then
 next_step "Creating portable AppImage..."
@@ -317,5 +311,30 @@ if [ -n "$APPIMAGE_PATH" ]; then
   mv "$APPIMAGE_PATH" "$DIST_DIR/"
   APPIMAGE_SIZE=$(stat --format=%s "$DIST_DIR/$(basename "$APPIMAGE_PATH")" 2>/dev/null || stat -f%z "$DIST_DIR/$(basename "$APPIMAGE_PATH")" 2>/dev/null)
   printf "     %-10s %s\n" "AppImage:" "$DIST_DIR/$(basename "$APPIMAGE_PATH") ($(numfmt --to=iec $APPIMAGE_SIZE 2>/dev/null || echo "$APPIMAGE_SIZE bytes"))"
+fi
+fi
+
+# --- UPX compression (runs last so it also catches the AppImage) ---
+if $UPX; then
+next_step "Compressing target binaries with UPX (-j $JOBS)..."
+if command -v upx &>/dev/null; then
+  # Compress every artifact present for the requested targets, in parallel.
+  UPX_TARGETS=()
+  if $WINDOWS; then UPX_TARGETS+=("$DIST_DIR/I2PChat.exe"); fi
+  if ! $WINDOWS; then UPX_TARGETS+=("$DIST_DIR/I2PChat"); fi
+  if $APPIMAGE && ls "$DIST_DIR"/I2PChat-*.AppImage >/dev/null 2>&1; then
+    UPX_TARGETS+=("$DIST_DIR"/I2PChat-*.AppImage)
+  fi
+  if [[ ${#UPX_TARGETS[@]} -eq 0 ]]; then
+    UPX_TARGETS+=("$BINARY")
+  fi
+  printf "     %-10s %s\n" "Targets:" "${UPX_TARGETS[*]##*/}"
+  printf "%s\n" "${UPX_TARGETS[@]}" | xargs -P "$JOBS" -I{} upx --best {} 2>&1
+  for t in "${UPX_TARGETS[@]}"; do
+    FS=$(stat --format=%s "$t" 2>/dev/null || stat -f%z "$t" 2>/dev/null)
+    printf "     %-10s %s bytes\n" "$(basename "$t"):" "$FS"
+  done
+else
+  fail "upx not found — install it via your package manager"
 fi
 fi
