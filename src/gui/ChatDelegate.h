@@ -72,6 +72,7 @@ enum MsgType {
   MsgPending,
   MsgFileOffer,
   MsgFileTransfer,
+  MsgSentFileOffer,
 };
 
 static const int MsgTypeRole = Qt::UserRole + 1;
