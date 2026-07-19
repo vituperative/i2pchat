@@ -905,18 +905,20 @@ void form_ChatWidget::addMessage(QString text) {
       }
       // Extract the file name so the sender can cancel the not-yet-accepted offer.
       QString fileName;
-      static QRegularExpression fileRe(QStringLiteral("File offer:\\s*([^\\(]+)\\s*\\("));
+      static QRegularExpression fileRe(QStringLiteral("^\\s*([^\\(]+)\\s*\\("));
       QRegularExpressionMatch fm = fileRe.match(body);
       if (fm.hasMatch())
         fileName = fm.captured(1).trimmed();
-      QString cancelLink;
-      if (!fileName.isEmpty())
-        cancelLink =
-          QStringLiteral("<a href=\"cancelsentfile:%1\" class=\"cancel-icon\">✕</a>").arg(fileName.toHtmlEscaped());
-      text = QStringLiteral("<div class=\"msg msg-fileoffer sent\">%1<span class=\"msg-time\">%2</span>: %3%4</div>")
-               .arg(sentOfferIconHtml(), timePart.toHtmlEscaped(), body, cancelLink);
-      if (!fileName.isEmpty())
-        cancelUrl = QStringLiteral("cancelsentfile:%1").arg(fileName);
+      text = QStringLiteral("<div class=\"msg msg-fileoffer sent\">%1<span class=\"msg-time\">%2</span>: %3</div>")
+               .arg(sentOfferIconHtml(), timePart.toHtmlEscaped(), body);
+      if (!fileName.isEmpty()) {
+        QString url = QStringLiteral("cancelsentfile:%1").arg(fileName);
+        if (mChatStyle == "classic")
+          text.replace(QRegularExpression("</div>\\s*$"),
+                       QStringLiteral("<a href=\"%1\" class=\"cancel-icon\">✕</a></div>").arg(url));
+        else
+          cancelUrl = url;
+      }
     } else {
       // Incoming offer: the raw text already carries [Accept][Reject] links.
       // Append a cancel ✕ so the receiver can back out before accepting.
@@ -925,12 +927,15 @@ void form_ChatWidget::addMessage(QString text) {
       QRegularExpressionMatch am = accRe.match(text);
       if (am.hasMatch())
         fileName = QUrl::fromPercentEncoding(am.captured(1).toUtf8());
-      static QRegularExpression rejRe(QStringLiteral("(</a>\\s*<br\\s*/?>?)"));
+      QString cancelLink;
       if (!fileName.isEmpty()) {
-        QString cancelLink =
-          QStringLiteral("<a href=\"cancelfileoffer:%1\" class=\"cancel-icon\">✕</a>").arg(fileName.toHtmlEscaped());
-        text.replace(rejRe, QStringLiteral("\\1%1").arg(cancelLink));
+        QString url = QStringLiteral("cancelfileoffer:%1").arg(fileName.toHtmlEscaped());
+        if (mChatStyle == "classic")
+          cancelLink = QStringLiteral("<a href=\"%1\" class=\"cancel-icon\">✕</a>").arg(url);
+        else
+          cancelUrl = url;
       }
+      text.replace(QRegularExpression("(</a>\\s*<br\\s*/?>?)"), QStringLiteral("\\1%1").arg(cancelLink));
       text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
     }
   } else if (type == MsgFileTransfer) {

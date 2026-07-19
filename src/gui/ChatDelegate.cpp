@@ -327,7 +327,8 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   stripBlockMargins(doc);
 
   QString cancelUrl;
-  bool hasCancel = (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty());
+  bool hasCancel = (!index.data(CancelUrlRole).toString().isEmpty() &&
+                    (type == MsgPending || type == MsgSentFileOffer || type == MsgFileOffer));
   if (hasCancel)
     cancelUrl = index.data(CancelUrlRole).toString();
 
