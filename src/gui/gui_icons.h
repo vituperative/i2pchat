@@ -17,7 +17,6 @@
 #define ICON_MYDESTINATION ":/icons/editcopy.svg"
 #define ICON_NEW ":/icons/new.svg"
 #define ICON_NEWUNREADMESSAGE ":/icons/newmail.svg"
-#define ICON_NEWUNREADMESSAGETRAY ":/icons/newmail.svg"
 #define ICON_NEWUSER ":/icons/add_user.svg"
 #define ICON_QUIT ":/icons/exit.svg"
 #define ICON_RELOAD ":/icons/reload.svg"
