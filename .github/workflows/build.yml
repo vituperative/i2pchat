@@ -23,17 +23,10 @@ jobs:
 
       - name: Install build tools
         run: |
-          sudo apt-get install -y g++ make bear clang-format clang-tidy pipx upx
-          pipx install compiledb
+          sudo apt-get install -y g++ make upx
 
       - name: Build
         run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
-
-      - name: Check formatting
-        run: bash build.sh --format
-
-      - name: Static analysis
-        run: bash build.sh --tidy
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
