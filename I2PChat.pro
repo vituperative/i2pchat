@@ -112,6 +112,12 @@ mingw {
 	LIBS           *= -lstdc++ -lpthread
 }
 
+# MSVC needs C++17 (C++11 mode broken in VS 2022+)
+msvc {
+	CONFIG -= c++11
+	CONFIG += c++17
+}
+
 # Remove AGL framework (deprecated, removed in recent macOS SDKs)
 macx {
 	LIBS -= -framework AGL
