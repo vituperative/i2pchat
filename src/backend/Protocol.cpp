@@ -9,6 +9,7 @@
 #include "User.h"
 #include "UserManager.h"
 
+#include <QDateTime>
 #include <QErrorMessage>
 #include <QSettings>
 
@@ -90,6 +91,12 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
   using namespace Protocol_Info;
 
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
+  if (stream == NULL) {
+    emit mCore.getConnectionManager()->signDebugMessages(
+      QDateTime::currentDateTime().toString("hh:mm:ss") +
+      " • CProtocol::send(NULL stream, TAG=" + QString::number((int)TAG) + " ID=" + QString::number(ID) + ")");
+    return;
+  }
 
   QString ProtocolInfoTag;
   QString Data = "";
@@ -155,6 +162,12 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QByteArray Data) 
   QString ProtocolInfoTag;
 
   CI2PStream *stream = mCore.getI2PStreamObjectByID(ID);
+  if (stream == NULL) {
+    emit mCore.getConnectionManager()->signDebugMessages(
+      QDateTime::currentDateTime().toString("hh:mm:ss") +
+      " • CProtocol::send(NULL stream, TAG=" + QString::number((int)TAG) + " ID=" + QString::number(ID) + ")");
+    return;
+  }
 
   switch (TAG) {
   case ECHO_OF_PING: {
