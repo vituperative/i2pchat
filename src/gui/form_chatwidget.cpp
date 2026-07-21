@@ -767,7 +767,7 @@ static int detectMsgType(const QString &text, const QString &selfName) {
     return MsgPending;
   if (text.contains("[Accept]") || text.contains("[Reject]"))
     return MsgFileOffer;
-  if (text.contains("File offer:") && text.contains("(sent)"))
+  if (text.contains("(sent)"))
     return MsgSentFileOffer;
   if (text.contains("msg-filetransfer"))
     return MsgFileTransfer;
@@ -965,11 +965,14 @@ void form_ChatWidget::addMessage(QString text) {
                               "<div class=\"msg-body\">%5</div></div>")
                  .arg(typeClass, timePart.toHtmlEscaped(), sender.toHtmlEscaped(), sep, body, headerIcon);
       } else {
+        QString headerIcon;
+        if (type == MsgPending)
+          headerIcon = sentOfferIconHtml();
         text = QStringLiteral("<div class=\"msg msg-%1\">"
                               "<div class=\"msg-header\">"
-                              "<span class=\"msg-time\">%2</span>%3"
+                              "%4<span class=\"msg-time\">%2</span> %3"
                               "</div></div>")
-                 .arg(typeClass, timePart.toHtmlEscaped(), rest);
+                 .arg(typeClass, timePart.toHtmlEscaped(), rest, headerIcon);
       }
     } else {
       text = QStringLiteral("<div class=\"msg msg-%1\">%2</div>").arg(typeClass, text);
