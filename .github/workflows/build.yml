@@ -74,11 +74,6 @@ jobs:
           target: desktop
           arch: clang_64
 
-      - name: Patch Qt for modern macOS (remove deprecated AGL framework)
-        run: |
-          find "$(qmake -query QT_INSTALL_LIBS)" -name '*.prl' \
-            -exec sed -i '' 's/-framework AGL//g' {} +
-
       - name: Build
         run: |
           qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/

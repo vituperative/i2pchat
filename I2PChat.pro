@@ -112,6 +112,12 @@ mingw {
 	LIBS           *= -lstdc++ -lpthread
 }
 
+# Remove AGL framework (deprecated, removed in recent macOS SDKs)
+macx {
+	LIBS -= -framework AGL
+	QMAKE_LFLAGS -= -framework AGL
+}
+
 #unix {}
 
 UI_DIR = src/gui
