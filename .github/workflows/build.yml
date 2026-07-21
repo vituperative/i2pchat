@@ -47,7 +47,6 @@ jobs:
           host: windows
           target: desktop
           arch: win64_msvc2019_64
-          modules: qtmultimedia qtsvg
 
       - name: Build
         run: |
@@ -60,9 +59,32 @@ jobs:
           name: I2PChat-windows
           path: dist/I2PChat.exe
 
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: mac
+          target: desktop
+          arch: clang_64
+
+      - name: Build
+        run: |
+          qmake I2PChat.pro "CONFIG += release"
+          make -j$(sysctl -n hw.logicalcpu)
+
+      - name: Upload macOS binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: I2PChat-macos
+          path: dist/I2PChat
+
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [linux, windows]
+    needs: [linux, windows, macos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -72,6 +94,7 @@ jobs:
           mkdir -p release-assets
           cp I2PChat-linux/I2PChat release-assets/
           cp I2PChat-windows/I2PChat.exe release-assets/
+          cp I2PChat-macos/I2PChat release-assets/I2PChat-macos
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
             cp I2PChat-linux/I2PChat-*.AppImage release-assets/
 
