@@ -23,7 +23,11 @@ public:
 
   void saveUserList();
   void loadUserList();
-  bool addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID = 0, bool SaveUserList = true);
+  bool addNewUser(QString Name,
+                  QString I2PDestination,
+                  qint32 I2PStream_ID = 0,
+                  bool SaveUserList = true,
+                  bool skipGlobalGate = false);
   bool checkIfUserExistsByI2PDestination(const QString &I2PDestination) const;
   void changeUserPositionInUserList(int oldPos, int newPos);
   void sortUserList(int sortType);

@@ -12,6 +12,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
+#include <algorithm>
 #include <cmath>
 
 static constexpr double kPi = 3.14159265358979323846;
@@ -326,7 +327,8 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
   stripBlockMargins(doc);
 
   QString cancelUrl;
-  bool hasCancel = (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty());
+  bool hasCancel = (!index.data(CancelUrlRole).toString().isEmpty() &&
+                    (type == MsgPending || type == MsgSentFileOffer || type == MsgFileOffer || type == MsgSystem));
   if (hasCancel)
     cancelUrl = index.data(CancelUrlRole).toString();
 
@@ -388,10 +390,9 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   } else {
     tw = w - margin - 4 - mColors.padH * 2;
   }
-  if (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty())
+  if ((type == MsgPending || type == MsgSystem) && !index.data(CancelUrlRole).toString().isEmpty())
     tw -= kCancelIconSize + kCancelIconMargin;
-  if (tw < 50)
-    tw = 50;
+  tw = std::max(tw, 50);
 
   // Measure height with QTextDocument as paint() does so heights match exactly
   QString renderText = text;
@@ -420,7 +421,7 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   stripBlockMargins(doc);
   doc->setTextWidth(tw);
   QSizeF ds = doc->documentLayout()->documentSize();
-  int textH = qMax((int)(ds.height() + 0.5), 1);
+  int textH = qMax(static_cast<int>(std::lround(ds.height())), 1);
 
   int h = textH + mColors.padV * 2 + mColors.padVInner * 2;
   if (type == MsgSystem && mColors.radius == 0 && !mColors.systemGradient.isValid())
@@ -496,8 +497,8 @@ bool ChatDelegate::editorEvent(QEvent *event,
     return true;
   }
 
-  // Check cancel icon click for pending messages
-  if (type == MsgPending) {
+  // Check cancel icon click for pending / system messages
+  if (type == MsgPending || type == MsgSystem) {
     QString cancelUrl = index.data(CancelUrlRole).toString();
     if (!cancelUrl.isEmpty() && cancelIconRect(bubbleRect).contains(me->pos())) {
       emit linkClicked(QUrl(cancelUrl));

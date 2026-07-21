@@ -105,6 +105,11 @@ signals:
   void signNicknameChanged();
   void signIncomingUserAuthorizationRequest(QString destination, qint32 streamID, QByteArray data);
   void signChatStyleChanged();
+  void signFileTransferCreated(qint32 streamID,
+                               const QString &fileName,
+                               quint64 fileSize,
+                               bool isSend,
+                               const QString &destination);
 
 private:
   CConnectionManager *mConnectionManager;
@@ -141,7 +146,7 @@ private slots:
 protected:
   bool m_access_anyone_incoming; // new users.
 public:
-  bool getAccessAnyoneIncoming() { return m_access_anyone_incoming; }
+  bool getAccessAnyoneIncoming() const { return m_access_anyone_incoming; }
 
   static QImage scaleImageLanczos(const QImage &src, int maxWidth, int maxHeight = 0);
 };

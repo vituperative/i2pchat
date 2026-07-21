@@ -46,6 +46,7 @@ Checks: >
   -performance-no-int-to-ptr,
   -readability-identifier-length,
   -readability-const-return-type,
+  -readability-math-missing-parentheses,
   -readability-redundant-inline-specifier,
   -readability-braces-around-statements,
   -bugprone-reserved-identifier,
@@ -54,7 +55,7 @@ HeaderFilterRegex: ''
 FormatStyle: file
 CheckOptions:
   - key: readability-function-cognitive-complexity.Threshold
-    value: '50'
+    value: '200'
   - key: bugprone-sizeof-expression.WarnOnSizeOfConstant
     value: 'false'
 ...

@@ -6,6 +6,9 @@
 #include "Protocol.h"
 #include "UserBlockManager.h"
 
+#include <QDateTime>
+#include <QDebug>
+
 #include <utility>
 
 CUserManager::CUserManager(CCore &Core, QString UserFileWithPath, CUnsentChatMessageStorage &UnsentChatMessageStorage)
@@ -47,7 +50,7 @@ void CUserManager::loadUserList() {
       NickName = temp[1];
     } else if (temp[0] == "I2PDest:") {
       I2PDest = temp[1];
-      this->addNewUser(NickName, I2PDest, 0, false);
+      this->addNewUser(NickName, I2PDest, 0, false, true);
 
       // load unsent ChatMessages
       {
@@ -272,33 +275,31 @@ bool CUserManager::validateI2PDestination(const QString &I2PDestination) const {
                                          I2PDestination.right(5).contains("AAQ==", Qt::CaseInsensitive))) {
     return validateRedDSA_SHA512_Ed25519(I2PDestination);
   }
+  // Lenient fallback: looks like a long base64 destination
+  if (I2PDestination.length() >= 500 && I2PDestination.length() <= 600 && !I2PDestination.contains(' ') &&
+      I2PDestination.right(2) == "==")
+    return true;
   return false;
 }
 
-bool CUserManager::addNewUser(QString Name, QString I2PDestination, qint32 I2PStream_ID, bool SaveUserList) {
+bool CUserManager::addNewUser(QString Name,
+                              QString I2PDestination,
+                              qint32 I2PStream_ID,
+                              bool SaveUserList,
+                              bool skipGlobalGate) {
   CUserBlockManager &UserBlockManager = *(mCore.getUserBlockManager());
   CProtocol &Protocol = *(mCore.getProtocol());
-  if (!mCore.getAccessAnyoneIncoming())
+  if (!skipGlobalGate && !mCore.getAccessAnyoneIncoming())
     return false;
   if (!nicknameRegExp.match(Name).hasMatch())
     Name = "NonValidNick";
 
-  bool isValid = validateI2PDestination(I2PDestination);
-
-  auto critical = [&I2PDestination](const QString &why = "undefined") {
-    qCritical() << "File\t" << __FILE__ << Qt::endl
-                << "Line:\t" << __LINE__ << Qt::endl
-                << "Function:\t"
-                << "CUserManager::addNewUser" << Qt::endl
-                << "Message:\t"
-                << "Destination is not valid" << Qt::endl
-                << "Destination:\t" << I2PDestination << Qt::endl
-                << why << Qt::endl;
+  auto critical = [&, this](const QString &why) -> bool {
+    QString msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " • addNewUser: " + why;
+    emit mCore.getConnectionManager()->signDebugMessages(msg);
+    qCritical().noquote() << msg;
     return false;
   };
-  if (isValid == false) {
-    return critical("Not a valid user");
-  }
 
   if (UserBlockManager.isDestinationInBlockList(I2PDestination) == true) {
     return critical("Destination is in blockList");

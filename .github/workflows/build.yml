@@ -7,16 +7,9 @@ on:
   pull_request:
     branches: [master]
 
-permissions:
-  contents: write
-
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v4
 
@@ -29,35 +22,37 @@ jobs:
             sudo ln -sf "$(command -v qmake6)" /usr/local/bin/qmake
           fi
 
+      - name: Install build tools
+        run: |
+          sudo apt-get install -y g++ make bear clang-format clang-tidy pipx upx
+          pipx install compiledb
+
       - name: Build
         run: |
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            sudo apt-get install -y -qq upx
+
             bash build.sh --upx
           else
             bash build.sh
           fi
 
-      - name: Build AppImage
-        run: bash build.sh --appimage
+      - name: Check formatting
+        run: bash build.sh --format
 
-      - name: Upload binary (artifact)
+      - name: Static analysis
+        run: bash build.sh --tidy
+
+      - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: I2PChat-linux
-          path: |-
-            dist/I2PChat
-            dist/I2PChat-*.AppImage
+          path: dist/I2PChat
 
-      - name: Upload to release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: |-
-            dist/I2PChat
-            dist/I2PChat-*.AppImage
-          name: I2PChat ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          files: dist/I2PChat
           generate_release_notes: true
 
   build-windows:

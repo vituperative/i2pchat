@@ -141,8 +141,11 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
 void CUser::slotSendFileOffer(const QString &fileName, quint64 fileSize, const QString &filePath) {
   QString sizeStr;
   QString sizeType;
-  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType, false);
   QString offerStr = fileName + "\t" + QString::number(fileSize) + "\t" + filePath;
+
+  // Always persist to mUnsentedFileOffers so the offer survives app restart
+  mUnsentedFileOffers.push_back(offerStr);
 
   if (mConnectionStatus == ONLINE && mCurrentOnlineState != USEROFFLINE && mCurrentOnlineState != USERINVISIBLE) {
     // Send offer via protocol
@@ -150,17 +153,15 @@ void CUser::slotSendFileOffer(const QString &fileName, quint64 fileSize, const Q
     mProtocol.send(FILE_OFFER, mI2PStream_ID, payload);
 
     auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
-               tr("File offer: %1 (%2 %3) <i>(sent)</i><br>").arg(fileName, sizeStr, sizeType);
+               tr("%1 (%2 %3) <i>(sent)</i><br>").arg(fileName, sizeStr, sizeType);
     mAllMessages.push_back(msg);
     mNewMessages.push_back(msg);
   } else {
     // Queue for later
-    mUnsentedFileOffers.push_back(offerStr);
-
     qint32 cancelId = mNextCancelId++;
     mPendingFileIdx[cancelId] = mUnsentedFileOffers.size() - 1;
     auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
-               tr("File offer: %1 (%2 %3) <i>(pending)</i>"
+               tr("%1 (%2 %3) <i>(pending)</i>"
                   "<a href=\"cancelfile:%4\">✕</a><br>")
                  .arg(fileName, sizeStr, sizeType, QString::number(cancelId));
     mAllMessages.push_back(msg);
@@ -193,6 +194,8 @@ void CUser::slotSendAllFileOffers() {
       mAllMessages[i] = mAllMessages[i].left(idx) + "<br>";
   }
 
+  // Keep file paths in sent pool so takeAcceptedFileOffer can still find them
+  mSentOfferStrs.append(mUnsentedFileOffers);
   mUnsentedFileOffers.clear();
   mPendingFileIdx.clear();
   mHaveNewUnreadMessages = true;
@@ -210,10 +213,10 @@ void CUser::slotIncomingFileOffer(const QString &data) {
   quint64 fileSize = parts.at(1).toULongLong();
 
   QString sizeStr, sizeType;
-  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+  mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType, false);
 
   QString msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
-                tr("Offers file: %1 (%2 %3) "
+                tr("%1 (%2 %3) "
                    "<a href=\"fileoffer:accept:%4\">[Accept]</a> "
                    "<a href=\"fileoffer:reject:%4\">[Reject]</a><br>")
                   .arg(fileName, sizeStr, sizeType, fileName.toHtmlEscaped());
@@ -239,16 +242,42 @@ QString CUser::takeAcceptedFileOffer(const QString &fileName) {
       return filePath;
     }
   }
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (parts.size() >= 3 && parts.at(0) == fileName) {
+      QString filePath = parts.at(2);
+      mSentOfferStrs.removeAt(i);
+      return filePath;
+    }
+  }
   return QString();
+}
+
+void CUser::cancelSentFileOffer(const QString &fileName) {
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (!parts.empty() && parts.at(0) == fileName) {
+      mSentOfferStrs.removeAt(i);
+      emit signSaveUnsentMessages(mI2PDestination);
+      return;
+    }
+  }
 }
 
 void CUser::removeFileOffer(const QString &fileName) {
   for (int i = 0; i < mUnsentedFileOffers.count(); i++) {
     QStringList parts = mUnsentedFileOffers.at(i).split("\t");
-    if (parts.size() >= 1 && parts.at(0) == fileName) {
+    if (!parts.empty() && parts.at(0) == fileName) {
       mUnsentedFileOffers.removeAt(i);
       emit signSaveUnsentMessages(mI2PDestination);
-      break;
+      return;
+    }
+  }
+  for (int i = 0; i < mSentOfferStrs.count(); i++) {
+    QStringList parts = mSentOfferStrs.at(i).split("\t");
+    if (!parts.empty() && parts.at(0) == fileName) {
+      mSentOfferStrs.removeAt(i);
+      return;
     }
   }
 }
@@ -263,11 +292,11 @@ void CUser::setUnsentedFileOffers(const QStringList &newOffers) {
     QString fileName = parts.at(0);
     quint64 fileSize = parts.at(1).toULongLong();
     QString sizeStr, sizeType;
-    mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType);
+    mCore.doConvertNumberToTransferSize(fileSize, sizeStr, sizeType, false);
     qint32 cancelId = mNextCancelId++;
     mPendingFileIdx[cancelId] = i;
     auto msg = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " +
-               tr("File offer: %1 (%2 %3) <i>(pending)</i>"
+               tr("%1 (%2 %3) <i>(pending)</i>"
                   "<a href=\"cancelfile:%4\">✕</a><br>")
                  .arg(fileName, sizeStr, sizeType, QString::number(cancelId));
     mAllMessages.push_back(msg);

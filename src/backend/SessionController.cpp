@@ -15,8 +15,8 @@ static QString ts() {
 }
 static QString truncateDbg(const QString &msg) {
   QString r = msg;
-  r.replace(QRegularExpression("DESTINATION=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}"), "DESTINATION=\\1…");
-  r.replace(QRegularExpression("PRIV=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}"), "PRIV=\\1…");
+  r.replace(QRegularExpression("DESTINATION=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}=+"), "DESTINATION=\\1");
+  r.replace(QRegularExpression("PRIV=([A-Za-z0-9~_-]{6})[A-Za-z0-9~_-]{44,}=+"), "PRIV=\\1");
   return ts() + " • " + r;
 }
 

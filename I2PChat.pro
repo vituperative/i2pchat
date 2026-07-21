@@ -2,7 +2,7 @@ CONFIG += qt
 
 CONFIG += c++17
 
-QT += network xml
+QT += network xml dbus
 
 QT += widgets multimedia core svg
 
@@ -43,6 +43,7 @@ SOURCES += \
 	src/backend/TextEmotionChanger.cpp \
 	src/backend/UnsentChatMessageStorage.cpp \
 	src/gui/form_Main.cpp \
+	src/gui/StatusNotifier.cpp \
 	src/gui/form_chatwidget.cpp \
 	src/gui/form_DebugMessages.cpp \
 	src/gui/form_fileReceive.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
 	src/backend/TextEmotionChanger.h \
 	src/backend/UnsentChatMessageStorage.h \
 	src/gui/form_Main.h \
+	src/gui/StatusNotifier.h \
 	src/gui/form_chatwidget.h \
 	src/gui/form_DebugMessages.h \
 	src/gui/form_fileReceive.h \

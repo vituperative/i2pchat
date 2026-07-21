@@ -8,10 +8,22 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QPixmap>
-#include <QSystemTrayIcon>
-
 static const QPixmap &avatarPixmap() {
   static QPixmap pix(":/icons/avatar.svg");
+  return pix;
+}
+
+// Scaled-down, alias-free version of newmail.svg for the taskbar tray icon.
+// The SVG is rasterized at a small tray size and resampled with Lanczos to
+// avoid the jaggies that appear when Qt scales the vector straight to 16-22px.
+static const QPixmap &newmailTrayPixmap() {
+  static QPixmap pix;
+  if (pix.isNull()) {
+    const int traySize = 22;
+    QImage img = QIcon(":/icons/newmail.svg").pixmap(traySize, traySize).toImage();
+    img = CCore::scaleImageLanczos(img, traySize, traySize);
+    pix = QPixmap::fromImage(img);
+  }
   return pix;
 }
 
@@ -64,7 +76,6 @@ form_MainWindow::~form_MainWindow() {
   applicationIsClosing = true;
 
   delete Core;
-  delete trayIcon;
   this->close();
 }
 
@@ -203,8 +214,6 @@ void form_MainWindow::closeApplication() {
 
     delete Core;
     Core = 0;
-    delete trayIcon;
-    trayIcon = 0;
 
     this->close();
   } else {
@@ -276,7 +285,7 @@ void form_MainWindow::eventUserChanged() {
         break;
       }
 
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     QFont currentFont = newItem->font();
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -308,7 +317,7 @@ void form_MainWindow::eventUserChanged() {
 
     newItem->setIcon(QIcon(ICON_FILETRANSFER_RECEIVE));
     newItem->setText(FileReceives.at(i)->getFileName());
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString t;
@@ -328,7 +337,7 @@ void form_MainWindow::eventUserChanged() {
 
     newItem->setIcon(QIcon(ICON_FILETRANSFER_SEND));
     newItem->setText(FileSends.at(i)->getFileName());
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString t;
@@ -343,7 +352,7 @@ void form_MainWindow::eventUserChanged() {
   if (showUnreadMessageAtTray == false) {
     OnlineStateChanged();
   } else {
-    trayIcon->setIcon(QIcon(ICON_NEWUNREADMESSAGETRAY));
+    setTrayIcon(QIcon(newmailTrayPixmap()));
   }
 }
 
@@ -536,15 +545,7 @@ void form_MainWindow::renameUserCLicked() {
 }
 
 void form_MainWindow::closeEvent(QCloseEvent *e) {
-  if ((trayIcon != 0) && (trayIcon->isVisible())) {
-    static bool firstTime = true;
-    if (firstTime) {
-
-      //            QMessageBox::information(this, tr("I2PChat System tray"),
-      //            tr("Application will continue running. Quit using context
-      //            menu in the system tray"));
-      firstTime = false;
-    }
+  if (mStatusNotifier != NULL) {
     hide();
     e->ignore();
   }
@@ -559,38 +560,25 @@ void form_MainWindow::updateMenu() {
   toggleVisibilityAction->setText(isVisible() ? tr("Hide") : tr("Show"));
 }
 
-void form_MainWindow::toggleVisibility(QSystemTrayIcon::ActivationReason e) {
-  if (mLastDestinationWithUnreadMessages.isEmpty() == false)
-    return;
+void form_MainWindow::toggleAllWindows() {
+  bool anyVisible = isVisible();
+  for (auto it = mAllOpenChatWindows.begin(); it != mAllOpenChatWindows.end(); ++it)
+    if (it.value()->isVisible())
+      anyVisible = true;
 
-  static QPoint MainFormPosition = this->pos();
-
-  if (e == QSystemTrayIcon::Trigger || e == QSystemTrayIcon::DoubleClick) {
-    if (isHidden()) {
-      this->move(MainFormPosition);
-      show();
-
-      if (isMinimized()) {
-        if (isMaximized()) {
-          showMaximized();
-        } else {
-          showNormal();
-        }
-      }
-      raise();
-      activateWindow();
-    } else {
-      MainFormPosition = this->pos();
-      hide();
-    }
-  }
-}
-
-void form_MainWindow::toggleVisibilitycontextmenu() {
-  if (isVisible())
+  if (anyVisible) {
     hide();
-  else
+    for (auto it = mAllOpenChatWindows.begin(); it != mAllOpenChatWindows.end(); ++it)
+      if (it.value()->isVisible())
+        it.value()->hide();
+  } else {
     show();
+    raise();
+    activateWindow();
+    for (auto it = mAllOpenChatWindows.begin(); it != mAllOpenChatWindows.end(); ++it)
+      if (it.value()->isHidden() == false)
+        it.value()->show();
+  }
 }
 
 void form_MainWindow::OnlineStateChanged() {
@@ -605,7 +593,7 @@ void form_MainWindow::OnlineStateChanged() {
                       tr("Connecting..."));                     // index 0
     comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline")); // 1
     comboBox->setCurrentIndex(0);
-    trayIcon->setIcon(QIcon(ICON_USER_TRYTOCONNECT));
+    setTrayIcon(QIcon(ICON_USER_TRYTOCONNECT));
   } else {
     if (comboBox->count() < 6) {
       comboBox->clear();
@@ -620,22 +608,22 @@ void form_MainWindow::OnlineStateChanged() {
 
     if (onlinestatus == User::USERONLINE) {
       comboBox->setCurrentIndex(0);
-      trayIcon->setIcon(QIcon(ICON_USER_ONLINE));
+      setTrayIcon(QIcon(ICON_USER_ONLINE));
     } else if (onlinestatus == User::USERWANTTOCHAT) {
       comboBox->setCurrentIndex(1);
-      trayIcon->setIcon(QIcon(ICON_USER_WANTTOCHAT));
+      setTrayIcon(QIcon(ICON_USER_WANTTOCHAT));
     } else if (onlinestatus == User::USERAWAY) {
       comboBox->setCurrentIndex(2);
-      trayIcon->setIcon(QIcon(ICON_USER_AWAY));
+      setTrayIcon(QIcon(ICON_USER_AWAY));
     } else if (onlinestatus == User::USERDONT_DISTURB) {
       comboBox->setCurrentIndex(3);
-      trayIcon->setIcon(QIcon(ICON_USER_DONT_DISTURB));
+      setTrayIcon(QIcon(ICON_USER_DONT_DISTURB));
     } else if (onlinestatus == User::USERINVISIBLE) {
       comboBox->setCurrentIndex(4);
-      trayIcon->setIcon(QIcon(ICON_USER_INVISIBLE));
+      setTrayIcon(QIcon(ICON_USER_INVISIBLE));
     } else if (onlinestatus == User::USEROFFLINE) {
       comboBox->setCurrentIndex(5);
-      trayIcon->setIcon(QIcon(ICON_USER_OFFLINE));
+      setTrayIcon(QIcon(ICON_USER_OFFLINE));
     }
   }
 
@@ -662,13 +650,11 @@ void form_MainWindow::openAboutDialog() {
   }
 }
 
-
 void form_MainWindow::initTryIconMenu() {
   // Tray icon Menu
   menu = new QMenu(this);
   QObject::connect(menu, SIGNAL(aboutToShow()), this, SLOT(updateMenu()));
-  toggleVisibilityAction =
-    menu->addAction(QIcon(ICON_CHAT), tr("Show/Hide"), this, SLOT(toggleVisibilitycontextmenu()));
+  toggleVisibilityAction = menu->addAction(QIcon(ICON_CHAT), tr("Show/Hide"), this, SLOT(toggleAllWindows()));
 
   toggleMuteAction = menu->addAction(QIcon(ICON_SOUND_ON), tr("Sound on"), this, SLOT(muteSound()));
   menu->addSeparator();
@@ -679,24 +665,32 @@ void form_MainWindow::initTryIconMenu() {
   menu->addAction(QIcon(ICON_CLOSE), tr("&Quit"), this, SLOT(closeApplication()));
 }
 
+void form_MainWindow::setTrayIcon(const QIcon &icon) {
+  if (mStatusNotifier != NULL)
+    mStatusNotifier->setIcon(icon.pixmap(22, 22));
+}
+
 void form_MainWindow::initTryIcon() {
-  // Create the tray icon
-  trayIcon = new QSystemTrayIcon(this);
-  trayIcon->setToolTip(tr("I2PChat"));
-  trayIcon->setContextMenu(menu);
-  trayIcon->setIcon(QIcon(ICON_CHAT));
+  // Use a single StatusNotifierItem (D-Bus) for the tray. Modern desktops
+  // (XFCE4 4.14+, KDE, etc.) only host the StatusNotifier protocol, not the
+  // legacy XEmbed QSystemTrayIcon, so we register one item and nothing else.
+  mStatusNotifier = new CStatusNotifier(this);
+  mStatusNotifier->setIconFromSvg(QStringLiteral(":/icons/avatar.svg"), 22);
+  mStatusNotifier->setToolTip(tr("I2PChat"), tr("I2PChat"));
+  if (mStatusNotifier->registerNotifier() == false) {
+    delete mStatusNotifier;
+    mStatusNotifier = NULL;
+  } else {
+    // A left click opens our menu. sntray's mapping of left-click to either
+    // Activate or ContextMenu varies, so bind both to the menu popup to be safe.
+    connect(mStatusNotifier, SIGNAL(activate(int, int)), this, SLOT(showTrayMenu(int, int)));
+    connect(mStatusNotifier, SIGNAL(contextMenu(int, int)), this, SLOT(showTrayMenu(int, int)));
+  }
+}
 
-  connect(trayIcon,
-          SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-          this,
-          SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
-
-  connect(trayIcon,
-          SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-          this,
-          SLOT(eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason)));
-
-  trayIcon->show();
+void form_MainWindow::showTrayMenu(int x, int y) {
+  if (menu != NULL)
+    menu->popup(QPoint(x, y));
 }
 
 void form_MainWindow::copyDestination() {
@@ -829,12 +823,6 @@ void form_MainWindow::eventChatWindowClosed(const QString &Destination) {
   } else {
     qCritical() << "form_MainWindow::eventChatWindowClosed\n"
                 << "Closing a unknown chat window";
-  }
-}
-
-void form_MainWindow::eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason) {
-  if (Reason == QSystemTrayIcon::DoubleClick && mLastDestinationWithUnreadMessages.isEmpty() == false) {
-    openChatWindow(mLastDestinationWithUnreadMessages);
   }
 }
 
@@ -996,17 +984,19 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
                 versiond = 0.0;
 
               // Add the user
-              bool added = false;
-              if (versiond >= 0.3) {
-                added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
-              } else {
-                added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
-              }
+              QString userName = callerNickname.isEmpty() ? "Unknown" : callerNickname;
+              bool added = Core->getUserManager()->addNewUser(userName, destination, streamID, true, true);
 
               if (!added) {
+                emit Core->getConnectionManager()->signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                                                                     " • AddNewUser FAILED — stream " +
+                                                                     QString::number(streamID) + " destroyed");
                 Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
                 return;
               }
+              emit Core->getConnectionManager()->signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                                                                   " • AddNewUser OK — stream " +
+                                                                   QString::number(streamID) + " authorized");
               CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
               if (User) {
                 User->setI2PStreamID(streamID);

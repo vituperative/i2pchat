@@ -18,6 +18,7 @@
 #include "form_settingsgui.h"
 #include "gui_icons.h"
 #include "ui_form_Main.h"
+#include "StatusNotifier.h"
 
 #include <QClipboard>
 #include <QContextMenuEvent>
@@ -29,7 +30,6 @@
 #include <QMutex>
 #include <QPoint>
 #include <QSettings>
-#include <QSystemTrayIcon>
 #include <QtGui>
 
 class form_MainWindow : public QMainWindow, private Ui::form_MainWindow {
@@ -55,7 +55,6 @@ public slots:
   void eventChatWindowClosed(const QString &Destination);
   void eventFileReceiveWindowClosed(qint32 StreamID);
   void eventFileSendWindowClosed(qint32 StreamID);
-  void eventTryIconDoubleClicked(enum QSystemTrayIcon::ActivationReason Reason);
   void eventTopicSubscribeWindowClosed();
   void eventDebugWindowClosed();
   void eventAvatarImageChanged();
@@ -95,8 +94,8 @@ private slots:
   void addUserToBlockList();
   void updateMenu();
   void onlineComboBoxChanged();
-  void toggleVisibility(QSystemTrayIcon::ActivationReason e);
-  void toggleVisibilitycontextmenu();
+  void toggleAllWindows();
+  void showTrayMenu(int x, int y);
   void OnlineStateChanged();
   void incomingUserAuthorizationRequest(const QString &destination, int streamID, const QByteArray &data);
   //
@@ -108,12 +107,14 @@ private:
   void initTryIcon();
   void initToolBars();
 
+  void setTrayIcon(const QIcon &icon);
+
   CCore *Core;
   bool applicationIsClosing;
 
   form_newUserWindow *newUserWindow;
 
-  QSystemTrayIcon *trayIcon;
+  CStatusNotifier *mStatusNotifier;
   QAction *toggleVisibilityAction, *toolAct;
   QAction *toggleMuteAction;
   QMenu *menu;

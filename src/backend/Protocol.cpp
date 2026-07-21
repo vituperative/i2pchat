@@ -285,7 +285,12 @@ void CProtocol::dispatchKnownCommand(const qint32 ID, const QByteArray &Data, co
     {"1002", [](CProtocol &p, qint32 id) { p.send(ANSWER_OF_GET_CLIENTNAME, id, p.mCore.getClientName()); }},
     {"1003",
      [](CProtocol &p, qint32 id) {
-       if (p.mCore.getUserManager()->getUserByI2P_ID(id)->getIsInvisible() == true) {
+       CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
+       if (!u || p.mCore.getUserBlockManager()->isDestinationInBlockList(u->getI2PDestination())) {
+         p.send(USER_ONLINESTATUS_OFFLINE, id, QString(""));
+         return;
+       }
+       if (u->getIsInvisible() == true) {
          p.send(USER_ONLINESTATUS_OFFLINE, id, QString(""));
        } else {
          switch (p.mCore.getOnlineStatus()) {
@@ -328,6 +333,9 @@ void CProtocol::dispatchKnownCommand(const qint32 ID, const QByteArray &Data, co
      }},
     {"1006",
      [](CProtocol &p, qint32 id) {
+       CUser *u = p.mCore.getUserManager()->getUserByI2P_ID(id);
+       if (u && p.mCore.getUserBlockManager()->isDestinationInBlockList(u->getI2PDestination()))
+         return;
        CReceivedInfos Infos = p.mCore.getUserInfos();
        p.send(USER_INFO_NICKNAME, id, Infos.Nickname);
        p.send(USER_INFO_GENDER, id, Infos.Gender);
@@ -515,10 +523,20 @@ void CProtocol::handleChatProtocolPacket(const qint32 ID, const QByteArray &Data
     settings.endGroup();
 
     if (blockAllUnknown) {
-      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-      return;
+      if (!requestAuth) {
+        mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+        return;
+      }
+      // requestAuth is also true — show dialog so user can override the blanket block
     }
     if (requestAuth) {
+      // Disconnect data signal while dialog is open — prevents
+      // slotInputUnknown from routing subsequent data to
+      // handleWebProfileProtocolPacket and destroying the stream.
+      QObject::disconnect(stream,
+                          SIGNAL(signDataReceived(const qint32, const QByteArray)),
+                          this,
+                          SLOT(slotInputUnknown(const qint32, const QByteArray)));
       emit mCore.signIncomingUserAuthorizationRequest(stream->getDestination(), ID, Data);
       return;
     }
