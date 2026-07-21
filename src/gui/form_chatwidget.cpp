@@ -847,6 +847,9 @@ void form_ChatWidget::addMessage(QString text) {
     }
     // Strip ugly <i>(pending)</i> / <i>(sent)</i> badges
     text.remove(QRegularExpression("<i>[^<]*</i>"));
+  } else if (type == MsgSystem) {
+    static int sysMsgCounter = 0;
+    cancelUrl = QStringLiteral("closeSystem:%1").arg(++sysMsgCounter);
   }
 
   QString typeClass;
@@ -1191,6 +1194,18 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
           if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString())
             mChatModel->removeRow(i);
     }
+    return;
+  }
+
+  if (link.scheme() == "closeSystem") {
+    if (mChatStyle == "classic")
+      addAllMessagesClassic();
+    else
+      for (int i = 0; i < mChatModel->rowCount(); ++i)
+        if (mChatModel->item(i)->data(CancelUrlRole).toString() == link.toString()) {
+          mChatModel->removeRow(i);
+          break;
+        }
     return;
   }
 

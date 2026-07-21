@@ -328,7 +328,7 @@ void ChatDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
   QString cancelUrl;
   bool hasCancel = (!index.data(CancelUrlRole).toString().isEmpty() &&
-                    (type == MsgPending || type == MsgSentFileOffer || type == MsgFileOffer));
+                    (type == MsgPending || type == MsgSentFileOffer || type == MsgFileOffer || type == MsgSystem));
   if (hasCancel)
     cancelUrl = index.data(CancelUrlRole).toString();
 
@@ -390,7 +390,7 @@ QSize ChatDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
   } else {
     tw = w - margin - 4 - mColors.padH * 2;
   }
-  if (type == MsgPending && !index.data(CancelUrlRole).toString().isEmpty())
+  if ((type == MsgPending || type == MsgSystem) && !index.data(CancelUrlRole).toString().isEmpty())
     tw -= kCancelIconSize + kCancelIconMargin;
   tw = std::max(tw, 50);
 
@@ -497,8 +497,8 @@ bool ChatDelegate::editorEvent(QEvent *event,
     return true;
   }
 
-  // Check cancel icon click for pending messages
-  if (type == MsgPending) {
+  // Check cancel icon click for pending / system messages
+  if (type == MsgPending || type == MsgSystem) {
     QString cancelUrl = index.data(CancelUrlRole).toString();
     if (!cancelUrl.isEmpty() && cancelIconRect(bubbleRect).contains(me->pos())) {
       emit linkClicked(QUrl(cancelUrl));
