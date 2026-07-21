@@ -6,7 +6,7 @@
 * Transient (non-persistent) destination option
 * Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
 * Auto-away with settings toggle
-* Chat: 🤖⏳ header icons, ⏳ removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
+* Chat: header icons, removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
 * ECIES/ED25519 defaults; ECIES (Ratchet) for new profiles; DSA_SHA1 removed
 * Optional profile web page at .b32 address
 * Auth dialog: Block button, immediate nickname apply
@@ -39,14 +39,12 @@
 
 ## June, 2020
 
-* Fixed crash of close chat window
-* Fixed crash of url link in chat
-* Added $HOME/.i2pchat/ directory support for using from /usr/bin
-* Created .deb package for ubuntu/debian x86_64
-* Created Windows build for 32 bit
-* Fix offline message crash
-* dr|z3d starts work on renovating the user interface, WipedLife starts work on the backend
+* Fix crash on close chat window, URL links, and offline messages
+* Add $HOME/.i2pchat/ directory support
+* Add .deb package for Debian/Ubuntu
+* Add 32-bit Windows build
+* UI renovation and backend overhaul
 
 ## January, 2017
 
-* Original repo at http://git.repo.i2p/w/I2P-Messenger-QT.git was fully merged here
+* Original I2P-Messenger-QT repository merged

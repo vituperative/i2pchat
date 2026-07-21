@@ -308,6 +308,40 @@ hr {
     content: "at https://github.com/";
   }
 }
+header + nav {
+  background: #b8dce8;
+  padding: 6px 25px;
+  border-bottom: 1px solid #9fc6d4;
+}
+header + nav a {
+  display: inline-block;
+  padding: 3px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #069;
+  text-decoration: none;
+  border-radius: 3px;
+}
+header + nav a:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+header + nav a strong {
+  color: #fff;
+  background: #069;
+  border-radius: 3px;
+  padding: 3px 14px;
+  margin: -3px -14px;
+}
+@media print, screen and (max-width: 580px) {
+  header + nav {
+    text-align: center;
+  }
+  header + nav a {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
 .wrapper,
 footer {
   width: 65% !important;

@@ -15,11 +15,14 @@
     <p>Secure, anonymous peer-to-peer chat over I2P
     <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
     <ul>
-      <li><a href=index.html>Home</a>
-      <li><a href=changelog.html>Changelog</a>
-      <li><a href=architecture.html><strong>Architecture</strong></a>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
     </ul>
   </header>
+  <nav>
+    <a href=index.html>Home</a>
+    <a href=changelog.html>Changelog</a>
+    <a href=architecture.html><strong>Architecture</strong></a>
+  </nav>
   <section>
     <h1>Architecture</h1>
 
@@ -90,6 +93,86 @@ debian/               — Debian packaging files</pre>
       <tr><td><code>TextEmotionChanger</code></td><td>Smiley/emoticon substitution.</td></tr>
     </table>
 
+    <h3>src/gui — UI Layer</h3>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>form_Main</code></td><td>Main window: user list, online status combo, tray icon, context menus.</td></tr>
+      <tr><td><code>form_chatwidget</code></td><td>Chat window per contact: message display (HTML), send field, emoticon/color/font controls.</td></tr>
+      <tr><td><code>form_settingsgui</code></td><td>Settings dialog (7 tabs).</td></tr>
+      <tr><td><code>form_about</code></td><td>About dialog.</td></tr>
+      <tr><td><code>form_DebugMessages</code></td><td>Debug log viewer.</td></tr>
+      <tr><td><code>form_fileReceive</code></td><td>Incoming file transfer dialog.</td></tr>
+      <tr><td><code>form_fileSend</code></td><td>Outgoing file transfer dialog.</td></tr>
+      <tr><td><code>form_newUser</code></td><td>Add-contact dialog.</td></tr>
+      <tr><td><code>form_rename</code></td><td>Rename-contact dialog.</td></tr>
+      <tr><td><code>form_TopicSubscribe</code></td><td>(Disabled) Topic subscription.</td></tr>
+      <tr><td><code>form_UserSearch</code></td><td>(Disabled) User search.</td></tr>
+    </table>
+
+    <h3>Data Flow — Connection Establishment</h3>
+
+    <h4>Outgoing (you connect to a known contact)</h4>
+    <pre>User clicks "Online"
+  &rarr; form_Main::onlineComboBoxChanged()
+    &rarr; CCore::setOnlineStatus(ONLINE)
+      [if OFFLINE] &rarr; mNextOnlineStatus=ONLINE, mCurrentOnlineStatus=TRYTOCONNECT
+        &rarr; CCore::init()
+          &rarr; CConnectionManager::doCreateSession(STREAM, privkey, opts)
+            &rarr; CSessionController::doConnect()           // TCP to SAM
+              &rarr; slotConnected() &rarr; HELLO VERSION...
+                &rarr; slotReadFromSocket()
+                  &rarr; HELLO_REPLAY OK &rarr; doSessionCreate()
+                    &rarr; SESSION STATUS OK &rarr; signSessionStreamStatusOK(true)
+                      &rarr; CCore::slotStreamControllerStatusOK(true)
+                        &rarr; createStreamObjectsForAllUsers()
+                          &rarr; createStreamObjectForUser(user)
+                            &rarr; CI2PStream::doConnect(dest)   // per-contact
+                              &rarr; SAM handshake &rarr; STREAM CONNECT
+                                &rarr; STREAM STATUS OK &rarr; signStreamStatusReceived(OK)
+                                  &rarr; CCore::slotStreamStatusReceived
+                                    &rarr; CProtocol::newConnectionChat(ID)
+                                      &rarr; send "CHATSYSTEM\t0.6\n" over SAM stream
+    &rarr; remote side receives FIRSTPACKET, processes slotInputUnknown
+      &rarr; remote sends back version, client info &rarr; slotInputKnown replies</pre>
+
+    <h4>Incoming (a contact connects to you)</h4>
+    <pre>CI2PStream (ACCEPT mode) receives data
+  &rarr; slotReadFromSocket() &rarr; STREAM STATUS + DESTINATION
+    &rarr; signModeAcceptIncomingStream(ID)
+      &rarr; CConnectionManager::slotModeAcceptIncomingStream()
+        &rarr; stream moved from StreamIncomingListener &rarr; allStreams
+        &rarr; emit signIncomingStream(stream)
+          &rarr; CCore::slotIncomingStream()
+            &rarr; connect stream &rarr; signDataReceived &rarr; mProtocol &rarr; slotInputUnknown
+        &rarr; remaining buffered data sent as signDataReceived
+          &rarr; CProtocol::slotInputUnknown()
+            &rarr; detects "CHATSYSTEM\t" &rarr; parses version
+            &rarr; if ID&lt;0: CProtocol::newConnectionChat(ID)  // send our FIRSTPACKET back
+            &rarr; adds/updates user via UserManager
+            &rarr; setStreamTypeToKnown() &rarr; creates PacketManager
+              &rarr; subsequent data routed through PacketManager &rarr; slotInputKnown</pre>
+
+    <h3>Online State Machine</h3>
+    <pre>                setOnlineStatus(ONLINE/AWAY/...)
+USEROFFLINE &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&rarr; USERTRYTOCONNECT
+  &uarr;                                                              &darr;
+  &nbsp;                                                   session OK &darr;
+  &nbsp;                                                              &darr;
+  &nbsp;                                              USERTRYTOCONNECT &mdash;&mdash;&rarr; mNextOnlineStatus
+  &nbsp;                                                                      &darr;
+  &nbsp;                                                              session &darr;
+  &nbsp;                                                              created &darr;
+  &nbsp;                                                                      &darr;
+  &nbsp;                                                            USERONLINE / USERAWAY /
+  &nbsp;                                                            USERWANTTOCHAT / USERINVISIBLE /
+  &nbsp;                                                            USERDONT_DISTURB
+  &nbsp;                                                                      &darr;
+  &larr;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; setOnlineStatus(OFFLINE) &larr;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#x2514;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#x2190;
+                               stopCore()
+
+Note: stopCore() is only called on explicit offline &mdash; not on SAM disconnect.
+Session loss sets mCurrentOnlineStatus = USEROFFLINE without cleaning up streams.</pre>
+
     <h3>Protocol Packet Format</h3>
     <pre>Offset  Size  Description
 0       4     Packet length in bytes (hex ASCII), excludes these 4 bytes
@@ -108,6 +191,9 @@ debian/               — Debian packaging files</pre>
       <tr><td>0019</td><td>Avatar changed notification</td></tr>
       <tr><td>1000–1008</td><td>Commands: PING, GET_CLIENTVERSION/NAME/USER_ONLINESTATUS etc.</td></tr>
     </table>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
   </section>
 </div>
 <style type="text/css">body{filter:opacity(1)}</style>

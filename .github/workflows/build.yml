@@ -48,10 +48,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache MXE toolchain
+        uses: actions/cache@v4
+        with:
+          path: tools/mxe
+          key: mxe-qt5-${{ runner.os }}-v1
+
       - name: Install build deps
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y g++ make libtool-bin git gperf wget qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+          sudo apt-get install -y g++ make libtool-bin git gperf wget \
+            qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev \
+            autoconf automake texinfo libuuid-dev intltool flex bison
 
       - name: Cross-compile Windows binary
         run: bash build.sh --windows $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
