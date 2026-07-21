@@ -106,9 +106,8 @@ FORMS += \
 
 RESOURCES += src/gui/resourcen.qrc
 
-# Windows static build
-win32 {
-	# QMAKE_CXXFLAGS *= -Wno-deprecated-copy -Wno-class-memaccess // appveyor errors out
+# MinGW static build
+mingw {
 	QMAKE_LFLAGS   *= -Wl,-Bstatic -static-libgcc -static-libstdc++
 	LIBS           *= -lstdc++ -lpthread
 }

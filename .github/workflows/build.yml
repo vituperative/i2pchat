@@ -52,7 +52,8 @@ jobs:
 
       - name: Build
         run: |
-          qmake I2PChat.pro "CONFIG += release"
+          mkdir dist
+          qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
           nmake
 
       - name: Upload Windows binary
@@ -73,10 +74,17 @@ jobs:
           target: desktop
           arch: clang_64
 
+      - name: Patch Qt for modern macOS (remove deprecated AGL framework)
+        run: |
+          find "$(qmake -query QT_INSTALL_LIBS)" -name '*.prl' \
+            -exec sed -i '' 's/-framework AGL//g' {} +
+
       - name: Build
         run: |
-          qmake I2PChat.pro "CONFIG += release"
+          qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
           make -j$(sysctl -n hw.logicalcpu)
+          strip dist/I2PChat.app/Contents/MacOS/I2PChat -o dist/I2PChat 2>/dev/null || \
+            cp dist/I2PChat.app/Contents/MacOS/I2PChat dist/I2PChat
 
       - name: Upload macOS binary
         uses: actions/upload-artifact@v4
