@@ -246,14 +246,14 @@ void form_ChatWidget::loadChatStyle() {
 static QString aboutIconHtml() {
   static const QString html = []() {
     QSizeF srcSize(48, 48);
-    QPixmap big(srcSize.toSize());
-    big.fill(Qt::transparent);
-    QPainter p(&big);
+    QImage img(srcSize.toSize(), QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    QPainter p(&img);
     p.setRenderHint(QPainter::Antialiasing);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     QSvgRenderer(QStringLiteral(":/icons/about.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QPixmap small = big.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap small = QPixmap::fromImage(img).scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
@@ -271,15 +271,14 @@ static QString aboutIconHtml() {
 static QString sentOfferIconHtml() {
   static const QString html = []() {
     QSizeF srcSize(48, 48);
-    QPixmap big(srcSize.toSize());
-    big.fill(Qt::transparent);
-    QPainter p(&big);
+    QImage img(srcSize.toSize(), QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    QPainter p(&img);
     p.setRenderHint(QPainter::Antialiasing);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     QSvgRenderer(QStringLiteral(":/icons/download.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
 
-    QImage img = big.toImage();
     img = img.mirrored(false, true);
     img = CCore::scaleImageLanczos(img, 12, 12);
 
@@ -299,19 +298,19 @@ QString form_ChatWidget::transferIconHtml(bool isSend) {
   int idx = isSend ? 1 : 0;
   if (cached[idx].isEmpty()) {
     QSizeF srcSize(48, 48);
-    QPixmap big(srcSize.toSize());
-    big.fill(Qt::transparent);
-    QPainter p(&big);
+    QImage img(srcSize.toSize(), QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    QPainter p(&img);
     p.setRenderHint(QPainter::Antialiasing);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     QSvgRenderer(QString(isSend ? ":/icons/upload.svg" : ":/icons/download.svg"))
       .render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QPixmap small = big.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage small = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
-    small.save(&buf, "PNG");
+    QPixmap::fromImage(small).save(&buf, "PNG");
     cached[idx] = QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
                                  "class=\"msg-icon transfer-icon\"> ")
                     .arg(QString::fromLatin1(bytes.toBase64()));

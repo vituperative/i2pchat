@@ -985,17 +985,19 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
                 versiond = 0.0;
 
               // Add the user
-              bool added = false;
-              if (versiond >= 0.3) {
-                added = Core->getUserManager()->addNewUser("...identifying...", destination, streamID);
-              } else {
-                added = Core->getUserManager()->addNewUser("Unknown", destination, streamID);
-              }
+              QString userName = callerNickname.isEmpty() ? "Unknown" : callerNickname;
+              bool added = Core->getUserManager()->addNewUser(userName, destination, streamID, true, true);
 
               if (!added) {
+                emit Core->getConnectionManager()->signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                                                                     " • AddNewUser FAILED — stream " +
+                                                                     QString::number(streamID) + " destroyed");
                 Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
                 return;
               }
+              emit Core->getConnectionManager()->signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                                                                   " • AddNewUser OK — stream " +
+                                                                   QString::number(streamID) + " authorized");
               CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
               if (User) {
                 User->setI2PStreamID(streamID);
