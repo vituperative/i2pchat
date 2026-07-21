@@ -48,6 +48,8 @@ jobs:
           target: desktop
           arch: win64_msvc2019_64
 
+      - uses: ilammy/msvc-dev-cmd@v1
+
       - name: Build
         run: |
           qmake I2PChat.pro "CONFIG += release"
