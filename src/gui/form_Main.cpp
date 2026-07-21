@@ -286,7 +286,7 @@ void form_MainWindow::eventUserChanged() {
         break;
       }
 
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     QFont currentFont = newItem->font();
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -318,7 +318,7 @@ void form_MainWindow::eventUserChanged() {
 
     newItem->setIcon(QIcon(ICON_FILETRANSFER_RECEIVE));
     newItem->setText(FileReceives.at(i)->getFileName());
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString t;
@@ -338,7 +338,7 @@ void form_MainWindow::eventUserChanged() {
 
     newItem->setIcon(QIcon(ICON_FILETRANSFER_SEND));
     newItem->setText(FileSends.at(i)->getFileName());
-    newItem->setTextAlignment(Qt::AlignLeft);
+    newItem->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     QString t;
