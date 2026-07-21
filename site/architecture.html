@@ -173,6 +173,41 @@ USEROFFLINE &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdas
 Note: stopCore() is only called on explicit offline &mdash; not on SAM disconnect.
 Session loss sets mCurrentOnlineStatus = USEROFFLINE without cleaning up streams.</pre>
 
+    <h3>SAM Protocol Integration</h3>
+    <p>I2PChat communicates with the local I2P router over TCP via the SAM v3 bridge (<code>127.0.0.1:7656</code>). All SAM I/O is managed by <code>SessionController</code> and <code>CI2PStream</code>.</p>
+
+    <h4>SAM v3 Handshake Flow</h4>
+    <pre>I2PChat &rarr; SAM:  HELLO VERSION MIN=3.1 MAX=3.3
+SAM &rarr; I2PChat:  HELLO REPLY RESULT=OK VERSION=3.3
+
+I2PChat &rarr; SAM:  SESSION CREATE ID=i2pchat STYLE=STREAM DESTINATION=TRANSIENT
+                [SIGNATURE_TYPE=EdDSA_SHA512_Ed25519]
+SAM &rarr; I2PChat:  SESSION STATUS RESULT=OK DESTINATION=&lt;base64&gt;</pre>
+
+    <h4>Key Management</h4>
+    <ul>
+      <li><strong>TRANSIENT</strong> destinations — server generates an ephemeral keypair; not persisted. Used when the user enables "Transient identity" in settings.</li>
+      <li><strong>Persistent (base64 private key)</strong> — a previously-generated key is sent back to SAM on reconnect, restoring the same I2P identity. Stored in <code>~/.i2pchat/</code>.</li>
+      <li><strong>Signature types:</strong> <code>EdDSA_SHA512_Ed25519</code> (EdDSA, default for new profiles) and <code>DSA_SHA1</code> (legacy).</li>
+    </ul>
+
+    <h4>Socket Stealing (v3)</h4>
+    <p>After <code>SESSION CREATE</code>, the control socket is still a command channel. When <code>STREAM CONNECT</code> or <code>STREAM ACCEPT</code> executes, SAM marks the handler as stolen and the TCP connection becomes a transparent bidirectional pipe to the I2P peer. From I2PChat's perspective, the <code>QTcpSocket</code> is now a raw stream.</p>
+
+    <h4>Naming Lookup</h4>
+    <pre>I2PChat &rarr; SAM:  NAMING LOOKUP NAME=&lt;b32|hostname&gt;
+SAM &rarr; I2PChat:  NAMING REPLY RESULT=OK NAME=&lt;name&gt; VALUE=&lt;base64&gt;</pre>
+    <p>Used to resolve .b32.i2p addresses and hostnames to full I2P destinations.</p>
+
+    <h4>Limits</h4>
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>SAM HELLO timeout</td><td>75 s</td></tr>
+      <tr><td>Stream send size</td><td>1–32768 bytes per message</td></tr>
+      <tr><td>Stale session expiry</td><td>10 min</td></tr>
+      <tr><td>Control socket timeout</td><td>60 s (first cmd), 3 min (subsequent)</td></tr>
+    </table>
+
     <h3>Protocol Packet Format</h3>
     <pre>Offset  Size  Description
 0       4     Packet length in bytes (hex ASCII), excludes these 4 bytes
