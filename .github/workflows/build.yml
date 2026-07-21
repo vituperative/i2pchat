@@ -7,9 +7,12 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    runs-on: ubuntu-26.04
+  linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -24,12 +27,7 @@ jobs:
           pipx install compiledb
 
       - name: Build
-        run: |
-          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            bash build.sh --upx
-          else
-            bash build.sh
-          fi
+        run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
 
       - name: Check formatting
         run: bash build.sh --format
@@ -41,11 +39,46 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: I2PChat-linux
-          path: dist/I2PChat
+          path: |
+            dist/I2PChat
+            dist/I2PChat-*.AppImage
+
+  windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y g++ make libtool-bin git gperf wget qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+
+      - name: Cross-compile Windows binary
+        run: bash build.sh --windows $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
+
+      - name: Upload Windows binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: I2PChat-windows
+          path: dist/I2PChat.exe
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [linux, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-assets
+          cp I2PChat-linux/I2PChat release-assets/
+          cp I2PChat-windows/I2PChat.exe release-assets/
+          ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
+            cp I2PChat-linux/I2PChat-*.AppImage release-assets/
 
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/I2PChat
+          files: release-assets/*
           generate_release_notes: true
