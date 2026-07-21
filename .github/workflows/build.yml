@@ -37,25 +37,36 @@ jobs:
             dist/I2PChat-*.AppImage
 
   windows:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache MXE toolchain
-        uses: actions/cache@v4
+      - uses: msys2/setup-msys2@v2
         with:
-          path: tools/mxe
-          key: mxe-qt5-${{ runner.os }}-v1
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-qt5-base
+            mingw-w64-x86_64-qt5-multimedia
+            mingw-w64-x86_64-qt5-svg
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-upx
 
-      - name: Install build deps
+      - name: Build
+        shell: msys2 {0}
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y g++ make libtool-bin git gperf wget \
-            qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev \
-            autoconf automake texinfo uuid-dev intltool flex bison
+          qmake I2PChat.pro "CONFIG += release"
+          mingw32-make -j$(nproc)
 
-      - name: Cross-compile Windows binary
-        run: bash build.sh --windows $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
+      - name: Strip
+        shell: msys2 {0}
+        run: strip dist/I2PChat.exe
+
+      - name: Compress with UPX
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: msys2 {0}
+        run: upx --best dist/I2PChat.exe
 
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4
