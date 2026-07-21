@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>Architecture — I2PChat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=index.html>Home</a>
+      <li><a href=changelog.html>Changelog</a>
+      <li><a href=architecture.html><strong>Architecture</strong></a>
+    </ul>
+  </header>
+  <section>
+    <h1>Architecture</h1>
+
+    <p>I2PChat is a Qt/C++ instant messaging application that operates over the I2P anonymous network using the SAM v3 protocol bridge. It provides encrypted, decentralized chat with file transfer capabilities.</p>
+
+    <h3>Directory Layout</h3>
+    <pre>I2PChat.pro           — Qt project file
+src/  backend/        — Core logic: network, protocol, user management
+  gui/                — Qt Widgets UI layer
+docs/                 — Local documentation
+site/                 — GitHub Pages website
+www/                  — Web profile assets (b32.i2p profiles)
+qss/                  — Qt stylesheets
+sounds/               — Notification sound files
+templates/            — HTML templates
+contrib/              — Packaging &amp; platform helpers
+debian/               — Debian packaging files</pre>
+
+    <h3>src/backend — Layer Overview</h3>
+
+    <h4>Session Layer (I2P Rendezvous)</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>SessionController</code></td><td>Single SAM session lifecycle — connects to SAM, creates a STREAM session, handles hello handshake, session create, dest generate, naming lookup, and auto-reconnect on disconnect. One per application.</td></tr>
+      <tr><td><code>I2PStream</code></td><td>One per logical connection. Wraps a <code>QTcpSocket</code> to SAM, performs STREAM CONNECT (outgoing) or STREAM ACCEPT (incoming), handles the SAM v3 handshake, reassembles fragmented SAM data, fires <code>signDataReceived</code>.</td></tr>
+    </table>
+
+    <h4>Stream Management Layer</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>ConnectionManager</code></td><td>Owns the <code>SessionController</code> and all <code>CI2PStream</code> objects. Creates/destroys streams, manages stream ID allocation, dispatches incoming streams to <code>CCore</code>.</td></tr>
+      <tr><td><code>I2PSamMessageAnalyser</code></td><td>Parses SAM v3 protocol text lines into <code>SAM_MESSAGE</code> structs.</td></tr>
+    </table>
+
+    <h4>Core / Application Logic</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>Core</code></td><td>Central orchestrator. Owns <code>ConnectionManager</code>, <code>UserManager</code>, <code>CProtocol</code>, <code>CFileTransferManager</code>, <code>CSoundManager</code>. Manages the online state machine.</td></tr>
+      <tr><td><code>Protocol</code></td><td>Wire protocol for I2PChat peers. Handles <code>slotInputUnknown</code> (initial CHATSYSTEM handshake) and <code>slotInputKnown</code> (parsed known packets).</td></tr>
+      <tr><td><code>PacketManager</code></td><td>Per-stream reassembly buffer. Slices complete packets by the 4-byte hex length header and emits <code>signAPacketIsCompleate</code>.</td></tr>
+    </table>
+
+    <h4>User Management</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>User</code></td><td>Per-contact model: nickname, I2P destination, protocol version, chat message history, unsent message queue, online state machine.</td></tr>
+      <tr><td><code>UserManager</code></td><td>Persisted user list (<code>users.config</code>), CRUD, sorting.</td></tr>
+      <tr><td><code>UserBlockManager</code></td><td>Block list persistence and lookup.</td></tr>
+      <tr><td><code>UnsentChatMessageStorage</code></td><td>Offline message queue persisted to disk.</td></tr>
+    </table>
+
+    <h4>File Transfer</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>FileTransferManager</code></td><td>Manages active send/receive transfers, protocol version guard.</td></tr>
+      <tr><td><code>FileTransferSend</code></td><td>Outgoing file transfer — streams file chunks over a dedicated I2P stream.</td></tr>
+      <tr><td><code>FileTransferReceive</code></td><td>Incoming file transfer — reassembles chunks, writes to disk.</td></tr>
+      <tr><td><code>HttpOverStreamObject</code></td><td>HTTP parsing over I2P stream (for web profile).</td></tr>
+    </table>
+
+    <h4>Utilities</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>Base</code></td><td>Base64/Base32 encoding/decoding.</td></tr>
+      <tr><td><code>ChatmessageChanger</code></td><td>Text transformation pipeline (emoticons, formatting).</td></tr>
+      <tr><td><code>DebugMessageManager</code></td><td>In-memory ring buffer of debug messages.</td></tr>
+      <tr><td><code>SoundManager</code></td><td>Audio notification dispatcher.</td></tr>
+      <tr><td><code>TextEmotionChanger</code></td><td>Smiley/emoticon substitution.</td></tr>
+    </table>
+
+    <h3>Protocol Packet Format</h3>
+    <pre>Offset  Size  Description
+0       4     Packet length in bytes (hex ASCII), excludes these 4 bytes
+4       4     Tag (ASCII) — identifies command or message type
+8       N     Payload (tag-dependent)</pre>
+
+    <table>
+      <tr><th>Tag</th><th>Meaning</th></tr>
+      <tr><td>0000–0002</td><td>Response: echo of ping, client version, client name</td></tr>
+      <tr><td>0003</td><td>Chat message</td></tr>
+      <tr><td>0004–0008</td><td>Online status updates</td></tr>
+      <tr><td>0009–0010</td><td>Protocol version, max file transfer protocol</td></tr>
+      <tr><td>0011–0014</td><td>User info (nick, gender, age, interests)</td></tr>
+      <tr><td>0015–0016</td><td>Block notifications</td></tr>
+      <tr><td>0017–0018</td><td>Min file transfer protocol, avatar image</td></tr>
+      <tr><td>0019</td><td>Avatar changed notification</td></tr>
+      <tr><td>1000–1008</td><td>Commands: PING, GET_CLIENTVERSION/NAME/USER_ONLINESTATUS etc.</td></tr>
+    </table>
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>
