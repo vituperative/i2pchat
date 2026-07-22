@@ -21,11 +21,11 @@ CPacketManager::~CPacketManager() {
 void CPacketManager::operator<<(const QByteArray &t) {
   if (mData != NULL) {
     mData->append(t);
-    checkifOnePacketIsCompleate();
+    checkIfOnePacketIsComplete();
   }
 }
 
-void CPacketManager::checkifOnePacketIsCompleate() {
+void CPacketManager::checkIfOnePacketIsComplete() {
   /* Wire format: first 4 bytes = hex-encoded payload length, followed by
      the payload itself. Recursively extracts all complete packets from
      the accumulation buffer mData. */
@@ -42,9 +42,9 @@ void CPacketManager::checkifOnePacketIsCompleate() {
       qCritical() << "File\t" << __FILE__ << Qt::endl
                   << "Line:\t" << __LINE__ << Qt::endl
                   << "Function:\t"
-                  << "CPacketManager::checkifOnePacketIsCompleate" << Qt::endl
+                  << "CPacketManager::checkIfOnePacketIsComplete" << Qt::endl
                   << "Message:\t"
-                  << "cant parse PacketLength" << Qt::endl
+                  << "can't parse PacketLength" << Qt::endl
                   << "StreamID: " << mID << Qt::endl
                   << "sPacketLength: " << sPacketLength << Qt::endl;
 
@@ -59,8 +59,8 @@ void CPacketManager::checkifOnePacketIsCompleate() {
       QByteArray CurrentPacket(mData->mid(4), iPacketLength);
       mData->remove(0, iPacketLength + 4);
 
-      emit signAPacketIsCompleate(mID, CurrentPacket);
-      checkifOnePacketIsCompleate();
+      emit signAPacketIsComplete(mID, CurrentPacket);
+      checkIfOnePacketIsComplete();
     }
   }
 }

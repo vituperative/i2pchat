@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>Architecture — I2PChat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <nav>
+    <a href=index.html>Home</a>
+    <a href=architecture.html><strong>Architecture</strong></a>
+    <a href=develop.html>Develop</a>
+    <a href=faq.html>FAQ</a>
+    <a href=changelog.html>Changelog</a>
+  </nav>
+  <section>
+    <h1>Architecture</h1>
+
+    <p>I2PChat is a Qt/C++ instant messaging application that operates over the I2P anonymous network using the SAM v3 protocol bridge. It provides encrypted, decentralized chat with file transfer capabilities.</p>
+
+    <h3>Directory Layout</h3>
+    <pre>I2PChat.pro           — Qt project file
+src/  backend/        — Core logic: network, protocol, user management
+  gui/                — Qt Widgets UI layer
+docs/                 — Local documentation
+site/                 — GitHub Pages website
+www/                  — Web profile assets (b32.i2p profiles)
+qss/                  — Qt stylesheets
+sounds/               — Notification sound files
+templates/            — HTML templates
+contrib/              — Packaging &amp; platform helpers
+debian/               — Debian packaging files</pre>
+
+    <h3>src/backend — Layer Overview</h3>
+
+    <h4>Session Layer (I2P Rendezvous)</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>SessionController</code></td><td>Single SAM session lifecycle — connects to SAM, creates a STREAM session, handles hello handshake, session create, dest generate, naming lookup, and auto-reconnect on disconnect. One per application.</td></tr>
+      <tr><td><code>I2PStream</code></td><td>One per logical connection. Wraps a <code>QTcpSocket</code> to SAM, performs STREAM CONNECT (outgoing) or STREAM ACCEPT (incoming), handles the SAM v3 handshake, reassembles fragmented SAM data, fires <code>signDataReceived</code>.</td></tr>
+    </table>
+
+    <h4>Stream Management Layer</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>ConnectionManager</code></td><td>Owns the <code>SessionController</code> and all <code>CI2PStream</code> objects. Creates/destroys streams, manages stream ID allocation, dispatches incoming streams to <code>CCore</code>.</td></tr>
+      <tr><td><code>I2PSamMessageAnalyser</code></td><td>Parses SAM v3 protocol text lines into <code>SAM_MESSAGE</code> structs.</td></tr>
+    </table>
+
+    <h4>Core / Application Logic</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>Core</code></td><td>Central orchestrator. Owns <code>ConnectionManager</code>, <code>UserManager</code>, <code>CProtocol</code>, <code>CFileTransferManager</code>, <code>CSoundManager</code>. Manages the online state machine.</td></tr>
+      <tr><td><code>Protocol</code></td><td>Wire protocol for I2PChat peers. Handles <code>slotInputUnknown</code> (initial CHATSYSTEM handshake) and <code>slotInputKnown</code> (parsed known packets).</td></tr>
+      <tr><td><code>PacketManager</code></td><td>Per-stream reassembly buffer. Slices complete packets by the 4-byte hex length header and emits <code>signAPacketIsComplete</code>.</td></tr>
+    </table>
+
+    <h4>User Management</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>User</code></td><td>Per-contact model: nickname, I2P destination, protocol version, chat message history, unsent message queue, online state machine.</td></tr>
+      <tr><td><code>UserManager</code></td><td>Persisted user list (<code>users.config</code>), CRUD, sorting.</td></tr>
+      <tr><td><code>UserBlockManager</code></td><td>Block list persistence and lookup.</td></tr>
+      <tr><td><code>UnsentChatMessageStorage</code></td><td>Offline message queue persisted to disk.</td></tr>
+    </table>
+
+    <h4>File Transfer</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>FileTransferManager</code></td><td>Manages active send/receive transfers, protocol version guard.</td></tr>
+      <tr><td><code>FileTransferSend</code></td><td>Outgoing file transfer — streams file chunks over a dedicated I2P stream.</td></tr>
+      <tr><td><code>FileTransferReceive</code></td><td>Incoming file transfer — reassembles chunks, writes to disk.</td></tr>
+      <tr><td><code>HttpOverStreamObject</code></td><td>HTTP parsing over I2P stream (for web profile).</td></tr>
+    </table>
+
+    <h4>Utilities</h4>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>Base</code></td><td>Base64/Base32 encoding/decoding.</td></tr>
+      <tr><td><code>ChatmessageChanger</code></td><td>Text transformation pipeline (emoticons, formatting).</td></tr>
+      <tr><td><code>DebugMessageManager</code></td><td>In-memory ring buffer of debug messages.</td></tr>
+      <tr><td><code>SoundManager</code></td><td>Audio notification dispatcher.</td></tr>
+      <tr><td><code>TextEmotionChanger</code></td><td>Smiley/emoticon substitution.</td></tr>
+    </table>
+
+    <h3>src/gui — UI Layer</h3>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>form_Main</code></td><td>Main window: user list, online status combo, tray icon, context menus.</td></tr>
+      <tr><td><code>form_chatwidget</code></td><td>Chat window per contact: message display (HTML), send field, emoticon/color/font controls.</td></tr>
+      <tr><td><code>form_settingsgui</code></td><td>Settings dialog (7 tabs).</td></tr>
+      <tr><td><code>form_about</code></td><td>About dialog.</td></tr>
+      <tr><td><code>form_DebugMessages</code></td><td>Debug log viewer.</td></tr>
+      <tr><td><code>form_fileReceive</code></td><td>Incoming file transfer dialog.</td></tr>
+      <tr><td><code>form_fileSend</code></td><td>Outgoing file transfer dialog.</td></tr>
+      <tr><td><code>form_newUser</code></td><td>Add-contact dialog.</td></tr>
+      <tr><td><code>form_rename</code></td><td>Rename-contact dialog.</td></tr>
+      <tr><td><code>form_TopicSubscribe</code></td><td>(Disabled) Topic subscription.</td></tr>
+      <tr><td><code>form_UserSearch</code></td><td>(Disabled) User search.</td></tr>
+    </table>
+
+    <h3>Data Flow — Connection Establishment</h3>
+
+    <h4>Outgoing (you connect to a known contact)</h4>
+    <pre>User clicks "Online"
+  &rarr; form_Main::onlineComboBoxChanged()
+    &rarr; CCore::setOnlineStatus(ONLINE)
+      [if OFFLINE] &rarr; mNextOnlineStatus=ONLINE, mCurrentOnlineStatus=TRYTOCONNECT
+        &rarr; CCore::init()
+          &rarr; CConnectionManager::doCreateSession(STREAM, privkey, opts)
+            &rarr; CSessionController::doConnect()           // TCP to SAM
+              &rarr; slotConnected() &rarr; HELLO VERSION...
+                &rarr; slotReadFromSocket()
+                  &rarr; HELLO_REPLAY OK &rarr; doSessionCreate()
+                    &rarr; SESSION STATUS OK &rarr; signSessionStreamStatusOK(true)
+                      &rarr; CCore::slotStreamControllerStatusOK(true)
+                        &rarr; createStreamObjectsForAllUsers()
+                          &rarr; createStreamObjectForUser(user)
+                            &rarr; CI2PStream::doConnect(dest)   // per-contact
+                              &rarr; SAM handshake &rarr; STREAM CONNECT
+                                &rarr; STREAM STATUS OK &rarr; signStreamStatusReceived(OK)
+                                  &rarr; CCore::slotStreamStatusReceived
+                                    &rarr; CProtocol::newConnectionChat(ID)
+                                      &rarr; send "CHATSYSTEM\t0.6\n" over SAM stream
+    &rarr; remote side receives FIRSTPACKET, processes slotInputUnknown
+      &rarr; remote sends back version, client info &rarr; slotInputKnown replies</pre>
+
+    <h4>Incoming (a contact connects to you)</h4>
+    <pre>CI2PStream (ACCEPT mode) receives data
+  &rarr; slotReadFromSocket() &rarr; STREAM STATUS + DESTINATION
+    &rarr; signModeAcceptIncomingStream(ID)
+      &rarr; CConnectionManager::slotModeAcceptIncomingStream()
+        &rarr; stream moved from StreamIncomingListener &rarr; allStreams
+        &rarr; emit signIncomingStream(stream)
+          &rarr; CCore::slotIncomingStream()
+            &rarr; connect stream &rarr; signDataReceived &rarr; mProtocol &rarr; slotInputUnknown
+        &rarr; remaining buffered data sent as signDataReceived
+          &rarr; CProtocol::slotInputUnknown()
+            &rarr; detects "CHATSYSTEM\t" &rarr; parses version
+            &rarr; if ID&lt;0: CProtocol::newConnectionChat(ID)  // send our FIRSTPACKET back
+            &rarr; adds/updates user via UserManager
+            &rarr; setStreamTypeToKnown() &rarr; creates PacketManager
+              &rarr; subsequent data routed through PacketManager &rarr; slotInputKnown</pre>
+
+    <h3>Online State Machine</h3>
+    <pre>                setOnlineStatus(ONLINE/AWAY/...)
+USEROFFLINE &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&rarr; USERTRYTOCONNECT
+  &uarr;                                                              &darr;
+  &nbsp;                                                   session OK &darr;
+  &nbsp;                                                              &darr;
+  &nbsp;                                              USERTRYTOCONNECT &mdash;&mdash;&rarr; mNextOnlineStatus
+  &nbsp;                                                                      &darr;
+  &nbsp;                                                              session &darr;
+  &nbsp;                                                              created &darr;
+  &nbsp;                                                                      &darr;
+  &nbsp;                                                            USERONLINE / USERAWAY /
+  &nbsp;                                                            USERWANTTOCHAT / USERINVISIBLE /
+  &nbsp;                                                            USERDONT_DISTURB
+  &nbsp;                                                                      &darr;
+  &larr;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; setOnlineStatus(OFFLINE) &larr;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#x2514;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#x2190;
+                               stopCore()
+
+Note: stopCore() is only called on explicit offline &mdash; not on SAM disconnect.
+Session loss sets mCurrentOnlineStatus = USEROFFLINE without cleaning up streams.</pre>
+
+    <h3>SAM Protocol Integration</h3>
+    <p>I2PChat communicates with the local I2P router over TCP via the SAM v3 bridge (<code>127.0.0.1:7656</code>). All SAM I/O is managed by <code>SessionController</code> and <code>CI2PStream</code>.</p>
+
+    <h4>SAM v3 Handshake Flow</h4>
+    <pre>I2PChat &rarr; SAM:  HELLO VERSION MIN=3.1 MAX=3.3
+SAM &rarr; I2PChat:  HELLO REPLY RESULT=OK VERSION=3.3
+
+I2PChat &rarr; SAM:  SESSION CREATE ID=i2pchat STYLE=STREAM DESTINATION=TRANSIENT
+                [SIGNATURE_TYPE=EdDSA_SHA512_Ed25519]
+SAM &rarr; I2PChat:  SESSION STATUS RESULT=OK DESTINATION=&lt;base64&gt;</pre>
+
+    <h4>Key Management</h4>
+    <ul>
+      <li><strong>TRANSIENT</strong> destinations — server generates an ephemeral keypair; not persisted. Used when the user enables "Transient identity" in settings.</li>
+      <li><strong>Persistent (base64 private key)</strong> — a previously-generated key is sent back to SAM on reconnect, restoring the same I2P identity. Stored in <code>~/.i2pchat/</code>.</li>
+      <li><strong>Signature types:</strong> <code>EdDSA_SHA512_Ed25519</code> (EdDSA, default for new profiles) and <code>DSA_SHA1</code> (legacy).</li>
+    </ul>
+
+    <h4>Socket Stealing (v3)</h4>
+    <p>After <code>SESSION CREATE</code>, the control socket is still a command channel. When <code>STREAM CONNECT</code> or <code>STREAM ACCEPT</code> executes, SAM marks the handler as stolen and the TCP connection becomes a transparent bidirectional pipe to the I2P peer. From I2PChat's perspective, the <code>QTcpSocket</code> is now a raw stream.</p>
+
+    <h4>Naming Lookup</h4>
+    <pre>I2PChat &rarr; SAM:  NAMING LOOKUP NAME=&lt;b32|hostname&gt;
+SAM &rarr; I2PChat:  NAMING REPLY RESULT=OK NAME=&lt;name&gt; VALUE=&lt;base64&gt;</pre>
+    <p>Used to resolve .b32.i2p addresses and hostnames to full I2P destinations.</p>
+
+    <p>Full SAM v3 protocol reference: <a href=https://i2p.net/en/docs/api/samv3/>https://i2p.net/en/docs/api/samv3/</a></p>
+
+    <h4>Limits</h4>
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>SAM HELLO timeout</td><td>75 s</td></tr>
+      <tr><td>Stream send size</td><td>1–32768 bytes per message</td></tr>
+      <tr><td>Stale session expiry</td><td>10 min</td></tr>
+      <tr><td>Control socket timeout</td><td>60 s (first cmd), 3 min (subsequent)</td></tr>
+    </table>
+
+    <h3>Protocol Packet Format</h3>
+    <pre>Offset  Size  Description
+0       4     Packet length in bytes (hex ASCII), excludes these 4 bytes
+4       4     Tag (ASCII) — identifies command or message type
+8       N     Payload (tag-dependent)</pre>
+
+    <table>
+      <tr><th>Tag</th><th>Meaning</th></tr>
+      <tr><td>0000–0002</td><td>Response: echo of ping, client version, client name</td></tr>
+      <tr><td>0003</td><td>Chat message</td></tr>
+      <tr><td>0004–0008</td><td>Online status updates</td></tr>
+      <tr><td>0009–0010</td><td>Protocol version, max file transfer protocol</td></tr>
+      <tr><td>0011–0014</td><td>User info (nick, gender, age, interests)</td></tr>
+      <tr><td>0015–0016</td><td>Block notifications</td></tr>
+      <tr><td>0017–0018</td><td>Min file transfer protocol, avatar image</td></tr>
+      <tr><td>0019</td><td>Avatar changed notification</td></tr>
+      <tr><td>1000–1008</td><td>Commands: PING, GET_CLIENTVERSION/NAME/USER_ONLINESTATUS etc.</td></tr>
+    </table>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>

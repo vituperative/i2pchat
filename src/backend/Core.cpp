@@ -715,7 +715,7 @@ void CCore::setStreamTypeToKnown(qint32 ID, const QByteArray &Data, bool isFileT
             SLOT(slotDataInput(qint32, QByteArray)));
 
     connect(packetManager,
-            SIGNAL(signAPacketIsCompleate(const qint32, const QByteArray)),
+            SIGNAL(signAPacketIsComplete(const qint32, const QByteArray)),
             mProtocol,
             SLOT(slotInputKnown(const qint32, const QByteArray)));
 
@@ -795,10 +795,10 @@ bool CCore::useThisChatConnection(const QString &Destination, const qint32 ID) {
 
   theUser = mUserManager->getUserByI2P_Destination(Destination);
   if (theUser != NULL) {
-    // check if connection to user allready exist
+    // check if connection to user already exists
     if (theUser->getI2PStreamID() != ID) {
       if (theUser->getConnectionStatus() == ONLINE) {
-        // close the new connection,- we have allready a connection to this user
+        // close the new connection, we already have a connection to this user
         mConnectionManager->doDestroyStreamObjectByID(ID);
         return false;
       }

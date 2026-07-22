@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>Develop — I2PChat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <nav>
+    <a href=index.html>Home</a>
+    <a href=architecture.html>Architecture</a>
+    <a href=develop.html><strong>Develop</strong></a>
+    <a href=faq.html>FAQ</a>
+    <a href=changelog.html>Changelog</a>
+  </nav>
+  <section>
+    <h1>Developer Guide</h1>
+    <p>This page documents the I2PChat wire protocol, connection lifecycle, and key internals for anyone building a compatible client or contributing to the codebase.</p>
+    <hr>
+
+    <h3>Wire Protocol — Packet Format</h3>
+    <p>Every packet on an established I2P stream follows a fixed-length-header format:</p>
+    <pre>Offset  Size  Description
+0       4     Payload length in bytes (hex ASCII), e.g. "0032" = 50 bytes
+              This length excludes these 4 bytes.
+4       4     Tag (ASCII) — identifies the message or command type
+8       N     Payload (tag-dependent format)</pre>
+    <p>Packets are reassembled from the raw I2P stream by <code>PacketManager</code>, which accumulates bytes in a buffer and extracts complete packets when enough data arrives (<code>checkIfOnePacketIsComplete</code>). All I/O beyond the initial handshake uses this framing.</p>
+
+    <h3>Connection Handshake</h3>
+    <p>When a new I2P stream is established (either outbound via <code>STREAM CONNECT</code> or inbound via <code>STREAM ACCEPT</code>), the peer that initiated the connection sends the first application-level message:</p>
+    <pre>CHATSYSTEM\t0.7\tCallerNickname\n</pre>
+    <p>The receiver parses this in <code>CProtocol::slotInputUnknown</code>:</p>
+    <ul>
+      <li>If the line starts with <code>CHATSYSTEM\t</code> — normal chat protocol</li>
+      <li>If the line starts with <code>CHATSYSTEMFILETRANSFER\t</code> — file transfer protocol</li>
+      <li>Otherwise — treated as an HTTP web profile request</li>
+    </ul>
+    <p>After the handshake, all traffic switches to the framed binary packet format (4-byte hex length + 4-byte tag + payload).</p>
+
+    <h3>Protocol Tags</h3>
+    <p>Tags are 4-character ASCII strings. Two namespaces exist:</p>
+
+    <h4>Commands (1000–1008)</h4>
+    <table>
+      <tr><th>Tag</th><th>Enum</th><th>Direction</th><th>Description</th></tr>
+      <tr><td>1000</td><td><code>PING</code></td><td>bidirectional</td><td>Keepalive ping</td></tr>
+      <tr><td>1001</td><td><code>GET_PROTOCOLVERSION</code></td><td>request</td><td>Query peer's protocol version</td></tr>
+      <tr><td>1002</td><td><code>GET_MAX_PROTOCOLVERSION_FILETRANSFER</code></td><td>request</td><td>Query max supported file transfer version</td></tr>
+      <tr><td>1003</td><td><code>GET_MIN_PROTOCOLVERSION_FILETRANSFER</code></td><td>request</td><td>Query min supported file transfer version</td></tr>
+      <tr><td>1004</td><td><code>GET_CLIENTVERSION</code></td><td>request</td><td>Query peer's client version string</td></tr>
+      <tr><td>1005</td><td><code>GET_CLIENTNAME</code></td><td>request</td><td>Query peer's client name</td></tr>
+      <tr><td>1006</td><td><code>GET_USER_ONLINESTATUS</code></td><td>request</td><td>Query peer's online status</td></tr>
+      <tr><td>1007</td><td><code>GET_USER_INFOS</code></td><td>request</td><td>Query peer's profile info</td></tr>
+      <tr><td>1008</td><td><code>GET_AVATARIMAGE</code></td><td>request</td><td>Query peer's avatar image</td></tr>
+    </table>
+
+    <h4>Messages (0000–0022)</h4>
+    <table>
+      <tr><th>Tag</th><th>Enum</th><th>Description</th></tr>
+      <tr><td>0000</td><td><code>ECHO_OF_PING</code></td><td>Ping reply</td></tr>
+      <tr><td>0001</td><td><code>ANSWER_OF_GET_PROTOCOLVERSION</code></td><td>Reply: protocol version string</td></tr>
+      <tr><td>0002</td><td><code>ANSWER_OF_GET_CLIENTVERSION</code></td><td>Reply: client version string</td></tr>
+      <tr><td>0003</td><td><code>CHATMESSAGE</code></td><td>UTF-8 chat message payload</td></tr>
+      <tr><td>0004</td><td><code>ANSWER_OF_GET_CLIENTNAME</code></td><td>Reply: client name</td></tr>
+      <tr><td>0005</td><td><code>USER_ONLINESTATUS_ONLINE</code></td><td>Status update: online</td></tr>
+      <tr><td>0006</td><td><code>USER_ONLINESTATUS_OFFLINE</code></td><td>Status update: offline</td></tr>
+      <tr><td>0007</td><td><code>USER_ONLINESTATUS_AWAY</code></td><td>Status update: away</td></tr>
+      <tr><td>0008</td><td><code>USER_ONLINESTATUS_INVISIBLE</code></td><td>Status update: invisible</td></tr>
+      <tr><td>0009</td><td><code>ANSWER_OF_GET_MAX_PROTOCOLVERSION_FILETRANSFER</code></td><td>Reply: max file transfer protocol version</td></tr>
+      <tr><td>0010</td><td><code>ANSWER_OF_GET_MIN_PROTOCOLVERSION_FILETRANSFER</code></td><td>Reply: min file transfer protocol version</td></tr>
+      <tr><td>0011</td><td><code>USER_INFO_NICKNAME</code></td><td>Profile: nickname</td></tr>
+      <tr><td>0012</td><td><code>USER_INFO_GENDER</code></td><td>Profile: gender</td></tr>
+      <tr><td>0013</td><td><code>USER_INFO_AGE</code></td><td>Profile: age</td></tr>
+      <tr><td>0014</td><td><code>USER_INFO_INTERESTS</code></td><td>Profile: interests</td></tr>
+      <tr><td>0015</td><td><code>USER_BLOCK_INVISIBLE</code></td><td>Blocked (invisible to peer)</td></tr>
+      <tr><td>0016</td><td><code>USER_BLOCK_NORMAL</code></td><td>Blocked (visible but blocked)</td></tr>
+      <tr><td>0017</td><td><code>ANSWER_OF_GET_AVATARIMAGE_IMAGE</code></td><td>Reply: avatar image data</td></tr>
+      <tr><td>0018</td><td><code>AVATARIMAGE_CHANGED</code></td><td>Notification: avatar changed</td></tr>
+      <tr><td>0019</td><td><code>FILE_OFFER</code></td><td>File transfer offer</td></tr>
+      <tr><td>0020</td><td><code>FILE_OFFER_ACCEPTED</code></td><td>File transfer offer accepted</td></tr>
+      <tr><td>0021</td><td><code>FILE_OFFER_REJECTED</code></td><td>File transfer offer rejected</td></tr>
+      <tr><td>0022</td><td><code>USER_ONLINESTATUS_WANTTOCHAT</code></td><td>Status update: want to chat</td></tr>
+      <tr><td>0023</td><td><code>USER_ONLINESTATUS_DONT_DISTURB</code></td><td>Status update: do not disturb</td></tr>
+    </table>
+    <p>Tags are dispatched in <code>CProtocol::slotInputKnown</code> by comparing the 4-char tag string.</p>
+
+    <h3>Payload Formats</h3>
+    <p><strong>CHATMESSAGE (0003):</strong> Payload is UTF-8 encoded chat text. No additional framing or metadata — the tag alone identifies it as a chat message.</p>
+    <p><strong>Profile fields (0011–0014):</strong> Payload is a UTF-8 string containing the field value (nickname, gender, age string, interests text).</p>
+    <p><strong>Status updates (0005–0008, 0022, 0023):</strong> Payload is empty — the tag itself encodes the status. The receiver sets the peer's online status based solely on which tag arrived.</p>
+    <p><strong>Block notifications (0015, 0016):</strong> Payload is empty. Tag 0015 means the peer has blocked you invisibly; 0016 means you're blocked but visible.</p>
+    <p><strong>Avatar (0017, 0018):</strong> Tag 0017 payload is the full image byte data. Tag 0018 is a notification with no payload — the receiver should fetch the new avatar with <code>GET_AVATARIMAGE</code>.</p>
+    <p><strong>File transfer (0019–0021):</strong> Payload is a JSON or structured string identifying the file offer, acceptance, or rejection (handled by <code>CFileTransferManager</code>).</p>
+    <p><strong>Command replies (0001, 0002, 0004, 0009, 0010):</strong> Payload is a UTF-8 string containing the requested value (version number, client name, etc.).</p>
+
+    <h3>File Transfer Protocol</h3>
+    <p>File transfers use a separate I2P stream (not the primary chat stream). The flow:</p>
+    <ol>
+      <li>Sender offers a file via tag <code>0019 (FILE_OFFER)</code> on the chat stream</li>
+      <li>Receiver accepts (0020) or rejects (0021) on the chat stream</li>
+      <li>If accepted, the sender opens a new I2P stream to the receiver</li>
+      <li>The new stream starts with the handshake: <code>CHATSYSTEMFILETRANSFER\t0.3\n&lt;size_in_bytes&gt;\n&lt;filename&gt;</code></li>
+      <li>File data follows as raw stream bytes (no packet framing)</li>
+    </ol>
+    <p>File transfer protocol version is independently negotiated (currently 0.3). Both peers must agree on a common version range before transfer begins.</p>
+
+    <h3>Connection Lifecycle</h3>
+    <h4>Outbound (you initiate)</h4>
+    <pre>User selects "Online"
+  → SAM session created (HELLO + SESSION CREATE)
+  → For each known contact: CI2PStream::doConnect(dest)
+    → STREAM CONNECT (SAM steals the socket)
+    → Send CHATSYSTEM\t0.7\tNickname\n
+    → Receiver parses handshake, sends back profile info
+    → PacketManager framing takes over</pre>
+
+    <h4>Inbound (contact initiates)</h4>
+    <pre>CI2PStream in accept mode receives data
+  → STREAM STATUS (SAM notification of inbound stream)
+  → Read first line → parse CHATSYSTEM header
+  → If unknown contact: authorization request dialog
+  → If known: accept, reply with profile, enter framed mode</pre>
+
+    <h4>Offline / Reconnect</h4>
+    <p>When the SAM connection drops, <code>SessionController</code> auto-reconnects after a 20-second delay. All streams are recreated. Unsent messages stored in <code>UnsetMessages.dat</code> are delivered on reconnection. The protocol state for each user (protocol version, capabilities) is re-queried.</p>
+    <p>Explicit <code>setOnlineStatus(OFFLINE)</code> calls <code>stopCore()</code> and tears down the SAM session cleanly. SAM disconnect without explicit offline keeps the user list intact — streams are recreated on reconnection.</p>
+
+    <h3>Online State Machine</h3>
+    <p>Each <code>CUser</code> tracks its peer's online status. I2PChat sends unsolicited status updates whenever the local user changes status, and responds to <code>GET_USER_ONLINESTATUS</code> (1006) queries. The peer's status is stored as an enum and displayed via the roster UI.</p>
+    <p>States: <code>OFFLINE</code>, <code>ONLINE</code>, <code>AWAY</code>, <code>INVISIBLE</code>, <code>WANTTOCHAT</code>, <code>DONT_DISTURB</code>. Each has a dedicated tag (0005–0008, 0022, 0023).</p>
+
+    <h3>Building a Compatible Client</h3>
+    <p>To implement a client interoperable with I2PChat:</p>
+    <ol>
+      <li>Open a SAM v3 STREAM session (<code>HELLO VERSION MIN=3.1 MAX=3.3</code> + <code>SESSION CREATE ID=... STYLE=STREAM DESTINATION=TRANSIENT</code>)</li>
+      <li>Resolve contact destinations via <code>NAMING LOOKUP NAME=&lt;b32&gt;</code></li>
+      <li>For each outbound connection: <code>STREAM CONNECT ID=... DESTINATION=&lt;b64&gt;</code> (socket stealing)</li>
+      <li>Send the handshake: <code>CHATSYSTEM\t0.7\tYourNickname\n</code></li>
+      <li>Parse incoming handshake to get the peer's name and protocol version</li>
+      <li>Send frames using the 4-byte hex length + 4-byte tag + payload format</li>
+      <li>Respond to commands (1000–1008) promptly — especially PING (1000) → ECHO (0000)</li>
+      <li>Send status updates as unsolicited messages (tags 0005–0008)</li>
+      <li>For avatar support, fetch via <code>GET_AVATARIMAGE</code> (1008) — reply comes as <code>ANSWER_OF_GET_AVATARIMAGE_IMAGE</code> (0017) with raw image bytes</li>
+    </ol>
+    <p>The SAM socket-stealing model means each I2P stream occupies its own TCP connection to SAM. After <code>STREAM CONNECT</code> or <code>STREAM ACCEPT</code>, the TCP socket becomes a raw byte pipe to the I2P peer — your framed packets flow directly.</p>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>

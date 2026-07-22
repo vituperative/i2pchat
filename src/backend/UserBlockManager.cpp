@@ -78,14 +78,14 @@ void CUserBlockManager::addNewBlockEntity(const QString &NickName,
   User = mCore.getUserManager()->getUserByI2P_Destination(Destination);
 
   if (mUserBlockMap.contains(Destination) == true) {
-    // do nothing allready blocked ?
+    // do nothing, already blocked?
     qDebug() << "File\t" << __FILE__ << Qt::endl
              << "Line:\t" << __LINE__ << Qt::endl
              << "Function:\t"
              << "cUserBlockManager::addNewBlockEntity" << Qt::endl
              << "Message:\t"
              << "Destination: " << Destination << Qt::endl
-             << "is allready in the Blocklist" << Qt::endl
+             << "is already in the Blocklist" << Qt::endl
              << "Action Aborted" << Qt::endl;
   } else {
     if (BlockDate.isEmpty()) {

@@ -6,7 +6,7 @@
 * Transient (non-persistent) destination option
 * Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
 * Auto-away with settings toggle
-* Chat: header icons, removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
+* Chat: 🤖⏳ header icons, ⏳ removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
 * ECIES/ED25519 defaults; ECIES (Ratchet) for new profiles; DSA_SHA1 removed
 * Optional profile web page at .b32 address
 * Auth dialog: Block button, immediate nickname apply
@@ -48,3 +48,9 @@
 ## January, 2017
 
 * Original I2P-Messenger-QT repository merged
+
+* Simplify message processing and enable emoticon handling
+* Enhance emoticon detection with punctuation boundary support
+* Improve file transfer performance with buffering and larger packets
+* Enable automatic URL linking in chat messages
+* Remove blocking QMessageBox from SAM disconnection handler

@@ -30,9 +30,9 @@ form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
 }
 
 static void ElideLabel(QLabel *label, const QString &text) {
-  QFontMetrics metrix(label->font());
+  QFontMetrics metrics(label->font());
   int width = label->width() - 6;
-  QString clippedText = metrix.elidedText(text, Qt::ElideMiddle, width);
+  QString clippedText = metrics.elidedText(text, Qt::ElideMiddle, width);
   label->setText(clippedText);
 }
 

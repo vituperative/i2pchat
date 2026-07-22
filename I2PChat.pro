@@ -9,7 +9,6 @@ QT += widgets multimedia core svg
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++17
-QMAKE_LFLAGS   += -std=c++17
 QMAKE_CXXFLAGS += -Wall
 # QMAKE_POST_LINK=$(STRIP) $(TARGET) // doesn't work with appveyor
 
@@ -106,11 +105,16 @@ FORMS += \
 
 RESOURCES += src/gui/resourcen.qrc
 
-# Windows static build
-win32 {
-	# QMAKE_CXXFLAGS *= -Wno-deprecated-copy -Wno-class-memaccess // appveyor errors out
+# MinGW static build
+mingw {
 	QMAKE_LFLAGS   *= -Wl,-Bstatic -static-libgcc -static-libstdc++
 	LIBS           *= -lstdc++ -lpthread
+}
+
+# Remove AGL framework (deprecated, removed in recent macOS SDKs)
+macx {
+	LIBS -= -framework AGL
+	QMAKE_LFLAGS -= -framework AGL
 }
 
 #unix {}

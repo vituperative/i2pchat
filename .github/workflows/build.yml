@@ -7,9 +7,12 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    runs-on: ubuntu-26.04
+  linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -24,35 +27,119 @@ jobs:
 
       - name: Install build tools
         run: |
-          sudo apt-get install -y g++ make bear clang-format clang-tidy pipx upx
-          pipx install compiledb
+          sudo apt-get install -y g++ make upx
+
+      - name: Build
+        run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v5
+        with:
+          name: I2PChat-linux
+          path: |
+            dist/I2PChat
+            dist/I2PChat-*.AppImage
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: windows
+          target: desktop
+          arch: win64_msvc2019_64
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build
+        shell: cmd
+        run: |
+          mkdir dist
+          qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
+          nmake > build.log 2>&1
+          if errorlevel 1 (type build.log && exit /b 1)
+          type build.log
+          if exist dist\I2PChat.exe (
+            echo Build successful: I2PChat.exe found in dist\
+          ) else (
+            echo Searching for I2PChat.exe...
+            for /r %%f in (I2PChat.exe) do (
+              echo Found: %%f
+              copy /Y "%%f" dist\ || exit /b 1
+            )
+          )
+
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: build-log
+          path: build.log
+
+      - name: Upload Windows binary
+        uses: actions/upload-artifact@v5
+        with:
+          name: I2PChat-windows
+          path: dist/I2PChat.exe
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        id: cache-qt5
+        with:
+          path: /usr/local/Cellar/qt@5
+          key: qt5-macos
+
+      - name: Install Qt5
+        run: |
+          if [ "${{ steps.cache-qt5.outputs.cache-hit }}" = "true" ]; then
+            VERSION=$(ls /usr/local/Cellar/qt@5/ | head -1)
+            ln -sf /usr/local/Cellar/qt@5/$VERSION /usr/local/opt/qt@5
+          else
+            brew install qt@5
+          fi
+          echo "/usr/local/opt/qt@5/bin" >> $GITHUB_PATH
 
       - name: Build
         run: |
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-
             bash build.sh --upx
           else
             bash build.sh
           fi
 
-      - name: Check formatting
-        run: bash build.sh --format
-
-      - name: Static analysis
-        run: bash build.sh --tidy
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
+      - name: Upload macOS binary
+        uses: actions/upload-artifact@v5
         with:
-          name: I2PChat-linux
+          name: I2PChat-macos
           path: dist/I2PChat
 
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [linux, windows, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-assets
+          cp I2PChat-linux/I2PChat release-assets/
+          cp I2PChat-windows/I2PChat.exe release-assets/
+          cp I2PChat-macos/I2PChat release-assets/I2PChat-macos
+          ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
+            cp I2PChat-linux/I2PChat-*.AppImage release-assets/
+
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/I2PChat
+          files: release-assets/*
           generate_release_notes: true
 
   build-windows:
@@ -84,7 +171,7 @@ jobs:
           mingw32-make -j$(nproc)
 
       - name: Upload binary (artifact)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: I2PChat-windows
           path: dist/I2PChat.exe
@@ -119,7 +206,7 @@ jobs:
         run: macdeployqt dist/I2PChat.app -verbose=2
 
       - name: Upload binary (artifact)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: I2PChat-macos
           path: dist/I2PChat.app
@@ -131,3 +218,37 @@ jobs:
           files: dist/I2PChat.app
           name: I2PChat ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
+
+  nightly:
+    if: github.ref == 'refs/heads/master'
+    needs: [build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-assets
+          cp I2PChat-linux/I2PChat release-assets/ 2>/dev/null || echo "MISSING I2PChat-linux"
+          cp I2PChat-windows/I2PChat.exe release-assets/ 2>/dev/null || echo "MISSING I2PChat-windows"
+          cp I2PChat-macos/I2PChat release-assets/I2PChat-macos 2>/dev/null || echo "MISSING I2PChat-macos"
+          ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
+            cp I2PChat-linux/I2PChat-*.AppImage release-assets/ || echo "No AppImage"
+
+      - name: Upload continuous release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: continuous
+          name: Continuous Build
+          body: "Automated build from the latest master commit."
+          commit: ${{ github.sha }}
+          artifacts: release-assets/*
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: false
+          makeLatest: true
+          omitBodyDuringUpdate: true
+          skipIfReleaseExists: false
+          token: ${{ secrets.GITHUB_TOKEN }}

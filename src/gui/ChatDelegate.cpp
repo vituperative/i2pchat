@@ -463,10 +463,18 @@ bool ChatDelegate::editorEvent(QEvent *event,
     if (mColors.radius > 0) {
       int bw = qMin(option.rect.width() * 3 / 4, 320);
       int bx = option.rect.x() + (option.rect.width() - bw) / 2;
-      bubbleRect = QRect(bx, option.rect.y() + 4, bw, option.rect.height() - 8);
-      docOrigin = bubbleRect.topLeft() + QPoint(4, 2);
-      doc->setTextWidth(bubbleRect.width() - 8);
+      bubbleRect = QRect(bx, option.rect.y() + mColors.padV, bw, option.rect.height() - mColors.padV * 2);
+      bool hasCancel = !index.data(CancelUrlRole).toString().isEmpty();
+      int rightPad = mColors.padH;
+      if (hasCancel)
+        rightPad += kCancelIconSize + kCancelIconMargin;
+      QRect textRect = bubbleRect.adjusted(mColors.padH, mColors.padVInner, -rightPad, -mColors.padVInner);
+      docOrigin = textRect.topLeft();
+      doc->setTextWidth(textRect.width());
     } else {
+      int bw = qMin(option.rect.width() * 3 / 4, 320);
+      int bx = option.rect.x() + (option.rect.width() - bw) / 2;
+      bubbleRect = QRect(bx, option.rect.y() + mColors.padV, bw, option.rect.height() - mColors.padV * 2);
       int availW = option.rect.width() - 8;
       doc->setTextWidth(availW);
       QSizeF ds = doc->documentLayout()->documentSize();

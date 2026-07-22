@@ -983,7 +983,25 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
               if (!OK)
                 versiond = 0.0;
 
-              // Add the user
+              // Remove first packet
+              QByteArray Data2 = data;
+              Data2 = Data2.remove(0, data.indexOf("\n") + 1);
+
+              // Check for existing user first (covers edge cases where the
+              // userlist guard in handleChatProtocolPacket didn't fire)
+              CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
+              if (User) {
+                User->setI2PStreamID(streamID);
+                User->setProtocolVersion(version);
+                User->setConnectionStatus(ONLINE);
+                Core->setStreamTypeToKnown(streamID, Data2, false);
+                if (!callerNickname.isEmpty())
+                  User->setReceivedUserInfos(NICKNAME, callerNickname);
+                else if (versiond >= 0.3)
+                  User->setReceivedNicknameToUserNickname();
+                return;
+              }
+
               QString userName = callerNickname.isEmpty() ? "Unknown" : callerNickname;
               bool added = Core->getUserManager()->addNewUser(userName, destination, streamID, true, true);
 
@@ -997,20 +1015,16 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
               emit Core->getConnectionManager()->signDebugMessages(QDateTime::currentDateTime().toString("hh:mm:ss") +
                                                                    " • AddNewUser OK — stream " +
                                                                    QString::number(streamID) + " authorized");
-              CUser *User = Core->getUserManager()->getUserByI2P_Destination(destination);
-              if (User) {
-                User->setI2PStreamID(streamID);
-                User->setProtocolVersion(version);
-                User->setConnectionStatus(ONLINE);
-                // Remove first packet
-                QByteArray Data2 = data;
-                Data2 = Data2.remove(0, data.indexOf("\n") + 1);
+              CUser *NewUser = Core->getUserManager()->getUserByI2P_Destination(destination);
+              if (NewUser) {
+                NewUser->setI2PStreamID(streamID);
+                NewUser->setProtocolVersion(version);
+                NewUser->setConnectionStatus(ONLINE);
                 Core->setStreamTypeToKnown(streamID, Data2, false);
-                if (!callerNickname.isEmpty()) {
-                  User->setReceivedUserInfos(NICKNAME, callerNickname);
-                } else if (versiond >= 0.3) {
-                  User->setReceivedNicknameToUserNickname();
-                }
+                if (!callerNickname.isEmpty())
+                  NewUser->setReceivedUserInfos(NICKNAME, callerNickname);
+                else if (versiond >= 0.3)
+                  NewUser->setReceivedNicknameToUserNickname();
               }
             } else if (clicked == btnBlock) {
               Core->getUserBlockManager()->addNewBlockEntity(displayName, destination);

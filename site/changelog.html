@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>Changelog — I2PChat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <nav>
+    <a href=index.html>Home</a>
+    <a href=architecture.html>Architecture</a>
+    <a href=develop.html>Develop</a>
+    <a href=faq.html>FAQ</a>
+    <a href=changelog.html><strong>Changelog</strong></a>
+  </nav>
+  <section>
+    <h1 id=changelog>Changelog</h1>
+
+    <h3>July, 2026</h3>
+    <ul>
+      <li>Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
+      <li>Transient (non-persistent) destination option
+      <li>Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
+      <li>Auto-away with settings toggle
+      <li>Chat: header icons, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
+      <li>ECIES/ED25519 defaults; ECIES (Ratchet) for new profiles; DSA_SHA1 removed
+      <li>Optional profile web page at .b32 address
+      <li>Auth dialog: Block button, immediate nickname apply
+      <li>Debug Messages: monospace 8pt, single-div HTML layout
+      <li>Minimal theme as sole default; log display improvements (newline trim, 9pt)
+      <li>Sound defaults aligned with real files; pending→send notification suppressed
+    </ul>
+
+    <h3>January, 2026</h3>
+    <ul>
+      <li>Add proper online status management during SAM connection loss/recovery
+      <li>Add auto-reconnect for SAM session and fix contact list icons
+      <li>Fix emoticon display and avatar in user list
+      <li>Fix settings persistence and avatar display
+      <li>Fix config persistence, nickname display, contact sorting, and network connection
+    </ul>
+
+    <h3>December, 2025</h3>
+    <ul>
+      <li>Enable user list sorting functionality
+      <li>Add Move to Top/Bottom user positioning options
+      <li>Implement per-user auto-download configuration
+      <li>Enable Copy B32 Address functionality with intelligent handling
+    </ul>
+
+    <h3>November, 2025</h3>
+    <ul>
+      <li>Simplify message processing and enable emoticon handling
+      <li>Enhance emoticon detection with punctuation boundary support
+      <li>Improve file transfer performance with buffering and larger packets
+      <li>Enable automatic URL linking in chat messages
+      <li>Remove blocking QMessageBox from SAM disconnection handler
+    </ul>
+
+    <h3>June, 2020</h3>
+    <ul>
+      <li>Fix crash on close chat window, URL links, and offline messages
+      <li>Add $HOME/.i2pchat/ directory support
+      <li>Add .deb package for Debian/Ubuntu
+      <li>Add 32-bit Windows build
+      <li>UI renovation and backend overhaul
+    </ul>
+
+    <h3>January, 2017</h3>
+    <ul>
+      <li>Original I2P-Messenger-QT repository merged
+    </ul>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>

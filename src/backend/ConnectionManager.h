@@ -68,7 +68,7 @@ private:
   qint32 nextFreePosID() const;
   qint32 nextFreeNegID() const;
   QString generateBridgeName() const;
-  void stopp();
+  void stop();
 
   QMap<qint32, CI2PStream *> StreamIncomingListener; // listeners waiting for incoming streams (ACCEPT mode)
   CSessionController *StreamController;
@@ -80,7 +80,7 @@ private:
   const QString mSamPort;
   const QString mConfigPath;
 
-  inline bool SessionStreamStatusOKCheck() { return mSessionStreamStatusOK; }
+  inline bool SessionStreamStatusOKCheck() const { return mSessionStreamStatusOK; }
   QMap<qint32, CI2PStream *> allStreams; // all active streams (both CONNECT and ACCEPT), keyed by stream ID
 };
 #endif

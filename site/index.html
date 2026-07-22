@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>I2PChat | Secure P2P Instant Messenger</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <nav>
+    <a href=index.html><strong>Home</strong></a>
+    <a href=architecture.html>Architecture</a>
+    <a href=develop.html>Develop</a>
+    <a href=faq.html>FAQ</a>
+    <a href=changelog.html>Changelog</a>
+  </nav>
+  <section>
+    <p>End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for anonymous, serverless communication with full file transfer support.</p>
+    <hr>
+    <h3 id=screenshots>Screenshots</h3>
+    <p id=screenshots><img src=screenshots/main.png alt=screenshot-roster> <img src=screenshots/chat.png alt=screenshot-chat>
+    <hr>
+    <h3 id=downloads>Downloads</h3>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat/actions/workflows/build.yml>Latest CI build (Linux)</a>
+    </ul>
+    <hr>
+    <h3 id=features>Features</h3>
+    <ul>
+      <li>Peer-to-peer messaging over I2P — no central server, E2E encrypted via garlic routing
+      <li>Transient (session-only) identity — no keys persisted to disk
+      <li>Offline message queue — compose while offline, delivered automatically on reconnect
+      <li>File transfer with per-user auto-download policy
+      <li>Optional b32.i2p web profile page with avatar, bio, and interests
+      <li>Configurable tunnel length, quantity, and backup; ECIES (Ratchet) and EdDSA
+      <li>Emoticon support with punctuation-boundary detection
+    </ul>
+    <hr>
+    <h3 id=build-instructions>Build instructions</h3>
+    <p>The project includes a <code>build.sh</code> wrapper script that handles compilation, optional AppImage packaging, Windows cross-compilation via MXE, clang-format, clang-tidy, and version bumping.
+    <p><strong>Prerequisites</strong>
+    <details>
+      <summary>Linux distribution package commands</summary>
+      <ul>
+        <li>Debian / Ubuntu:<br>
+          <code>sudo apt-get install build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev pkg-config</code>
+        <li>Fedora / RHEL:<br>
+          <code>sudo dnf install gcc-c++ qt5-qtbase-devel qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtxml-devel make pkgconfig</code>
+        <li>Arch Linux:<br>
+          <code>sudo pacman -S base-devel qt5-base qt5-multimedia qt5-svg qt5-xml pkgconf</code>
+      </ul>
+    </details>
+    <ul>
+      <li>AppImage (<code>--appimage</code>): needs <code>wget</code> plus the native prerequisites above.
+      <li>Windows cross-compile (<code>--windows</code>): needs <code>git gperf libtool</code> plus the native prerequisites. MXE is cloned and built automatically on first run.
+      <li>UPX compression (<code>--upx</code>): needs <code>upx</code>.
+      <li>Format (<code>--format</code>): needs <code>clang-format</code>.
+      <li>Tidy (<code>--tidy</code>): needs <code>clang-tidy bear compiledb</code>.
+    </ul>
+    <p><strong>Usage</strong>
+    <div>
+      <div class=highlight>
+        <pre class=highlight><code>bash build.sh [OPTIONS]
+
+Options:
+  --clean       Clean previous build artifacts before building
+  --format      Run clang-format (auto-fix sources)
+  --tidy        Run clang-tidy with --fix (check and auto-fix issues)
+  --appimage    Build portable AppImage (Linux only)
+  --windows     Cross-compile Windows .exe via MinGW-w64
+  --upx         Compress binary with UPX (reduces size, all platforms)
+  --bump        Bump patch version, update Core.h and create git tag
+  -j N          Use N parallel jobs (default: all cores)
+  -h, --help    Show this help</code></pre>
+      </div>
+    </div>
+    <p><strong>Manual compilation</strong> (without <code>build.sh</code>):
+    <ul>
+      <li><code>qmake I2PChat.pro "CONFIG += release"</code>
+      <li><code>make -j$(nproc)</code>
+    </ul>
+    <hr>
+    <h3 id=running>Running</h3>
+    <p>On Linux, <code>bash build.sh</code> creates a stripped binary at <code>dist/I2PChat</code>. Run it with <code>./dist/I2PChat</code>.
+    <ul>
+      <li>Enable the SAM application bridge in your router: Java <a href=https://i2pplus.github.io>I2P+</a> / <a href=https://i2p.net>I2P</a> via <a href=http://127.0.0.1:7657/configclients>Client Configuration</a>, or <a href=https://i2pd.website/>i2pd</a> via i2pd.conf's [SAM] section.
+      <li>Select <strong>Online</strong> from the dropdown menu. Your unique I2P destination is created automatically on first SAM connection.
+      <li>Settings and contacts are stored in <code>~/.i2pchat/</code> (Linux) or <code>%APPDATA%\Roaming\I2PChat\</code> (Windows).
+    </ul>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>

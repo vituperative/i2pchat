@@ -14,8 +14,10 @@
 #include <QtDebug>
 #include <QtGui>
 
+#ifndef _WIN32
 #include <getopt.h>
 #include <unistd.h>
+#endif
 
 QString debugLogDir;
 
@@ -73,6 +75,7 @@ int main(int argc, char *argv[]) {
   configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + NameOfConfigDirectoryOnLinux;
 #endif
 
+#ifndef _WIN32
   { // getopt_long + getopt (short)
 
     int ret;
@@ -107,6 +110,7 @@ int main(int argc, char *argv[]) {
       };
     };
   }
+#endif
 
   {
     QDir configdir(configPath);
@@ -188,7 +192,7 @@ int main(int argc, char *argv[]) {
     auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
     auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
     settings.endGroup();
-    qDebug() << "Curent style: " << CurrentStyle;
+    qDebug() << "Current style: " << CurrentStyle;
     mainForm->setStyle(QStyleFactory::create(CurrentStyle));
     if (CustomStyleSheet.size() > 1)
       styleSheetFile.setFileName(CustomStyleSheet);

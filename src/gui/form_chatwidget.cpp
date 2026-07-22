@@ -253,11 +253,11 @@ static QString aboutIconHtml() {
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     QSvgRenderer(QStringLiteral(":/icons/about.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QPixmap small = QPixmap::fromImage(img).scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage scaledImg = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
-    small.save(&buf, "PNG");
+    scaledImg.save(&buf, "PNG");
     return QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
                           "class=\"msg-icon system-icon\"> ")
       .arg(QString::fromLatin1(bytes.toBase64()));
@@ -306,11 +306,11 @@ QString form_ChatWidget::transferIconHtml(bool isSend) {
     QSvgRenderer(QString(isSend ? ":/icons/upload.svg" : ":/icons/download.svg"))
       .render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QImage small = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage smallImg = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
-    QPixmap::fromImage(small).save(&buf, "PNG");
+    QPixmap::fromImage(smallImg).save(&buf, "PNG");
     cached[idx] = QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
                                  "class=\"msg-icon transfer-icon\"> ")
                     .arg(QString::fromLatin1(bytes.toBase64()));
@@ -398,7 +398,7 @@ static QColor parseCSSColor(const QString &raw) {
     if (ok)
       return QColor(qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
   }
-  return QColor(s); // hex/named (returns invalid if unparseable)
+  return QColor(s); // hex/named (returns invalid if unparsable)
 }
 
 static BubbleGradient parseGradient(const QString &val) {
@@ -1278,7 +1278,7 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
   if (link.scheme() == "http" || link.scheme() == "https")
     QDesktopServices::openUrl(link);
   else if (link.scheme() == "") {
-    // it's probably a web adress, let's add http:// at the beginning of the
+    // it's probably a web address, let's add http:// at the beginning of the
     // link
     QString newAddress = link.toString();
     newAddress.prepend("http://");
