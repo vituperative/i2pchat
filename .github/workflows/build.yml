@@ -50,14 +50,23 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build
+      - name: Build (via MSBuild)
         shell: cmd
         run: |
           mkdir dist
-          qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\" "CONFIG -= batch"
-          nmake > build.log 2>&1
+          qmake -tp vc I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\"
+          if not exist I2PChat.vcxproj (
+            echo qmake -tp vc FAILED, falling back to nmake
+            qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\" "CONFIG -= batch"
+            nmake > build.log 2>&1
+            set ERR=%ERRORLEVEL%
+            findstr /N /I /C:"error C" build.log
+            exit /b %ERR%
+          )
+          msbuild I2PChat.vcxproj /p:Configuration=Release /t:Build /v:minimal /fl /flp:logfile=build.log
           set ERR=%ERRORLEVEL%
-          findstr /N /I /C:"error C" build.log
+          findstr /N /I /C:"error C" build.log 2>nul
+          exit /b %ERR%
           if "%ERR%"=="0" if not exist dist\I2PChat.exe (
             for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
           )
