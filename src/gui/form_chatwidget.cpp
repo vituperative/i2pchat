@@ -253,8 +253,8 @@ static QString aboutIconHtml() {
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     QSvgRenderer(QStringLiteral(":/icons/about.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QPixmap iconPix = QPixmap::fromImage(img);
-    QPixmap small = iconPix.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage scaledImg = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap small = QPixmap::fromImage(scaledImg);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
