@@ -54,7 +54,7 @@ jobs:
         shell: cmd
         run: |
           mkdir dist
-          qmake I2PChat.pro "CONFIG += release"
+          qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\"
           echo === Testing compiler ===
           cl -nologo -? >nul 2>&1 && echo cl.exe works || echo cl.exe FAILED
           echo === Done ===
