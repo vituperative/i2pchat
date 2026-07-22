@@ -152,7 +152,8 @@ img {
 }
 code {
   font-family: Consolas, Monaco, Lucida Console, monospace;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: #333;
 }
 pre {
@@ -160,14 +161,16 @@ pre {
   background: #282a2e;
   color: #e4e4e9;
   font-family: Consolas, Monaco, Lucida Console, monospace;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   overflow-x: auto;
   border-radius: 5px;
   margin: 0 0 20px;
 }
 pre code {
   color: #e4e4e9;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
 }
 li pre {
   margin-left: -40px;
