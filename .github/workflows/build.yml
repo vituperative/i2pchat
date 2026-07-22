@@ -53,18 +53,10 @@ jobs:
       - name: Build
         shell: cmd
         run: |
-          mkdir dist
-          qmake -tp vc I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\"
-          if not exist I2PChat.vcxproj (
-            qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\" "CONFIG -= batch"
-            nmake 2>&1
-            set ERR=%ERRORLEVEL%
-            exit /b %ERR%
-          )
-          msbuild I2PChat.vcxproj /p:Configuration=Release /t:Build /v:minimal /fl /flp:logfile=build.log
-          set ERR=%ERRORLEVEL%
-          type build.log
-          exit /b %ERR%
+          qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\"
+          echo === Compile first file directly with exact flags ===
+          cl -c -nologo -EHsc -I. -Isrc\gui -Isrc\backend -I..\Qt\5.15.2\msvc2019_64\include -I..\Qt\5.15.2\msvc2019_64\include\QtCore -DQT_CORE_LIB -DNDEBUG -DUNICODE -DWIN32 -DWIN64 -DGIT_VERSION=\"debug\" src\backend\Main.cpp 2>&1
+          echo === First file result: %ERRORLEVEL% ===
           if "%ERR%"=="0" if not exist dist\I2PChat.exe (
             for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
           )
