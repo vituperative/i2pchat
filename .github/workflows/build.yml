@@ -83,6 +83,16 @@ jobs:
           target: desktop
           arch: clang_64
 
+      - name: Patch Qt prl files (remove deprecated AGL framework)
+        run: |
+          find "${Qt5_DIR}/lib" -name '*.prl' -exec sed -i '' 's/ -framework AGL//g' {} +
+          find "${Qt5_DIR}/lib" -name '*.prl' | while read f; do
+            if grep -q 'framework AGL' "$f"; then
+              echo "FAILED to remove AGL from: $f"
+              grep 'framework AGL' "$f"
+            fi
+          done
+
       - name: Build
         run: |
           qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
