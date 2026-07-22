@@ -28,8 +28,8 @@
   </emoticon>
 
   <emoticon file="glasses-cool">
-    <strong>*COOL*</string>
-    <strong>*SHADES*</string>
+    <string>*COOL*</string>
+    <string>*SHADES*</string>
   </emoticon>
 
   <emoticon file="glasses">

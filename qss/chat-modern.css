@@ -1,7 +1,0 @@
-/* Chat style: Modern (Telegram-like)
-   Reference only — applied as inline styles by the application.
-   Qt's QTextDocument does NOT support border-radius on divs,
-   so bubbles render as colored rectangles with padding + margin.
-   Sent: right-aligned white text on lavender (#8774e1)
-   Received: left-aligned dark text on light blue (#e8f0fe)
-   System: centered, muted */
