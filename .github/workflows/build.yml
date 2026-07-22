@@ -54,10 +54,12 @@ jobs:
         shell: cmd
         run: |
           mkdir dist
-          qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\"
-          echo === Compile one file manually ===
-          cl -c -nologo -EHsc -I. -Isrc\gui -Isrc\backend -I..\Qt\5.15.2\msvc2019_64\include -I..\Qt\5.15.2\msvc2019_64\include\QtCore -DQT_CORE_LIB -DNDEBUG -DUNICODE -DWIN32 -DWIN64 src\backend\Main.cpp
-          echo === Manual compile exit: %ERRORLEVEL% ===
+          qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\" "CONFIG -= batch"
+          echo === List source files ===
+          dir /s /b src\*.cpp
+          echo === Check response file dir ===
+          dir /b "%TMP%\nm*.tmp" 2>nul
+          echo === Done ===
           nmake > build.log 2>&1
           set ERR=%ERRORLEVEL%
           echo === Full build log ===
