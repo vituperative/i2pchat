@@ -54,9 +54,11 @@ jobs:
         shell: cmd
         run: |
           mkdir dist
-          qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
+          qmake I2PChat.pro "CONFIG += release"
           nmake > build.log 2>&1
+          set ERR=%ERRORLEVEL%
           type build.log
+          exit /b %ERR%
 
       - name: Upload build log
         if: failure()
@@ -69,7 +71,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: I2PChat-windows
-          path: dist/I2PChat.exe
+          path: |
+            dist/I2PChat.exe
+            release/I2PChat.exe
 
   macos:
     runs-on: macos-latest
