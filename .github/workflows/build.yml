@@ -76,45 +76,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: jurplel/install-qt-action@v4
-        with:
-          version: '5.15.2'
-          host: mac
-          target: desktop
-          arch: clang_64
-
-      - name: Patch Qt prl files (remove deprecated AGL framework)
+      - name: Install Qt5
         run: |
-          QT_LIB_DIR=$(find /Users/runner/work/i2pchat/Qt -type d -name lib 2>/dev/null | head -1)
-          if [ -z "$QT_LIB_DIR" ]; then
-            echo "Warning: Qt lib directory not found, skipping AGL patch"
-            exit 0
-          fi
-
-          # Remove AGL framework references from all .prl files
-          find "$QT_LIB_DIR" -name '*.prl' | while read file; do
-            sed -i '' \
-              -e 's/ -framework AGL//g' \
-              -e 's/-framework AGL//g' \
-              -e 's/ -weak_framework AGL//g' \
-              "$file"
-          done
-
-          # Remove AGL framework references from all .la files
-          find "$QT_LIB_DIR" -name '*.la' | while read file; do
-            sed -i '' \
-              -e 's/ -framework AGL//g' \
-              -e 's/-framework AGL//g' \
-              -e 's/ -weak_framework AGL//g' \
-              "$file"
-          done
-
-          # Verify AGL references are gone
-          if find "$QT_LIB_DIR" \( -name '*.prl' -o -name '*.la' \) -exec grep -l "AGL" {} \; 2>/dev/null | grep .; then
-            echo "Warning: Some AGL references remain after patching"
-          else
-            echo "Successfully removed all AGL framework references"
-          fi
+          brew install qt@5
+          echo "/usr/local/opt/qt@5/bin" >> $GITHUB_PATH
 
       - name: Build
         run: |
