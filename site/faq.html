@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang=en-us>
+<head>
+<meta charset=utf-8>
+<title>FAQ — I2PChat</title>
+<meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+<link href="style.css" rel=stylesheet type=text/css>
+<link rel="icon" href="favicon.svg">
+</head>
+<body>
+<style type="text/css">body{filter:opacity(0)}</style>
+<div class=wrapper>
+  <header>
+    <h1>i2pchat</h1>
+    <p>Secure, anonymous peer-to-peer chat over I2P
+    <p class=view><a href=https://github.com/vituperative/i2pchat>View the Project on GitHub <small></small></a>
+    <ul>
+      <li><a href=https://github.com/vituperative/i2pchat>View On <strong>GitHub</strong></a>
+    </ul>
+  </header>
+  <nav>
+    <a href=index.html>Home</a>
+    <a href=architecture.html>Architecture</a>
+    <a href=faq.html><strong>FAQ</strong></a>
+    <a href=changelog.html>Changelog</a>
+  </nav>
+  <section>
+    <h1>FAQ</h1>
+
+    <h3>Connection &amp; SAM</h3>
+
+    <p><strong>I2PChat says "Connection refused" or can't connect.</strong></p>
+    <p>The SAM bridge isn't running or isn't reachable. Enable it in your router: Java I2P via <a href=http://127.0.0.1:7657/configclients>http://127.0.0.1:7657/configclients</a> (check SAM application bridge), i2pd via <code>[SAM] enabled = true</code> in <code>i2pd.conf</code>. Default port is <code>127.0.0.1:7656</code>.</p>
+
+    <p><strong>I2PChat connects but none of my contacts appear online.</strong></p>
+    <p>I2P is a store-and-forward network — route updates take time. After connecting, wait 1–2 minutes for floodfill propagation. If contacts still show offline, they may not have SAM enabled on their end, or their I2P router is unreachable due to tunnel configuration or firewall settings.</p>
+
+    <p><strong>Can I run I2PChat over a remote SAM bridge?</strong></p>
+    <p>Not recommended. SAM listens on <code>127.0.0.1</code> by default for security. Exposing it to the network leaks unencrypted I2P traffic. If you must, bind SAM to <code>0.0.0.0</code> and enable SSL+auth on the bridge — but running I2PChat locally alongside your router is simpler and safer.</p>
+
+    <h3>Identity &amp; Keys</h3>
+
+    <p><strong>What's the difference between persistent and transient identity?</strong></p>
+    <p>Persistent (default): your I2P destination key is saved to <code>~/.i2pchat/</code> and reused across restarts. Your contacts can always find you at the same address. Transient: a new keypair is generated each session — contacts will not recognize you unless you share your new destination every time.</p>
+
+    <p><strong>I restarted I2PChat and my contacts can't find me.</strong></p>
+    <p>Your I2P destination hasn't changed (it's stored in <code>~/.i2pchat/</code>), but floodfill caches may have expired. Wait a few minutes for the network to re-learn your address. If you're using a transient identity, share your new destination with your contacts.</p>
+
+    <p><strong>How do I change my I2P key / reset my identity?</strong></p>
+    <p>Delete <code>~/.i2pchat/sam.privkey</code> and restart I2PChat. A new keypair will be generated. You must share the new destination with all contacts.</p>
+
+    <h3>Messaging</h3>
+
+    <p><strong>Why was my message not delivered?</strong></p>
+    <p>The recipient was offline when you sent it. I2PChat stores unsent messages in <code>~/.i2pchat/UnsetMessages.dat</code> and delivers them automatically on next connection. Messages are delivered only while both peers are online simultaneously — I2PChat has no server-side store-and-forward.</p>
+
+    <p><strong>Can I use I2PChat without an I2P router running?</strong></p>
+    <p>No — I2PChat requires a local SAM bridge. Java I2P or i2pd must be running with SAM enabled. You can compose offline messages, but they won't be sent until both routers are online.</p>
+
+    <h3>File Transfer</h3>
+
+    <p><strong>File transfer fails or never starts.</strong></p>
+    <p>Both peers must be online simultaneously. Large files may timeout on slow I2P connections — try smaller files first to verify the channel works. Check that your tunnel configuration (length, quantity) allows enough bandwidth. File transfers open a dedicated I2P stream per transfer.</p>
+
+    <p><strong>Where are received files saved?</strong></p>
+    <p>In your configured download directory (Settings → File Transfer). Default is <code>~/Downloads/I2PChat/</code> on Linux, <code>%USERPROFILE%\Downloads\I2PChat\</code> on Windows.</p>
+
+    <h3>Settings &amp; Data</h3>
+
+    <p><strong>Where are my contacts and settings stored?</strong></p>
+    <p>Linux: <code>~/.i2pchat/</code>. Windows: <code>%APPDATA%\Roaming\I2PChat\</code>. Key files: <code>users.config</code> (contacts), <code>userblocklist.config</code> (blocked users), <code>settingsGUI.config</code> (UI settings), <code>sam.privkey</code> (your I2P identity), <code>UnsetMessages.dat</code> (offline message queue).</p>
+
+    <p><strong>How do I back up or migrate I2PChat?</strong></p>
+    <p>Copy the entire <code>~/.i2pchat/</code> directory to the new machine. That preserves your identity, contacts, and settings. Install I2PChat and a compatible I2P router on the target machine, then launch.</p>
+
+    <p><strong>How do I reset I2PChat completely?</strong></p>
+    <p>Quit I2PChat, delete the <code>~/.i2pchat/</code> directory, and restart. A fresh identity and configuration will be created. Your contacts will need your new destination.</p>
+
+    <h3>Debugging</h3>
+
+    <p><strong>How do I view debug logs?</strong></p>
+    <p>Use the Debug Messages window (View → Debug Messages) for in-app logging. For more detail, run I2PChat from a terminal and watch stdout/stderr output.</p>
+
+    <p><strong>I2PChat crashes on startup.</strong></p>
+    <p>Try deleting <code>~/.i2pchat/settingsGUI.config</code> to reset UI settings. If it still crashes, check that your I2P router is running and SAM is enabled. Run from a terminal to capture crash output.</p>
+
+    <p><strong>Where can I report bugs or get help?</strong></p>
+    <p>Open an issue at <a href=https://github.com/vituperative/i2pchat/issues>github.com/vituperative/i2pchat/issues</a> with debug output, OS version, and I2P router type/version.</p>
+    <hr>
+    <h3 id=license>License</h3>
+    <p>Licensed under GPLv3.
+  </section>
+</div>
+<style type="text/css">body{filter:opacity(1)}</style>
+</body>
+</html>
