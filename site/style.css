@@ -228,11 +228,14 @@ header + nav a:hover {
   text-decoration: none;
 }
 header + nav a strong {
+  display: inline-block;
+  min-width: 90px;
+  text-align: center;
+  padding: 3px 14px;
+  margin: 0;
   color: #fff;
   background: #1a6b8a;
   border-radius: 4px;
-  padding: 4px 14px;
-  margin: -4px -14px;
 }
 @media print, screen and (max-width: 800px) {
   body { padding: 0; }
