@@ -55,23 +55,9 @@ jobs:
         run: |
           mkdir dist
           qmake I2PChat.pro "CONFIG += release" -after "DESTDIR=dist\\" "CONFIG -= batch"
-          echo === List source files ===
-          dir /s /b src\*.cpp
-          echo === Check response file dir ===
-          dir /b "%TMP%\nm*.tmp" 2>nul
-          echo === Done ===
           nmake > build.log 2>&1
           set ERR=%ERRORLEVEL%
-          echo === Full build log ===
-          type build.log
-          echo === Searching for cl.exe fatal errors ===
-          findstr /C:"fatal error C1" build.log 2>nul || echo No C1xxx errors found
-          findstr /C:"fatal error C" build.log 2>nul || echo No C errors found
-          findstr /C:"fatal error LNK" build.log 2>nul || echo No LNK errors found
-          echo === NMake response files in TMP ===
-          dir /s /b "%TMP%\nm*.tmp" 2>nul > nmfiles.txt
-          type nmfiles.txt
-          for /f %%f in (nmfiles.txt) do echo === %%f === & type "%%f"
+          findstr /N /I /C:"error C" build.log
           if "%ERR%"=="0" if not exist dist\I2PChat.exe (
             for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
           )
