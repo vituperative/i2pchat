@@ -398,7 +398,7 @@ static QColor parseCSSColor(const QString &raw) {
     if (ok)
       return QColor(qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
   }
-  return QColor(s); // hex/named (returns invalid if unparseable)
+  return QColor(s); // hex/named (returns invalid if unparsable)
 }
 
 static BubbleGradient parseGradient(const QString &val) {
@@ -1278,7 +1278,7 @@ void form_ChatWidget::anchorClicked(const QUrl &link) {
   if (link.scheme() == "http" || link.scheme() == "https")
     QDesktopServices::openUrl(link);
   else if (link.scheme() == "") {
-    // it's probably a web adress, let's add http:// at the beginning of the
+    // it's probably a web address, let's add http:// at the beginning of the
     // link
     QString newAddress = link.toString();
     newAddress.prepend("http://");

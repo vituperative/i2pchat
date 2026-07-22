@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
     auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
     auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
     settings.endGroup();
-    qDebug() << "Curent style: " << CurrentStyle;
+    qDebug() << "Current style: " << CurrentStyle;
     mainForm->setStyle(QStyleFactory::create(CurrentStyle));
     if (CustomStyleSheet.size() > 1)
       styleSheetFile.setFileName(CustomStyleSheet);

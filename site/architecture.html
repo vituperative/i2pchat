@@ -64,7 +64,7 @@ debian/               — Debian packaging files</pre>
       <tr><th>File</th><th>Role</th></tr>
       <tr><td><code>Core</code></td><td>Central orchestrator. Owns <code>ConnectionManager</code>, <code>UserManager</code>, <code>CProtocol</code>, <code>CFileTransferManager</code>, <code>CSoundManager</code>. Manages the online state machine.</td></tr>
       <tr><td><code>Protocol</code></td><td>Wire protocol for I2PChat peers. Handles <code>slotInputUnknown</code> (initial CHATSYSTEM handshake) and <code>slotInputKnown</code> (parsed known packets).</td></tr>
-      <tr><td><code>PacketManager</code></td><td>Per-stream reassembly buffer. Slices complete packets by the 4-byte hex length header and emits <code>signAPacketIsCompleate</code>.</td></tr>
+      <tr><td><code>PacketManager</code></td><td>Per-stream reassembly buffer. Slices complete packets by the 4-byte hex length header and emits <code>signAPacketIsComplete</code>.</td></tr>
     </table>
 
     <h4>User Management</h4>

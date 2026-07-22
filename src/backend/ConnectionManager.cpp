@@ -238,7 +238,7 @@ void CConnectionManager::slotModeAcceptIncomingStream(qint32 ID) {
 }
 
 CConnectionManager::~CConnectionManager() {
-  stopp();
+  stop();
 }
 
 QString CConnectionManager::getSamPrivKey() const {
@@ -265,7 +265,7 @@ QString CConnectionManager::generateBridgeName() const {
 
 void CConnectionManager::doStopp() {
   mComponentStateStopped = true;
-  this->stopp();
+  this->stop();
 }
 
 void CConnectionManager::doReStart() {
@@ -276,7 +276,7 @@ void CConnectionManager::doReStart() {
                          " • I2PChat: Connection Manager restarted");
 }
 
-void CConnectionManager::stopp() {
+void CConnectionManager::stop() {
   // close all StreamObjects
   QMapIterator<qint32, CI2PStream *> i(allStreams);
   while (i.hasNext()) {

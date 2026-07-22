@@ -37,7 +37,7 @@
               This length excludes these 4 bytes.
 4       4     Tag (ASCII) — identifies the message or command type
 8       N     Payload (tag-dependent format)</pre>
-    <p>Packets are reassembled from the raw I2P stream by <code>PacketManager</code>, which accumulates bytes in a buffer and extracts complete packets when enough data arrives (<code>checkifOnePacketIsCompleate</code>). All I/O beyond the initial handshake uses this framing.</p>
+    <p>Packets are reassembled from the raw I2P stream by <code>PacketManager</code>, which accumulates bytes in a buffer and extracts complete packets when enough data arrives (<code>checkIfOnePacketIsComplete</code>). All I/O beyond the initial handshake uses this framing.</p>
 
     <h3>Connection Handshake</h3>
     <p>When a new I2P stream is established (either outbound via <code>STREAM CONNECT</code> or inbound via <code>STREAM ACCEPT</code>), the peer that initiated the connection sends the first application-level message:</p>
@@ -135,7 +135,7 @@
   → If known: accept, reply with profile, enter framed mode</pre>
 
     <h4>Offline / Reconnect</h4>
-    <p>When the SAM connection drops, <code>SessionController</code> auto-reconnects after a 20-second delay. All streams are recreated. Unsent messages stored in <code>UnsetMessages.dat</code> are delivered on reconnection. The protocol state for each user (protocol version, capabilties) is re-queried.</p>
+    <p>When the SAM connection drops, <code>SessionController</code> auto-reconnects after a 20-second delay. All streams are recreated. Unsent messages stored in <code>UnsetMessages.dat</code> are delivered on reconnection. The protocol state for each user (protocol version, capabilities) is re-queried.</p>
     <p>Explicit <code>setOnlineStatus(OFFLINE)</code> calls <code>stopCore()</code> and tears down the SAM session cleanly. SAM disconnect without explicit offline keeps the user list intact — streams are recreated on reconnection.</p>
 
     <h3>Online State Machine</h3>

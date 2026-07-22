@@ -25,13 +25,13 @@ public slots:
   void slotDataInput(qint32 ID, const QByteArray &t);
 
 signals:
-  void signAPacketIsCompleate(const qint32 ID, const QByteArray CurrentPacket);
+  void signAPacketIsComplete(const qint32 ID, const QByteArray CurrentPacket);
 
 private:
   CConnectionManager &mConnectionManager;
   const qint32 mID;
   QByteArray *mData;
 
-  void checkifOnePacketIsCompleate();
+  void checkIfOnePacketIsComplete();
 };
 #endif
