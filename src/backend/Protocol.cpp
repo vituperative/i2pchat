@@ -5,7 +5,7 @@
 #include "Core.h"
 #include "FileTransferSend.h"
 #include "I2PStream.h"
-#include "LoadHTML.cpp" // NOLINT: intentional inclusion of inline functions
+#include "LoadHTML.h"
 #include "User.h"
 #include "UserManager.h"
 

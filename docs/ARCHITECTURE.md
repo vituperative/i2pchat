@@ -13,15 +13,11 @@ I2PChat.pro           - Qt project file
 src/
   backend/            - Core logic: network, protocol, user management
   gui/                - Qt Widgets UI layer
-docs/                 - Local documentation (ARCHITECTURE.md, CHANGELOG.md)
+docs/                 - Local documentation (ARCHITECTURE.md, CHANGELOG.md, LICENSE)
 site/                 - GitHub Pages website (index.html, screenshots/)
 www/                  - Web profile assets (b32.i2p profile templates)
 qss/                  - Qt stylesheets
 sounds/               - Notification sound files
-templates/            - HTML templates
-www/                  - Web profile assets
-contrib/              - Packaging & platform helpers
-debian/               - Debian packaging files
 ```
 
 ## src/backend — Layer Overview
@@ -64,7 +60,7 @@ debian/               - Debian packaging files
 | `FileTransferManager.h/cpp`  | Manages lists of active send/receive transfers, protocol version negotiation guard. |
 | `FileTransferSend.h/cpp`     | Outgoing file transfer — streams file chunks over a dedicated I2P stream.           |
 | `FileTransferReceive.h/cpp`  | Incoming file transfer — reassembles chunks, writes to disk.                        |
-| `HttpOverStreamObject.h/cpp` | HTTP parsing over I2P stream (for web profile).                                     |
+| *(functionality in LoadHTML.cpp)* | HTTP response construction and template loading for web profile.                   |
 
 ### Utilities
 
