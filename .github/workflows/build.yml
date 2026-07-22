@@ -55,7 +55,7 @@ jobs:
         run: |
           mkdir dist
           qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
-          nmake > build.log 2>&1
+          nmake > build.log 2>&1 || (type build.log && exit /b 1)
           type build.log
           for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
 
