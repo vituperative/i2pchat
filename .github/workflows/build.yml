@@ -55,9 +55,18 @@ jobs:
         run: |
           mkdir dist
           qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
-          nmake > build.log 2>&1 || (type build.log && exit /b 1)
+          nmake > build.log 2>&1
+          if errorlevel 1 (type build.log && exit /b 1)
           type build.log
-          for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
+          if exist dist\I2PChat.exe (
+            echo Build successful: I2PChat.exe found in dist\
+          ) else (
+            echo Searching for I2PChat.exe...
+            for /r %%f in (I2PChat.exe) do (
+              echo Found: %%f
+              copy /Y "%%f" dist\ || exit /b 1
+            )
+          )
 
       - name: Upload build log
         if: failure()
