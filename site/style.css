@@ -165,7 +165,10 @@ pre {
   font-weight: 500;
   overflow-x: auto;
   border-radius: 5px;
-  margin: 0 0 20px;
+  margin: 0 20px 20px;
+}
+details {
+  margin: 0 20px;
 }
 pre code {
   color: #e4e4e9;
