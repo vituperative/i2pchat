@@ -91,8 +91,17 @@ jobs:
             exit 0
           fi
 
-          # Remove AGL framework references from all relevant files
-          find "$QT_LIB_DIR" -name '*.prl' -o -name '*.la' | while read file; do
+          # Remove AGL framework references from all .prl files
+          find "$QT_LIB_DIR" -name '*.prl' | while read file; do
+            sed -i '' \
+              -e 's/ -framework AGL//g' \
+              -e 's/-framework AGL//g' \
+              -e 's/ -weak_framework AGL//g' \
+              "$file"
+          done
+
+          # Remove AGL framework references from all .la files
+          find "$QT_LIB_DIR" -name '*.la' | while read file; do
             sed -i '' \
               -e 's/ -framework AGL//g' \
               -e 's/-framework AGL//g' \
