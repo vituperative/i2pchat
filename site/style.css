@@ -94,7 +94,8 @@ header ul a strong {
 }
 section {
   padding: 24px 28px;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
   border-radius: 0 0 8px 8px;
 }
 a {
