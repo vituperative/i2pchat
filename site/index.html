@@ -46,23 +46,38 @@
     </ul>
     <hr>
     <h3 id=build-instructions>Build instructions</h3>
+    <p>The project includes a <code>build.sh</code> wrapper script that handles compilation, optional AppImage packaging, Windows cross-compilation via MXE, clang-format, clang-tidy, and version bumping.
+    <p><strong>Prerequisites</strong>
     <ul>
-      <li>Install prerequisites:
+      <li>Native (Linux):<br>
+        <code>sudo apt-get install build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev pkg-config</code>
+      <li>AppImage (<code>--appimage</code>): needs <code>wget</code> plus the native prerequisites.
+      <li>Windows cross-compile (<code>--windows</code>): needs <code>git gperf libtool</code> plus the native prerequisites. MXE is cloned and built automatically on first run.
+      <li>UPX compression (<code>--upx</code>): needs <code>upx</code>.
+      <li>Format (<code>--format</code>): needs <code>clang-format</code>.
+      <li>Tidy (<code>--tidy</code>): needs <code>clang-tidy bear compiledb</code>.
     </ul>
+    <p><strong>Usage</strong>
     <div>
       <div class=highlight>
-        <pre class=highlight><code>sudo apt-get install build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
-</code></pre>
+        <pre class=highlight><code>bash build.sh [OPTIONS]
+
+Options:
+  --clean       Clean previous build artifacts before building
+  --format      Run clang-format (auto-fix sources)
+  --tidy        Run clang-tidy with --fix (check and auto-fix issues)
+  --appimage    Build portable AppImage (Linux only)
+  --windows     Cross-compile Windows .exe via MinGW-w64
+  --upx         Compress binary with UPX (reduces size, all platforms)
+  --bump        Bump patch version, update Core.h and create git tag
+  -j N          Use N parallel jobs (default: all cores)
+  -h, --help    Show this help</code></pre>
       </div>
     </div>
+    <p><strong>Manual compilation</strong> (without <code>build.sh</code>):
     <ul>
-      <li>Quick build:<ul>
-          <li><code>bash build.sh</code>
-        </ul>
-      <li>Manual compilation:<ul>
-          <li><code>qmake I2PChat.pro "CONFIG += release"</code>
-          <li><code>make -j$(nproc)</code>
-        </ul>
+      <li><code>qmake I2PChat.pro "CONFIG += release"</code>
+      <li><code>make -j$(nproc)</code>
     </ul>
     <hr>
     <h3 id=running>Running</h3>
