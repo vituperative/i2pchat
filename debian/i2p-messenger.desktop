@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=I2P-Messenger
-Comment=Chat over I2P via the SAM bridge and Seedless
-Exec=i2p-messenger
-Icon=i2p-messenger
-StartupNotify=true
-Terminal=false
-Type=Application
-Categories=Network;InstantMessaging;
