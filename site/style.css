@@ -221,7 +221,6 @@ header + nav a {
   color: #1a6b8a;
   text-decoration: none;
   border-radius: 4px;
-  background: rgba(255,255,255,.3);
   transition: background .15s;
 }
 header + nav a:hover {
