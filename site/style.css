@@ -215,6 +215,7 @@ header + nav a {
   min-width: 90px;
   text-align: center;
   padding: 4px 14px;
+  margin-right: 2px;
   font-size: 12px;
   font-weight: 600;
   color: #1a6b8a;
