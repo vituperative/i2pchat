@@ -90,8 +90,22 @@ jobs:
             echo "Warning: Qt lib directory not found, skipping AGL patch"
             exit 0
           fi
-          find "$QT_LIB_DIR" -name '*.prl' -exec sed -i '' 's/ -framework AGL//g; s/framework AGL//g' {} + 2>/dev/null || true
-          find "$QT_LIB_DIR" -name '*.la' -exec sed -i '' 's/ -framework AGL//g; s/framework AGL//g' {} + 2>/dev/null || true
+
+          # Remove AGL framework references from all relevant files
+          find "$QT_LIB_DIR" -name '*.prl' -o -name '*.la' | while read file; do
+            sed -i '' \
+              -e 's/ -framework AGL//g' \
+              -e 's/-framework AGL//g' \
+              -e 's/ -weak_framework AGL//g' \
+              "$file"
+          done
+
+          # Verify AGL references are gone
+          if find "$QT_LIB_DIR" \( -name '*.prl' -o -name '*.la' \) -exec grep -l "AGL" {} \; 2>/dev/null | grep .; then
+            echo "Warning: Some AGL references remain after patching"
+          else
+            echo "Successfully removed all AGL framework references"
+          fi
 
       - name: Build
         run: |
