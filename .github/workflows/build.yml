@@ -76,9 +76,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        id: cache-qt5
+        with:
+          path: /usr/local/Cellar/qt@5
+          key: qt5-macos
+
       - name: Install Qt5
         run: |
-          brew install qt@5
+          if [ "${{ steps.cache-qt5.outputs.cache-hit }}" = "true" ]; then
+            VERSION=$(ls /usr/local/Cellar/qt@5/ | head -1)
+            ln -sf /usr/local/Cellar/qt@5/$VERSION /usr/local/opt/qt@5
+          else
+            brew install qt@5
+          fi
           echo "/usr/local/opt/qt@5/bin" >> $GITHUB_PATH
 
       - name: Build
