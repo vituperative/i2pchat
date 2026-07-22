@@ -48,13 +48,18 @@
     <h3 id=build-instructions>Build instructions</h3>
     <p>The project includes a <code>build.sh</code> wrapper script that handles compilation, optional AppImage packaging, Windows cross-compilation via MXE, clang-format, clang-tidy, and version bumping.
     <p><strong>Prerequisites</strong>
+    <details>
+      <summary>Linux distribution package commands</summary>
+      <ul>
+        <li>Debian / Ubuntu:<br>
+          <code>sudo apt-get install build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev pkg-config</code>
+        <li>Fedora / RHEL:<br>
+          <code>sudo dnf install gcc-c++ qt5-qtbase-devel qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtxml-devel make pkgconfig</code>
+        <li>Arch Linux:<br>
+          <code>sudo pacman -S base-devel qt5-base qt5-multimedia qt5-svg qt5-xml pkgconf</code>
+      </ul>
+    </details>
     <ul>
-      <li>Debian / Ubuntu:<br>
-        <code>sudo apt-get install build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libqt5xml5-dev pkg-config</code>
-      <li>Fedora / RHEL:<br>
-        <code>sudo dnf install gcc-c++ qt5-qtbase-devel qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtxml-devel make pkgconfig</code>
-      <li>Arch Linux:<br>
-        <code>sudo pacman -S base-devel qt5-base qt5-multimedia qt5-svg qt5-xml pkgconf</code>
       <li>AppImage (<code>--appimage</code>): needs <code>wget</code> plus the native prerequisites above.
       <li>Windows cross-compile (<code>--windows</code>): needs <code>git gperf libtool</code> plus the native prerequisites. MXE is cloned and built automatically on first run.
       <li>UPX compression (<code>--upx</code>): needs <code>upx</code>.
