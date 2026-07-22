@@ -1,6 +1,0 @@
-README.Debian for i2p-messenger
-
-This packaged version of i2p-messenger for Debian/Ubuntu has had the source
-code patched to store the configuration files in ~/.I2P-Messenger  
-
- -- Kill Your TV <killyourtv@mail.i2p>  Mon, 10 Jan 2011 09:22:30 +0000
