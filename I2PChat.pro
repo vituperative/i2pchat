@@ -117,7 +117,6 @@ msvc {
 	CONFIG -= c++11 batch
 	CONFIG += c++17
 	QMAKE_CXXFLAGS -= -std=c++11
-	QMAKE_CXXFLAGS += -std:c++17 -Zc:__cplusplus
 }
 
 # Remove AGL framework (deprecated, removed in recent macOS SDKs)

@@ -55,7 +55,15 @@ jobs:
         run: |
           mkdir dist
           qmake I2PChat.pro "CONFIG += release" -after DESTDIR=dist/
-          nmake 2>&1
+          nmake > build.log 2>&1
+          type build.log
+
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
 
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4
