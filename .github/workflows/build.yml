@@ -55,9 +55,15 @@ jobs:
         run: |
           mkdir dist
           qmake I2PChat.pro "CONFIG += release"
+          echo === Testing compiler ===
+          cl -nologo -? >nul 2>&1 && echo cl.exe works || echo cl.exe FAILED
+          echo === Done ===
           nmake > build.log 2>&1
           set ERR=%ERRORLEVEL%
           type build.log
+          if "%ERR%"=="0" if not exist dist\I2PChat.exe (
+            for /r %%f in (I2PChat.exe) do copy /Y "%%f" dist\ >nul 2>&1
+          )
           exit /b %ERR%
 
       - name: Upload build log
