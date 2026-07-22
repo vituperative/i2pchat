@@ -114,7 +114,7 @@ mingw {
 
 # MSVC needs C++17 (C++11 mode broken in VS 2022+)
 msvc {
-	CONFIG -= c++11
+	CONFIG -= c++11 batch
 	CONFIG += c++17
 	QMAKE_CXXFLAGS -= -std=c++11
 	QMAKE_CXXFLAGS += -std:c++17 -Zc:__cplusplus
