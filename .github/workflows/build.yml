@@ -127,3 +127,36 @@ jobs:
         with:
           files: release-assets/*
           generate_release_notes: true
+
+  nightly:
+    if: github.ref == 'refs/heads/master'
+    needs: [linux, windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-assets
+          cp I2PChat-linux/I2PChat release-assets/ 2>/dev/null || true
+          cp I2PChat-windows/I2PChat.exe release-assets/ 2>/dev/null || true
+          cp I2PChat-macos/I2PChat release-assets/I2PChat-macos 2>/dev/null || true
+          ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
+            cp I2PChat-linux/I2PChat-*.AppImage release-assets/ || true
+
+      - name: Upload continuous release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: continuous
+          name: Continuous Build
+          body: "Automated build from the latest master commit."
+          artifacts: release-assets/*
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
+          makeLatest: true
+          omitBodyDuringUpdate: true
+          skipIfReleaseExists: false
+          token: ${{ secrets.GITHUB_TOKEN }}
