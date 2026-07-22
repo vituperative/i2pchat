@@ -165,7 +165,6 @@ jobs:
           artifacts: release-assets/*
           allowUpdates: true
           removeArtifacts: true
-          replacesArtifacts: true
           makeLatest: true
           omitBodyDuringUpdate: true
           skipIfReleaseExists: false
