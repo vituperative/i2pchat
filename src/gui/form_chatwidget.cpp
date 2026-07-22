@@ -254,11 +254,10 @@ static QString aboutIconHtml() {
     QSvgRenderer(QStringLiteral(":/icons/about.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
     QImage scaledImg = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    QPixmap small = QPixmap::fromImage(scaledImg);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
-    small.save(&buf, "PNG");
+    scaledImg.save(&buf, "PNG");
     return QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
                           "class=\"msg-icon system-icon\"> ")
       .arg(QString::fromLatin1(bytes.toBase64()));
@@ -307,11 +306,11 @@ QString form_ChatWidget::transferIconHtml(bool isSend) {
     QSvgRenderer(QString(isSend ? ":/icons/upload.svg" : ":/icons/download.svg"))
       .render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
-    QImage iconImg = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage small = img.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QByteArray bytes;
     QBuffer buf(&bytes);
     buf.open(QIODevice::WriteOnly);
-    QPixmap::fromImage(iconImg).save(&buf, "PNG");
+    QPixmap::fromImage(small).save(&buf, "PNG");
     cached[idx] = QStringLiteral("<img src=\"data:image/png;base64,%1\" width=\"12\" height=\"12\" "
                                  "class=\"msg-icon transfer-icon\"> ")
                     .arg(QString::fromLatin1(bytes.toBase64()));
