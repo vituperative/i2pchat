@@ -40,7 +40,8 @@ GIT_VERSION2 ~= s/-/"."
 # Now we are ready to pass parsed version to Qt
 VERSION = $$GIT_VERSION2
 win32 { # On windows version can only be numerical so remove commit hash
-    VERSION ~= s/\.\d+\.[a-f0-9]{6,}//
+    VERSION ~= s/[a-f0-9]{6,}$//
+    VERSION ~= s/\.$//
 }
 
 # Adding C preprocessor #DEFINE so we can use it in C++ code
