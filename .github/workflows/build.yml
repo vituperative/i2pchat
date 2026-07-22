@@ -29,7 +29,7 @@ jobs:
         run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
 
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: I2PChat-linux
           path: |
@@ -70,13 +70,13 @@ jobs:
 
       - name: Upload build log
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-log
           path: build.log
 
       - name: Upload Windows binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: I2PChat-windows
           path: dist/I2PChat.exe
@@ -110,7 +110,7 @@ jobs:
             cp dist/I2PChat.app/Contents/MacOS/I2PChat dist/I2PChat
 
       - name: Upload macOS binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: I2PChat-macos
           path: dist/I2PChat
@@ -120,7 +120,7 @@ jobs:
     needs: [linux, windows, macos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
 
       - name: Collect artifacts
         run: |
@@ -144,7 +144,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
 
       - name: Collect artifacts
         run: |
