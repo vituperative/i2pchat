@@ -32,7 +32,16 @@
     <ul>
       <li>Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
       <li>Transient (non-persistent) destination option
-      <li>Multi-user web server with HTTP Basic Auth, per-user folder mapping, cookie sessions, directory listing, rate-limited logins (3 failed = 1h ban), configurable docroot, and /login+/logout endpoints
+      <li>Multi-user web server
+        <ul>
+          <li>HTTP Basic Auth (dual mode: optional/required, configurable per-profile user mapping)
+          <li>Cookie-based sessions with configurable timeout (1–1440 min, default 60)
+          <li>Rate-limited logins: 3 failed attempts = 1h ban (persisted to bans.txt)
+          <li>Static file serving with MIME detection and content-security-policy header
+          <li>Directory listing (dotfiles and temp/backup files hidden)
+          <li>Custom error-page fallback from <code>/.resources/{code}.html</code>
+          <li>Configurable document root and /login+/logout endpoints
+        </ul>
       <li>Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
       <li>Auto-away with settings toggle
       <li>Chat: header icons, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
