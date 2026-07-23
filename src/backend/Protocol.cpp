@@ -982,6 +982,7 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
       fallback.replace(QStringLiteral("[AVATARIMAGE]"), QString::fromUtf8(avatarB64));
       fallback.replace(QStringLiteral("[MYDEST]"), myDest);
       QByteArray fbContent = fallback.toUtf8();
+      fbContent = CSimpleHttpServer::minifyBody(QStringLiteral("index.html"), fbContent);
       QByteArray fbHeader = CSimpleHttpServer::buildHeader(
         200, QStringLiteral("OK"), fbContent.size(), QStringLiteral("text/html; charset=utf-8"), QString());
       response = fbHeader + fbContent;

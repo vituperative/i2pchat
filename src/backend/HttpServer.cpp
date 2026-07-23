@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QRegularExpression>
 #include <QSet>
 #include <QUrl>
 
@@ -182,6 +183,8 @@ QByteArray CSimpleHttpServer::buildResponse(const HttpRequest &req,
     content = html.toUtf8();
   }
 
+  content = minifyBody(file.fileName(), content);
+
   QByteArray header = buildHeader(200, QStringLiteral("OK"), content.size(), contentType, generateCSP());
 
   // HEAD request: return headers only
@@ -221,18 +224,18 @@ QByteArray CSimpleHttpServer::buildDirectoryListing(const QFileInfo &dir, const 
   body += QStringLiteral("<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\">\n<title>");
   body += title;
   body += QStringLiteral("</title>\n");
-  body += QStringLiteral("<style>body{font-family:sans-serif;margin:20px}"
-                         "th{text-align:left;padding-right:2em}"
-                         "td{padding-right:2em}</style>\n");
-  body += QStringLiteral("</head><body>\n<h1>");
+  body += QStringLiteral("<link rel=\"stylesheet\" href=\"/.resources/filelist.css\">\n");
+  body += QStringLiteral("</head><body>\n<div id=\"dirlist\">\n<h1>");
   body += title;
-  body += QStringLiteral("</h1>\n<hr>\n<table>\n");
-  body += QStringLiteral("<tr><th>Name</th><th>Size</th><th>Last Modified</th></tr>\n");
-
-  // Parent directory link
-  body += QStringLiteral("<tr><td><a href=\"") + parentPath.toHtmlEscaped() +
+  body += QStringLiteral("</h1>\n<table>\n<thead>\n<tr>"
+                         "<th class=\"name\">Name</th>"
+                         "<th class=\"size\">Size</th>"
+                         "<th class=\"lastmodified\">Last Modified</th>"
+                         "</tr>\n</thead>\n<tbody>\n");
+  body += QStringLiteral("<tr><td class=\"name\"><a href=\"") + parentPath.toHtmlEscaped() +
           QStringLiteral("\">..</a></td>"
-                         "<td></td><td></td></tr>\n");
+                         "<td class=\"size\"></td>"
+                         "<td class=\"lastmodified\"></td></tr>\n");
 
   QFileInfoList entries =
     d.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs | QDir::Readable, QDir::Name | QDir::DirsFirst);
@@ -274,14 +277,15 @@ QByteArray CSimpleHttpServer::buildDirectoryListing(const QFileInfo &dir, const 
 
     QString modStr = entry.lastModified().toString(QStringLiteral("yyyy-MM-dd HH:mm"));
 
-    body += QStringLiteral("<tr><td><a href=\"") + href + QStringLiteral("\">") + name.toHtmlEscaped() +
-            QStringLiteral("</a></td><td>") + sizeStr + QStringLiteral("</td><td>") + modStr +
-            QStringLiteral("</td></tr>\n");
+    body += QStringLiteral("<tr><td class=\"name\"><a href=\"") + href + QStringLiteral("\">") + name.toHtmlEscaped() +
+            QStringLiteral("</a></td><td class=\"size\">") + sizeStr +
+            QStringLiteral("</td><td class=\"lastmodified\">") + modStr + QStringLiteral("</td></tr>\n");
   }
 
-  body += QStringLiteral("</table>\n<hr>\n</body></html>\n");
+  body += QStringLiteral("</tbody>\n</table>\n</div>\n</body></html>\n");
 
   QByteArray content = body.toUtf8();
+  content = minifyBody(QStringLiteral("index.html"), content);
   QString csp = generateCSP();
   QByteArray header =
     buildHeader(200, QStringLiteral("OK"), content.size(), QStringLiteral("text/html; charset=utf-8"), csp);
@@ -361,4 +365,167 @@ QString CSimpleHttpServer::generateCSP() {
                         "form-action 'none'; "
                         "base-uri 'none'; "
                         "frame-ancestors 'none'");
+}
+
+static QByteArray minifyCss(const QByteArray &input) {
+  QString css = QString::fromUtf8(input);
+
+  struct FnBlock {
+    int start, end;
+    QString text;
+  };
+  QList<FnBlock> fnBlocks;
+  int pos = 0;
+  auto findParen = [&](int from) {
+    int depth = 0;
+    for (int i = from; i < css.size(); ++i) {
+      if (css[i] == QLatin1Char('('))
+        ++depth;
+      else if (css[i] == QLatin1Char(')')) {
+        if (--depth <= 0)
+          return i + 1;
+      }
+    }
+    return -1;
+  };
+  auto saveFn = [&](const QString &name) {
+    while (true) {
+      int ci = css.indexOf(name, pos, Qt::CaseInsensitive);
+      if (ci < 0)
+        break;
+      int end = findParen(ci + name.size());
+      if (end < 0)
+        break;
+      fnBlocks.append({ci, end, css.mid(ci, end - ci)});
+      pos = end;
+    }
+  };
+  saveFn(QStringLiteral("calc("));
+  saveFn(QStringLiteral("min("));
+  saveFn(QStringLiteral("max("));
+  saveFn(QStringLiteral("clamp("));
+  for (int i = fnBlocks.size() - 1; i >= 0; --i) {
+    QString ph = QString(QChar(0)) + QStringLiteral("FN%1").arg(i) + QString(QChar(0));
+    css.replace(fnBlocks[i].start, fnBlocks[i].end - fnBlocks[i].start, ph);
+  }
+
+  QRegularExpression comRe(QStringLiteral("/\\*.*?\\*/"), QRegularExpression::DotMatchesEverythingOption);
+  css.remove(comRe);
+  css.replace(QRegularExpression(QStringLiteral("\\s+")), QStringLiteral(" "));
+  css.replace(QStringLiteral(" {"), QStringLiteral("{"));
+  css.replace(QStringLiteral("{ "), QStringLiteral("{"));
+  css.replace(QStringLiteral(" }"), QStringLiteral("}"));
+  css.replace(QStringLiteral("} "), QStringLiteral("}"));
+  css.replace(QStringLiteral(" :"), QStringLiteral(":"));
+  css.replace(QStringLiteral(": "), QStringLiteral(":"));
+  css.replace(QStringLiteral(" ;"), QStringLiteral(";"));
+  css.replace(QStringLiteral("; "), QStringLiteral(";"));
+  css.replace(QStringLiteral(" ,"), QStringLiteral(","));
+  css.replace(QStringLiteral(", "), QStringLiteral(","));
+  css.replace(QStringLiteral(";}"), QStringLiteral("}"));
+  css = css.trimmed();
+
+  for (int i = 0; i < fnBlocks.size(); ++i) {
+    QString ph = QString(QChar(0)) + QStringLiteral("FN%1").arg(i) + QString(QChar(0));
+    int pi = css.indexOf(ph);
+    if (pi >= 0)
+      css.replace(pi, ph.size(), fnBlocks[i].text);
+  }
+
+  return css.toUtf8();
+}
+
+static QByteArray minifyHtml(const QByteArray &input) {
+  QString html = QString::fromUtf8(input);
+
+  // Preserve <pre> blocks
+  QList<QPair<int, int>> preRanges;
+  int pos = 0;
+  while (true) {
+    int ps = html.indexOf(QLatin1String("<pre"), pos, Qt::CaseInsensitive);
+    if (ps < 0)
+      break;
+    int te = html.indexOf(QLatin1Char('>'), ps);
+    if (te < 0)
+      break;
+    int cs = html.indexOf(QLatin1String("</pre>"), te + 1, Qt::CaseInsensitive);
+    if (cs < 0)
+      break;
+    int ce = cs + 6;
+    preRanges.append(qMakePair(ps, ce));
+    pos = ce;
+  }
+  for (int i = preRanges.size() - 1; i >= 0; --i) {
+    QString ph = QString(QChar(0)) + QStringLiteral("PRE%1").arg(i) + QString(QChar(0));
+    html.replace(preRanges[i].first, preRanges[i].second - preRanges[i].first, ph);
+  }
+
+  // Minify inline <style> blocks
+  pos = 0;
+  while (true) {
+    int ss = html.indexOf(QLatin1String("<style"), pos, Qt::CaseInsensitive);
+    if (ss < 0)
+      break;
+    int te = html.indexOf(QLatin1Char('>'), ss);
+    if (te < 0)
+      break;
+    int cs = html.indexOf(QLatin1String("</style>"), te + 1, Qt::CaseInsensitive);
+    if (cs < 0)
+      break;
+    QString raw = html.mid(te + 1, cs - te - 1);
+    QString min = QString::fromUtf8(minifyCss(raw.toUtf8()));
+    html.replace(te + 1, cs - te - 1, min);
+    pos = cs + 8 - (raw.size() - min.size());
+    // ^ adjust for size change so next search position is still correct
+  }
+
+  QRegularExpression comRe(QStringLiteral("<!--.*?-->"), QRegularExpression::DotMatchesEverythingOption);
+  html.remove(comRe);
+  html.replace(QRegularExpression(QStringLiteral("\\s+")), QStringLiteral(" "));
+  html.replace(QStringLiteral("> <"), QStringLiteral("><"));
+  // Strip quotes from simple attribute values (no restricted chars: " ' < > = whitespace ` & ?)
+  QRegularExpression attrRe(QStringLiteral("([\\w-]+)=[\"']([^\"'<>=\\s`&?]*)[\"']"));
+  html.replace(attrRe, QStringLiteral("\\1=\\2"));
+  html = html.trimmed();
+
+  for (int i = 0; i < preRanges.size(); ++i) {
+    QString ph = QString(QChar(0)) + QStringLiteral("PRE%1").arg(i) + QString(QChar(0));
+    int pi = html.indexOf(ph);
+    if (pi >= 0)
+      html.replace(pi, ph.size(), QStringLiteral("<pre></pre>"));
+  }
+
+  return html.toUtf8();
+}
+
+static QByteArray minifyJs(const QByteArray &input) {
+  QString js = QString::fromUtf8(input);
+  // Line comments
+  QStringList lines = js.split(QLatin1Char('\n'));
+  for (int i = 0; i < lines.size(); ++i) {
+    int cpos = lines[i].indexOf(QLatin1String("//"));
+    if (cpos >= 0) {
+      int dq = lines[i].left(cpos).count(QLatin1Char('"'));
+      int sq = lines[i].left(cpos).count(QLatin1Char('\''));
+      if (dq % 2 == 0 && sq % 2 == 0)
+        lines[i] = lines[i].left(cpos);
+    }
+  }
+  js = lines.join(QLatin1Char('\n'));
+  // Block comments
+  QRegularExpression comRe(QStringLiteral("/\\*.*?\\*/"), QRegularExpression::DotMatchesEverythingOption);
+  js.remove(comRe);
+  js.replace(QRegularExpression(QStringLiteral("\\s+")), QStringLiteral(" "));
+  js = js.trimmed();
+  return js.toUtf8();
+}
+
+QByteArray CSimpleHttpServer::minifyBody(const QString &filename, const QByteArray &body) {
+  if (filename.endsWith(QStringLiteral(".html")) || filename.endsWith(QStringLiteral(".htm")))
+    return minifyHtml(body);
+  if (filename.endsWith(QStringLiteral(".css")))
+    return minifyCss(body);
+  if (filename.endsWith(QStringLiteral(".js")))
+    return minifyJs(body);
+  return body;
 }

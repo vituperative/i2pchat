@@ -5,6 +5,8 @@
 * Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
 * Transient (non-persistent) destination option
 * Multi-file static web server with HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, rate-limited login (3 failed = 1h ban), configurable docroot, and /login+/logout endpoints
+* On-the-fly HTML/CSS/JS minification
+* Custom-styled directory listings via `filelist.css` (dark/light theme, file-type icons)
 * Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
 * Auto-away with settings toggle
 * Chat: header icons, removed after send, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
