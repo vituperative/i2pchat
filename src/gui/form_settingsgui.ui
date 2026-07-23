@@ -77,10 +77,10 @@
     </size>
    </property>
    <property name="frameShape">
-    <enum>QFrame::NoFrame</enum>
+    <enum>QFrame::Shape::NoFrame</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
+    <enum>QFrame::Shadow::Plain</enum>
    </property>
    <widget class="QStackedWidget" name="Settings">
     <property name="enabled">
@@ -90,19 +90,19 @@
      <rect>
       <x>136</x>
       <y>2</y>
-      <width>390</width>
+      <width>394</width>
       <height>408</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>390</width>
+      <width>394</width>
       <height>408</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>184</width>
+      <width>394</width>
       <height>408</height>
      </size>
     </property>
@@ -115,19 +115,19 @@
        <rect>
         <x>4</x>
         <y>178</y>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </size>
       </property>
@@ -144,7 +144,7 @@
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_11">
-        <item row="0" column="1" alignment="Qt::AlignLeft">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QSpinBox" name="OfflineChkSpinBox">
           <property name="minimumSize">
            <size>
@@ -187,7 +187,7 @@
            <string>Offline user check (seconds):</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -199,19 +199,19 @@
        <rect>
         <x>4</x>
         <y>290</y>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>50</height>
        </size>
       </property>
@@ -246,11 +246,11 @@
            <string>Max SAM log messages:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignLeft">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QSpinBox" name="spinBox">
           <property name="minimumSize">
            <size>
@@ -303,7 +303,7 @@
        <property name="verticalSpacing">
         <number>6</number>
        </property>
-       <item row="0" column="2" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="basicLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -327,7 +327,6 @@
           <font>
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
            <underline>false</underline>
@@ -341,11 +340,11 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;General&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="basiciconlabel">
          <property name="minimumSize">
           <size>
@@ -378,7 +377,7 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -389,19 +388,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>50</y>
-        <width>380</width>
+        <width>390</width>
         <height>122</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -464,7 +463,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>86</y>
          <width>356</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_20">
@@ -481,7 +480,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignRight">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_Downloads">
           <property name="enabled">
            <bool>true</bool>
@@ -530,19 +529,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>346</y>
-        <width>380</width>
+        <width>390</width>
         <height>49</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>49</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>49</height>
        </size>
       </property>
@@ -572,33 +571,33 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
-      <widget class="QGroupBox" name="AutoAway">
-       <property name="geometry">
-        <rect>
-         <x>4</x>
-         <y>234</y>
-         <width>380</width>
-         <height>50</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>380</width>
-         <height>50</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>380</width>
-         <height>50</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Auto-Away</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
+     <widget class="QGroupBox" name="AutoAway">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>234</y>
+        <width>390</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>390</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>390</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Auto-Away</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
       <widget class="QWidget" name="layoutWidget_22">
        <property name="geometry">
         <rect>
@@ -609,8 +608,8 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_21">
-        <item row="0" column="1" alignment="Qt::AlignLeft">
-          <widget class="QSpinBox" name="AutoAwaySpinBox">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
+         <widget class="QSpinBox" name="AutoAwaySpinBox">
           <property name="minimumSize">
            <size>
             <width>80</width>
@@ -637,8 +636,8 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="NoActivityLabel">
+        <item row="0" column="0">
+         <widget class="QLabel" name="NoActivityLabel">
           <property name="minimumSize">
            <size>
             <width>200</width>
@@ -655,7 +654,7 @@ p, li { white-space: pre-wrap; }
            <string>Auto-away after (minutes):</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -692,7 +691,7 @@ p, li { white-space: pre-wrap; }
        <property name="verticalSpacing">
         <number>6</number>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="networkiconlabel">
          <property name="minimumSize">
           <size>
@@ -728,11 +727,11 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="networkLabel">
          <property name="minimumSize">
           <size>
@@ -750,7 +749,6 @@ p, li { white-space: pre-wrap; }
           <font>
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
            <underline>false</underline>
@@ -765,7 +763,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;Network&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -776,19 +774,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>248</y>
-        <width>380</width>
+        <width>390</width>
         <height>147</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -800,8 +798,8 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>13</x>
          <y>42</y>
-         <width>356</width>
-         <height>100</height>
+         <width>386</width>
+         <height>152</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="TunnConf">
@@ -841,11 +839,11 @@ p, li { white-space: pre-wrap; }
            <string>Backup Quantity:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignHCenter">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
          <widget class="QLabel" name="label_14">
           <property name="minimumSize">
            <size>
@@ -876,7 +874,7 @@ p, li { white-space: pre-wrap; }
         <item row="1" column="1">
          <widget class="QSpinBox" name="spinBox_4"/>
         </item>
-        <item row="1" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_10">
           <property name="minimumSize">
            <size>
@@ -900,11 +898,11 @@ p, li { white-space: pre-wrap; }
            <string>Length:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" alignment="Qt::AlignRight">
+        <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QLabel" name="label_11">
           <property name="minimumSize">
            <size>
@@ -928,11 +926,11 @@ p, li { white-space: pre-wrap; }
            <string>Quantity:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_15">
           <property name="minimumSize">
            <size>
@@ -959,7 +957,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>12</y>
          <width>356</width>
-         <height>25</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="TunnName">
@@ -990,11 +988,11 @@ p, li { white-space: pre-wrap; }
            <string>Tunnel Name:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignVCenter">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLineEdit" name="lineEdit">
           <property name="clearButtonEnabled">
            <bool>true</bool>
@@ -1009,19 +1007,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>50</y>
-        <width>380</width>
+        <width>390</width>
         <height>45</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>68</height>
        </size>
       </property>
@@ -1033,8 +1031,8 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>13</x>
          <y>12</y>
-         <width>356</width>
-         <height>26</height>
+         <width>401</width>
+         <height>44</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_30">
@@ -1065,11 +1063,11 @@ p, li { white-space: pre-wrap; }
            <string>SAM Host IP:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignVCenter">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLineEdit" name="lineEdit_3">
           <property name="clearButtonEnabled">
            <bool>true</bool>
@@ -1108,119 +1106,119 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
      </widget>
-      <widget class="QGroupBox" name="Crypto">
+     <widget class="QGroupBox" name="Crypto">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>202</y>
+        <width>390</width>
+        <height>43</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>390</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>390</width>
+        <height>68</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Your existing destination will be deleted</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <widget class="QWidget" name="layoutWidget_9">
        <property name="geometry">
         <rect>
-         <x>4</x>
-         <y>202</y>
-         <width>380</width>
-         <height>43</height>
+         <x>14</x>
+         <y>12</y>
+         <width>356</width>
+         <height>38</height>
         </rect>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>380</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>380</width>
-         <height>68</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Your existing destination will be deleted</string>
-       </property>
-       <property name="title">
-        <string/>
-       </property>
-       <widget class="QWidget" name="layoutWidget_9">
-        <property name="geometry">
-         <rect>
-          <x>14</x>
-          <y>12</y>
-          <width>356</width>
-          <height>23</height>
-         </rect>
+       <layout class="QGridLayout" name="Encryption">
+        <property name="horizontalSpacing">
+         <number>10</number>
         </property>
-        <layout class="QGridLayout" name="Encryption">
-         <property name="horizontalSpacing">
-          <number>10</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="Encryption_label">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="Encryption_label">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Encryption Type:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="comboBox_EncType">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>220</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
            <property name="text">
-            <string>Encryption Type:</string>
+            <string>ECIES (X25519)</string>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </item>
+          <item>
+           <property name="text">
+            <string>ML-KEM-512 + ECIES</string>
            </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QComboBox" name="comboBox_EncType">
-           <property name="enabled">
-            <bool>true</bool>
+          </item>
+          <item>
+           <property name="text">
+            <string>ML-KEM-768 + ECIES</string>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>220</width>
-             <height>0</height>
-            </size>
+          </item>
+          <item>
+           <property name="text">
+            <string>ML-KEM-1024 + ECIES</string>
            </property>
-           <item>
-            <property name="text">
-             <string>ECIES (X25519)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ML-KEM-512 + ECIES</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ML-KEM-768 + ECIES</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ML-KEM-1024 + ECIES</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+          </item>
+         </widget>
+        </item>
+       </layout>
       </widget>
+     </widget>
      <widget class="QGroupBox" name="SigType">
       <property name="geometry">
        <rect>
         <x>4</x>
         <y>98</y>
-        <width>380</width>
+        <width>390</width>
         <height>101</height>
        </rect>
       </property>
@@ -1229,46 +1227,25 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>13</x>
          <y>14</y>
-         <width>356</width>
-         <height>25</height>
+         <width>388</width>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="SigType_2">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="0" column="0" alignment="Qt::AlignVCenter">
-      <widget class="QLabel" name="label_13">
-       <property name="geometry">
-        <rect>
-         <x>14</x>
-         <y>54</y>
-         <width>405</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Request Authorization</string>
-       </property>
-      </widget>
-       <widget class="QCheckBox" name="requestAuthcheckBox">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>14</x>
-          <y>76</y>
-          <width>405</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Request Authorization</string>
-        </property>
-        </widget>
-         </item>
-        <item row="0" column="1" alignment="Qt::AlignVCenter">
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignVCenter">
+         <widget class="QCheckBox" name="requestAuthcheckBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Request Authorization</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QComboBox" name="comboBox_SigType">
           <property name="enabled">
            <bool>true</bool>
@@ -1308,7 +1285,7 @@ p, li { white-space: pre-wrap; }
          <x>13</x>
          <y>44</y>
          <width>356</width>
-         <height>25</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="NewDest">
@@ -1339,11 +1316,11 @@ p, li { white-space: pre-wrap; }
            <string>New Destination:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignVCenter">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QPushButton" name="cmd_DestGenerate">
           <property name="text">
            <string>Generate</string>
@@ -1352,7 +1329,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-       <widget class="QCheckBox" name="nonpersistdest">
+      <widget class="QCheckBox" name="nonpersistdest">
        <property name="geometry">
         <rect>
          <x>144</x>
@@ -1373,19 +1350,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>278</y>
-        <width>380</width>
+        <width>390</width>
         <height>117</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -1458,7 +1435,7 @@ border-radius: 2px;
 (stored in your application.ini file)</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
       <widget class="QPushButton" name="cmd_selectAvatarImage">
@@ -1505,19 +1482,19 @@ border-radius: 2px;
        <rect>
         <x>4</x>
         <y>50</y>
-        <width>380</width>
+        <width>390</width>
         <height>109</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -1530,14 +1507,14 @@ border-radius: 2px;
          <x>104</x>
          <y>12</y>
          <width>268</width>
-         <height>88</height>
+         <height>115</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_12" columnstretch="10,0,0">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="1" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_21">
           <property name="minimumSize">
            <size>
@@ -1555,11 +1532,11 @@ border-radius: 2px;
            <string>Age:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_19">
           <property name="minimumSize">
            <size>
@@ -1577,11 +1554,11 @@ border-radius: 2px;
            <string>Nickname:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="2" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QCheckBox" name="checkGender_Female">
           <property name="enabled">
            <bool>true</bool>
@@ -1600,7 +1577,7 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="0" column="1" colspan="2" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLineEdit" name="txt_Nickname">
           <property name="enabled">
            <bool>true</bool>
@@ -1622,7 +1599,7 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="1" column="1" colspan="2" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QSpinBox" name="spinAge">
           <property name="enabled">
            <bool>true</bool>
@@ -1641,7 +1618,7 @@ border-radius: 2px;
           </property>
          </widget>
         </item>
-        <item row="2" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_22">
           <property name="minimumSize">
            <size>
@@ -1659,11 +1636,11 @@ border-radius: 2px;
            <string>Gender:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QCheckBox" name="checkGender_Male">
           <property name="enabled">
            <bool>true</bool>
@@ -1739,19 +1716,19 @@ border-radius: 2px;
        <rect>
         <x>4</x>
         <y>166</y>
-        <width>380</width>
+        <width>390</width>
         <height>104</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -1824,11 +1801,11 @@ border-radius: 2px;
           <bool>true</bool>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignVCenter">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="shareLabel">
          <property name="minimumSize">
           <size>
@@ -1846,7 +1823,6 @@ border-radius: 2px;
           <font>
            <family>Sans Serif</family>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
            <underline>false</underline>
@@ -1861,13 +1837,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;User Details&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget5</zorder>
      <zorder>UserBio</zorder>
      <zorder>SelectAvatar</zorder>
      <zorder>UserSuppInfo</zorder>
@@ -1878,19 +1854,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>126</y>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </size>
       </property>
@@ -1937,11 +1913,11 @@ p, li { white-space: pre-wrap; }
            <string>Style Sheet:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignRight">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QComboBox" name="styleSheetCombo">
           <property name="enabled">
            <bool>true</bool>
@@ -1961,7 +1937,6 @@ p, li { white-space: pre-wrap; }
           <property name="font">
            <font>
             <pointsize>9</pointsize>
-            <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
@@ -1987,19 +1962,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>52</y>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>69</height>
        </size>
       </property>
@@ -2040,11 +2015,11 @@ p, li { white-space: pre-wrap; }
            <string>Style:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignRight">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QComboBox" name="styleCombo">
           <property name="enabled">
            <bool>true</bool>
@@ -2094,7 +2069,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_30">
          <property name="minimumSize">
           <size>
@@ -2111,7 +2086,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2124,7 +2098,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_29">
          <property name="minimumSize">
           <size>
@@ -2165,7 +2139,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>210</y>
-        <width>380</width>
+        <width>390</width>
         <height>185</height>
        </rect>
       </property>
@@ -2183,10 +2157,10 @@ p, li { white-space: pre-wrap; }
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-          <widget class="QCheckBox" name="checkBox_5">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <widget class="QCheckBox" name="checkBox_5">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2208,10 +2182,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="1" column="0">
-          <widget class="QRadioButton" name="radioButton_2">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2233,10 +2207,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="2" column="0">
-          <widget class="QRadioButton" name="radioButton_3">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <widget class="QRadioButton" name="radioButton_3">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2258,10 +2232,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="3" column="0">
-          <widget class="QRadioButton" name="radioButton_4">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <widget class="QRadioButton" name="radioButton_4">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2283,10 +2257,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="4" column="0">
-          <widget class="QRadioButton" name="radioButton_5">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <widget class="QRadioButton" name="radioButton_5">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -2311,32 +2285,364 @@ p, li { white-space: pre-wrap; }
       </widget>
      </widget>
     </widget>
+    <widget class="QWidget" name="webserver_Page">
+     <widget class="QWidget" name="layoutWidget_21">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>0</y>
+        <width>152</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="WebServerHeader">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing">
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>6</number>
+       </property>
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+        <widget class="QLabel" name="webservericonlabel">
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resourcen.qrc">:/icons/webserver.svg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="webserverLabel">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Sans Serif</family>
+           <pointsize>16</pointsize>
+           <italic>false</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="text">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:16pt; font-weight:600; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;span style=&quot; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;Web Server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="WebServer">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>40</y>
+        <width>390</width>
+        <height>300</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>390</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>390</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Web Server Access</string>
+      </property>
+      <widget class="QCheckBox" name="WebServerAuthCheckbox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>31</y>
+         <width>362</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Require login</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="WebProfileDirectoryListingCheckbox">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>56</y>
+         <width>362</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Show file listing when no index.html exists</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelRealm">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>82</y>
+         <width>40</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Realm:</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="webServerRealmEdit">
+       <property name="geometry">
+        <rect>
+         <x>55</x>
+         <y>82</y>
+         <width>321</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>I2PChat Webserver</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSessionTimeout">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>108</y>
+         <width>140</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Session timeout (minutes):</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="webServerSessionTimeout">
+       <property name="geometry">
+        <rect>
+         <x>155</x>
+         <y>108</y>
+         <width>90</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1440</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>60</number>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="webServerUserTable">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>136</y>
+         <width>362</width>
+         <height>117</height>
+        </rect>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+       </property>
+       <column>
+        <property name="text">
+         <string>Username</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Folder</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QPushButton" name="webServerAddUserButton">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>260</y>
+         <width>65</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="webServerEditUserButton">
+       <property name="geometry">
+        <rect>
+         <x>82</x>
+         <y>260</y>
+         <width>65</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Edit</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="webServerDeleteUserButton">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>260</y>
+         <width>65</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="Docroot">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>347</y>
+        <width>390</width>
+        <height>53</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>390</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>390</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Document Root</string>
+      </property>
+      <widget class="QLineEdit" name="WebProfileDocrootEdit">
+       <property name="geometry">
+        <rect>
+         <x>14</x>
+         <y>25</y>
+         <width>280</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="browseDocrootButton">
+       <property name="geometry">
+        <rect>
+         <x>295</x>
+         <y>25</y>
+         <width>75</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Browse...</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QWidget" name="security_Page">
      <widget class="QGroupBox" name="UserAuth">
       <property name="geometry">
        <rect>
         <x>4</x>
         <y>150</y>
-        <width>380</width>
+        <width>390</width>
         <height>89</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
       <property name="title">
        <string>Authorization</string>
       </property>
-
       <widget class="QCheckBox" name="blockallcheckBox">
        <property name="enabled">
         <bool>true</bool>
@@ -2367,7 +2673,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_23">
          <property name="minimumSize">
           <size>
@@ -2395,7 +2701,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_3">
          <property name="minimumSize">
           <size>
@@ -2412,7 +2718,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2432,19 +2737,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>52</y>
-        <width>380</width>
+        <width>390</width>
         <height>89</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -2507,24 +2812,24 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>248</y>
-        <width>380</width>
+        <width>390</width>
         <height>147</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
       <property name="title">
-       <string>Destination Web Page</string>
+       <string>Profile Page</string>
       </property>
       <widget class="QCheckBox" name="WebProfileCheckbox">
        <property name="enabled">
@@ -2566,13 +2871,13 @@ p, li { white-space: pre-wrap; }
         <string>Share this address with new contacts to facilitate adding you to their contact list</string>
        </property>
        <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
+        <set>Qt::InputMethodHint::ImhNone</set>
        </property>
        <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
+        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
        </property>
        <property name="lineWrapMode">
-        <enum>QPlainTextEdit::NoWrap</enum>
+        <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -2616,7 +2921,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_24">
          <property name="maximumSize">
           <size>
@@ -2641,7 +2946,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_25">
          <property name="minimumSize">
           <size>
@@ -2658,7 +2963,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2680,19 +2984,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>331</y>
-        <width>380</width>
+        <width>390</width>
         <height>64</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>64</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>64</height>
        </size>
       </property>
@@ -2705,7 +3009,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>28</y>
          <width>361</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_14">
@@ -2756,7 +3060,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile_6">
           <property name="minimumSize">
            <size>
@@ -2783,13 +3087,13 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>156</y>
-        <width>380</width>
+        <width>390</width>
         <height>64</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>64</height>
        </size>
       </property>
@@ -2808,7 +3112,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>28</y>
          <width>360</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_17">
@@ -2859,7 +3163,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile_3">
           <property name="minimumSize">
            <size>
@@ -2886,19 +3190,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>52</y>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </size>
       </property>
@@ -2911,7 +3215,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>60</y>
          <width>360</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_18">
@@ -2962,7 +3266,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile_2">
           <property name="minimumSize">
            <size>
@@ -2989,7 +3293,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>28</y>
          <width>360</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_19" columnstretch="0,0,0">
@@ -3040,7 +3344,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile">
           <property name="minimumSize">
            <size>
@@ -3067,19 +3371,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>228</y>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>96</height>
        </size>
       </property>
@@ -3092,7 +3396,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>60</y>
          <width>361</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_15">
@@ -3143,7 +3447,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile_5">
           <property name="minimumSize">
            <size>
@@ -3170,7 +3474,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>28</y>
          <width>361</width>
-         <height>27</height>
+         <height>38</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_16">
@@ -3221,7 +3525,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="cmd_openFile_4">
           <property name="minimumSize">
            <size>
@@ -3258,7 +3562,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_33">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -3301,7 +3605,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_34">
          <property name="minimumSize">
           <size>
@@ -3318,7 +3622,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -3333,15 +3636,15 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-      <widget class="QFrame" name="frame_18">
-        <property name="geometry">
-         <rect>
-          <x>2</x>
-          <y>40</y>
-          <width>384</width>
-          <height>438</height>
-         </rect>
-        </property>
+     <widget class="QFrame" name="frame_18">
+      <property name="geometry">
+       <rect>
+        <x>2</x>
+        <y>40</y>
+        <width>384</width>
+        <height>438</height>
+       </rect>
+      </property>
       <property name="minimumSize">
        <size>
         <width>384</width>
@@ -3355,29 +3658,29 @@ p, li { white-space: pre-wrap; }
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Shape::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+       <enum>QFrame::Shadow::Plain</enum>
       </property>
       <widget class="QGroupBox" name="LocalStyle">
        <property name="geometry">
         <rect>
          <x>2</x>
          <y>12</y>
-         <width>380</width>
+         <width>390</width>
          <height>80</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>380</width>
+         <width>390</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>380</width>
+         <width>390</width>
          <height>16777215</height>
         </size>
        </property>
@@ -3390,7 +3693,6 @@ p, li { white-space: pre-wrap; }
        <property name="font">
         <font>
          <pointsize>9</pointsize>
-         <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
@@ -3422,10 +3724,10 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::FocusPolicy::NoFocus</enum>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::NoContextMenu</enum>
+         <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
         </property>
         <property name="acceptDrops">
          <bool>false</bool>
@@ -3444,7 +3746,7 @@ p, li { white-space: pre-wrap; }
          <property name="horizontalSpacing">
           <number>10</number>
          </property>
-         <item row="0" column="0" alignment="Qt::AlignHCenter">
+         <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdBoldChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3485,7 +3787,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="1" alignment="Qt::AlignHCenter">
+         <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdUnderChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3526,7 +3828,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="2" alignment="Qt::AlignHCenter">
+         <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdItalicChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3567,7 +3869,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="3" alignment="Qt::AlignHCenter">
+         <item row="0" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdColorChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3605,7 +3907,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="4" alignment="Qt::AlignHCenter">
+         <item row="0" column="4" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdFontChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3664,19 +3966,19 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>2</x>
          <y>98</y>
-         <width>380</width>
+         <width>390</width>
          <height>80</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>380</width>
+         <width>390</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>380</width>
+         <width>390</width>
          <height>16777215</height>
         </size>
        </property>
@@ -3689,7 +3991,6 @@ p, li { white-space: pre-wrap; }
        <property name="font">
         <font>
          <pointsize>9</pointsize>
-         <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
@@ -3734,16 +4035,16 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
+         <enum>Qt::FocusPolicy::NoFocus</enum>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::NoContextMenu</enum>
+         <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
         </property>
         <property name="acceptDrops">
          <bool>false</bool>
         </property>
         <property name="autoFormatting">
-         <set>QTextEdit::AutoNone</set>
+         <set>QTextEdit::AutoFormattingFlag::AutoNone</set>
         </property>
        </widget>
        <widget class="QWidget" name="layoutWidget10">
@@ -3759,7 +4060,7 @@ p, li { white-space: pre-wrap; }
          <property name="horizontalSpacing">
           <number>10</number>
          </property>
-         <item row="0" column="0" alignment="Qt::AlignHCenter">
+         <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdOverwriteBoldChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3800,7 +4101,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="1" alignment="Qt::AlignHCenter">
+         <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdOverwriteUnderChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3841,7 +4142,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="2" alignment="Qt::AlignHCenter">
+         <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdOverwriteItalicChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3882,7 +4183,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="3" alignment="Qt::AlignHCenter">
+         <item row="0" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdOverwriteColorChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3920,7 +4221,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="0" column="4" alignment="Qt::AlignHCenter">
+         <item row="0" column="4" alignment="Qt::AlignmentFlag::AlignHCenter">
           <widget class="QToolButton" name="cmdOverwriteFontChat">
            <property name="enabled">
             <bool>true</bool>
@@ -3961,67 +4262,67 @@ p, li { white-space: pre-wrap; }
         </layout>
        </widget>
       </widget>
-       <widget class="QGroupBox" name="groupChatStyle">
+      <widget class="QGroupBox" name="groupChatStyle">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>239</y>
+         <width>390</width>
+         <height>45</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QLabel" name="labelChatStyle">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>239</y>
-          <width>380</width>
-          <height>45</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QLabel" name="labelChatStyle">
-         <property name="geometry">
-          <rect>
-           <x>14</x>
-           <y>14</y>
-           <width>60</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Chat Style</string>
-         </property>
-        </widget>
-        <widget class="QComboBox" name="comboBoxChatStyle">
-         <property name="geometry">
-          <rect>
-           <x>76</x>
-           <y>12</y>
-           <width>150</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_DisplayImagesInline">
-        <property name="geometry">
-         <rect>
-          <x>16</x>
-          <y>287</y>
-          <width>358</width>
+          <x>14</x>
+          <y>14</y>
+          <width>60</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Display received images inline</string>
+         <string>Chat Style</string>
         </property>
        </widget>
-       <widget class="QGroupBox" name="UserEvents">
+       <widget class="QComboBox" name="comboBoxChatStyle">
         <property name="geometry">
          <rect>
-          <x>2</x>
-          <y>314</y>
-          <width>380</width>
-          <height>51</height>
+          <x>76</x>
+          <y>12</y>
+          <width>150</width>
+          <height>22</height>
          </rect>
         </property>
+       </widget>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_DisplayImagesInline">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>287</y>
+         <width>358</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Display received images inline</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="UserEvents">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>314</y>
+         <width>390</width>
+         <height>51</height>
+        </rect>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>380</width>
+         <width>390</width>
          <height>68</height>
         </size>
        </property>
@@ -4040,7 +4341,6 @@ p, li { white-space: pre-wrap; }
         <property name="font">
          <font>
           <pointsize>9</pointsize>
-          <weight>50</weight>
           <bold>false</bold>
          </font>
         </property>
@@ -4054,7 +4354,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>2</x>
          <y>184</y>
-         <width>380</width>
+         <width>390</width>
          <height>51</height>
         </rect>
        </property>
@@ -4081,18 +4381,18 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>2</x>
-          <y>371</y>
-          <width>380</width>
-          <height>57</height>
-         </rect>
-        </property>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>371</y>
+         <width>390</width>
+         <height>57</height>
+        </rect>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -4106,7 +4406,7 @@ p, li { white-space: pre-wrap; }
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0" alignment="Qt::AlignRight">
+         <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignRight">
           <widget class="QLabel" name="label_6">
            <property name="enabled">
             <bool>false</bool>
@@ -4127,11 +4427,11 @@ p, li { white-space: pre-wrap; }
             <string>Connection timeout (seconds):</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" alignment="Qt::AlignLeft">
+         <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
           <widget class="QSpinBox" name="spinBox_maxACK">
            <property name="enabled">
             <bool>false</bool>
@@ -4178,7 +4478,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_36">
          <property name="minimumSize">
           <size>
@@ -4201,7 +4501,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -4214,7 +4513,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_35">
          <property name="minimumSize">
           <size>
@@ -4335,7 +4634,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>0</y>
-        <width>151</width>
+        <width>152</width>
         <height>30</height>
        </rect>
       </property>
@@ -4343,7 +4642,7 @@ p, li { white-space: pre-wrap; }
        <property name="horizontalSpacing">
         <number>3</number>
        </property>
-       <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QLabel" name="label_27">
          <property name="minimumSize">
           <size>
@@ -4380,7 +4679,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignLeft">
+       <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
         <widget class="QLabel" name="label_28">
          <property name="minimumSize">
           <size>
@@ -4397,7 +4696,6 @@ p, li { white-space: pre-wrap; }
          <property name="font">
           <font>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -4420,19 +4718,19 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>4</x>
         <y>50</y>
-        <width>380</width>
+        <width>390</width>
         <height>117</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>380</width>
+        <width>390</width>
         <height>16777215</height>
        </size>
       </property>
@@ -4468,7 +4766,7 @@ p, li { white-space: pre-wrap; }
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="0" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_32">
           <property name="minimumSize">
            <size>
@@ -4486,11 +4784,11 @@ p, li { white-space: pre-wrap; }
            <string>Reannounce timer in hours:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignLeft">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QSpinBox" name="spinBox_ReAnnounceUserSearch">
           <property name="minimumSize">
            <size>
@@ -4527,7 +4825,7 @@ p, li { white-space: pre-wrap; }
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="0" column="0" alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="label_31">
           <property name="minimumSize">
            <size>
@@ -4545,11 +4843,11 @@ p, li { white-space: pre-wrap; }
            <string>Max. Log Messages:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignLeft">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QSpinBox" name="spinBox_MaxLogMsgUserSearch">
           <property name="minimumSize">
            <size>
@@ -4607,7 +4905,6 @@ p, li { white-space: pre-wrap; }
      <font>
       <family>SansSerif</family>
       <pointsize>9</pointsize>
-      <weight>50</weight>
       <bold>false</bold>
      </font>
     </property>
@@ -4615,16 +4912,16 @@ p, li { white-space: pre-wrap; }
      <bool>false</bool>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::Shape::StyledPanel</enum>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
+     <enum>QFrame::Shadow::Plain</enum>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
     </property>
     <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
     </property>
     <property name="showDropIndicator" stdset="0">
      <bool>false</bool>
@@ -4636,13 +4933,13 @@ p, li { white-space: pre-wrap; }
      </size>
     </property>
     <property name="flow">
-     <enum>QListView::TopToBottom</enum>
+     <enum>QListView::Flow::TopToBottom</enum>
     </property>
     <property name="resizeMode">
-     <enum>QListView::Fixed</enum>
+     <enum>QListView::ResizeMode::Fixed</enum>
     </property>
     <property name="layoutMode">
-     <enum>QListView::SinglePass</enum>
+     <enum>QListView::LayoutMode::SinglePass</enum>
     </property>
     <property name="spacing">
      <number>4</number>
@@ -4665,7 +4962,6 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="font">
       <font>
-       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
@@ -4699,6 +4995,15 @@ p, li { white-space: pre-wrap; }
      <property name="icon">
       <iconset resource="resourcen.qrc">
        <normaloff>:/icons/theme.svg</normaloff>:/icons/theme.svg</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Web Server</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resourcen.qrc">
+       <normaloff>:/icons/webserver.svg</normaloff>:/icons/webserver.svg</iconset>
      </property>
     </item>
     <item>
@@ -4773,10 +5078,10 @@ p, li { white-space: pre-wrap; }
      </size>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+     <enum>QFrame::Shadow::Raised</enum>
     </property>
     <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
    <widget class="QFrame" name="buttonFrame">
@@ -4801,10 +5106,10 @@ p, li { white-space: pre-wrap; }
      </size>
     </property>
     <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
+     <enum>QFrame::Shape::NoFrame</enum>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+     <enum>QFrame::Shadow::Raised</enum>
     </property>
     <widget class="QPushButton" name="cancel_Button">
      <property name="geometry">

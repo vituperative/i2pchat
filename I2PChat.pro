@@ -22,6 +22,7 @@ INCLUDEPATH += . \
 
 SOURCES += \
 	src/backend/Base.cpp \
+	src/backend/HttpServer.cpp \
 	src/backend/LoadHTML.cpp \
 	src/backend/Main.cpp \
 	src/backend/Core.cpp \
@@ -59,6 +60,7 @@ SOURCES += \
 
 HEADERS += \
 	src/backend/Core.h \
+	src/backend/HttpServer.h \
 	src/backend/LoadHTML.h \
 	src/backend/User.h \
 	src/backend/I2PSamMessageAnalyser.h \

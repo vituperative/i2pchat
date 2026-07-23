@@ -2,7 +2,7 @@
 
 ## July, 2026
 
-* Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
+* Multi-file static web server with HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, rate-limited login (3 failed = 1h ban), configurable docroot, and /login+/logout endpoints
 * Transient (non-persistent) destination option
 * Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
 * Auto-away with settings toggle

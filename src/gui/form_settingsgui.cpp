@@ -7,7 +7,10 @@
 #include "UserBlockManager.h"
 
 #include <QDebug>
+#include <QDialogButtonBox>
 #include <QFileDialog>
+#include <QFormLayout>
+#include <QHBoxLayout>
 
 form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   : QDialog(parent, flags)
@@ -46,6 +49,13 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
   connect(cmd_openFile_5, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile5()));
 
   connect(cmd_openFile_6, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile6()));
+
+  connect(browseDocrootButton, SIGNAL(clicked(bool)), this, SLOT(clicked_browseDocroot()));
+
+  connect(webServerAddUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerAddUser()));
+  connect(webServerEditUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerEditUser()));
+  connect(webServerDeleteUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerDeleteUser()));
+  connect(WebServerAuthCheckbox, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerAuthToggled(bool)));
 
   connect(cmd_DestGenerate, SIGNAL(clicked(bool)), this, SLOT(clicked_DestinationGenerate()));
 
@@ -389,6 +399,31 @@ void form_settingsgui::loadSettings() {
   } else {
     HideWebCheckbox->setChecked(false);
   }
+  if (settings->value("WebProfileDirectoryListing", "False").toString() == "True") {
+    WebProfileDirectoryListingCheckbox->setChecked(true);
+  } else {
+    WebProfileDirectoryListingCheckbox->setChecked(false);
+  }
+  if (settings->value("WebServerAuthRequired", "False").toString() == "True") {
+    WebServerAuthCheckbox->setChecked(true);
+  } else {
+    WebServerAuthCheckbox->setChecked(false);
+  }
+  webServerRealmEdit->setText(settings->value("WebServerRealm", "I2PChat Webserver").toString());
+  webServerSessionTimeout->setValue(settings->value("WebServerSessionTimeout", 3600).toInt() / 60);
+  int userCount = settings->value("WebServerUserCount", 0).toInt();
+  webServerUserTable->setRowCount(userCount);
+  for (int i = 0; i < userCount; i++) {
+    QString name = settings->value(QStringLiteral("WebServerUser_%1_Name").arg(i)).toString();
+    QString folder = settings->value(QStringLiteral("WebServerUser_%1_Folder").arg(i)).toString();
+    webServerUserTable->setItem(i, 0, new QTableWidgetItem(name));
+    webServerUserTable->setItem(i, 1, new QTableWidgetItem(folder));
+  }
+  { // WebProfileDocroot — show default path if unset
+    QString d = settings->value("WebProfileDocroot", "").toString();
+    WebProfileDocrootEdit->setText(d.isEmpty() ? mConfigPath + QStringLiteral("/www") : d);
+  }
+  clicked_webServerAuthToggled(WebServerAuthCheckbox->isChecked());
 
   // Load blocking settings
   blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
@@ -552,6 +587,31 @@ void form_settingsgui::saveSettings() {
   } else {
     settings->setValue("HideWebProfileWhenInvisible", "False");
   }
+  if (WebProfileDirectoryListingCheckbox->isChecked() == true) {
+    settings->setValue("WebProfileDirectoryListing", "True");
+  } else {
+    settings->setValue("WebProfileDirectoryListing", "False");
+  }
+  if (WebServerAuthCheckbox->isChecked() == true) {
+    settings->setValue("WebServerAuthRequired", "True");
+  } else {
+    settings->setValue("WebServerAuthRequired", "False");
+  }
+  settings->setValue("WebServerRealm", webServerRealmEdit->text());
+  settings->setValue("WebServerSessionTimeout", webServerSessionTimeout->value() * 60);
+  int userCount = webServerUserTable->rowCount();
+  settings->setValue("WebServerUserCount", userCount);
+  for (int i = 0; i < userCount; i++) {
+    QTableWidgetItem *nameItem = webServerUserTable->item(i, 0);
+    QTableWidgetItem *folderItem = webServerUserTable->item(i, 1);
+    if (nameItem && !nameItem->text().isEmpty()) {
+      settings->setValue(QStringLiteral("WebServerUser_%1_Name").arg(i), nameItem->text());
+      QVariant passData = webServerUserTable->item(i, 0)->data(Qt::UserRole);
+      settings->setValue(QStringLiteral("WebServerUser_%1_Password").arg(i), passData.toString());
+      settings->setValue(QStringLiteral("WebServerUser_%1_Folder").arg(i), folderItem ? folderItem->text() : QString());
+    }
+  }
+  settings->setValue("WebProfileDocroot", WebProfileDocrootEdit->text());
   settings->setValue("BlockAllUnknownUsers", blockallcheckBox->isChecked());
   settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
   settings->endGroup();
@@ -707,6 +767,100 @@ void form_settingsgui::clicked_openFile6() {
     checkBoxSound_6->setEnabled(false);
   } else
     checkBoxSound_6->setEnabled(true);
+}
+
+void form_settingsgui::clicked_browseDocroot() {
+  QString dir = QFileDialog::getExistingDirectory(
+    this,
+    tr("Choose Document Root"),
+    WebProfileDocrootEdit->text().isEmpty() ? mConfigPath + QStringLiteral("/www") : WebProfileDocrootEdit->text());
+  if (!dir.isEmpty())
+    WebProfileDocrootEdit->setText(dir);
+}
+
+static bool editUserDialog(QWidget *parent, QString &name, QString &password, QString &folder) {
+  QDialog d(parent);
+  d.setWindowTitle(name.isEmpty() ? QObject::tr("Add User") : QObject::tr("Edit User"));
+  QFormLayout *form = new QFormLayout(&d);
+  QLineEdit *nameEdit = new QLineEdit(name, &d);
+  QLineEdit *passEdit = new QLineEdit(password, &d);
+  passEdit->setEchoMode(QLineEdit::Password);
+  QWidget *folderRow = new QWidget(&d);
+  QHBoxLayout *folderLayout = new QHBoxLayout(folderRow);
+  folderLayout->setContentsMargins(0, 0, 0, 0);
+  QLineEdit *folderEdit = new QLineEdit(folder, folderRow);
+  QPushButton *browseBtn = new QPushButton(QObject::tr("Browse..."), folderRow);
+  folderLayout->addWidget(folderEdit);
+  folderLayout->addWidget(browseBtn);
+  QObject::connect(browseBtn, &QPushButton::clicked, [parent, folderEdit]() {
+    QString dir = QFileDialog::getExistingDirectory(parent, QObject::tr("Choose Folder"), folderEdit->text());
+    if (!dir.isEmpty())
+      folderEdit->setText(dir);
+  });
+  form->addRow(QObject::tr("Username:"), nameEdit);
+  form->addRow(QObject::tr("Password:"), passEdit);
+  form->addRow(QObject::tr("Folder:"), folderRow);
+  QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &d);
+  form->addRow(buttons);
+  QObject::connect(buttons, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+  QObject::connect(buttons, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+  if (d.exec() != QDialog::Accepted)
+    return false;
+  name = nameEdit->text().trimmed();
+  password = passEdit->text();
+  folder = folderEdit->text().trimmed();
+  return true;
+}
+
+void form_settingsgui::clicked_webServerAddUser() {
+  QString name, password, folder;
+  if (!editUserDialog(this, name, password, folder))
+    return;
+  if (name.isEmpty())
+    return;
+  int row = webServerUserTable->rowCount();
+  webServerUserTable->insertRow(row);
+  QTableWidgetItem *nameItem = new QTableWidgetItem(name);
+  nameItem->setData(Qt::UserRole, password);
+  webServerUserTable->setItem(row, 0, nameItem);
+  webServerUserTable->setItem(row, 1, new QTableWidgetItem(folder));
+}
+
+void form_settingsgui::clicked_webServerEditUser() {
+  int row = webServerUserTable->currentRow();
+  if (row < 0)
+    return;
+  QTableWidgetItem *nameItem = webServerUserTable->item(row, 0);
+  QTableWidgetItem *folderItem = webServerUserTable->item(row, 1);
+  if (!nameItem)
+    return;
+  QString name = nameItem->text();
+  QString password = nameItem->data(Qt::UserRole).toString();
+  QString folder = folderItem ? folderItem->text() : QString();
+  if (!editUserDialog(this, name, password, folder))
+    return;
+  if (name.isEmpty())
+    return;
+  nameItem->setText(name);
+  nameItem->setData(Qt::UserRole, password);
+  if (folderItem)
+    folderItem->setText(folder);
+}
+
+void form_settingsgui::clicked_webServerDeleteUser() {
+  int row = webServerUserTable->currentRow();
+  if (row < 0)
+    return;
+  webServerUserTable->removeRow(row);
+}
+
+void form_settingsgui::clicked_webServerAuthToggled(bool checked) {
+  webServerUserTable->setEnabled(checked);
+  webServerAddUserButton->setEnabled(checked);
+  webServerEditUserButton->setEnabled(checked);
+  webServerDeleteUserButton->setEnabled(checked);
+  labelRealm->setEnabled(checked);
+  webServerRealmEdit->setEnabled(checked);
 }
 
 void form_settingsgui::clicked_DestinationGenerate() {

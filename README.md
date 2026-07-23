@@ -20,6 +20,7 @@ End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for an
 * Emoticon support with punctuation-boundary detection
 * Automatic URL linking in chat messages
 * Optional b32.i2p web profile page with avatar, bio, and interests
+* Multi-file static web server hosted at your b32.i2p address — drop files in <code>~/.i2pchat/www/</code>
 * File transfer with per-user auto-download configuration and pipelined transfers
 * Drag-and-drop image upload with inline display
 * Copy b32 address and raw destination with right-click
@@ -104,6 +105,34 @@ On macOS, the CI produces a bundled `.app` via `macdeployqt`. Run it by double-c
 * Select **Online** from the dropdown menu on the main window. Your unique I2P destination is created automatically on first SAM connection.
 * Settings and contacts are stored in `~/.i2pchat/` (Linux) or `%APPDATA%\Roaming\I2PChat\` (Windows).
 * Default signature type: EdDSA_SHA512_Ed25519. DSA_SHA1 is no longer available.
+
+## Web Server
+
+When enabled, I2PChat serves files from `~/.i2pchat/www/` (or a custom docroot) over I2P on your b32.i2p address. The web server supports multi-user access with HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, and rate-limited login attempts.
+
+| Setting | Default | Behavior |
+|---|---|---|
+| Web server | Enabled | Master toggle; hides page when any contact is invisible |
+| Require login | Disabled | When ON, all requests challenge for credentials |
+| Directory listing | Disabled | Show file index when no `index.html` exists |
+| Session timeout | 60 min | Cookie lifetime; expired sessions require re-login |
+| Users | — | Per-user username/password and document root folder |
+
+**Auth modes:**
+- **Login not required (default):** All paths are public. Visit `b32.i2p/login` to authenticate; once authenticated via Basic Auth, a session cookie is set and your per-user folder is served. `/logout` clears the session and returns to the public root.
+- **Login required:** Every request challenges with 401. After successful auth a session cookie avoids re-prompting. `/logout` challenges again.
+
+**Rate limiting:** 3 failed login attempts per I2P destination triggers a 1-hour ban (persisted across restarts in `bans.txt`).
+
+**Security model:**
+- Path traversal is blocked at every level: `QDir::cleanPath` normalization, null-byte rejection, and canonical-path boundary enforcement that follows symlink resolution
+- Only GET and HEAD methods are accepted; all others receive 405
+- Request headers over 4KB are rejected (DoS mitigation)
+- Username token injection strips `<` and `>` characters (XSS prevention)
+- Content-Security-Policy is set restrictively (`default-src 'self'`, `form-action 'none'`, `base-uri 'none'`, `frame-ancestors 'none'`). Users may override via `<meta>` tags in their HTML
+- Symlinks inside `www/` are rejected (must be regular files)
+- Session cookies are HttpOnly + SameSite=Lax
+- HTTPS is not applicable — transport security is provided by I2P's garlic routing at the network layer
 
 ## Changelog
 

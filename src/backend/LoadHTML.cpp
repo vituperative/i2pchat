@@ -10,7 +10,7 @@
 #include <QErrorMessage>
 #include <QSettings>
 
-QString gethttpheader(QString pagedata) {
+QString gethttpheader(const QString& pagedata) {
   QString header;
   header = "HTTP/1.0 200\r\nContent-Length: " + QString::number(pagedata.size()) + "\r\n" +
            "Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; "
@@ -20,7 +20,7 @@ QString gethttpheader(QString pagedata) {
   return header;
 }
 
-QString pngtobase64(QByteArray pngdata) {
+QString pngtobase64(const QByteArray& pngdata) {
   return pngdata.toBase64();
 }
 
@@ -28,7 +28,7 @@ QString pngtobase64(QByteArray pngdata) {
 //	htmldata.
 //}
 
-QString loadfile(QString filename) {
+QString loadfile(const QString& filename) {
 
   QString filecontents;
   QFile f(filename);

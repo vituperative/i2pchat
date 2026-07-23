@@ -4,6 +4,7 @@
 #define PROTOCOL
 
 #include <QThread>
+#include <QTimer>
 #include <QtGui>
 
 /*
@@ -165,6 +166,7 @@ public:
 public slots:
   void slotInputUnknown(const qint32 ID, const QByteArray &Data);
   void slotInputKnown(const qint32 ID, const QByteArray &Data);
+  void cleanupRateLimits();
 
 private:
   void dispatchKnownCommand(const qint32 ID, const QByteArray &Data, const QString &tag);
@@ -174,5 +176,6 @@ private:
   void handleWebProfileProtocolPacket(const qint32 ID, const QByteArray &Data, class CI2PStream *stream);
 
   CCore &mCore;
+  QTimer *mRateLimitCleanupTimer;
 };
 #endif

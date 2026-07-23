@@ -43,6 +43,11 @@ private slots:
   void clicked_openFile4();
   void clicked_openFile5();
   void clicked_openFile6();
+  void clicked_browseDocroot();
+  void clicked_webServerAddUser();
+  void clicked_webServerEditUser();
+  void clicked_webServerDeleteUser();
+  void clicked_webServerAuthToggled(bool checked);
   void clicked_DestinationGenerate();
   void clicked_IncomingFileFolder();
 

@@ -4,19 +4,122 @@
 
 #include "Core.h"
 #include "FileTransferSend.h"
+#include "HttpServer.h"
 #include "I2PStream.h"
 #include "LoadHTML.h"
 #include "User.h"
 #include "UserManager.h"
 
 #include <QDateTime>
+#include <QDir>
 #include <QErrorMessage>
+#include <QFile>
+#include <QMap>
 #include <QSettings>
+#include <QTextStream>
+#include <QUuid>
 
 #include <iostream>
 
+namespace {
+constexpr int MAX_LOGIN_ATTEMPTS = 3;
+constexpr qint64 BAN_DURATION_MS = 3600 * 1000;
+constexpr qint64 CLEANUP_INTERVAL_MS = 300000;
+
+struct RateLimitEntry {
+  int failures = 0;
+  qint64 banUntil = 0;
+};
+
+QMap<QString, RateLimitEntry> s_rateLimits;
+QString s_bansFile;
+const QString BANS_MAGIC = "I2PChat_BANv1\t";
+
+void loadBans() {
+  s_rateLimits.clear();
+  QFile f(s_bansFile);
+  if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+    return;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  QTextStream in(&f);
+  while (!in.atEnd()) {
+    QString line = in.readLine().trimmed();
+    if (!line.startsWith(BANS_MAGIC))
+      continue;
+    QString payload = line.mid(BANS_MAGIC.length());
+    int tab = payload.indexOf(QLatin1Char('\t'));
+    if (tab < 0)
+      continue;
+    qint64 banUntil = payload.left(tab).toLongLong();
+    if (banUntil <= now)
+      continue;
+    QString dest = payload.mid(tab + 1);
+    if (!dest.isEmpty()) {
+      RateLimitEntry e;
+      e.banUntil = banUntil;
+      s_rateLimits[dest] = e;
+    }
+  }
+}
+
+void saveBans() {
+  QFile f(s_bansFile);
+  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+    return;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  QTextStream out(&f);
+  for (auto it = s_rateLimits.constBegin(); it != s_rateLimits.constEnd(); ++it) {
+    if (it.value().banUntil > now) {
+      out << BANS_MAGIC << it.value().banUntil << QLatin1Char('\t') << it.key() << QLatin1Char('\n');
+    }
+  }
+}
+
+bool isBansLoaded() {
+  static bool loaded = false;
+  if (!loaded && !s_bansFile.isEmpty()) {
+    loadBans();
+    loaded = true;
+  }
+  return loaded;
+}
+
+struct WebSession {
+  QString username;
+  qint64 expiry;
+};
+QMap<QString, WebSession> s_sessions;
+
+QString generateSessionToken() {
+  return QUuid::createUuid().toString(QUuid::WithoutBraces);
+}
+
+void setCookieInResponse(QByteArray &response, const QString &token, int maxAgeSecs) {
+  int insertPos = response.indexOf("\r\n\r\n");
+  if (insertPos > 0) {
+    QByteArray cookie = "Set-Cookie: I2PChatSession=" + token.toUtf8() +
+                        "; HttpOnly; SameSite=Lax; Max-Age=" + QByteArray::number(maxAgeSecs) + "; Path=/\r\n";
+    response.insert(insertPos, cookie);
+  }
+}
+
+void clearCookieInResponse(QByteArray &response) {
+  int insertPos = response.indexOf("\r\n\r\n");
+  if (insertPos > 0)
+    response.insert(insertPos,
+                    QByteArray("Set-Cookie: I2PChatSession=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/\r\n"));
+}
+
+} // namespace
+
 CProtocol::CProtocol(CCore &Core)
-  : mCore(Core) {}
+  : mCore(Core) {
+  if (s_bansFile.isEmpty())
+    s_bansFile = mCore.getConfigPath() + QStringLiteral("/bans.txt");
+  mRateLimitCleanupTimer = new QTimer(this);
+  connect(mRateLimitCleanupTimer, &QTimer::timeout, this, &CProtocol::cleanupRateLimits);
+  mRateLimitCleanupTimer->start(CLEANUP_INTERVAL_MS);
+}
 
 void CProtocol::newConnectionChat(const qint32 ID) {
   using namespace Protocol_Info;
@@ -616,12 +719,28 @@ void CProtocol::handleFileTransferProtocolPacket(const qint32 ID, const QByteArr
 }
 
 void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray &Data, CI2PStream *stream) {
-  Q_UNUSED(Data);
-  bool webprofileenabled = false;
-  if (mCore.getUserBlockManager()->isDestinationInBlockList(stream->getDestination()) == true) {
+  // Reject oversized request headers (4KB max) to prevent DoS
+  if (Data.size() > 4096) {
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
     return;
   }
+
+  // Load persisted bans on first request
+  isBansLoaded();
+
+  // Rate-limit check: ban remote destination after 3 failed login attempts
+  QString remoteDest = stream->getDestination();
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  auto &rateEntry = s_rateLimits[remoteDest];
+  if (rateEntry.banUntil > 0 && now >= rateEntry.banUntil) {
+    rateEntry = RateLimitEntry();
+  }
+  if (rateEntry.banUntil > 0) {
+    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    return;
+  }
+
+  bool webprofileenabled = false;
   QSettings settings(mCore.getConfigPath() + "/application.ini", QSettings::IniFormat);
   settings.beginGroup("Security");
   if (settings.value("WebProfile", "Enabled").toString() == "Enabled")
@@ -637,19 +756,241 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
     if (mCore.getOnlineStatus() == USERINVISIBLE)
       webprofileenabled = false;
   }
+
+  bool dirListing = settings.value("WebProfileDirectoryListing", "False").toString() == "True";
+  bool authRequired = settings.value("WebServerAuthRequired", "False").toString() == "True";
+  QString realm = settings.value("WebServerRealm", "I2PChat Webserver").toString();
+  int sessionMaxAgeSecs = settings.value("WebServerSessionTimeout", 3600).toInt();
+  int userCount = settings.value("WebServerUserCount", 0).toInt();
+
+  QMap<QString, QString> userPasswords;
+  QMap<QString, QString> userDocroots;
+  for (int i = 0; i < userCount; i++) {
+    QString name = settings.value(QStringLiteral("WebServerUser_%1_Name").arg(i)).toString();
+    QString pass = settings.value(QStringLiteral("WebServerUser_%1_Password").arg(i)).toString();
+    QString folder = settings.value(QStringLiteral("WebServerUser_%1_Folder").arg(i)).toString();
+    if (!name.isEmpty()) {
+      userPasswords[name] = pass;
+      userDocroots[name] = folder;
+    }
+  }
+
+  QString docroot = settings.value("WebProfileDocroot", "").toString();
   settings.endGroup();
 
-  if (webprofileenabled == true) {
-    QString TEMPHTTPPAGE = loadfile(mCore.getConfigPath() + "/www/index.html");
-    if (TEMPHTTPPAGE.isEmpty())
-      TEMPHTTPPAGE = HTTPPAGE;
-    QString myNick = mCore.getUserInfos().Nickname;
-    myNick = myNick.replace("<", "").replace(">", "");
-    TEMPHTTPPAGE.replace("[USERNAME]", myNick);
-    TEMPHTTPPAGE.replace("[AVATARIMAGE]", mCore.getUserInfos().AvatarImage.toBase64());
-    TEMPHTTPPAGE.replace("[MYDEST]", mCore.getMyDestination());
-    *(stream) << (QString)(gethttpheader(TEMPHTTPPAGE) + TEMPHTTPPAGE);
+  if (docroot.isEmpty())
+    docroot = QDir::cleanPath(mCore.getConfigPath() + QStringLiteral("/www"));
+
+  if (!webprofileenabled) {
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    return;
+  }
+
+  HttpRequest req = CSimpleHttpServer::parseRequest(Data);
+  if (req.method == QStringLiteral("UNSUPPORTED")) {
+    QByteArray resp405 = CSimpleHttpServer::buildErrorResponse(405, "Method Not Allowed");
+    *(stream) << resp405;
+    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    return;
+  }
+
+  // ---- Session check ----
+  QString sessionUser;
+  bool hadValidSession = false;
+  if (!req.sessionToken.isEmpty()) {
+    auto sit = s_sessions.find(req.sessionToken);
+    if (sit != s_sessions.end()) {
+      if (sit.value().expiry > now) {
+        sessionUser = sit.value().username;
+        hadValidSession = true;
+      } else {
+        s_sessions.erase(sit);
+      }
+    }
+  }
+
+  bool credsValid = !req.authUser.isEmpty() && !req.authPassword.isEmpty() && userPasswords.contains(req.authUser) &&
+                    userPasswords[req.authUser] == req.authPassword;
+
+  // Resolve the effective authenticated user
+  QString authUser;
+  if (!sessionUser.isEmpty())
+    authUser = sessionUser;
+  else if (credsValid)
+    authUser = req.authUser;
+
+  bool shallCreateSession = false;
+  bool shallDestroySession = false;
+  QByteArray newSessionToken;
+
+  // ---- /logout ----
+  if (req.path == QStringLiteral("/logout")) {
+    if (hadValidSession) {
+      s_sessions.remove(req.sessionToken);
+      shallDestroySession = true;
+    }
+    if (authRequired) {
+      QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+      clearCookieInResponse(resp401);
+      *(stream) << resp401;
+      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+      return;
+    }
+    QByteArray redirect;
+    redirect += "HTTP/1.0 302 Found\r\n";
+    redirect += "Location: /\r\n";
+    redirect += "Content-Length: 0\r\n";
+    if (shallDestroySession)
+      clearCookieInResponse(redirect);
+    redirect += "\r\n";
+    *(stream) << redirect;
+    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    return;
+  }
+
+  // ---- Auth-required mode ----
+  if (authRequired && authUser.isEmpty()) {
+    if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
+      s_rateLimits[remoteDest].failures++;
+    QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+    *(stream) << resp401;
+    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    auto &re = s_rateLimits[remoteDest];
+    if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
+      re.banUntil = now + BAN_DURATION_MS;
+      saveBans();
+    }
+    return;
+  }
+
+  // ---- /login (auth not required) ----
+  if (!authRequired && req.path == QStringLiteral("/login")) {
+    if (hadValidSession) {
+      // Already logged in – redirect to /
+      QByteArray redirect;
+      redirect += "HTTP/1.0 302 Found\r\n";
+      redirect += "Location: /\r\n";
+      redirect += "Content-Length: 0\r\n";
+      redirect += "\r\n";
+      *(stream) << redirect;
+      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+      return;
+    }
+    if (authUser.isEmpty()) {
+      if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
+        s_rateLimits[remoteDest].failures++;
+      QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+      *(stream) << resp401;
+      mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+      auto &re = s_rateLimits[remoteDest];
+      if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
+        re.banUntil = now + BAN_DURATION_MS;
+        saveBans();
+      }
+      return;
+    }
+    // Valid creds on /login → create session and redirect
+    newSessionToken = generateSessionToken().toUtf8();
+    s_sessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
+    s_rateLimits[remoteDest] = RateLimitEntry();
+
+    QByteArray redirect;
+    redirect += "HTTP/1.0 302 Found\r\n";
+    redirect += "Location: /\r\n";
+    redirect += "Content-Length: 0\r\n";
+    setCookieInResponse(redirect, QString::fromUtf8(newSessionToken), sessionMaxAgeSecs);
+    redirect += "\r\n";
+    *(stream) << redirect;
+    mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+    return;
+  }
+
+  // ---- Successful auth outside /login (e.g. cached Basic Auth) – create session if not already ----
+  if (authUser.isEmpty()) {
+    authUser = QString();
+  } else if (!hadValidSession) {
+    shallCreateSession = true;
+    newSessionToken = generateSessionToken().toUtf8();
+    s_sessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
+    s_rateLimits[remoteDest] = RateLimitEntry();
+  } else {
+    // Valid session – reset rate-limit counter as good behavior
+    s_rateLimits[remoteDest] = RateLimitEntry();
+  }
+
+  // Apply user docroot if authenticated
+  if (!authUser.isEmpty()) {
+    QString userFolder = userDocroots.value(authUser);
+    if (!userFolder.isEmpty())
+      docroot = userFolder;
+  }
+
+  QFileInfo file = CSimpleHttpServer::resolvePath(docroot, req.path);
+
+  QString nickname = mCore.getUserInfos().Nickname;
+  QByteArray avatarB64 = mCore.getUserInfos().AvatarImage.toBase64();
+  QString myDest = mCore.getMyDestination();
+
+  QByteArray response;
+  if (file.exists() && file.isReadable() && file.isFile()) {
+    response = CSimpleHttpServer::buildResponse(req, file, docroot, nickname, avatarB64, myDest);
+  } else if (file.exists() && file.isDir()) {
+    QFileInfo indexFile(file.absoluteFilePath() + QStringLiteral("/index.html"));
+    if (indexFile.exists() && indexFile.isFile() && indexFile.isReadable()) {
+      response = CSimpleHttpServer::buildResponse(req, indexFile, docroot, nickname, avatarB64, myDest);
+    } else if (dirListing) {
+      response = CSimpleHttpServer::buildDirectoryListing(file, req.path);
+    } else {
+      response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
+    }
+  } else if ((req.path == QStringLiteral("/") || req.path.isEmpty()) && !file.exists()) {
+    QDir rootDir(docroot);
+    if (dirListing && rootDir.exists()) {
+      QFileInfo dirInfo(docroot);
+      response = CSimpleHttpServer::buildDirectoryListing(dirInfo, req.path);
+    } else {
+      QString fallback = HTTPPAGE;
+      QString safeNick = nickname;
+      safeNick.replace(QStringLiteral("<"), QString()).replace(QStringLiteral(">"), QString());
+      fallback.replace(QStringLiteral("[USERNAME]"), safeNick);
+      fallback.replace(QStringLiteral("[AVATARIMAGE]"), QString::fromUtf8(avatarB64));
+      fallback.replace(QStringLiteral("[MYDEST]"), myDest);
+      QByteArray fbContent = fallback.toUtf8();
+      QByteArray fbHeader = CSimpleHttpServer::buildHeader(
+        200, QStringLiteral("OK"), fbContent.size(), QStringLiteral("text/html; charset=utf-8"), QString());
+      response = fbHeader + fbContent;
+    }
+  } else {
+    response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
+  }
+
+  if (shallCreateSession && !newSessionToken.isEmpty())
+    setCookieInResponse(response, QString::fromUtf8(newSessionToken), sessionMaxAgeSecs);
+
+  *(stream) << response;
+  mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
+}
+
+void CProtocol::cleanupRateLimits() {
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  bool dirty = false;
+  for (auto it = s_rateLimits.begin(); it != s_rateLimits.end();) {
+    if (it.value().banUntil > 0 && now >= it.value().banUntil) {
+      it = s_rateLimits.erase(it);
+      dirty = true;
+    } else {
+      ++it;
+    }
+  }
+  if (dirty)
+    saveBans();
+
+  // Clean expired sessions
+  for (auto it = s_sessions.begin(); it != s_sessions.end();) {
+    if (it.value().expiry <= now)
+      it = s_sessions.erase(it);
+    else
+      ++it;
   }
 }
 

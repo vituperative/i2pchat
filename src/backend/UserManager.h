@@ -24,7 +24,7 @@ public:
   void saveUserList();
   void loadUserList();
   bool addNewUser(QString Name,
-                  QString I2PDestination,
+                  const QString& I2PDestination,
                   qint32 I2PStream_ID = 0,
                   bool SaveUserList = true,
                   bool skipGlobalGate = false);

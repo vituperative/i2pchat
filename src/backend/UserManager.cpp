@@ -283,7 +283,7 @@ bool CUserManager::validateI2PDestination(const QString &I2PDestination) const {
 }
 
 bool CUserManager::addNewUser(QString Name,
-                              QString I2PDestination,
+                              const QString& I2PDestination,
                               qint32 I2PStream_ID,
                               bool SaveUserList,
                               bool skipGlobalGate) {

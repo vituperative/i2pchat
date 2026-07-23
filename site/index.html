@@ -42,7 +42,8 @@
       <li>Transient (session-only) identity — no keys persisted to disk
       <li>Offline message queue — compose while offline, delivered automatically on reconnect
       <li>File transfer with per-user auto-download policy
-      <li>Optional b32.i2p web profile page with avatar, bio, and interests
+      <li>Optional b32.i2p web profile page — drop HTML, CSS, JS, and images into <code>~/.i2pchat/www/</code> for a multi-file static site at your b32 address
+      <li>Multi-user web server with per-user folder mapping, HTTP Basic Auth, cookie sessions, and directory listing
       <li>Configurable tunnel length, quantity, and backup; ECIES (Ratchet) and EdDSA
       <li>Emoticon support with punctuation-boundary detection
     </ul>
@@ -98,6 +99,17 @@ Options:
       <li>Select <strong>Online</strong> from the dropdown menu. Your unique I2P destination is created automatically on first SAM connection.
       <li>Settings and contacts are stored in <code>~/.i2pchat/</code> (Linux) or <code>%APPDATA%\Roaming\I2PChat\</code> (Windows).
     </ul>
+    <details>
+      <summary>Web server</summary>
+      <p>Static files in <code>~/.i2pchat/www/</code> (or a custom docroot) are served on your b32.i2p address. Supports HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, and rate-limited login. Visit Settings → Web Server to configure:</p>
+      <ul>
+        <li><strong>Require login</strong> — when ON, all paths challenge for credentials; when OFF, only <code>/login</code> challenges and <code>/logout</code> returns to the public root
+        <li><strong>Session timeout</strong> — configurable cookie lifetime (default 60 min)
+        <li><strong>Users</strong> — per-user username, password, and document root folder
+        <li><strong>Directory listing</strong> — file index when no <code>index.html</code> exists
+      </ul>
+      <p>Content-Security-Policy: <code>default-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'</code>. Only GET/HEAD accepted. Request headers limited to 4KB. Symlinks rejected. Session cookies are HttpOnly+SameSite=Lax. 3 failed logins = 1h ban. Transport security by I2P's garlic routing.</p>
+    </details>
     <hr>
     <h3 id=license>License</h3>
     <p>Licensed under GPLv3.
