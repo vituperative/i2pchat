@@ -788,8 +788,10 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
 
   HttpRequest req = CSimpleHttpServer::parseRequest(Data);
   if (req.method == QStringLiteral("UNSUPPORTED")) {
-    QByteArray resp405 = CSimpleHttpServer::buildErrorResponse(405, "Method Not Allowed");
-    *(stream) << resp405;
+    QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 405, QStringLiteral("Method Not Allowed"));
+    if (resp.isEmpty())
+      resp = CSimpleHttpServer::buildErrorResponse(405, "Method Not Allowed");
+    *(stream) << resp;
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
     return;
   }
@@ -830,9 +832,17 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
       shallDestroySession = true;
     }
     if (authRequired) {
-      QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
-      clearCookieInResponse(resp401);
-      *(stream) << resp401;
+      QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 401, QStringLiteral("Unauthorized"));
+      if (!resp.isEmpty()) {
+        // Inject WWW-Authenticate header for browser challenge
+        int pos = resp.indexOf("\r\n\r\n");
+        if (pos > 0)
+          resp.insert(pos, "WWW-Authenticate: Basic realm=\"" + realm.toUtf8() + "\"\r\n");
+      } else {
+        resp = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+      }
+      clearCookieInResponse(resp);
+      *(stream) << resp;
       mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       return;
     }
@@ -852,8 +862,15 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
   if (authRequired && authUser.isEmpty()) {
     if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
       s_rateLimits[remoteDest].failures++;
-    QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
-    *(stream) << resp401;
+    QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 401, QStringLiteral("Unauthorized"));
+    if (!resp.isEmpty()) {
+      int pos = resp.indexOf("\r\n\r\n");
+      if (pos > 0)
+        resp.insert(pos, "WWW-Authenticate: Basic realm=\"" + realm.toUtf8() + "\"\r\n");
+    } else {
+      resp = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+    }
+    *(stream) << resp;
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
     auto &re = s_rateLimits[remoteDest];
     if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
@@ -879,8 +896,15 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
     if (authUser.isEmpty()) {
       if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
         s_rateLimits[remoteDest].failures++;
-      QByteArray resp401 = CSimpleHttpServer::buildAuthRequiredResponse(realm);
-      *(stream) << resp401;
+      QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 401, QStringLiteral("Unauthorized"));
+      if (!resp.isEmpty()) {
+        int pos = resp.indexOf("\r\n\r\n");
+        if (pos > 0)
+          resp.insert(pos, "WWW-Authenticate: Basic realm=\"" + realm.toUtf8() + "\"\r\n");
+      } else {
+        resp = CSimpleHttpServer::buildAuthRequiredResponse(realm);
+      }
+      *(stream) << resp;
       mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
       auto &re = s_rateLimits[remoteDest];
       if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
@@ -941,7 +965,9 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
     } else if (dirListing) {
       response = CSimpleHttpServer::buildDirectoryListing(file, req.path);
     } else {
-      response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
+      response = CSimpleHttpServer::tryCustomErrorPage(docroot, 404, QStringLiteral("Not Found"));
+      if (response.isEmpty())
+        response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
     }
   } else if ((req.path == QStringLiteral("/") || req.path.isEmpty()) && !file.exists()) {
     QDir rootDir(docroot);
@@ -961,7 +987,9 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
       response = fbHeader + fbContent;
     }
   } else {
-    response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
+    response = CSimpleHttpServer::tryCustomErrorPage(docroot, 404, QStringLiteral("Not Found"));
+    if (response.isEmpty())
+      response = CSimpleHttpServer::buildErrorResponse(404, QStringLiteral("Not Found"));
   }
 
   if (shallCreateSession && !newSessionToken.isEmpty())

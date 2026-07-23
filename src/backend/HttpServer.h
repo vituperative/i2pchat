@@ -28,6 +28,7 @@ public:
   static QByteArray buildDirectoryListing(const QFileInfo &dir, const QString &requestPath);
   static QByteArray buildAuthRequiredResponse(const QString &realm);
   static QByteArray buildErrorResponse(int status, const QString &statusText);
+  static QByteArray tryCustomErrorPage(const QString &docroot, int statusCode, const QString &statusText);
   static QByteArray buildHeader(int statusCode,
                                 const QString &statusText,
                                 qint64 contentLength,

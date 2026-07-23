@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QSet>
 #include <QUrl>
 
 static bool hasNullBytes(const QString &s) {
@@ -235,8 +236,31 @@ QByteArray CSimpleHttpServer::buildDirectoryListing(const QFileInfo &dir, const 
 
   QFileInfoList entries =
     d.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs | QDir::Readable, QDir::Name | QDir::DirsFirst);
+  const QSet<QString> hiddenExact = {QStringLiteral("Thumbs.db"), QStringLiteral("desktop.ini")};
+  const QSet<QString> hiddenSuffix = {QStringLiteral("~"),
+                                      QStringLiteral(".bak"),
+                                      QStringLiteral(".orig"),
+                                      QStringLiteral(".swp"),
+                                      QStringLiteral(".swo"),
+                                      QStringLiteral(".pyc"),
+                                      QStringLiteral(".pyo"),
+                                      QStringLiteral(".o"),
+                                      QStringLiteral(".obj"),
+                                      QStringLiteral(".class")};
   for (const QFileInfo &entry : entries) {
-    if (entry.fileName().startsWith(QLatin1Char('.')))
+    const QString fname = entry.fileName();
+    if (fname.startsWith(QLatin1Char('.')))
+      continue;
+    if (hiddenExact.contains(fname))
+      continue;
+    bool skip = false;
+    for (const QString &suffix : hiddenSuffix) {
+      if (fname.endsWith(suffix)) {
+        skip = true;
+        break;
+      }
+    }
+    if (skip)
       continue;
 
     QString name = entry.fileName();
@@ -262,6 +286,21 @@ QByteArray CSimpleHttpServer::buildDirectoryListing(const QFileInfo &dir, const 
   QByteArray header =
     buildHeader(200, QStringLiteral("OK"), content.size(), QStringLiteral("text/html; charset=utf-8"), csp);
   return header + content;
+}
+
+QByteArray CSimpleHttpServer::tryCustomErrorPage(const QString &docroot, int statusCode, const QString &statusText) {
+  QString path = docroot + QStringLiteral("/.resources/") + QString::number(statusCode) + QStringLiteral(".html");
+  QFileInfo fi(path);
+  if (!fi.exists() || !fi.isFile() || !fi.isReadable())
+    return QByteArray();
+  QFile f(path);
+  if (!f.open(QIODevice::ReadOnly))
+    return QByteArray();
+  QByteArray body = f.readAll();
+  f.close();
+  QByteArray header =
+    buildHeader(statusCode, statusText, body.size(), QStringLiteral("text/html; charset=utf-8"), generateCSP());
+  return header + body;
 }
 
 QByteArray CSimpleHttpServer::buildAuthRequiredResponse(const QString &realm) {
