@@ -26,7 +26,7 @@ jobs:
           sudo apt-get install -y g++ make upx
 
       - name: Build
-        run: bash build.sh --appimage --upx
+        run: bash build.sh --appimage --upx --deb
 
       - name: Upload binary
         uses: actions/upload-artifact@v5
@@ -35,6 +35,7 @@ jobs:
           path: |
             dist/I2PChat
             dist/I2PChat-*.AppImage
+            dist/i2pchat_*.deb
 
   windows:
     runs-on: windows-latest
@@ -134,6 +135,8 @@ jobs:
           cp I2PChat-macos/I2PChat release-assets/I2PChat-macos
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
             cp I2PChat-linux/I2PChat-*.AppImage release-assets/
+          ls I2PChat-linux/i2pchat_*.deb 2>/dev/null && \
+            cp I2PChat-linux/i2pchat_*.deb release-assets/ || echo "No .deb"
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -158,6 +161,8 @@ jobs:
           cp I2PChat-macos/I2PChat release-assets/I2PChat-macos 2>/dev/null || echo "MISSING I2PChat-macos"
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
             cp I2PChat-linux/I2PChat-*.AppImage release-assets/ || echo "No AppImage"
+          ls I2PChat-linux/i2pchat_*.deb 2>/dev/null && \
+            cp I2PChat-linux/i2pchat_*.deb release-assets/ || echo "No .deb"
 
       - name: Upload continuous release
         uses: ncipollo/release-action@v1

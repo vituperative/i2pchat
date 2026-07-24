@@ -16,6 +16,9 @@
 * Debug Messages: monospace 8pt, single-div HTML layout
 * Minimal theme as sole default; log display improvements (newline trim, 9pt)
 * Sound defaults aligned with real files; pending→send notification suppressed
+* Settings dialog overhaul: layout-based UI, removed Gender/Age
+* Added .deb packaging via `build.sh --deb`
+* CI: always UPX Linux builds, strip Windows binaries
 
 ## January, 2026
 

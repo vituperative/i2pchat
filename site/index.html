@@ -66,6 +66,7 @@
       <li>AppImage (<code>--appimage</code>): needs <code>wget</code> plus the native prerequisites above.
       <li>Windows cross-compile (<code>--windows</code>): needs <code>git gperf libtool</code> plus the native prerequisites. MXE is cloned and built automatically on first run.
       <li>UPX compression (<code>--upx</code>): needs <code>upx</code>.
+      <li>.deb package (<code>--deb</code>): needs <code>dpkg-deb</code> (pre-installed on Debian/Ubuntu).
       <li>Format (<code>--format</code>): needs <code>clang-format</code>.
       <li>Tidy (<code>--tidy</code>): needs <code>clang-tidy bear compiledb</code>.
     </ul>
@@ -79,6 +80,7 @@ Options:
   --format      Run clang-format (auto-fix sources)
   --tidy        Run clang-tidy with --fix (check and auto-fix issues)
   --appimage    Build portable AppImage (Linux only)
+  --deb         Build .deb package (Linux only)
   --windows     Cross-compile Windows .exe via MinGW-w64
   --upx         Compress binary with UPX (reduces size, all platforms)
   --bump        Bump patch version, update Core.h and create git tag

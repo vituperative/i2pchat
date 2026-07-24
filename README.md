@@ -72,6 +72,7 @@ takes a while). Subsequent builds reuse the cached toolchain automatically.
 | `bear` or `compiledb`           | (compile_commands.json) | `apt install bear` / `pipx install compiledb` (for clang-tidy, clangd, etc.)      |
 | `wget` + linuxdeploy            | `--appimage`            | `apt install wget` / `dnf install wget` (linuxdeploy downloaded automatically)    |
 | `upx`                           | `--upx`                 | `apt install upx` / `dnf install upx`                                             |
+| `dpkg-deb`                      | `--deb`                 | `apt install dpkg` (pre-installed on Debian/Ubuntu)                                |
 | MXE + qt5 target                | `--windows`             | Auto-cloned — needs `gperf`, `libtool` + `libtool-bin` (Debian) on the host       |
 
 #### Quick build
@@ -80,7 +81,7 @@ takes a while). Subsequent builds reuse the cached toolchain automatically.
 bash build.sh
 ```
 
-Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--windows` to cross-compile a Windows .exe, `--upx` to compress the binary with UPX).
+Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--deb` for a .deb package, `--windows` to cross-compile a Windows .exe, `--upx` to compress the binary with UPX).
 
 #### Manual compilation
 
@@ -95,7 +96,7 @@ make -j$(nproc)
 
 ## Running
 
-On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Run `bash build.sh --appimage` to produce a portable AppImage at `dist/I2PChat-x86_64.AppImage`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
+On Linux, `bash build.sh` creates a stripped binary at `dist/I2PChat`. Run `bash build.sh --appimage` to produce a portable AppImage at `dist/I2PChat-x86_64.AppImage`. Run `bash build.sh --deb` to produce a `.deb` package at `dist/i2pchat_<version>_<arch>.deb`. Manual builds produce `I2PChat` in the project root. Run it with `./I2PChat`.
 
 On Windows, cross-compile from Linux via `bash build.sh --windows` (64‑bit only, requires [MXE](https://mxe.cc) with `qt5`). The `.exe` is written to `dist/I2PChat.exe`. No Windows SDK needed.
 
