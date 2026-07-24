@@ -328,9 +328,6 @@ if command -v upx &>/dev/null; then
   UPX_TARGETS=()
   if $WINDOWS; then UPX_TARGETS+=("$DIST_DIR/I2PChat.exe"); fi
   if ! $WINDOWS; then UPX_TARGETS+=("$DIST_DIR/I2PChat"); fi
-  if $APPIMAGE && ls "$DIST_DIR"/I2PChat-*.AppImage >/dev/null 2>&1; then
-    UPX_TARGETS+=("$DIST_DIR"/I2PChat-*.AppImage)
-  fi
   if [[ ${#UPX_TARGETS[@]} -eq 0 ]]; then
     UPX_TARGETS+=("$BINARY")
   fi
