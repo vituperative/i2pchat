@@ -107,7 +107,8 @@ CCore::CCore(const QString &configPath) {
   connect(&mAutoAwayTimer, SIGNAL(timeout()), this, SLOT(slotAutoAwayTimeout()));
   QSettings autoSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   mAutoAwayMinutes = autoSettings.value("General/AutoAwayMinutes", 0).toInt();
-  if (mAutoAwayMinutes > 0 && autoSettings.value("General/AutoAwayEnabled", false).toBool())
+  mAutoAwayEnabled = autoSettings.value("General/AutoAwayEnabled", false).toBool();
+  if (mAutoAwayEnabled && mAutoAwayMinutes > 0)
     mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
 }
 
@@ -653,16 +654,17 @@ void CCore::slotAutoAwayTimeout() {
 }
 
 void CCore::resetAutoAway() {
-  if (mAutoAwayMinutes > 0) {
+  if (mAutoAwayEnabled && mAutoAwayMinutes > 0) {
     mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
     if (mCurrentOnlineStatus == USERAWAY)
       setOnlineStatus(USERONLINE);
   }
 }
 
-void CCore::applyAutoAwaySettings(int minutes) {
+void CCore::applyAutoAwaySettings(bool enabled, int minutes) {
+  mAutoAwayEnabled = enabled;
   mAutoAwayMinutes = minutes;
-  if (minutes > 0)
+  if (enabled && minutes > 0)
     mAutoAwayTimer.start(minutes * 60000);
   else
     mAutoAwayTimer.stop();

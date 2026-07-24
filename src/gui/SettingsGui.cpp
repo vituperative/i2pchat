@@ -577,9 +577,10 @@ void SettingsGui::saveSettings() {
   mCore.loadUserInfos();
 
   int autoMinutes = 0;
-  if (settings->value("General/AutoAwayEnabled", false).toBool())
+  bool autoEnabled = settings->value("General/AutoAwayEnabled", false).toBool();
+  if (autoEnabled)
     autoMinutes = settings->value("General/AutoAwayMinutes", 0).toInt();
-  mCore.applyAutoAwaySettings(autoMinutes);
+  mCore.applyAutoAwaySettings(autoEnabled, autoMinutes);
   mCore.getUserManager()->avatarImageChanged();
 
   // Force update nickname display in main window
@@ -1137,7 +1138,7 @@ void SettingsGui::clicked_sortByLastOnline(bool checked) {
 void SettingsGui::clicked_AutoAwayEnabled(bool enabled) {
   AutoAwaySpinBox->setEnabled(enabled);
   NoActivityLabel->setEnabled(enabled);
-  mCore.applyAutoAwaySettings(enabled ? AutoAwaySpinBox->value() : 0);
+  mCore.applyAutoAwaySettings(enabled, enabled ? AutoAwaySpinBox->value() : 0);
 }
 
 void SettingsGui::clicked_nonPersistDest(bool checked) {

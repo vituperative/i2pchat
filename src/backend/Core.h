@@ -64,7 +64,7 @@ public:
 
   void doNamingLookUP(const QString &Name) const;
   void resetAutoAway();
-  void applyAutoAwaySettings(int minutes);
+  void applyAutoAwaySettings(bool enabled, int minutes);
   void doConvertNumberToTransferSize(quint64 inNumber,
                                      QString &outNumber,
                                      QString &outType,
@@ -120,6 +120,7 @@ private:
   ONLINESTATE mNextOnlineStatus;
   QTimer mKeepAliveTimer;
   QTimer mAutoAwayTimer;
+  bool mAutoAwayEnabled;
   int mAutoAwayMinutes;
 
   void init();
