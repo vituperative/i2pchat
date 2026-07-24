@@ -26,7 +26,7 @@ jobs:
           sudo apt-get install -y g++ make upx
 
       - name: Build
-        run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
+        run: bash build.sh --appimage --upx
 
       - name: Upload binary
         uses: actions/upload-artifact@v5
@@ -67,6 +67,10 @@ jobs:
               copy /Y "%%f" dist\ || exit /b 1
             )
           )
+
+      - name: Strip binary
+        shell: cmd
+        run: llvm-strip dist\I2PChat.exe
 
       - name: Upload build log
         if: failure()
