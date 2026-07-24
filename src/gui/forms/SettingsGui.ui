@@ -903,22 +903,47 @@
          </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="comboBox_SigType">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>390</width>
-             <height>26</height>
-            </size>
-           </property>
-          </widget>
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>390</width>
+              <height>26</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>ECDSA_SHA256_P256</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ECDSA_SHA384_P384</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ECDSA_SHA512_P521</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string extracomment="Default">EdDSA_SHA512_Ed25519</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>RedDSA_SHA512_Ed25519</string>
+             </property>
+            </item>
+           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_26">
@@ -1067,22 +1092,42 @@
          </item>
          <item row="0" column="1" colspan="2">
           <widget class="QComboBox" name="comboBox_EncType">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>390</width>
-             <height>26</height>
-            </size>
-           </property>
-          </widget>
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>390</width>
+              <height>26</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>ECIES (X25519)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ML-KEM-512 + ECIES</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ML-KEM-768 + ECIES</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ML-KEM-1024 + ECIES</string>
+             </property>
+            </item>
+           </widget>
          </item>
         </layout>
        </widget>
