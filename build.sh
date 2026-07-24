@@ -67,7 +67,7 @@ if $BUMP; then
   exit 0
 fi
 
-BUILD_DIR="/tmp/build-i2pchat"
+BUILD_DIR="${TMPDIR:-/tmp}/build-i2pchat"
 DIST_DIR="$ROOT/dist"
 
 # --- dependency check ---

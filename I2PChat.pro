@@ -115,10 +115,10 @@ macx {
 
 #unix {}
 
-UI_DIR = /tmp/build-i2pchat/uic
-OBJECTS_DIR = /tmp/build-i2pchat/obj
-RCC_DIR = /tmp/build-i2pchat/qrc
-MOC_DIR = /tmp/build-i2pchat/moc
+UI_DIR = $$OUT_PWD/build/uic
+OBJECTS_DIR = $$OUT_PWD/build/obj
+RCC_DIR = $$OUT_PWD/build/qrc
+MOC_DIR = $$OUT_PWD/build/moc
 DESTDIR = dist/
 RC_FILE = src/gui/icons/i2pmessenger_win.rc
 
