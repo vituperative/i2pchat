@@ -32,8 +32,13 @@
     <p id=screenshots><img src=screenshots/main.png alt=screenshot-roster> <img src=screenshots/chat.png alt=screenshot-chat>
     <hr>
     <h3 id=downloads>Downloads</h3>
+    <p><a href=https://github.com/vituperative/i2pchat/releases/tag/continuous>Latest CI build</a> (all platforms)
     <ul>
-      <li><a href=https://github.com/vituperative/i2pchat/actions/workflows/build.yml>Latest CI build (Linux)</a>
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat-Linux>Linux</a> (binary)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat.exe>Windows</a> (.exe)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat-macos>macOS</a>
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/i2pchat_0.2.43_amd64.deb>Debian/Ubuntu</a> (.deb)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/sounds.zip>Sounds</a> (.zip)
     </ul>
     <hr>
     <h3 id=features>Features</h3>
@@ -111,6 +116,18 @@ Options:
         <li><strong>Directory listing</strong> — file index when no <code>index.html</code> exists
       </ul>
       <p>Content-Security-Policy: <code>default-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'</code>. Only GET/HEAD accepted. Request headers limited to 4KB. Symlinks rejected. Session cookies are HttpOnly+SameSite=Lax. 3 failed logins = 1h ban. Transport security by I2P's garlic routing.</p>
+    </details>
+    <details>
+      <summary>Sounds</summary>
+      <p>I2PChat plays notification sounds for online/offline events, incoming messages, and file transfers.</p>
+      <p><strong>Debian/Ubuntu (`.deb`):</strong> Sounds are included and automatically copied to <code>~/.i2pchat/sounds/</code> on first run.</p>
+      <p><strong>Other platforms:</strong> Download the <a href=https://github.com/vituperative/i2pchat/releases>sounds archive</a> and extract to the config directory:</p>
+      <ul>
+        <li><strong>Linux:</strong> <code>~/.i2pchat/sounds/</code>
+        <li><strong>Windows:</strong> <code>%APPDATA%\Roaming\I2PChat\sounds\</code>
+        <li><strong>macOS:</strong> <code>~/Library/Application Support/I2PChat/sounds/</code>
+      </ul>
+      <p>Sound files can be customized by editing <code>application.ini</code> under <code>[Sound][SoundFilePath]</code>.</p>
     </details>
     <hr>
     <h3 id=license>License</h3>

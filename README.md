@@ -107,6 +107,22 @@ On macOS, the CI produces a bundled `.app` via `macdeployqt`. Run it by double-c
 * Settings and contacts are stored in `~/.i2pchat/` (Linux) or `%APPDATA%\Roaming\I2PChat\` (Windows).
 * Default signature type: EdDSA_SHA512_Ed25519. DSA_SHA1 is no longer available.
 
+## Sounds
+
+I2PChat plays notification sounds for online/offline events, incoming messages, and file transfers.
+
+**Debian/Ubuntu (`.deb`):** Sounds are included and automatically copied to `~/.i2pchat/sounds/` on first run.
+
+**Other platforms:** Download the [sounds archive](https://github.com/vituperative/i2pchat/releases) and extract to the config directory:
+
+| Platform | Config path |
+|----------|-------------|
+| Linux | `~/.i2pchat/sounds/` |
+| Windows | `%APPDATA%\Roaming\I2PChat\sounds\` |
+| macOS | `~/Library/Application Support/I2PChat/sounds/` |
+
+Sound files can be customized by editing the paths in `application.ini` under `[Sound][SoundFilePath]`.
+
 ## Web Server
 
 When enabled, I2PChat serves files from `~/.i2pchat/www/` (or a custom docroot) over I2P on your b32.i2p address. The web server supports multi-user access with HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, and rate-limited login attempts.
