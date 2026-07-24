@@ -19,6 +19,7 @@ BUMP=false
 APPIMAGE=false
 WINDOWS=false
 UPX=false
+DEB=false
 JOBS=$(nproc)
 
 usage() {
@@ -29,6 +30,7 @@ usage() {
     echo "  --format      Run clang-format (auto-fix sources)"
     echo "  --tidy        Run clang-tidy with --fix (check and auto-fix issues)"
     echo "  --appimage    Build portable AppImage (Linux only)"
+    echo "  --deb         Build .deb package (Linux only)"
     echo "  --windows     Cross-compile Windows .exe via MinGW-w64"
     echo "  --upx         Compress binary with UPX (reduces size, all platforms)"
     echo "  --bump        Bump patch version, update Core.h and create git tag"
@@ -43,6 +45,7 @@ while [[ $# -gt 0 ]]; do
     --format) FORMAT=true ;;
     --tidy) TIDY=true ;;
     --appimage) APPIMAGE=true ;;
+    --deb) DEB=true ;;
     --windows) WINDOWS=true ;;
     --upx) UPX=true ;;
     --bump) BUMP=true ;;
@@ -75,6 +78,7 @@ DEPS=(g++ qmake make pkg-config file)
 if $FORMAT; then DEPS+=(clang-format); fi
 if $TIDY; then DEPS+=(clang-tidy run-clang-tidy bear compiledb); fi
 if $APPIMAGE; then DEPS+=(wget); fi
+if $DEB; then DEPS+=(dpkg-deb); fi
 MISSING=()
 if $WINDOWS; then
   DEPS+=(git gperf)
@@ -169,6 +173,7 @@ TOTAL_STEPS=2
 if $FORMAT; then ((TOTAL_STEPS++)); fi
 if $TIDY; then ((TOTAL_STEPS++)); fi
 if $APPIMAGE; then ((TOTAL_STEPS++)); fi
+if $DEB; then ((TOTAL_STEPS++)); fi
 if $WINDOWS; then ((TOTAL_STEPS++)); fi
 if $UPX; then ((TOTAL_STEPS++)); fi
 CUR_STEP=0
@@ -338,4 +343,49 @@ if command -v upx &>/dev/null; then
 else
   fail "upx not found — install it via your package manager"
 fi
+fi
+
+# --- .deb package ---
+if $DEB; then
+next_step "Building .deb package..."
+if ! command -v dpkg-deb &>/dev/null; then
+  die "dpkg-deb not found — install dpkg (apt install dpkg)"
+fi
+
+VERSION=$(sed -n 's/^#define CLIENTVERSION "\(.*\)"$/\1/p' src/backend/Core.h)
+ARCH=$(dpkg --print-architecture)
+DEB_NAME="i2pchat_${VERSION}_${ARCH}"
+DEB_STAGING="$BUILD_DIR/$DEB_NAME"
+
+rm -rf "$DEB_STAGING"
+mkdir -p "$DEB_STAGING/DEBIAN"
+mkdir -p "$DEB_STAGING/usr/bin"
+mkdir -p "$DEB_STAGING/usr/share/applications"
+mkdir -p "$DEB_STAGING/usr/share/icons/hicolor/scalable/apps"
+
+cp "$DIST_DIR/I2PChat" "$DEB_STAGING/usr/bin/"
+cp "$ROOT/packaging/I2PChat.desktop" "$DEB_STAGING/usr/share/applications/"
+cp "$ROOT/src/gui/icons/avatar.svg" "$DEB_STAGING/usr/share/icons/hicolor/scalable/apps/i2pchat.svg"
+
+cat > "$DEB_STAGING/DEBIAN/control" << EOF
+Package: i2pchat
+Version: $VERSION
+Section: net
+Priority: optional
+Architecture: $ARCH
+Depends: libqt5core5a (>= 5.15), libqt5gui5 (>= 5.15), libqt5widgets5 (>= 5.15), libqt5network5 (>= 5.15), libqt5multimedia5 (>= 5.15), libqt5svg5 (>= 5.15), libqt5xml5 (>= 5.15), libqt5dbus5 (>= 5.15)
+Maintainer: dr|z3d <z3d@i2pmail.org>
+Homepage: https://i2pgit.org/i2p-hackers/i2pchat
+Description: End-to-end encrypted peer-to-peer messenger over I2P
+ I2PChat is a Qt-based instant messaging client that communicates
+ exclusively over the I2P anonymous network.
+EOF
+
+chmod 0755 "$DEB_STAGING/DEBIAN"
+dpkg-deb --root-owner-group --build "$DEB_STAGING" "$DIST_DIR/$DEB_NAME.deb" >/dev/null
+
+DEB_SIZE=$(stat --format=%s "$DIST_DIR/$DEB_NAME.deb" 2>/dev/null || stat -f%z "$DIST_DIR/$DEB_NAME.deb" 2>/dev/null)
+printf "     %-10s %s\n" "Package:" "$DIST_DIR/$DEB_NAME.deb"
+printf "     %-10s %s\n" "Size:" "${DEB_SIZE} bytes"
+rm -rf "$DEB_STAGING"
 fi
