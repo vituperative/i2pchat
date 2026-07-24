@@ -130,6 +130,23 @@ int main(int argc, char *argv[]) {
   QDir().mkpath(configPath + "/themes/chat");
   QDir().mkpath(configPath + "/themes/app");
   QDir().mkpath(configPath + "/www");
+  QDir().mkpath(configPath + "/sounds");
+
+  // Copy default sound files on first run
+  QString soundsDest = configPath + "/sounds/";
+  if (QDir(soundsDest).entryList(QDir::Files).isEmpty()) {
+    QStringList searchPaths = {"/usr/share/i2pchat/sounds", "./sounds"};
+    for (const QString &src : searchPaths) {
+      QDir srcDir(src);
+      if (srcDir.exists()) {
+        for (const QString &file : srcDir.entryList(QDir::Files)) {
+          QFile::copy(src + "/" + file, soundsDest + file);
+        }
+        if (!QDir(soundsDest).entryList(QDir::Files).isEmpty())
+          break;
+      }
+    }
+  }
 
   // Write the default Minimal theme CSS — always overwritten on startup so defaults stay fresh.
   // Users who want custom themes should copy Minimal.css to a new name in themes/chat/.

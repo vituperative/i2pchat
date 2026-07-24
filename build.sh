@@ -359,10 +359,12 @@ mkdir -p "$DEB_STAGING/DEBIAN"
 mkdir -p "$DEB_STAGING/usr/bin"
 mkdir -p "$DEB_STAGING/usr/share/applications"
 mkdir -p "$DEB_STAGING/usr/share/icons/hicolor/scalable/apps"
+mkdir -p "$DEB_STAGING/usr/share/i2pchat/sounds"
 
 cp "$DIST_DIR/I2PChat" "$DEB_STAGING/usr/bin/"
 cp "$ROOT/packaging/I2PChat.desktop" "$DEB_STAGING/usr/share/applications/"
 cp "$ROOT/src/gui/icons/avatar.svg" "$DEB_STAGING/usr/share/icons/hicolor/scalable/apps/i2pchat.svg"
+cp "$ROOT/sounds/"*.wav "$DEB_STAGING/usr/share/i2pchat/sounds/"
 
 cat > "$DEB_STAGING/DEBIAN/control" << EOF
 Package: i2pchat
