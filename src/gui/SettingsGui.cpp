@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QHBoxLayout>
+#include <QStandardItemModel>
 
 SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   : QDialog(parent, flags)
@@ -20,6 +21,7 @@ SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   , mConfigPath(Core.getConfigPath()) {
   setupUi(this);
   this->setAttribute(Qt::WA_DeleteOnClose, true);
+  Sections->setCurrentRow(0);
 
   settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->setIniCodec("UTF-8");
@@ -63,10 +65,6 @@ SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
 
   connect(cmd_Downloads, SIGNAL(clicked(bool)), this, SLOT(clicked_IncomingFileFolder()));
 
-  connect(checkGender_Male, SIGNAL(clicked(bool)), this, SLOT(clicked_Gender_Male(bool)));
-
-  connect(checkGender_Female, SIGNAL(clicked(bool)), this, SLOT(clicked_Gender_Female(bool)));
-
   connect(cmdBoldChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageBold(bool)));
 
   connect(cmdUnderChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageUnderline(bool)));
@@ -90,8 +88,6 @@ SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   connect(cmd_deleteUserFromBlockList, SIGNAL(clicked()), this, SLOT(clicked_BlockListDelete()));
 
   connect(cmd_unblockUserFromBlockList, SIGNAL(clicked()), this, SLOT(clicked_BlockListUnblock()));
-
-  connect(check_UserSearchEnable, SIGNAL(clicked(bool)), this, SLOT(clicked_EnableUserSearch(bool)));
 
   connect(checkBox_AutoAcceptFiles, SIGNAL(clicked(bool)), checkBox_Subfolders, SLOT(setChecked(bool)));
 
@@ -275,18 +271,6 @@ void SettingsGui::loadSettings() {
   settings->beginGroup("User");
   txt_Nickname->setMaxLength(12);
   txt_Nickname->setText(settings->value("Nickname", "").toString());
-  spinAge->setValue(settings->value("Age", "0").toInt());
-
-  if (settings->value("Gender", "").toString() == "Male") {
-    checkGender_Male->setChecked(true);
-    checkGender_Female->setChecked(false);
-  } else if (settings->value("Gender", "").toString() == "Female") {
-    checkGender_Male->setChecked(false);
-    checkGender_Female->setChecked(true);
-  } else {
-    checkGender_Male->setChecked(false);
-    checkGender_Female->setChecked(false);
-  }
 
   txt_Interests->setPlainText(settings->value("Interests", "").toString());
 
@@ -297,17 +281,17 @@ void SettingsGui::loadSettings() {
     tmpPixmap.load(":/icons/silhouette.svg");
   } else {
     tmpPixmap.loadFromData(avatarImageByteArray);
-    if (tmpPixmap.width() != ownavatar_label_2->width() || tmpPixmap.height() != ownavatar_label_2->height()) {
+    if (tmpPixmap.width() != ownavatar_label->width() || tmpPixmap.height() != ownavatar_label->height()) {
       QImage img = tmpPixmap.toImage();
-      img = CCore::scaleImageLanczos(img, ownavatar_label_2->width(), ownavatar_label_2->height());
+      img = CCore::scaleImageLanczos(img, ownavatar_label->width(), ownavatar_label->height());
       tmpPixmap = QPixmap::fromImage(img);
     }
   }
 
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
-  ownavatar_label_2->setAlignment(Qt::AlignCenter);
-  ownavatar_label_2->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
 
   settings->endGroup();
 
@@ -405,12 +389,16 @@ void SettingsGui::loadSettings() {
   webServerRealmEdit->setText(settings->value("WebServerRealm", "I2PChat Webserver").toString());
   webServerSessionTimeout->setValue(settings->value("WebServerSessionTimeout", 3600).toInt() / 60);
   int userCount = settings->value("WebServerUserCount", 0).toInt();
-  webServerUserTable->setRowCount(userCount);
+  auto *tableModel = new QStandardItemModel(userCount, 2, this);
+  tableModel->setHorizontalHeaderLabels({"User", "Path"});
+  webServerUserTable->setModel(tableModel);
   for (int i = 0; i < userCount; i++) {
     QString name = settings->value(QStringLiteral("WebServerUser_%1_Name").arg(i)).toString();
     QString folder = settings->value(QStringLiteral("WebServerUser_%1_Folder").arg(i)).toString();
-    webServerUserTable->setItem(i, 0, new QTableWidgetItem(name));
-    webServerUserTable->setItem(i, 1, new QTableWidgetItem(folder));
+    auto *nameItem = new QStandardItem(name);
+    nameItem->setData(settings->value(QStringLiteral("WebServerUser_%1_Password").arg(i)), Qt::UserRole);
+    tableModel->setItem(i, 0, nameItem);
+    tableModel->setItem(i, 1, new QStandardItem(folder));
   }
   { // WebProfileDocroot — show default path if unset
     QString d = settings->value("WebProfileDocroot", "").toString();
@@ -447,19 +435,6 @@ void SettingsGui::loadSettings() {
       QApplication::translate("SettingsGui", "b32 address will be displayed when online", Q_NULLPTR));
   }
 
-  settings->beginGroup("Usersearch");
-  if (txt_Nickname->text().isEmpty() == false && (settings->value("Enabled", true).toBool()) == true) {
-    check_UserSearchEnable->setChecked(true);
-  } else {
-    check_UserSearchEnable->setChecked(false);
-  }
-
-  spinBox_MaxLogMsgUserSearch->setMinimum(0);
-  spinBox_MaxLogMsgUserSearch->setMaximum(200);
-  spinBox_MaxLogMsgUserSearch->setValue(settings->value("Debug_Max_Message_count", 100).toInt());
-  spinBox_ReAnnounceUserSearch->setMinimum(0);
-  spinBox_ReAnnounceUserSearch->setMaximum(23);
-  spinBox_ReAnnounceUserSearch->setValue(settings->value("ReAnnounceTimerInHours", 1).toInt());
   settings->endGroup();
   settings->sync();
 }
@@ -525,14 +500,6 @@ void SettingsGui::saveSettings() {
 
   settings->beginGroup("User");
   settings->setValue("Nickname", txt_Nickname->text());
-  settings->setValue("Age", spinAge->value());
-  if (checkGender_Male->isChecked() == true) {
-    settings->setValue("Gender", "Male");
-  } else if (checkGender_Female->isChecked() == true) {
-    settings->setValue("Gender", "Female");
-  } else {
-    settings->setValue("Gender", "");
-  }
   settings->setValue("Interests", txt_Interests->toPlainText());
   settings->setValue("AvatarBinaryImage", avatarImageByteArray);
   settings->endGroup();
@@ -558,7 +525,6 @@ void SettingsGui::saveSettings() {
   settings->setValue("ColorForOverwrite", txtOverrideRemote->textColor().name());
   settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
   settings->setValue("DisplayImagesInline", checkBox_DisplayImagesInline->isChecked());
-  settings->setValue("MaxChatmessageACKTimeInSec", spinBox_maxACK->value());
   settings->endGroup();
 
   settings->beginGroup("Security");
@@ -589,15 +555,15 @@ void SettingsGui::saveSettings() {
   }
   settings->setValue("WebServerRealm", webServerRealmEdit->text());
   settings->setValue("WebServerSessionTimeout", webServerSessionTimeout->value() * 60);
-  int userCount = webServerUserTable->rowCount();
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  int userCount = tableModel ? tableModel->rowCount() : 0;
   settings->setValue("WebServerUserCount", userCount);
   for (int i = 0; i < userCount; i++) {
-    QTableWidgetItem *nameItem = webServerUserTable->item(i, 0);
-    QTableWidgetItem *folderItem = webServerUserTable->item(i, 1);
+    QStandardItem *nameItem = tableModel->item(i, 0);
+    QStandardItem *folderItem = tableModel->item(i, 1);
     if (nameItem && !nameItem->text().isEmpty()) {
       settings->setValue(QStringLiteral("WebServerUser_%1_Name").arg(i), nameItem->text());
-      QVariant passData = webServerUserTable->item(i, 0)->data(Qt::UserRole);
-      settings->setValue(QStringLiteral("WebServerUser_%1_Password").arg(i), passData.toString());
+      settings->setValue(QStringLiteral("WebServerUser_%1_Password").arg(i), nameItem->data(Qt::UserRole).toString());
       settings->setValue(QStringLiteral("WebServerUser_%1_Folder").arg(i), folderItem ? folderItem->text() : QString());
     }
   }
@@ -606,13 +572,6 @@ void SettingsGui::saveSettings() {
   settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
   settings->endGroup();
   settings->sync();
-
-  // TODO: DHT implementation
-  settings->beginGroup("Usersearch");
-  settings->setValue("Enabled", check_UserSearchEnable->isChecked());
-  settings->setValue("Debug_Max_Message_count", spinBox_MaxLogMsgUserSearch->value());
-  settings->setValue("ReAnnounceTimerInHours", spinBox_ReAnnounceUserSearch->value());
-  settings->endGroup();
 
   settings->sync();
   mCore.loadUserInfos();
@@ -646,8 +605,8 @@ void SettingsGui::saveSettings() {
 
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
-  ownavatar_label_2->setAlignment(Qt::AlignCenter);
-  ownavatar_label_2->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
 
   this->close();
 }
@@ -808,20 +767,26 @@ void SettingsGui::clicked_webServerAddUser() {
     return;
   if (name.isEmpty())
     return;
-  int row = webServerUserTable->rowCount();
-  webServerUserTable->insertRow(row);
-  QTableWidgetItem *nameItem = new QTableWidgetItem(name);
-  nameItem->setData(Qt::UserRole, password);
-  webServerUserTable->setItem(row, 0, nameItem);
-  webServerUserTable->setItem(row, 1, new QTableWidgetItem(folder));
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = tableModel->rowCount();
+  tableModel->insertRow(row);
+  auto *nameItem = new QStandardItem(name);
+  nameItem->setData(password, Qt::UserRole);
+  tableModel->setItem(row, 0, nameItem);
+  tableModel->setItem(row, 1, new QStandardItem(folder));
 }
 
 void SettingsGui::clicked_webServerEditUser() {
-  int row = webServerUserTable->currentRow();
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = webServerUserTable->selectionModel()->currentIndex().row();
   if (row < 0)
     return;
-  QTableWidgetItem *nameItem = webServerUserTable->item(row, 0);
-  QTableWidgetItem *folderItem = webServerUserTable->item(row, 1);
+  QStandardItem *nameItem = tableModel->item(row, 0);
+  QStandardItem *folderItem = tableModel->item(row, 1);
   if (!nameItem)
     return;
   QString name = nameItem->text();
@@ -832,16 +797,19 @@ void SettingsGui::clicked_webServerEditUser() {
   if (name.isEmpty())
     return;
   nameItem->setText(name);
-  nameItem->setData(Qt::UserRole, password);
+  nameItem->setData(password, Qt::UserRole);
   if (folderItem)
     folderItem->setText(folder);
 }
 
 void SettingsGui::clicked_webServerDeleteUser() {
-  int row = webServerUserTable->currentRow();
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = webServerUserTable->selectionModel()->currentIndex().row();
   if (row < 0)
     return;
-  webServerUserTable->removeRow(row);
+  tableModel->removeRow(row);
 }
 
 void SettingsGui::clicked_webServerAuthToggled(bool checked) {
@@ -877,18 +845,6 @@ void SettingsGui::clicked_IncomingFileFolder() {
 
   if (txt_IncomingFileFolder->text().isEmpty()) {
     checkBox_AutoAcceptFiles->setChecked(false);
-  }
-}
-
-void SettingsGui::clicked_Gender_Male(bool state) {
-  if (state == true) {
-    checkGender_Female->setChecked(false);
-  }
-}
-
-void SettingsGui::clicked_Gender_Female(bool state) {
-  if (state == true) {
-    checkGender_Male->setChecked(false);
   }
 }
 
@@ -1058,24 +1014,6 @@ void SettingsGui::clicked_BlockListUnblock() {
   }
 }
 
-void SettingsGui::clicked_EnableUserSearch(bool t) {
-  if (t == true) {
-    if (txt_Nickname->text().isEmpty() == true) {
-      QMessageBox msgBox(NULL);
-      msgBox.setIcon(QMessageBox::Information);
-      msgBox.setText(tr("I2PChat"));
-      msgBox.setInformativeText(tr("Sorry you have to enter a Nickname(at "
-                                   "User-details) for UserSearch"));
-      msgBox.setStandardButtons(QMessageBox::Ok);
-      msgBox.setDefaultButton(QMessageBox::Ok);
-      msgBox.setWindowModality(Qt::NonModal);
-      msgBox.exec();
-      check_UserSearchEnable->setChecked(false);
-      return;
-    }
-  }
-}
-
 void SettingsGui::clicked_SelectAvatarImage() {
   QPixmap tmpPixmap;
 
@@ -1094,8 +1032,8 @@ void SettingsGui::clicked_SelectAvatarImage() {
     tmpPixmap.save(&buffer, "PNG");
     ownavatar_label->setAlignment(Qt::AlignCenter);
     ownavatar_label->setPixmap(tmpPixmap);
-    ownavatar_label_2->setAlignment(Qt::AlignCenter);
-    ownavatar_label_2->setPixmap(tmpPixmap);
+    ownavatar_label->setAlignment(Qt::AlignCenter);
+    ownavatar_label->setPixmap(tmpPixmap);
   }
 }
 void SettingsGui::clicked_ClearAvatarImage() {
@@ -1104,8 +1042,8 @@ void SettingsGui::clicked_ClearAvatarImage() {
   tmpPixmap.load(":/icons/silhouette.svg");
   ownavatar_label->setAlignment(Qt::AlignCenter);
   ownavatar_label->setPixmap(tmpPixmap);
-  ownavatar_label_2->setAlignment(Qt::AlignCenter);
-  ownavatar_label_2->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
 }
 
 void SettingsGui::setCustomStyleSheet() {

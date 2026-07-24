@@ -52,9 +52,6 @@ private slots:
   void clicked_DestinationGenerate();
   void clicked_IncomingFileFolder();
 
-  void clicked_Gender_Male(bool state);
-  void clicked_Gender_Female(bool state);
-
   void clicked_sortingEnabled(bool enabled);
   void clicked_sortAlphabetically(bool checked);
   void clicked_sortByDateAdded(bool checked);
@@ -75,7 +72,6 @@ private slots:
 
   void clicked_BlockListDelete();
   void clicked_BlockListUnblock();
-  void clicked_EnableUserSearch(bool t);
   void clicked_BlockAllUnknownUsers(bool checked);
   void clicked_RequestAuthorization(bool checked);
 
