@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>form_newUserWindow</class>
- <widget class="QDialog" name="form_newUserWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>465</width>
-    <height>434</height>
+<class>NewUserWindow</class>
+ <widget class="QDialog" name="NewUserWindow">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>465</width>
+     <height>434</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,7 +198,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>form_newUserWindow</receiver>
+   <receiver>NewUserWindow</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -214,7 +214,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>form_newUserWindow</receiver>
+   <receiver>NewUserWindow</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

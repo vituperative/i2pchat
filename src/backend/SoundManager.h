@@ -5,7 +5,6 @@
 
 #include <QSettings>
 #include <QSound>
-#include <QtGui>
 
 class CSoundManager : public QObject {
   Q_OBJECT
@@ -13,7 +12,6 @@ public:
   CSoundManager(QString ConfigPath);
   ~CSoundManager();
 
-  // forbid some operators
   CSoundManager(const CSoundManager &) = delete;
   CSoundManager &operator=(const CSoundManager &) = delete;
 

@@ -6,7 +6,9 @@
 #include "User.h"
 #include "UserManager.h"
 
+#include <QDir>
 #include <QFileInfo>
+#include <QImage>
 #include <QSettings>
 #include <QUrl>
 
@@ -344,7 +346,6 @@ void CFileTransferReceive::start(const QString &FilePath, bool Accepted) {
   if (mRequestAccepted)
     return;
   if (Accepted == true) {
-    // mFileForReceive= new QFile(FilePath);
     mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
 
     mFileForReceive.setFileName(FilePath);
@@ -362,7 +363,6 @@ void CFileTransferReceive::start(const QString &FilePath, bool Accepted) {
     emit signFileNameChanged();
   } else {
 
-    // emit signFileReceiveAborted();
     if (mUsingProtocolVersionD <= 0.2) {
       mStream.operator<<(QString("1")); // false
     } else if (mUsingProtocolVersionD == 0.3) {

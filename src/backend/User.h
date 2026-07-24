@@ -6,12 +6,13 @@
 #include "I2PStream.h"
 
 #include <QByteArray>
+#include <QColor>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QFont>
 #include <QMap>
 #include <QStringList>
 #include <QtGlobal>
-#include <QtGui>
 
 namespace User {
 enum CONNECTIONTOUSER { OFFLINE, ONLINE, TRYTOCONNECT, CONNECTERROR };

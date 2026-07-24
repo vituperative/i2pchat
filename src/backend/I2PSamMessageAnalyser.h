@@ -3,8 +3,7 @@
 #ifndef I2PSAMMESSAGEANALYSER_H
 #define I2PSAMMESSAGEANALYSER_H
 
-#include <QMessageBox>
-#include <QtGui>
+#include <QObject>
 
 namespace SAM_Message_Types {
 
@@ -47,7 +46,6 @@ public:
   CI2PSamMessageAnalyser(const QString &debugFrom = "not set");
   ~CI2PSamMessageAnalyser();
 
-  // forbid some operators
   CI2PSamMessageAnalyser(const CI2PSamMessageAnalyser &) = delete;
   CI2PSamMessageAnalyser &operator=(const CI2PSamMessageAnalyser &) = delete;
 

@@ -6,9 +6,9 @@
 #include "I2PStream.h"
 
 #include <QElapsedTimer>
+#include <QFile>
 #include <QTimer>
 #include <QtGlobal>
-#include <QtGui>
 
 /*
       Filetransferprotocol 0.3: (sender Receive)
@@ -24,8 +24,6 @@ const QString MINPROTOCOLVERSION = "0.3";
 const double MINPROTOCOLVERSION_D = 0.3;
 const QString MAXPROTOCOLVERSION = "0.3";
 const double MAXPROTOCOLVERSION_D = 0.3;
-// const QString FIRSTPACKET ="CHATSYSTEMFILETRANSFER\t"+PROTOCOLVERSION+"\n";
-//+sizeinbit\nFileName
 }; // namespace FileTransferProtocol
 
 #define NORMPACKETSIZE 32768           // Increased from 4096 to 32KB

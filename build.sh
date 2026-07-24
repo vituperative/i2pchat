@@ -191,11 +191,12 @@ if $CLEAN; then
   rm -rf "$BUILD_DIR"/AppDir
 fi
 mkdir -p "$BUILD_DIR" "$DIST_DIR"
-qmake -after DESTDIR=dist/ OBJECTS_DIR="$BUILD_DIR/obj/" MOC_DIR="$BUILD_DIR/moc/" RCC_DIR="$BUILD_DIR/qrc/" >/dev/null 2>&1
-for ui in src/gui/*.ui; do
-  uic "$ui" -o "src/gui/ui_$(basename "${ui%.ui}").h"
+qmake -after DESTDIR=dist/ OBJECTS_DIR="$BUILD_DIR/obj/" MOC_DIR="$BUILD_DIR/moc/" RCC_DIR="$BUILD_DIR/qrc/" UI_DIR="$BUILD_DIR/uic/" >/dev/null 2>&1
+mkdir -p "$BUILD_DIR/uic"
+for ui in src/gui/forms/*.ui; do
+  uic "$ui" -o "$BUILD_DIR/uic/ui_$(basename "${ui%.ui}").h"
 done
-pass "Generated $(ls src/gui/*.ui | wc -l) uic headers"
+pass "Generated $(ls src/gui/forms/*.ui 2>/dev/null | wc -l) uic headers"
 if command -v compiledb &>/dev/null; then
   compiledb make -n >/dev/null 2>&1
   mv compile_commands.json "$BUILD_DIR/"

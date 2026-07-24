@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>form_renameWindow</class>
- <widget class="QDialog" name="form_renameWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>318</width>
-    <height>126</height>
+<class>RenameWindow</class>
+ <widget class="QDialog" name="RenameWindow">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>318</width>
+     <height>126</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -159,7 +159,7 @@
   <connection>
    <sender>CancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>form_renameWindow</receiver>
+   <receiver>RenameWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

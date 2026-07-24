@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#include "form_Main.h"
+#include "MainWindow.h"
 
 #include "Base.h"
 #include "UserManager.h"
 
+#include <QApplication>
+#include <QCryptographicHash>
 #include <QIcon>
 #include <QMessageBox>
 #include <QPixmap>
@@ -28,7 +30,7 @@ static const QPixmap &newmailTrayPixmap() {
   return pix;
 }
 
-form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
+MainWindow::MainWindow(const QString &configDir, QWidget *parent)
   : QMainWindow(parent) {
   setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
                  Qt::WindowCloseButtonHint);
@@ -55,7 +57,6 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
 
   connect(Core, SIGNAL(signNicknameChanged()), this, SLOT(eventNicknameChanged()));
 
-  mTopicSubscribeWindow = NULL;
   mAboutWindow = NULL;
   mDebugWindow = NULL;
   mAuthDialog = NULL;
@@ -73,14 +74,14 @@ form_MainWindow::form_MainWindow(const QString &configDir, QWidget *parent)
   eventAvatarImageChanged();
 }
 
-form_MainWindow::~form_MainWindow() {
+MainWindow::~MainWindow() {
   applicationIsClosing = true;
 
   delete Core;
   this->close();
 }
 
-bool form_MainWindow::eventFilter(QObject *obj, QEvent *event) {
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
   switch (event->type()) {
   case QEvent::MouseMove:
   case QEvent::MouseButtonPress:
@@ -95,7 +96,7 @@ bool form_MainWindow::eventFilter(QObject *obj, QEvent *event) {
   return QMainWindow::eventFilter(obj, event);
 }
 
-void form_MainWindow::onlineComboBoxChanged() {
+void MainWindow::onlineComboBoxChanged() {
   QComboBox *comboBox = this->comboBox;
   QString text = comboBox->currentText();
 
@@ -137,8 +138,7 @@ void form_MainWindow::onlineComboBoxChanged() {
   }
 }
 
-void form_MainWindow::initToolBars() {
-  // toolBar->setIconSize(QSize(24, 24));
+void MainWindow::initToolBars() {
   QSettings settings(Core->getConfigPath() + "/application.ini", QSettings::IniFormat);
   QToolBar *toolBar = this->toolBar;
 
@@ -153,24 +153,24 @@ void form_MainWindow::initToolBars() {
   toolBar->addAction(QIcon(ICON_CLOSE), tr("Quit I2PChat"), this, SLOT(closeApplication()));
 }
 
-void form_MainWindow::openConfigWindow() {
+void MainWindow::openConfigWindow() {
 
-  form_settingsgui *dialog = new form_settingsgui(*Core);
+  SettingsGui *dialog = new SettingsGui(*Core);
   connect(this, SIGNAL(closeAllWindows()), dialog, SLOT(close()));
 
   dialog->show();
 }
-void form_MainWindow::openAdduserWindow() {
-  form_newUserWindow *dialog = new form_newUserWindow(*Core);
+void MainWindow::openAdduserWindow() {
+  NewUserWindow *dialog = new NewUserWindow(*Core);
 
   connect(this, SIGNAL(closeAllWindows()), dialog, SLOT(close()));
 
   dialog->show();
 }
 
-void form_MainWindow::openDebugMessagesWindow() {
+void MainWindow::openDebugMessagesWindow() {
   if (mDebugWindow == NULL) {
-    mDebugWindow = new form_DebugMessages(*Core);
+    mDebugWindow = new DebugMessages(*Core);
 
     connect(this, SIGNAL(closeAllWindows()), mDebugWindow, SLOT(close()));
 
@@ -182,7 +182,7 @@ void form_MainWindow::openDebugMessagesWindow() {
   }
 }
 
-void form_MainWindow::namingMe() {
+void MainWindow::namingMe() {
   QClipboard *clipboard = QApplication::clipboard();
   QString Destination = Core->getMyDestination();
   const QPixmap &pixmap = avatarPixmap();
@@ -194,7 +194,7 @@ void form_MainWindow::namingMe() {
     QMessageBox::information(this, "", tr("\nYou must be online to copy Destination"), QMessageBox::Close);
   }
 }
-void form_MainWindow::closeApplication() {
+void MainWindow::closeApplication() {
   if (Core->getFileTransferManager()->checkActiveFileTransfer() == false) {
 
     QMessageBox msgBox(this);
@@ -230,7 +230,7 @@ void form_MainWindow::closeApplication() {
   }
 }
 
-void form_MainWindow::eventUserChanged() {
+void MainWindow::eventUserChanged() {
 
   mLastDestinationWithUnreadMessages = "";
   bool showUnreadMessageAtTray = false;
@@ -357,7 +357,7 @@ void form_MainWindow::eventUserChanged() {
   }
 }
 
-void form_MainWindow::openUserListeClicked() {
+void MainWindow::openUserListeClicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
   const QPixmap &pixmap = avatarPixmap();
   setWindowIcon(QIcon(pixmap));
@@ -378,7 +378,7 @@ void form_MainWindow::openUserListeClicked() {
     if (OK == false) {
       QMessageBox msgBox;
       msgBox.setIcon(QMessageBox::Critical);
-      msgBox.setText(tr("form_Main(openChat_or_FileReceive_Dialog))"));
+      msgBox.setText(tr("MainWindow(openChat_or_FileReceive_Dialog))"));
       msgBox.setInformativeText(tr("can't parse value: %1").arg(t->text()));
       msgBox.setStandardButtons(QMessageBox::Ok);
       msgBox.setDefaultButton(QMessageBox::Ok);
@@ -395,7 +395,7 @@ void form_MainWindow::openUserListeClicked() {
     if (OK == false) {
       QMessageBox msgBox;
       msgBox.setIcon(QMessageBox::Critical);
-      msgBox.setText(tr("form_Main(openChat_or_FileReceive_Dialog)"));
+      msgBox.setText(tr("MainWindow(openChat_or_FileReceive_Dialog)"));
       msgBox.setInformativeText(tr("can't parse value: %1").arg(t->text()));
       msgBox.setStandardButtons(QMessageBox::Ok);
       msgBox.setDefaultButton(QMessageBox::Ok);
@@ -404,7 +404,7 @@ void form_MainWindow::openUserListeClicked() {
     openFileSendWindow(StreamID);
   }
 }
-void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
+void MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   QListWidget *listWidget = this->listWidget;
 
   if (listWidget->count() == 0)
@@ -515,7 +515,7 @@ void form_MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
   }
 }
 
-void form_MainWindow::deleteUserClicked() {
+void MainWindow::deleteUserClicked() {
 
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
@@ -534,18 +534,18 @@ void form_MainWindow::deleteUserClicked() {
   }
 }
 
-void form_MainWindow::renameUserCLicked() {
+void MainWindow::renameUserCLicked() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow());
   QString OldNickname = t->text();
 
   QListWidgetItem *t2 = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t2->text();
 
-  form_RenameWindow *Dialog = new form_RenameWindow(*Core, OldNickname, Destination);
+  RenameWindow *Dialog = new RenameWindow(*Core, OldNickname, Destination);
   Dialog->show();
 }
 
-void form_MainWindow::closeEvent(QCloseEvent *e) {
+void MainWindow::closeEvent(QCloseEvent *e) {
   if (mStatusNotifier != NULL) {
     hide();
     e->ignore();
@@ -557,11 +557,11 @@ void form_MainWindow::closeEvent(QCloseEvent *e) {
   }
 }
 
-void form_MainWindow::updateMenu() {
+void MainWindow::updateMenu() {
   toggleVisibilityAction->setText(isVisible() ? tr("Hide") : tr("Show"));
 }
 
-void form_MainWindow::toggleAllWindows() {
+void MainWindow::toggleAllWindows() {
   bool anyVisible = isVisible();
   for (auto it = mAllOpenChatWindows.begin(); it != mAllOpenChatWindows.end(); ++it)
     if (it.value()->isVisible())
@@ -582,7 +582,7 @@ void form_MainWindow::toggleAllWindows() {
   }
 }
 
-void form_MainWindow::OnlineStateChanged() {
+void MainWindow::OnlineStateChanged() {
   disconnect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onlineComboBoxChanged()));
 
   QComboBox *comboBox = this->comboBox;
@@ -634,12 +634,12 @@ void form_MainWindow::OnlineStateChanged() {
   connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onlineComboBoxChanged()));
 }
 
-void form_MainWindow::openAboutDialog() {
+void MainWindow::openAboutDialog() {
   if (mAboutWindow == NULL) {
-    mAboutWindow = new form_About(Core->getClientVersion(),
-                                  Core->getProtocolVersion(),
-                                  FileTransferProtocol::MINPROTOCOLVERSION,
-                                  FileTransferProtocol::MAXPROTOCOLVERSION);
+    mAboutWindow = new About(Core->getClientVersion(),
+                             Core->getProtocolVersion(),
+                             FileTransferProtocol::MINPROTOCOLVERSION,
+                             FileTransferProtocol::MAXPROTOCOLVERSION);
     connect(this, SIGNAL(closeAllWindows()), mAboutWindow, SLOT(close()));
 
     connect(mAboutWindow, SIGNAL(closingAboutWindow()), this, SLOT(eventAboutWindowClosed()));
@@ -647,11 +647,10 @@ void form_MainWindow::openAboutDialog() {
     mAboutWindow->show();
   } else {
     mAboutWindow->getFocus();
-    ;
   }
 }
 
-void form_MainWindow::initTryIconMenu() {
+void MainWindow::initTryIconMenu() {
   // Tray icon Menu
   menu = new QMenu(this);
   QObject::connect(menu, SIGNAL(aboutToShow()), this, SLOT(updateMenu()));
@@ -659,19 +658,16 @@ void form_MainWindow::initTryIconMenu() {
 
   toggleMuteAction = menu->addAction(QIcon(ICON_SOUND_ON), tr("Sound on"), this, SLOT(muteSound()));
   menu->addSeparator();
-  // menu->addAction(QIcon(ICON_MINIMIZE), tr("Minimize"), this,
-  // SLOT(showMinimized())); menu->addAction(QIcon(ICON_MAXIMIZE),
-  // tr("Maximize"), this, SLOT(showMaximized()));
   menu->addSeparator();
   menu->addAction(QIcon(ICON_CLOSE), tr("&Quit"), this, SLOT(closeApplication()));
 }
 
-void form_MainWindow::setTrayIcon(const QIcon &icon) {
+void MainWindow::setTrayIcon(const QIcon &icon) {
   if (mStatusNotifier != NULL)
     mStatusNotifier->setIcon(icon.pixmap(22, 22));
 }
 
-void form_MainWindow::initTryIcon() {
+void MainWindow::initTryIcon() {
   // Use a single StatusNotifierItem (D-Bus) for the tray. Modern desktops
   // (XFCE4 4.14+, KDE, etc.) only host the StatusNotifier protocol, not the
   // legacy XEmbed QSystemTrayIcon, so we register one item and nothing else.
@@ -689,12 +685,12 @@ void form_MainWindow::initTryIcon() {
   }
 }
 
-void form_MainWindow::showTrayMenu(int x, int y) {
+void MainWindow::showTrayMenu(int x, int y) {
   if (menu != NULL)
     menu->popup(QPoint(x, y));
 }
 
-void form_MainWindow::copyDestination() {
+void MainWindow::copyDestination() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   if (t == NULL)
     return;
@@ -706,7 +702,7 @@ void form_MainWindow::copyDestination() {
   QMessageBox::information(this, "", tr("\nContact's Destination copied to clipboard"), QMessageBox::Close);
 }
 
-void form_MainWindow::copyB32() {
+void MainWindow::copyB32() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   if (t == NULL)
     return;
@@ -735,7 +731,7 @@ void form_MainWindow::copyB32() {
   QMessageBox::information(this, "", tr("\nContact's profile address copied to clipboard"), QMessageBox::Close);
 }
 
-void form_MainWindow::muteSound() {
+void MainWindow::muteSound() {
   if (this->Mute == false) {
     toggleMuteAction->setIcon(QIcon(ICON_SOUND_OFF));
     toggleMuteAction->setText(tr("Sound off"));
@@ -748,7 +744,7 @@ void form_MainWindow::muteSound() {
   Core->getSoundManager()->doMute(Mute);
 }
 
-void form_MainWindow::showUserInfos() {
+void MainWindow::showUserInfos() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
   QString UserInfos;
@@ -775,21 +771,21 @@ void form_MainWindow::showUserInfos() {
   msgBox.exec();
 }
 
-void form_MainWindow::UserPositionUP() {
+void MainWindow::UserPositionUP() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() >= 1)
     Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
                                                          (listWidget->currentRow() / 3) - 1);
 }
 
-void form_MainWindow::UserPositionDOWN() {
+void MainWindow::UserPositionDOWN() {
   QListWidget *listWidget = this->listWidget;
   if (listWidget->currentRow() < (listWidget->count() / 3) - 1)
     Core->getUserManager()->changeUserPositionInUserList(listWidget->currentRow() / 3,
                                                          (listWidget->currentRow() / 3) + 1);
 }
 
-void form_MainWindow::UserPositionTOP() {
+void MainWindow::UserPositionTOP() {
   QListWidget *listWidget = this->listWidget;
   int currentUserIndex = listWidget->currentRow() / 3;
   if (currentUserIndex > 0) {
@@ -797,7 +793,7 @@ void form_MainWindow::UserPositionTOP() {
   }
 }
 
-void form_MainWindow::UserPositionBOTTOM() {
+void MainWindow::UserPositionBOTTOM() {
   QListWidget *listWidget = this->listWidget;
   int currentUserIndex = listWidget->currentRow() / 3;
   int totalUsers = listWidget->count() / 3;
@@ -806,7 +802,7 @@ void form_MainWindow::UserPositionBOTTOM() {
   }
 }
 
-void form_MainWindow::UserInvisible(bool b) {
+void MainWindow::UserInvisible(bool b) {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
 
@@ -817,28 +813,28 @@ void form_MainWindow::UserInvisible(bool b) {
   }
 }
 
-void form_MainWindow::eventChatWindowClosed(const QString &Destination) {
+void MainWindow::eventChatWindowClosed(const QString &Destination) {
   if (mAllOpenChatWindows.contains(Destination) == true) {
     mAllOpenChatWindows[Destination]->deleteLater();
     mAllOpenChatWindows.remove(Destination);
   } else {
-    qCritical() << "form_MainWindow::eventChatWindowClosed\n"
+    qCritical() << "MainWindow::eventChatWindowClosed\n"
                 << "Closing a unknown chat window";
   }
 }
 
-void form_MainWindow::openChatWindow(const QString &Destination) {
+void MainWindow::openChatWindow(const QString &Destination) {
   CUser *User;
   User = Core->getUserManager()->getUserByI2P_Destination(Destination);
   if (User == NULL) {
-    qCritical() << "form_MainWindow::openChatWindow"
+    qCritical() << "MainWindow::openChatWindow"
                 << "Cannot open chat window for non-existent user!";
     return;
   }
 
   if (mAllOpenChatWindows.contains(Destination) == false) {
     // create new chatWindow
-    form_ChatWidget *tmp = new form_ChatWidget(*User, *Core);
+    ChatWidget *tmp = new ChatWidget(*User, *Core);
     connect(this, SIGNAL(closeAllWindows()), tmp, SLOT(close()));
 
     connect(tmp, SIGNAL(closingChatWindow(QString)), this, SLOT(eventChatWindowClosed(QString)));
@@ -854,38 +850,38 @@ void form_MainWindow::openChatWindow(const QString &Destination) {
   }
 }
 
-void form_MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
+void MainWindow::eventFileReceiveWindowClosed(qint32 StreamID) {
   if (mAllFileReceiveWindows.contains(StreamID) == true) {
     mAllFileReceiveWindows.value(StreamID)->deleteLater();
     mAllFileReceiveWindows.remove(StreamID);
   } else {
-    qCritical() << "form_MainWindow::eventFileReceiveWindowClose\n"
+    qCritical() << "MainWindow::eventFileReceiveWindowClose\n"
                 << "Closing a unknown FileReceive window";
   }
 }
 
-void form_MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
+void MainWindow::eventFileSendWindowClosed(qint32 StreamID) {
   if (mAllFileSendWindows.contains(StreamID) == true) {
     mAllFileSendWindows.value(StreamID)->deleteLater();
     mAllFileSendWindows.remove(StreamID);
   } else {
-    qCritical() << "form_MainWindow::eventFileSendWindowClosed\n"
+    qCritical() << "MainWindow::eventFileSendWindowClosed\n"
                 << "Closing a unknown FileSend window";
   }
 }
 
-void form_MainWindow::openFileSendWindow(qint32 StreamID) {
+void MainWindow::openFileSendWindow(qint32 StreamID) {
   CFileTransferSend *TransferSend = Core->getFileTransferManager()->getFileSendByID(StreamID);
 
   if (TransferSend == NULL) {
-    qCritical() << "form_MainWindow::openFileSendWindow\n"
+    qCritical() << "MainWindow::openFileSendWindow\n"
                 << "Can't find FileSend Object with ID: " << StreamID << "\nFile transfer failed!";
     return;
   }
 
   if (mAllFileSendWindows.contains(StreamID) == false) {
     // open new FileSendWindow
-    form_fileSend *Dialog = new form_fileSend(*TransferSend);
+    FileSend *Dialog = new FileSend(*TransferSend);
     connect(Dialog, SIGNAL(closingFileSendWindow(qint32)), this, SLOT(eventFileSendWindowClosed(qint32)));
 
     mAllFileSendWindows.insert(StreamID, Dialog);
@@ -896,17 +892,17 @@ void form_MainWindow::openFileSendWindow(qint32 StreamID) {
   }
 }
 
-void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
+void MainWindow::openFileReceiveWindow(qint32 StreamID) {
   CFileTransferReceive *receive = Core->getFileTransferManager()->getFileReceiveByID(StreamID);
   if (receive == NULL) {
-    qCritical() << "form_MainWindow::openFileReceiveWindow\n"
+    qCritical() << "MainWindow::openFileReceiveWindow\n"
                 << "Can't find FileReceive Object with ID: " << StreamID << "\nFile transfer failed!";
     return;
   }
 
   if (mAllFileReceiveWindows.contains(StreamID) == false) {
     // create new FileReceiveWindow
-    form_fileReceive *Dialog = new form_fileReceive(*receive);
+    FileReceive *Dialog = new FileReceive(*receive);
 
     connect(Dialog, SIGNAL(closingFileReceiveWindow(qint32)), this, SLOT(eventFileReceiveWindowClosed(qint32)));
 
@@ -920,7 +916,7 @@ void form_MainWindow::openFileReceiveWindow(qint32 StreamID) {
   }
 }
 
-void form_MainWindow::addUserToBlockList() {
+void MainWindow::addUserToBlockList() {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 2);
 
   if (t->text() == "U") {
@@ -937,9 +933,7 @@ void form_MainWindow::addUserToBlockList() {
   }
 }
 
-void form_MainWindow::incomingUserAuthorizationRequest(const QString &destination,
-                                                       int streamID,
-                                                       const QByteArray &data) {
+void MainWindow::incomingUserAuthorizationRequest(const QString &destination, int streamID, const QByteArray &data) {
   // Only one auth dialog at a time — deny new requests while one is pending
   if (mAuthDialog != NULL) {
     Core->getConnectionManager()->doDestroyStreamObjectByID(streamID);
@@ -1038,26 +1032,21 @@ void form_MainWindow::incomingUserAuthorizationRequest(const QString &destinatio
   mAuthDialog->show();
 }
 
-void form_MainWindow::eventTopicSubscribeWindowClosed() {
-  mTopicSubscribeWindow->deleteLater();
-  mTopicSubscribeWindow = NULL;
-}
-
-void form_MainWindow::eventAboutWindowClosed() {
+void MainWindow::eventAboutWindowClosed() {
   mAboutWindow->deleteLater();
   mAboutWindow = NULL;
 }
-void form_MainWindow::eventDebugWindowClosed() {
+void MainWindow::eventDebugWindowClosed() {
   mDebugWindow->deleteLater();
   mDebugWindow = NULL;
 }
 
-void form_MainWindow::eventNicknameChanged() {
+void MainWindow::eventNicknameChanged() {
   QString nick = Core->getUserInfos().Nickname;
   nicknamelabel->setText(nick);
 }
 
-void form_MainWindow::eventAvatarImageChanged() {
+void MainWindow::eventAvatarImageChanged() {
   if (Core->getUserInfos().AvatarImage.isEmpty() == false) {
     QPixmap avatar;
     avatar.loadFromData(Core->getUserInfos().AvatarImage);
@@ -1074,7 +1063,7 @@ void form_MainWindow::eventAvatarImageChanged() {
   slotLoadOwnAvatarImage();
 }
 
-void form_MainWindow::slotLoadOwnAvatarImage() {
+void MainWindow::slotLoadOwnAvatarImage() {
   ONLINESTATE onlineStatus = Core->getOnlineStatus();
   bool isOnline = (onlineStatus != User::USEROFFLINE && onlineStatus != User::USERTRYTOCONNECT);
 
@@ -1134,29 +1123,7 @@ void form_MainWindow::slotLoadOwnAvatarImage() {
   }
 }
 
-void form_MainWindow::openTopicSubscribeWindow() {
-  ONLINESTATE currentState = Core->getOnlineStatus();
-
-  if (currentState == USEROFFLINE || currentState == USERTRYTOCONNECT) {
-    QMessageBox::information(this, "", tr("You must be connected for this"), QMessageBox::Close);
-    return;
-  }
-
-  if (mTopicSubscribeWindow == NULL) {
-
-    mTopicSubscribeWindow = new form_topicSubscribe(*Core);
-
-    connect(this, SIGNAL(closeAllWindows()), mTopicSubscribeWindow, SLOT(close()));
-
-    connect(
-      mTopicSubscribeWindow, SIGNAL(signClosingTopicSubscribeWindow()), this, SLOT(eventTopicSubscribeWindowClosed()));
-    mTopicSubscribeWindow->show();
-  } else {
-    mTopicSubscribeWindow->requestFocus();
-  }
-}
-
-void form_MainWindow::UserAutoDownload(bool enabled) {
+void MainWindow::UserAutoDownload(bool enabled) {
   QListWidgetItem *t = listWidget->item(listWidget->currentRow() + 1);
   QString Destination = t->text();
 

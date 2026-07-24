@@ -23,7 +23,6 @@ INCLUDEPATH += . \
 SOURCES += \
 	src/backend/Base.cpp \
 	src/backend/HttpServer.cpp \
-	src/backend/LoadHTML.cpp \
 	src/backend/Main.cpp \
 	src/backend/Core.cpp \
 	src/backend/User.cpp \
@@ -43,25 +42,22 @@ SOURCES += \
 	src/backend/FileTransferManager.cpp \
 	src/backend/TextEmotionChanger.cpp \
 	src/backend/UnsentChatMessageStorage.cpp \
-	src/gui/form_Main.cpp \
+	src/gui/MainWindow.cpp \
 	src/gui/StatusNotifier.cpp \
-	src/gui/form_chatwidget.cpp \
-	src/gui/form_DebugMessages.cpp \
-	src/gui/form_fileReceive.cpp \
-	src/gui/form_fileSend.cpp \
-	src/gui/form_newUser.cpp \
-	src/gui/form_rename.cpp \
-	src/gui/form_settingsgui.cpp \
-	src/gui/form_UserSearch.cpp \
-	src/gui/form_about.cpp \
-	src/gui/form_TopicSubscribe.cpp \
+	src/gui/ChatWidget.cpp \
+	src/gui/DebugMessages.cpp \
+	src/gui/FileReceive.cpp \
+	src/gui/FileSend.cpp \
+	src/gui/NewUserWindow.cpp \
+	src/gui/RenameWindow.cpp \
+	src/gui/SettingsGui.cpp \
+	src/gui/About.cpp \
 	src/gui/ChatDelegate.cpp
 
 
 HEADERS += \
 	src/backend/Core.h \
 	src/backend/HttpServer.h \
-	src/backend/LoadHTML.h \
 	src/backend/User.h \
 	src/backend/I2PSamMessageAnalyser.h \
 	src/backend/DebugMessageManager.h \
@@ -79,33 +75,29 @@ HEADERS += \
 	src/backend/FileTransferManager.h \
 	src/backend/TextEmotionChanger.h \
 	src/backend/UnsentChatMessageStorage.h \
-	src/gui/form_Main.h \
+	src/gui/MainWindow.h \
 	src/gui/StatusNotifier.h \
-	src/gui/form_chatwidget.h \
-	src/gui/form_DebugMessages.h \
-	src/gui/form_fileReceive.h \
-	src/gui/form_fileSend.h \
-	src/gui/form_newUser.h \
-	src/gui/form_rename.h \
-	src/gui/form_settingsgui.h \
-	src/gui/form_UserSearch.h \
-	src/gui/form_about.h \
+	src/gui/ChatWidget.h \
+	src/gui/DebugMessages.h \
+	src/gui/FileReceive.h \
+	src/gui/FileSend.h \
+	src/gui/NewUserWindow.h \
+	src/gui/RenameWindow.h \
+	src/gui/SettingsGui.h \
 	src/gui/gui_icons.h \
-	src/gui/form_TopicSubscribe.h \
+	src/gui/About.h \
 	src/gui/ChatDelegate.h
 
 FORMS += \
-	src/gui/form_Main.ui \
-	src/gui/form_chatwidget.ui \
-	src/gui/form_DebugMessages.ui \
-	src/gui/form_fileReceive.ui \
-	src/gui/form_fileSend.ui \
-	src/gui/form_newUser.ui \
-	src/gui/form_rename.ui \
-	src/gui/form_settingsgui.ui \
-	src/gui/form_userSearch.ui \
-	src/gui/form_about.ui \
-	src/gui/form_topicSubscribe.ui
+	src/gui/forms/MainWindow.ui \
+	src/gui/forms/ChatWidget.ui \
+	src/gui/forms/DebugMessages.ui \
+	src/gui/forms/FileReceive.ui \
+	src/gui/forms/FileSend.ui \
+	src/gui/forms/NewUserWindow.ui \
+	src/gui/forms/RenameWindow.ui \
+	src/gui/forms/SettingsGui.ui \
+	src/gui/forms/About.ui
 
 RESOURCES += src/gui/resourcen.qrc
 
@@ -123,10 +115,11 @@ macx {
 
 #unix {}
 
-UI_DIR = src/gui
-OBJECTS_DIR = temp/obj
-RCC_DIR = temp/qrc
-MOC_DIR = temp/moc
+UI_DIR = /tmp/build-i2pchat/uic
+OBJECTS_DIR = /tmp/build-i2pchat/obj
+RCC_DIR = /tmp/build-i2pchat/qrc
+MOC_DIR = /tmp/build-i2pchat/moc
+DESTDIR = dist/
 RC_FILE = src/gui/icons/i2pmessenger_win.rc
 
 android {

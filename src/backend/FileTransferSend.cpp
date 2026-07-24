@@ -82,7 +82,6 @@ void CFileTransferSend::slotStreamStatus(const SAM_Message_Types::RESULT result,
 
       mStream->operator<<(
         QString("CHATSYSTEMFILETRANSFER\t" + mUsingProtocolVersion + "\n" + StringFileSize + "\n" + mFileName));
-      // mStream->operator <<(FIRSTPACKET+StringFileSize+"\n"+mFileName);
       mSendFirstPacket = false;
     }
     break;

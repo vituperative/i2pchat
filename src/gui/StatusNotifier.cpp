@@ -6,7 +6,6 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusMetaType>
-#include <QDebug>
 #include <QFile>
 #include <QImage>
 #include <QPainter>

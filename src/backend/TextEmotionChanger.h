@@ -22,7 +22,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QHash>
-#include <QtGui>
+#include <QString>
+#include <QStringList>
 
 class CTextEmotionChanger {
 public:

@@ -6,7 +6,6 @@
 #include "ConnectionManager.h"
 
 #include <QSettings>
-#include <QtGui>
 
 class CDebugMessageManager : public QObject {
   Q_OBJECT
@@ -15,7 +14,6 @@ public:
   CDebugMessageManager(const QString &Group, const QString &configPath);
   ~CDebugMessageManager();
 
-  // forbid some operators
   CDebugMessageManager(const CDebugMessageManager &) = delete;
   CDebugMessageManager &operator=(const CDebugMessageManager &) = delete;
 

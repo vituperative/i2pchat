@@ -5,7 +5,6 @@
 
 #include <QThread>
 #include <QTimer>
-#include <QtGui>
 
 /*
         First packet on connection must be:

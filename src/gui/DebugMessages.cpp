@@ -17,9 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "form_DebugMessages.h"
+#include "DebugMessages.h"
 
-form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
+DebugMessages::DebugMessages(CCore &core, QDialog *parent)
   : QDialog(parent)
   , core(core) {
   setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint |
@@ -47,15 +47,15 @@ form_DebugMessages::form_DebugMessages(CCore &core, QDialog *parent)
   newDebugMessage();
 }
 
-form_DebugMessages::~form_DebugMessages() {}
+DebugMessages::~DebugMessages() {}
 
-void form_DebugMessages::connectionDump() {
+void DebugMessages::connectionDump() {
   QString Message = core.getConnectionDump();
   connection_txt->clear();
   connection_txt->setText(Message);
 }
 
-void form_DebugMessages::newDebugMessage() {
+void DebugMessages::newDebugMessage() {
   Sam_txt->clear();
 
   const QStringList temp = DebugMessageManager->getAllMessages();
@@ -70,22 +70,21 @@ void form_DebugMessages::newDebugMessage() {
   Sam_txt->setTextCursor(cursor);
 }
 
-void form_DebugMessages::clearDebugMessages() {
+void DebugMessages::clearDebugMessages() {
   DebugMessageManager->doClearAllMessages();
   Sam_txt->clear();
 }
 
-void form_DebugMessages::closeEvent(QCloseEvent *e) {
-  // e->ignore();
+void DebugMessages::closeEvent(QCloseEvent *e) {
   e->accept();
   emit closingDebugWindow();
 }
-void form_DebugMessages::getFocus() {
+void DebugMessages::getFocus() {
   this->activateWindow();
   this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
-void form_DebugMessages::keyPressEvent(QKeyEvent *event) {
+void DebugMessages::keyPressEvent(QKeyEvent *event) {
   if (event->key() != Qt::Key_Escape) {
     QDialog::keyPressEvent(event);
   } else {

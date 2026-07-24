@@ -12,12 +12,9 @@
 #include "User.h"
 #include "UserBlockManager.h"
 
-#include <QIODevice>
 #include <QList>
 #include <QSettings>
-#include <QTextStream>
 #include <QTimer>
-#include <QtGui>
 
 #define CLIENTVERSION "0.2.43"
 #define CLIENTNAME "I2PChat"
@@ -35,7 +32,6 @@ public:
   CCore(const QString &configPath);
   ~CCore();
 
-  // forbid some operators
   CCore(const CCore &) = delete;
   CCore &operator=(const CCore &) = delete;
 
@@ -51,7 +47,6 @@ public:
   QString getConnectionDump() const;
   const QString getConfigPath() const { return mConfigPath; };
 
-  //<SUBSYSTEMS>
   CDebugMessageManager *getDebugMessageHandler() const { return mDebugMessageHandler; };
   CConnectionManager *getConnectionManager() const { return mConnectionManager; };
   CUserBlockManager *getUserBlockManager() const { return mUserBlockManager; };
@@ -59,7 +54,6 @@ public:
   CSoundManager *getSoundManager() const { return mSoundManager; };
   CUserManager *getUserManager() const { return mUserManager; };
   CFileTransferManager *getFileTransferManager() const { return mFileTransferManager; };
-  //</SUBSYSTEMS>
 
   void setUserProtocolVersionByStreamID(qint32 ID, QString Version);
   void setOnlineStatus(const ONLINESTATE newStatus);
@@ -83,10 +77,7 @@ public:
   void loadUserInfos();
   QString calcSessionOptionString() const;
 
-  QString canonicalizeTopicId(QString topicIdNonCanonicalized);
-
 private slots:
-  // <SIGNALS FROM CONNECTIONMANAGER>
   void slotStreamStatusReceived(const SAM_Message_Types::RESULT result, const qint32 ID, const QString &Message);
   void slotNamingReplyReceived(const SAM_Message_Types::RESULT result,
                                const QString &Name,
@@ -96,7 +87,6 @@ private slots:
   void slotReconnectAttempt();
   void slotIncomingStream(CI2PStream *stream);
   void slotNewSamPrivKeyGenerated(const QString &SamPrivKey);
-  // </SIGNALS FROM CONNECTIONMANAGER>
 
 signals:
   void signUserStatusChanged();

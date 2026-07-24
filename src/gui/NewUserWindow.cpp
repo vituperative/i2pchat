@@ -1,21 +1,22 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#include "form_newUser.h"
+#include "NewUserWindow.h"
 
 #include "UserManager.h"
 
-form_newUserWindow::form_newUserWindow(CCore &Core, QDialog *parent)
+#include <QMessageBox>
+
+NewUserWindow::NewUserWindow(CCore &Core, QDialog *parent)
   : QDialog(parent)
   , Core(Core) {
   setupUi(this);
-  // this->setAttribute(Qt::WA_DeleteOnClose,true);
   connect(buttonBox, SIGNAL(accepted()), this, SLOT(addnewUser()));
   connect(buttonBox, SIGNAL(rejected()), this, SLOT(close()));
 }
 
-form_newUserWindow::~form_newUserWindow() {}
+NewUserWindow::~NewUserWindow() {}
 
-void form_newUserWindow::addnewUser() {
+void NewUserWindow::addnewUser() {
   QString Name = lineEdit->text();
   QString I2PDestination = textEdit->toPlainText();
 
@@ -86,8 +87,7 @@ void form_newUserWindow::addnewUser() {
   }
 }
 
-void form_newUserWindow::closeEvent(QCloseEvent *e) {
+void NewUserWindow::closeEvent(QCloseEvent *e) {
   e->ignore();
   this->deleteLater();
-  // delete this;
 }

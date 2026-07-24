@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>form_FileSend</class>
- <widget class="QDialog" name="form_FileSend">
+ <class>FileReceive</class>
+ <widget class="QDialog" name="FileReceive">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,11 +29,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>File Upload</string>
+   <string>File Download</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resourcen.qrc">
-    <normaloff>:/icons/upload.svg</normaloff>:/icons/upload.svg</iconset>
+    <normaloff>:/icons/download.svg</normaloff>:/icons/download.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -61,41 +61,18 @@
      <rect>
       <x>20</x>
       <y>32</y>
-      <width>169</width>
-      <height>112</height>
+      <width>145</width>
+      <height>100</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QCheckBox" name="checkBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Fileinfo sent</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_2">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Filetransfer Accepted</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QCheckBox" name="checkBox_3">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Transferring</string>
+        <string>Receiveing</string>
        </property>
       </widget>
      </item>
@@ -142,25 +119,10 @@
      <property name="verticalSpacing">
       <number>2</number>
      </property>
-     <item row="2" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="Speed">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="3" column="1" colspan="2">
+      <widget class="QLabel" name="labelETA">
        <property name="text">
-        <string>Speed:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <string>n/a</string>
        </property>
       </widget>
      </item>
@@ -180,6 +142,28 @@
        </property>
        <property name="text">
         <string>ETA:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" alignment="Qt::AlignRight">
+      <widget class="QLabel" name="Speed">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Speed:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -212,7 +196,7 @@
       </widget>
      </item>
      <item row="1" column="0" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="Size">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -230,13 +214,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="QLabel" name="labelETA">
-       <property name="text">
-        <string>n/a</string>
        </property>
       </widget>
      </item>
@@ -292,7 +269,7 @@
      <rect>
       <x>9</x>
       <y>11</y>
-      <width>185</width>
+      <width>179</width>
       <height>24</height>
      </rect>
     </property>
@@ -308,6 +285,12 @@
       <height>24</height>
      </size>
     </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>30</height>
+     </size>
+    </property>
     <property name="value">
      <number>24</number>
     </property>
@@ -315,9 +298,9 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>194</x>
       <y>11</y>
-      <width>75</width>
+      <width>81</width>
       <height>24</height>
      </rect>
     </property>

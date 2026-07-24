@@ -1,47 +1,45 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#ifndef FORM_MAIN_H
-#define FORM_MAIN_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
+#include "About.h"
+#include "ChatWidget.h"
 #include "Core.h"
+#include "DebugMessages.h"
+#include "FileReceive.h"
+#include "FileSend.h"
 #include "FileTransferReceive.h"
 #include "FileTransferSend.h"
-#include "User.h"
-#include "form_DebugMessages.h"
-#include "form_TopicSubscribe.h"
-#include "form_about.h"
-#include "form_chatwidget.h"
-#include "form_fileReceive.h"
-#include "form_fileSend.h"
-#include "form_newUser.h"
-#include "form_rename.h"
-#include "form_settingsgui.h"
-#include "gui_icons.h"
-#include "ui_form_Main.h"
+#include "NewUserWindow.h"
+#include "RenameWindow.h"
+#include "SettingsGui.h"
 #include "StatusNotifier.h"
+#include "User.h"
+#include "gui_icons.h"
+#include "ui_MainWindow.h"
 
 #include <QClipboard>
-#include <QContextMenuEvent>
+#include <QCloseEvent>
 #include <QCursor>
-#include <QFileDialog>
+#include <QEvent>
+#include <QIcon>
 #include <QMap>
 #include <QMenu>
-#include <QMouseEvent>
-#include <QMutex>
+#include <QMessageBox>
 #include <QPoint>
 #include <QSettings>
-#include <QtGui>
 
-class form_MainWindow : public QMainWindow, private Ui::form_MainWindow {
+class MainWindow : public QMainWindow, private Ui::MainWindow {
   Q_OBJECT
 
 public:
-  form_MainWindow(const QString &configDir, QWidget *parent = 0);
-  ~form_MainWindow();
+  MainWindow(const QString &configDir, QWidget *parent = 0);
+  ~MainWindow();
 
   // forbid some operators
-  form_MainWindow(const form_MainWindow &) = delete;
-  form_MainWindow &operator=(const form_MainWindow &) = delete;
+  MainWindow(const MainWindow &) = delete;
+  MainWindow &operator=(const MainWindow &) = delete;
 
 protected:
   void closeEvent(QCloseEvent *);
@@ -55,7 +53,6 @@ public slots:
   void eventChatWindowClosed(const QString &Destination);
   void eventFileReceiveWindowClosed(qint32 StreamID);
   void eventFileSendWindowClosed(qint32 StreamID);
-  void eventTopicSubscribeWindowClosed();
   void eventDebugWindowClosed();
   void eventAvatarImageChanged();
   void eventNicknameChanged();
@@ -70,7 +67,6 @@ private slots:
   void openChatWindow(const QString &Destination);
   void openFileReceiveWindow(qint32 StreamID);
   void openFileSendWindow(qint32 StreamID);
-  void openTopicSubscribeWindow();
 
   // Windows end
   void namingMe();
@@ -112,7 +108,7 @@ private:
   CCore *Core;
   bool applicationIsClosing;
 
-  form_newUserWindow *newUserWindow;
+  NewUserWindow *newUserWindow;
 
   CStatusNotifier *mStatusNotifier;
   QAction *toggleVisibilityAction, *toolAct;
@@ -121,13 +117,12 @@ private:
   QString mLastDestinationWithUnreadMessages;
 
   // windows
-  QMap<QString, form_ChatWidget *> mAllOpenChatWindows;
-  QMap<qint32, form_fileReceive *> mAllFileReceiveWindows;
-  QMap<qint32, form_fileSend *> mAllFileSendWindows;
+  QMap<QString, ChatWidget *> mAllOpenChatWindows;
+  QMap<qint32, FileReceive *> mAllFileReceiveWindows;
+  QMap<qint32, FileSend *> mAllFileSendWindows;
 
-  form_topicSubscribe *mTopicSubscribeWindow;
-  form_About *mAboutWindow;
-  form_DebugMessages *mDebugWindow;
+  About *mAboutWindow;
+  DebugMessages *mDebugWindow;
 
   bool Mute;
   QMessageBox *mAuthDialog;

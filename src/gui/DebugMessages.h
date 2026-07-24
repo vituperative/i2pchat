@@ -1,24 +1,25 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#ifndef FORM_DEBUGMESSAGES_H
-#define FORM_DEBUGMESSAGES_H
+#ifndef DEBUGMESSAGES_H
+#define DEBUGMESSAGES_H
 
 #include "Core.h"
 #include "DebugMessageManager.h"
-#include "ui_form_DebugMessages.h"
+#include "ui_DebugMessages.h"
 
-#include <QtGlobal>
-#include <QtGui>
+#include <QCloseEvent>
+#include <QDialog>
+#include <QKeyEvent>
 
-class form_DebugMessages : public QDialog, private Ui::form_DebugMessages {
+class DebugMessages : public QDialog, private Ui::DebugMessages {
   Q_OBJECT
 public:
-  form_DebugMessages(CCore &core, QDialog *parent = 0);
-  ~form_DebugMessages();
+  DebugMessages(CCore &core, QDialog *parent = 0);
+  ~DebugMessages();
 
   // forbid some operators
-  form_DebugMessages(const form_DebugMessages &) = delete;
-  form_DebugMessages &operator=(const form_DebugMessages &) = delete;
+  DebugMessages(const DebugMessages &) = delete;
+  DebugMessages &operator=(const DebugMessages &) = delete;
 
   void getFocus();
 

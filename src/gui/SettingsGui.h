@@ -4,31 +4,32 @@
 #define SETTINGSGUI_H
 
 #include "UserManager.h"
-#include "ui_form_settingsgui.h"
+#include "ui_SettingsGui.h"
 
 #include <QColorDialog>
+#include <QDialog>
 #include <QFileDialog>
 #include <QFileSystemWatcher>
 #include <QFontDialog>
 #include <QMap>
 #include <QMapIterator>
+#include <QMessageBox>
 #include <QSettings>
 #include <QStyleFactory>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QtGui>
 
 class CCore;
-class form_settingsgui : public QDialog, private Ui::form_settingsgui {
+class SettingsGui : public QDialog, private Ui::SettingsGui {
   Q_OBJECT
 
 public:
-  form_settingsgui(CCore &Core, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
-  ~form_settingsgui();
+  SettingsGui(CCore &Core, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+  ~SettingsGui();
 
   // forbid some operators
-  form_settingsgui(const form_settingsgui &) = delete;
-  form_settingsgui &operator=(const form_settingsgui &) = delete;
+  SettingsGui(const SettingsGui &) = delete;
+  SettingsGui &operator=(const SettingsGui &) = delete;
 
 private slots:
   void loadSettings();

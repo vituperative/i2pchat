@@ -24,7 +24,7 @@ public:
   void saveUserList();
   void loadUserList();
   bool addNewUser(QString Name,
-                  const QString& I2PDestination,
+                  const QString &I2PDestination,
                   qint32 I2PStream_ID = 0,
                   bool SaveUserList = true,
                   bool skipGlobalGate = false);
@@ -36,7 +36,6 @@ public:
   bool deleteUserByI2PDestination(const QString &I2PDestination);
   void avatarImageChanged();
 
-  bool deleteUserByI2P_Destination(const QString &Destination);
   CUser *getUserByI2P_ID(qint32 ID) const;
   CUser *getUserByI2P_Destination(const QString &Destination) const;
   QString getUserInfosByI2P_Destination(const QString &Destination) const;
@@ -58,6 +57,6 @@ private:
   bool mSortingEnabled;
   int mSortType;
 
-private:
+  bool deleteUserByI2P_Destination(const QString &Destination);
 };
 #endif // CUSERMANAGER_H

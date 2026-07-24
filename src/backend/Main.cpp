@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include "Core.h"
-#include "form_Main.h"
+#include "MainWindow.h"
 
 #include <QApplication>
 #include <QDateTime>
 #include <QDir>
-#include <QElapsedTimer>
 #include <QFile>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QStyleFactory>
+#include <QTextCodec>
 #include <QTextStream>
 #include <QtDebug>
-#include <QtGui>
 
 #ifndef _WIN32
 #include <getopt.h>
@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
   enableDebugLogging(configPath);
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-  form_MainWindow *mainForm = new form_MainWindow(configPath);
+  MainWindow *mainForm = new MainWindow(configPath);
 
   {
 
@@ -194,7 +194,6 @@ int main(int argc, char *argv[]) {
     auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
     auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
     settings.endGroup();
-    qDebug() << "Current style: " << CurrentStyle;
     mainForm->setStyle(QStyleFactory::create(CurrentStyle));
     if (CustomStyleSheet.size() > 1)
       styleSheetFile.setFileName(CustomStyleSheet);

@@ -4,6 +4,7 @@
 
 #include "Protocol.h"
 
+#include <QDateTime>
 #include <QDir>
 #include <QFile>
 #include <QMimeDatabase>

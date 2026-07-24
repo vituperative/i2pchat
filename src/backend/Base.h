@@ -2,8 +2,7 @@
 #define BASE_H__
 
 #include <inttypes.h>
-
-#include <iostream>
+#include <stddef.h>
 
 namespace i2p {
 namespace data {

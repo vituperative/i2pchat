@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#include "form_fileSend.h"
+#include "FileSend.h"
 
-form_fileSend::form_fileSend(CFileTransferSend &FileTransfer)
+FileSend::FileSend(CFileTransferSend &FileTransfer)
   : FileTransfer(FileTransfer) {
   setupUi(this);
 
@@ -36,7 +36,7 @@ static void ElideLabel(QLabel *label, const QString &text) {
   label->setText(clippedText);
 }
 
-void form_fileSend::init() {
+void FileSend::init() {
   QString SSize;
   QLabel *labelFilename = this->labelFilename;
   QLabel *labelFilesize = this->labelFilesize;
@@ -65,18 +65,18 @@ void form_fileSend::init() {
   labelETA->setText("n/a");
 }
 
-void form_fileSend::slot_alreadySentSizeChanged(quint64 value) {
+void FileSend::slot_alreadySentSizeChanged(quint64 value) {
   progressBar->setValue(value);
 }
 
-void form_fileSend::slot_FileTransferFinishedOK() {
+void FileSend::slot_FileTransferFinishedOK() {
   QCheckBox *checkBox_4 = this->checkBox_4;
   checkBox_4->setChecked(true);
 
   this->close();
 }
 
-void form_fileSend::slot_FileTransferAccepted(bool t) {
+void FileSend::slot_FileTransferAccepted(bool t) {
   if (t == true) {
     checkBox_2->setChecked(true);
     checkBox_3->setChecked(true);
@@ -86,38 +86,38 @@ void form_fileSend::slot_FileTransferAccepted(bool t) {
   }
 }
 
-void form_fileSend::slot_Button() {
+void FileSend::slot_Button() {
 
   FileTransfer.slotAbbortFileSend();
   this->close();
 }
 
-void form_fileSend::slot_FileTransferError() {
+void FileSend::slot_FileTransferError() {
   this->close();
 }
 
-void form_fileSend::slot_FileTransferAborted() {
+void FileSend::slot_FileTransferAborted() {
   this->close();
 }
 
-form_fileSend::~form_fileSend() {}
+FileSend::~FileSend() {}
 
-void form_fileSend::closeEvent(QCloseEvent *e) {
+void FileSend::closeEvent(QCloseEvent *e) {
   emit closingFileSendWindow(FileTransfer.getStreamID());
   e->ignore();
 }
 
-void form_fileSend::getFocus() {
+void FileSend::getFocus() {
   this->activateWindow();
   this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
 }
 
-void form_fileSend::slot_SpeedChanged(const QString &SNumber, const QString &Type) {
+void FileSend::slot_SpeedChanged(const QString &SNumber, const QString &Type) {
   labelSpeed->setText(SNumber + " " + Type);
 }
 
-void form_fileSend::keyPressEvent(QKeyEvent *event) {
+void FileSend::keyPressEvent(QKeyEvent *event) {
   if (event->key() != Qt::Key_Escape) {
     QDialog::keyPressEvent(event);
   } else {

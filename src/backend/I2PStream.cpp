@@ -2,6 +2,7 @@
 
 #include "I2PStream.h"
 
+#include <QDateTime>
 #include <QRegularExpression>
 
 #include <utility>

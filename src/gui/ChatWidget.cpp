@@ -1,19 +1,27 @@
-#include "form_chatwidget.h"
+#include "ChatWidget.h"
 
 #include "ChatDelegate.h"
 #include "User.h"
 
+#include <QApplication>
 #include <QBuffer>
+#include <QColorDialog>
+#include <QDesktopServices>
 #include <QDir>
-#include <QErrorMessage>
 #include <QFile>
+#include <QFileInfo>
+#include <QFontDialog>
 #include <QMap>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPainter>
+#include <QPalette>
+#include <QScreen>
+#include <QScrollBar>
+#include <QSettings>
 #include <QSvgRenderer>
 #include <QTextStream>
 #include <QVBoxLayout>
-#include <QXmlStreamReader>
 
 #include <algorithm>
 
@@ -45,7 +53,7 @@ bool ChatEventEater::eventFilter(QObject *obj, QEvent *event) {
   return false;
 }
 
-form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 0 */)
+ChatWidget::ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 0 */)
   : QMainWindow(parent, Qt::WindowFlags())
   , user(user)
   , Core(Core) {
@@ -92,22 +100,15 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   mFileWatcher = new QFileSystemWatcher(this);
   {
     QString themeDir = Core.getConfigPath() + "/themes/chat";
-    qDebug() << "theme dir:" << themeDir << "exists:" << QDir(themeDir).exists();
-    bool ok = mFileWatcher->addPath(themeDir);
-    qDebug() << "  addPath returned:" << ok;
+    Q_UNUSED(mFileWatcher->addPath(themeDir));
   }
   mReloadTimer = new QTimer(this);
   mReloadTimer->setSingleShot(true);
   mReloadTimer->setInterval(200);
-  connect(mReloadTimer, &QTimer::timeout, this, &form_ChatWidget::loadChatStyle);
-  connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, [this](const QString &p) {
-    qDebug() << "fileChanged:" << p;
-    mReloadTimer->start();
-  });
-  connect(mFileWatcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString &p) {
-    qDebug() << "directoryChanged:" << p;
-    mReloadTimer->start();
-  });
+  connect(mReloadTimer, &QTimer::timeout, this, &ChatWidget::loadChatStyle);
+  connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, [this](const QString &) { mReloadTimer->start(); });
+  connect(
+    mFileWatcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString &) { mReloadTimer->start(); });
   m_event_eater = new ChatEventEater(this);
 
   connect(m_event_eater, SIGNAL(sendMessage()), send, SLOT(click()));
@@ -148,7 +149,6 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
 
   QPixmap pxm(22, 22);
   pxm.fill(textColor);
-  // txtColor->setIcon(pxm);
 
   connect(send, SIGNAL(clicked()), SLOT(sendMessageSignal()));
   connect(txtColor, SIGNAL(clicked()), SLOT(setTextColor()));
@@ -179,15 +179,14 @@ form_ChatWidget::form_ChatWidget(CUser &user, CCore &Core, QDialog *parent /* = 
   remoteAvatarImageChanged();
 
   // QTimer *updater_chat = new QTimer(this);
-  // connect(timer, &QTimer::timeout, this, &form_ChatWidget::raise);
+  // connect(timer, &QTimer::timeout, this, &ChatWidget::raise);
   // timer->start();
 }
 
-void form_ChatWidget::loadChatStyle() {
+void ChatWidget::loadChatStyle() {
   QSettings settings(Core.getConfigPath() + "/application.ini", QSettings::IniFormat);
   QString style = settings.value("Chat/ChatStyle", "Minimal").toString();
   mChatStyle = style;
-  qDebug() << "loadChatStyle: style =" << style;
   QString styleLower = style.toLower();
 
   bool themed = (styleLower != "classic");
@@ -293,7 +292,7 @@ static QString sentOfferIconHtml() {
   return html;
 }
 
-QString form_ChatWidget::transferIconHtml(bool isSend) {
+QString ChatWidget::transferIconHtml(bool isSend) {
   static QString cached[2];
   int idx = isSend ? 1 : 0;
   if (cached[idx].isEmpty()) {
@@ -318,14 +317,14 @@ QString form_ChatWidget::transferIconHtml(bool isSend) {
   return cached[idx];
 }
 
-QString form_ChatWidget::transferProgressHtml(const QString &timePart,
-                                              const QString &fileName,
-                                              quint64 transferred,
-                                              quint64 total,
-                                              const QString &speed,
-                                              const QString &eta,
-                                              qint32 streamID,
-                                              bool isSend) {
+QString ChatWidget::transferProgressHtml(const QString &timePart,
+                                         const QString &fileName,
+                                         quint64 transferred,
+                                         quint64 total,
+                                         const QString &speed,
+                                         const QString &eta,
+                                         qint32 streamID,
+                                         bool isSend) {
   int pct = total > 0 ? static_cast<int>(transferred * 100 / total) : 0;
   pct = std::min(pct, 100);
   QString stats;
@@ -511,7 +510,7 @@ static QVector<BubbleShadow> parseShadows(const QString &val) {
   return shadows;
 }
 
-void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, ChatDelegate::BubbleColors &dc) {
+void ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, ChatDelegate::BubbleColors &dc) {
   QString dir = Core.getConfigPath() + "/themes/chat";
   QString cap = style;
   QString path = dir + "/" + cap + ".css";
@@ -730,7 +729,7 @@ void form_ChatWidget::applyThemeCss(const QString &style, ChatBubbleStyle &bs, C
   f.close();
 }
 
-void form_ChatWidget::newMessageReceived() {
+void ChatWidget::newMessageReceived() {
   QStringList messages = user.getNewMessages(mHaveFocus);
 
   if (mChatStyle == "classic") {
@@ -782,7 +781,7 @@ static int detectMsgType(const QString &text, const QString &selfName) {
   return MsgReceived;
 }
 
-void form_ChatWidget::addAllMessagesClassic() {
+void ChatWidget::addAllMessagesClassic() {
   chat->clear();
   QTextCursor cursor(chat->document());
   cursor.movePosition(QTextCursor::End);
@@ -808,7 +807,7 @@ void form_ChatWidget::addAllMessagesClassic() {
   chat->verticalScrollBar()->setValue(chat->verticalScrollBar()->maximum());
 }
 
-void form_ChatWidget::addAllMessages() {
+void ChatWidget::addAllMessages() {
   if (mChatStyle == "classic") {
     addAllMessagesClassic();
     return;
@@ -820,7 +819,7 @@ void form_ChatWidget::addAllMessages() {
   mChatListView->scrollToBottom();
 }
 
-void form_ChatWidget::addMessage(QString text) {
+void ChatWidget::addMessage(QString text) {
   CTextEmotionChanger::exemplar()->checkMessageForEmoticons(text);
 
   if (mChatStyle == "classic") {
@@ -987,14 +986,12 @@ void form_ChatWidget::addMessage(QString text) {
   mChatListView->scrollToBottom();
 }
 
-void form_ChatWidget::setTextColor() {
+void ChatWidget::setTextColor() {
   QTextEdit *message = this->message;
   textColor = QColorDialog::getColor(user.getTextColor(), this);
 
-  // textColor = QColorDialog::getColor(message->textColor(), this);
   QPixmap pxm(22, 22);
   pxm.fill(textColor);
-  // txtColor->setIcon(pxm);
   user.setTextColor(textColor);
 
   QPalette pal = message->palette();
@@ -1002,7 +999,7 @@ void form_ChatWidget::setTextColor() {
   message->setPalette(pal);
 }
 
-void form_ChatWidget::setFont() {
+void ChatWidget::setFont() {
   QTextEdit *message = this->message;
   bool ok;
   mCurrentFont = QFontDialog::getFont(&ok, mCurrentFont, this);
@@ -1013,7 +1010,7 @@ void form_ChatWidget::setFont() {
   message->setFocus();
 }
 
-void form_ChatWidget::setBold(bool t) {
+void ChatWidget::setBold(bool t) {
 
   QTextEdit *message = this->message;
 
@@ -1024,7 +1021,7 @@ void form_ChatWidget::setBold(bool t) {
   message->setFont(mCurrentFont);
 }
 
-void form_ChatWidget::closeEvent(QCloseEvent *e) {
+void ChatWidget::closeEvent(QCloseEvent *e) {
   disconnect(&user, SIGNAL(signNewMessageReceived()), this, SLOT(newMessageReceived()));
 
   emit closingChatWindow(user.getI2PDestination());
@@ -1047,7 +1044,7 @@ static QString minifyChatHtml(const QString &html) {
   return out.trimmed();
 }
 
-void form_ChatWidget::sendMessageSignal() {
+void ChatWidget::sendMessageSignal() {
   QTextEdit *message = this->message;
   if (message->toPlainText().length() == 0)
     return;
@@ -1081,7 +1078,7 @@ void form_ChatWidget::sendMessageSignal() {
 
 static QPixmap statusIconWithBadge(const QString &statusIconPath);
 
-void form_ChatWidget::changeWindowsTitle() {
+void ChatWidget::changeWindowsTitle() {
   QString OnlineStatus;
   QString statusIconPath;
   switch (user.getOnlineState()) {
@@ -1158,7 +1155,7 @@ static QPixmap statusIconWithBadge(const QString &statusIconPath) {
   return base;
 }
 
-void form_ChatWidget::newFileTransfer() {
+void ChatWidget::newFileTransfer() {
   QString title =
     user.getConnectionStatus() == ONLINE ? tr("Open File") : tr("Open File (will be sent when contact comes online)");
   QString FilePath = QFileDialog::getOpenFileName(this, title, ".", tr("all Files (*)"));
@@ -1167,7 +1164,7 @@ void form_ChatWidget::newFileTransfer() {
   startFileTransfer(FilePath);
 }
 
-void form_ChatWidget::anchorClicked(const QUrl &link) {
+void ChatWidget::anchorClicked(const QUrl &link) {
   if (link.scheme() == "cancelmsg") {
     bool ok = false;
     qint32 id = link.toString().mid(link.scheme().length() + 1).toInt(&ok);
@@ -1292,11 +1289,11 @@ static QString extractTimeFromHtml(const QString &html) {
   return m.hasMatch() ? m.captured(1) : QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
 }
 
-void form_ChatWidget::slotFileTransferCreated(qint32 streamID,
-                                              const QString &fileName,
-                                              quint64 fileSize,
-                                              bool isSend,
-                                              const QString &destination) {
+void ChatWidget::slotFileTransferCreated(qint32 streamID,
+                                         const QString &fileName,
+                                         quint64 fileSize,
+                                         bool isSend,
+                                         const QString &destination) {
   if (destination != user.getI2PDestination())
     return;
 
@@ -1354,7 +1351,7 @@ void form_ChatWidget::slotFileTransferCreated(qint32 streamID,
   }
 }
 
-void form_ChatWidget::updateTransferItem(QObject *s) {
+void ChatWidget::updateTransferItem(QObject *s) {
   qint32 streamID;
   quint64 transferred = 0, total = 0;
   bool isSend = false;
@@ -1397,11 +1394,11 @@ void form_ChatWidget::updateTransferItem(QObject *s) {
   }
 }
 
-void form_ChatWidget::slotTransferUpdate() {
+void ChatWidget::slotTransferUpdate() {
   updateTransferItem(sender());
 }
 
-void form_ChatWidget::slotTransferETA(const QString &eta) {
+void ChatWidget::slotTransferETA(const QString &eta) {
   if (auto *s = sender()) {
     qint32 streamID = 0;
     if (auto *ft = qobject_cast<CFileTransferSend *>(s))
@@ -1421,7 +1418,7 @@ void form_ChatWidget::slotTransferETA(const QString &eta) {
   updateTransferItem(sender());
 }
 
-void form_ChatWidget::slotTransferSpeed(const QString &speed, const QString &type) {
+void ChatWidget::slotTransferSpeed(const QString &speed, const QString &type) {
   if (auto *s = sender()) {
     qint32 streamID = 0;
     if (auto *ft = qobject_cast<CFileTransferSend *>(s))
@@ -1442,7 +1439,7 @@ void form_ChatWidget::slotTransferSpeed(const QString &speed, const QString &typ
   updateTransferItem(sender());
 }
 
-void form_ChatWidget::slotTransferCompleted() {
+void ChatWidget::slotTransferCompleted() {
   auto *s = sender();
   qint32 streamID = 0;
   QString fileName;
@@ -1499,7 +1496,7 @@ void form_ChatWidget::slotTransferCompleted() {
   }
 }
 
-void form_ChatWidget::slotTransferAborted() {
+void ChatWidget::slotTransferAborted() {
   auto *s = sender();
   qint32 streamID = 0;
   QString fileName;
@@ -1536,7 +1533,7 @@ void form_ChatWidget::slotTransferAborted() {
   }
 }
 
-void form_ChatWidget::focusEvent(bool b) {
+void ChatWidget::focusEvent(bool b) {
   mHaveFocus = b;
 
   if (user.getHaveNewUnreadMessages() == true) {
@@ -1544,7 +1541,7 @@ void form_ChatWidget::focusEvent(bool b) {
   }
 }
 
-void form_ChatWidget::slotPendingCanceled() {
+void ChatWidget::slotPendingCanceled() {
   if (mChatStyle == "classic") {
     addAllMessages();
     return;
@@ -1566,7 +1563,7 @@ void form_ChatWidget::slotPendingCanceled() {
   mChatListView->viewport()->update();
 }
 
-void form_ChatWidget::showContextMenu(const QPoint &pos) {
+void ChatWidget::showContextMenu(const QPoint &pos) {
   QModelIndex idx = mChatListView->indexAt(pos);
   if (!idx.isValid())
     return;
@@ -1586,14 +1583,13 @@ void form_ChatWidget::showContextMenu(const QPoint &pos) {
     QApplication::clipboard()->setText(plain);
 }
 
-void form_ChatWidget::getFocus() {
+void ChatWidget::getFocus() {
   this->activateWindow();
   this->setWindowState((windowState() & (~Qt::WindowMinimized)) | Qt::WindowActive);
   this->raise();
-  //  this->setFocus(); // don't automatically focus chat window
 }
 
-void form_ChatWidget::setUnderline(bool t) {
+void ChatWidget::setUnderline(bool t) {
   mCurrentFont.setUnderline(t);
   user.setTextFont(mCurrentFont);
 
@@ -1602,7 +1598,7 @@ void form_ChatWidget::setUnderline(bool t) {
   message->setFocus();
 }
 
-void form_ChatWidget::setItalic(bool t) {
+void ChatWidget::setItalic(bool t) {
   mCurrentFont.setItalic(t);
   user.setTextFont(mCurrentFont);
 
@@ -1611,13 +1607,13 @@ void form_ChatWidget::setItalic(bool t) {
   message->setFocus();
 }
 
-void form_ChatWidget::dragEnterEvent(QDragEnterEvent *event) {
+void ChatWidget::dragEnterEvent(QDragEnterEvent *event) {
   if (event->mimeData() && event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
   }
 }
 
-void form_ChatWidget::dropEvent(QDropEvent *event) {
+void ChatWidget::dropEvent(QDropEvent *event) {
   if (!event->mimeData() || !event->mimeData()->hasUrls())
     return;
 
@@ -1636,15 +1632,15 @@ void form_ChatWidget::dropEvent(QDropEvent *event) {
   startFileTransfer(filePath);
 }
 
-void form_ChatWidget::startFileTransfer(const QString &filePath) {
+void ChatWidget::startFileTransfer(const QString &filePath) {
   QFileInfo fi(filePath);
   if (fi.exists() && fi.isFile())
     user.slotSendFileOffer(fi.fileName(), fi.size(), filePath);
 }
 
-form_ChatWidget::~form_ChatWidget() {}
+ChatWidget::~ChatWidget() {}
 
-void form_ChatWidget::keyPressEvent(QKeyEvent *event) {
+void ChatWidget::keyPressEvent(QKeyEvent *event) {
   if (event->key() != Qt::Key_Escape) {
     QMainWindow::keyPressEvent(event);
   } else {
@@ -1652,7 +1648,7 @@ void form_ChatWidget::keyPressEvent(QKeyEvent *event) {
     close();
   }
 }
-void form_ChatWidget::showAvatarFrame(bool show) {
+void ChatWidget::showAvatarFrame(bool show) {
   if (show) {
     avatarframe->setVisible(false);
     avatarFrameButton->setChecked(true);
@@ -1666,7 +1662,7 @@ void form_ChatWidget::showAvatarFrame(bool show) {
   }
 }
 
-void form_ChatWidget::remoteAvatarImageChanged() {
+void ChatWidget::remoteAvatarImageChanged() {
   if (user.getReceivedUserInfos().AvatarImage.size() > 0) {
     QPixmap pxm;
     pxm.loadFromData(user.getReceivedUserInfos().AvatarImage);
@@ -1683,7 +1679,7 @@ void form_ChatWidget::remoteAvatarImageChanged() {
   }
 }
 
-void form_ChatWidget::messageTextChanged() {
+void ChatWidget::messageTextChanged() {
   if (user.getProtocolVersion_D() < 0.5) {
     return;
   }
@@ -1709,12 +1705,12 @@ void form_ChatWidget::messageTextChanged() {
   }
   message->setTextCursor(tmpCursor);
 }
-void form_ChatWidget::centerDialog() {
+void ChatWidget::centerDialog() {
   QRect scr = QGuiApplication::primaryScreen()->geometry();
   move(scr.center() - rect().center());
 }
 
-void form_ChatWidget::slotLoadOwnAvatarImage() {
+void ChatWidget::slotLoadOwnAvatarImage() {
   ownavatar_label->setAlignment(Qt::AlignCenter);
   QPixmap pxm;
   pxm.loadFromData(Core.getUserInfos().AvatarImage);

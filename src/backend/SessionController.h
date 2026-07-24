@@ -5,10 +5,8 @@
 
 #include "I2PSamMessageAnalyser.h"
 
-#include <QSocketNotifier>
 #include <QTcpSocket>
 #include <QTimer>
-#include <QtGui>
 
 class CSessionController : public QObject {
   Q_OBJECT

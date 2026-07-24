@@ -3,8 +3,9 @@
 #include "SessionController.h"
 
 #include <QDateTime>
-#include <QIcon>
+#include <QMessageBox>
 #include <QRegularExpression>
+#include <QSettings>
 
 #include <utility>
 
@@ -86,8 +87,6 @@ void CSessionController::slotDisconnected() {
       emit signDebugMessages(truncateDbg("I2P Stream Controller ‣ Scheduling reconnect in 60 seconds"));
       mReconnectTimer->start(60000); // 60 seconds
     }
-
-    // emit SamConnectionClosed();
   }
 }
 
@@ -175,7 +174,6 @@ void CSessionController::slotReadFromSocket() {
     }
     case STREAM_STATUS: {
       emit signDebugMessages(truncateDbg(t));
-      // emit StreamStatusReceived(sam.result,sam.ID,sam.Message);
       break;
     }
     case NAMING_REPLY: {
@@ -208,13 +206,9 @@ void CSessionController::slotReadFromSocket() {
 void CSessionController::doConnect() {
   mDoneDisconnect = false;
 
-  qDebug() << "CSessionController::doConnect() - SamHost:" << mSamHost << "SamPort:" << mSamPort;
-
   if (mTcpSocket.state() == QAbstractSocket::UnconnectedState) {
-    qDebug() << "CSessionController::doConnect() - Connecting to SAM host...";
     mTcpSocket.connectToHost(mSamHost, mSamPort.toInt());
   }
-  qDebug() << "CSessionController::doConnect() - Connection initiated, result handled asynchronously";
 }
 
 void CSessionController::doDisconnect() {
@@ -244,8 +238,6 @@ void CSessionController::doSessionCreate() {
 
   QByteArray Message;
   Message += "SESSION CREATE STYLE=STREAM ID=" + mBridgeName.toUtf8() + " DESTINATION=" + mSamPrivKey.toUtf8();
-  // TODO: Enable as option for Non-persistent destination
-  // Message += mBridgeName + " DESTINATION=TRANSIENT";
 
   if (mSessionOptions.isEmpty() == false) {
     Message += " " + mSessionOptions.toUtf8();

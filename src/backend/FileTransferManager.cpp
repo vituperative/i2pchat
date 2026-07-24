@@ -5,6 +5,7 @@
 #include "UserManager.h"
 
 #include <QFile>
+#include <QMessageBox>
 #include <QStandardPaths>
 
 CFileTransferManager::CFileTransferManager(CCore &Core)
@@ -13,11 +14,6 @@ CFileTransferManager::CFileTransferManager(CCore &Core)
 CFileTransferManager::~CFileTransferManager() {}
 
 CFileTransferReceive *CFileTransferManager::getFileReceiveByID(qint32 ID) const {
-  /*for(int i=0;i<mFileReceives.size();i++){
-          if(mFileReceives.at(i)->getStreamID()==ID){
-                  return mFileReceives.at(i);
-          }
-  }*/
   for (auto it : mFileReceives)
     if (it->getStreamID() == ID)
       return it;
@@ -30,11 +26,6 @@ CFileTransferSend *CFileTransferManager::getFileSendByID(qint32 ID) const {
     if (it->getStreamID() == ID)
       return it;
 
-  /*for(int i=0;i<mFileSends.size();i++){
-          if(mFileSends.at(i)->getStreamID()==ID){
-                  return mFileSends.at(i);
-          }
-  }*/
   return NULL;
 }
 
@@ -63,7 +54,6 @@ void CFileTransferManager::addNewFileTransfer(const QString &FilePath, const QSt
   if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
       this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
     qCritical() << "Already exists transfer for user";
-    throw std::runtime_error("Already exists transfer for user");
     return;
   }
 
@@ -150,7 +140,6 @@ void CFileTransferManager::addNewFileReceive(qint32 ID,
       if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
           this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
         qCritical() << "File is already in the transfer queue";
-        throw std::runtime_error("File is already in the transfer queue");
         return;
       }
     }

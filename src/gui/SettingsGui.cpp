@@ -1,18 +1,20 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#include "form_settingsgui.h"
+#include "SettingsGui.h"
 
 #include "Base.h"
 #include "Core.h"
 #include "UserBlockManager.h"
 
+#include <QBuffer>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QHBoxLayout>
 
-form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
+SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   : QDialog(parent, flags)
   , mCore(Core)
   , mConfigPath(Core.getConfigPath()) {
@@ -107,23 +109,19 @@ form_settingsgui::form_settingsgui(CCore &Core, QWidget *parent, Qt::WindowFlags
 
   connect(nonpersistdest, SIGNAL(clicked(bool)), this, SLOT(clicked_nonPersistDest(bool)));
 
-  // TODO: Add this button from ui file. (QtCreator, i dont have it)
-  // connect(setCustomSheetButton, SIGNAL( clicked(bool) ), this, SLOT(
-  // setCustomStyleSheet() ) );
-
   mThemeWatcher = new QFileSystemWatcher(this);
   QString themesDir = mConfigPath + "/themes/chat";
   if (QDir(themesDir).exists())
     mThemeWatcher->addPath(themesDir);
-  connect(mThemeWatcher, &QFileSystemWatcher::directoryChanged, this, &form_settingsgui::slotThemeDirChanged);
+  connect(mThemeWatcher, &QFileSystemWatcher::directoryChanged, this, &SettingsGui::slotThemeDirChanged);
 }
 
-form_settingsgui::~form_settingsgui() {
+SettingsGui::~SettingsGui() {
   settings->sync();
   delete (settings);
 }
 
-void form_settingsgui::loadSettings() {
+void SettingsGui::loadSettings() {
   settings->beginGroup("General");
   bool autoAwayEnabled = settings->value("AutoAwayEnabled", false).toBool();
   AutoAway->setChecked(autoAwayEnabled);
@@ -374,11 +372,6 @@ void form_settingsgui::loadSettings() {
   checkboxUserEvents->setChecked(settings->value("LogOnlineStatesOfUsers", true).toBool());
   checkBox_DisplayImagesInline->setChecked(settings->value("DisplayImagesInline", false).toBool());
 
-  // TODO: Connection timeout from I2PStream.cpp or nuke ?
-  // spinBox_maxACK->setMinimum(20);
-  // spinBox_maxACK->setMaximum(180);
-  // spinBox_maxACK->setValue(settings->value("MaxChatmessageACKTimeInSec","120").toInt());
-
   settings->endGroup();
 
   settings->beginGroup("Security");
@@ -446,13 +439,12 @@ void form_settingsgui::loadSettings() {
     i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
     b32buffer[52] = '\0';
     QString strb32address = "http://" + QString(b32buffer) + ".b32.i2p";
-    b32address->setPlainText(
-      QApplication::translate("form_settingsgui", strb32address.toUtf8().constData(), Q_NULLPTR));
+    b32address->setPlainText(QApplication::translate("SettingsGui", strb32address.toUtf8().constData(), Q_NULLPTR));
     free(outputbuffer);
     free(b32buffer);
   } else {
     b32address->setPlainText(
-      QApplication::translate("form_settingsgui", "b32 address will be displayed when online", Q_NULLPTR));
+      QApplication::translate("SettingsGui", "b32 address will be displayed when online", Q_NULLPTR));
   }
 
   settings->beginGroup("Usersearch");
@@ -471,7 +463,7 @@ void form_settingsgui::loadSettings() {
   settings->endGroup();
   settings->sync();
 }
-void form_settingsgui::saveSettings() {
+void SettingsGui::saveSettings() {
   settings->beginGroup("General");
   settings->setValue("AutoAwayEnabled", AutoAway->isChecked());
   settings->setValue("AutoAwayMinutes", AutoAwaySpinBox->value());
@@ -545,8 +537,6 @@ void form_settingsgui::saveSettings() {
   settings->setValue("AvatarBinaryImage", avatarImageByteArray);
   settings->endGroup();
   settings->sync();
-
-  qDebug() << "saveSettings: sync complete";
 
   settings->beginGroup("Chat");
   {
@@ -662,15 +652,15 @@ void form_settingsgui::saveSettings() {
   this->close();
 }
 
-void form_settingsgui::on_styleCombo_activated(const QString &styleName) {
+void SettingsGui::on_styleCombo_activated(const QString &styleName) {
   qApp->setStyle(styleName);
 }
 
-void form_settingsgui::on_styleSheetCombo_activated(const QString &sheetName) {
+void SettingsGui::on_styleSheetCombo_activated(const QString &sheetName) {
   loadStyleSheet(sheetName);
 }
 
-void form_settingsgui::loadStyleSheet(const QString &sheetName) {
+void SettingsGui::loadStyleSheet(const QString &sheetName) {
   //
   // external Stylesheets
   QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
@@ -683,7 +673,7 @@ void form_settingsgui::loadStyleSheet(const QString &sheetName) {
     qWarning() << "WARNING: stylesheet file is broken";
 }
 
-void form_settingsgui::loadqss() {
+void SettingsGui::loadqss() {
 
   QFileInfoList slist = QDir(mConfigPath + "/qss/").entryInfoList();
   foreach (QFileInfo st, slist) {
@@ -692,7 +682,7 @@ void form_settingsgui::loadqss() {
   }
 }
 
-void form_settingsgui::populateChatStyleCombo() {
+void SettingsGui::populateChatStyleCombo() {
   QString current = comboBoxChatStyle->currentData().toString();
   comboBoxChatStyle->clear();
   comboBoxChatStyle->addItem(tr("Classic"), "classic");
@@ -715,11 +705,11 @@ void form_settingsgui::populateChatStyleCombo() {
   }
 }
 
-void form_settingsgui::slotThemeDirChanged() {
+void SettingsGui::slotThemeDirChanged() {
   populateChatStyleCombo();
 }
 
-void form_settingsgui::clicked_openFile() {
+void SettingsGui::clicked_openFile() {
   txt_SoundFile->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile->text().isEmpty()) {
     checkBoxSound->setChecked(false);
@@ -728,7 +718,7 @@ void form_settingsgui::clicked_openFile() {
     checkBoxSound->setEnabled(true);
 }
 
-void form_settingsgui::clicked_openFile2() {
+void SettingsGui::clicked_openFile2() {
   txt_SoundFile2->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile2->text().isEmpty()) {
     checkBoxSound_2->setChecked(false);
@@ -736,7 +726,7 @@ void form_settingsgui::clicked_openFile2() {
   } else
     checkBoxSound_2->setEnabled(true);
 }
-void form_settingsgui::clicked_openFile3() {
+void SettingsGui::clicked_openFile3() {
   txt_SoundFile3->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile3->text().isEmpty()) {
     checkBoxSound_3->setChecked(false);
@@ -744,7 +734,7 @@ void form_settingsgui::clicked_openFile3() {
   } else
     checkBoxSound_3->setEnabled(true);
 }
-void form_settingsgui::clicked_openFile4() {
+void SettingsGui::clicked_openFile4() {
   txt_SoundFile4->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile4->text().isEmpty()) {
     checkBoxSound_4->setChecked(false);
@@ -752,7 +742,7 @@ void form_settingsgui::clicked_openFile4() {
   } else
     checkBoxSound_4->setEnabled(true);
 }
-void form_settingsgui::clicked_openFile5() {
+void SettingsGui::clicked_openFile5() {
   txt_SoundFile5->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile5->text().isEmpty()) {
     checkBoxSound_5->setChecked(false);
@@ -760,7 +750,7 @@ void form_settingsgui::clicked_openFile5() {
   } else
     checkBoxSound_5->setEnabled(true);
 }
-void form_settingsgui::clicked_openFile6() {
+void SettingsGui::clicked_openFile6() {
   txt_SoundFile6->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
   if (txt_SoundFile6->text().isEmpty()) {
     checkBoxSound_6->setChecked(false);
@@ -769,7 +759,7 @@ void form_settingsgui::clicked_openFile6() {
     checkBoxSound_6->setEnabled(true);
 }
 
-void form_settingsgui::clicked_browseDocroot() {
+void SettingsGui::clicked_browseDocroot() {
   QString dir = QFileDialog::getExistingDirectory(
     this,
     tr("Choose Document Root"),
@@ -812,7 +802,7 @@ static bool editUserDialog(QWidget *parent, QString &name, QString &password, QS
   return true;
 }
 
-void form_settingsgui::clicked_webServerAddUser() {
+void SettingsGui::clicked_webServerAddUser() {
   QString name, password, folder;
   if (!editUserDialog(this, name, password, folder))
     return;
@@ -826,7 +816,7 @@ void form_settingsgui::clicked_webServerAddUser() {
   webServerUserTable->setItem(row, 1, new QTableWidgetItem(folder));
 }
 
-void form_settingsgui::clicked_webServerEditUser() {
+void SettingsGui::clicked_webServerEditUser() {
   int row = webServerUserTable->currentRow();
   if (row < 0)
     return;
@@ -847,14 +837,14 @@ void form_settingsgui::clicked_webServerEditUser() {
     folderItem->setText(folder);
 }
 
-void form_settingsgui::clicked_webServerDeleteUser() {
+void SettingsGui::clicked_webServerDeleteUser() {
   int row = webServerUserTable->currentRow();
   if (row < 0)
     return;
   webServerUserTable->removeRow(row);
 }
 
-void form_settingsgui::clicked_webServerAuthToggled(bool checked) {
+void SettingsGui::clicked_webServerAuthToggled(bool checked) {
   webServerUserTable->setEnabled(checked);
   webServerAddUserButton->setEnabled(checked);
   webServerEditUserButton->setEnabled(checked);
@@ -863,7 +853,7 @@ void form_settingsgui::clicked_webServerAuthToggled(bool checked) {
   webServerRealmEdit->setEnabled(checked);
 }
 
-void form_settingsgui::clicked_DestinationGenerate() {
+void SettingsGui::clicked_DestinationGenerate() {
 
   QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   settings->beginGroup("Network");
@@ -881,7 +871,7 @@ void form_settingsgui::clicked_DestinationGenerate() {
   msgBox.exec();
 }
 
-void form_settingsgui::clicked_IncomingFileFolder() {
+void SettingsGui::clicked_IncomingFileFolder() {
   txt_IncomingFileFolder->setText(QFileDialog::getExistingDirectory(
     this, tr("Open Folder"), mConfigPath + "/Incoming", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks));
 
@@ -890,19 +880,19 @@ void form_settingsgui::clicked_IncomingFileFolder() {
   }
 }
 
-void form_settingsgui::clicked_Gender_Male(bool state) {
+void SettingsGui::clicked_Gender_Male(bool state) {
   if (state == true) {
     checkGender_Female->setChecked(false);
   }
 }
 
-void form_settingsgui::clicked_Gender_Female(bool state) {
+void SettingsGui::clicked_Gender_Female(bool state) {
   if (state == true) {
     checkGender_Male->setChecked(false);
   }
 }
 
-void form_settingsgui::clicked_ChatMessageTextColor() {
+void SettingsGui::clicked_ChatMessageTextColor() {
   txtShowCurrentChatStyle->selectAll();
   txtShowCurrentChatStyle->setTextColor(QColorDialog::getColor(Qt::black, this));
 
@@ -910,7 +900,7 @@ void form_settingsgui::clicked_ChatMessageTextColor() {
   txtShowCurrentChatStyle->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_ChatMessageBold(bool t) {
+void SettingsGui::clicked_ChatMessageBold(bool t) {
   QFont font = txtShowCurrentChatStyle->currentFont();
   font.setBold(t);
   txtShowCurrentChatStyle->selectAll();
@@ -919,7 +909,7 @@ void form_settingsgui::clicked_ChatMessageBold(bool t) {
   txtShowCurrentChatStyle->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_ChatMessageFont() {
+void SettingsGui::clicked_ChatMessageFont() {
   bool ok;
   QFont newFont = QFontDialog::getFont(&ok, txtShowCurrentChatStyle->currentFont(), this);
   if (ok == true) {
@@ -930,14 +920,14 @@ void form_settingsgui::clicked_ChatMessageFont() {
   }
 }
 
-void form_settingsgui::clicked_OverWriteChatMessageTextColor() {
+void SettingsGui::clicked_OverWriteChatMessageTextColor() {
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setTextColor(QColorDialog::getColor(Qt::black, this));
   txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_OverWriteChatMessageBold(bool t) {
+void SettingsGui::clicked_OverWriteChatMessageBold(bool t) {
   QFont font = txtOverrideRemote->currentFont();
   font.setBold(t);
   txtOverrideRemote->selectAll();
@@ -946,7 +936,7 @@ void form_settingsgui::clicked_OverWriteChatMessageBold(bool t) {
   txtOverrideRemote->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_OverWriteChatMessageFont() {
+void SettingsGui::clicked_OverWriteChatMessageFont() {
   bool ok;
   QFont newFont = QFontDialog::getFont(&ok, txtShowCurrentChatStyle->currentFont(), this);
   if (ok == true) {
@@ -957,35 +947,35 @@ void form_settingsgui::clicked_OverWriteChatMessageFont() {
   }
 }
 
-void form_settingsgui::clicked_ChatMessageItalic(bool t) {
+void SettingsGui::clicked_ChatMessageItalic(bool t) {
   txtShowCurrentChatStyle->selectAll();
   txtShowCurrentChatStyle->setFontItalic(t);
   txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtShowCurrentChatStyle->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_ChatMessageUnderline(bool t) {
+void SettingsGui::clicked_ChatMessageUnderline(bool t) {
   txtShowCurrentChatStyle->selectAll();
   txtShowCurrentChatStyle->setFontUnderline(t);
   txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtShowCurrentChatStyle->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_OverWriteChatMessageItalic(bool t) {
+void SettingsGui::clicked_OverWriteChatMessageItalic(bool t) {
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setFontItalic(t);
   txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
-void form_settingsgui::clicked_OverWriteChatMessageUnderline(bool t) {
+void SettingsGui::clicked_OverWriteChatMessageUnderline(bool t) {
   txtOverrideRemote->selectAll();
   txtOverrideRemote->setFontUnderline(t);
   txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
   txtOverrideRemote->textCursor().clearSelection();
 }
 
-void form_settingsgui::showUserBlockList() {
+void SettingsGui::showUserBlockList() {
   QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
 
   QMap<QString, CUserBlockManager::CUserBlockEntity *> UserBlockMap;
@@ -1026,7 +1016,7 @@ void form_settingsgui::showUserBlockList() {
   UserBlockTreeWidget->sortByColumn(0, Qt::AscendingOrder);
 }
 
-void form_settingsgui::clicked_BlockListDelete() {
+void SettingsGui::clicked_BlockListDelete() {
   QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
   QTreeWidgetItem *item;
   QTreeWidgetItem *parent;
@@ -1046,7 +1036,7 @@ void form_settingsgui::clicked_BlockListDelete() {
   }
 }
 
-void form_settingsgui::clicked_BlockListUnblock() {
+void SettingsGui::clicked_BlockListUnblock() {
   QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
   QTreeWidgetItem *item;
   QTreeWidgetItem *parent;
@@ -1068,7 +1058,7 @@ void form_settingsgui::clicked_BlockListUnblock() {
   }
 }
 
-void form_settingsgui::clicked_EnableUserSearch(bool t) {
+void SettingsGui::clicked_EnableUserSearch(bool t) {
   if (t == true) {
     if (txt_Nickname->text().isEmpty() == true) {
       QMessageBox msgBox(NULL);
@@ -1086,7 +1076,7 @@ void form_settingsgui::clicked_EnableUserSearch(bool t) {
   }
 }
 
-void form_settingsgui::clicked_SelectAvatarImage() {
+void SettingsGui::clicked_SelectAvatarImage() {
   QPixmap tmpPixmap;
 
   QString tmp = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("Images (*.png *.svg *.jpg *.gif)"));
@@ -1108,7 +1098,7 @@ void form_settingsgui::clicked_SelectAvatarImage() {
     ownavatar_label_2->setPixmap(tmpPixmap);
   }
 }
-void form_settingsgui::clicked_ClearAvatarImage() {
+void SettingsGui::clicked_ClearAvatarImage() {
   avatarImageByteArray.clear();
   QPixmap tmpPixmap;
   tmpPixmap.load(":/icons/silhouette.svg");
@@ -1118,7 +1108,7 @@ void form_settingsgui::clicked_ClearAvatarImage() {
   ownavatar_label_2->setPixmap(tmpPixmap);
 }
 
-void form_settingsgui::setCustomStyleSheet() {
+void SettingsGui::setCustomStyleSheet() {
 
   auto fileName =
     QFileDialog::getOpenFileName(this, tr("open your StyleSheet"), "", tr("StyleSheet(*.css *.qss *.txt)"));
@@ -1129,7 +1119,7 @@ void form_settingsgui::setCustomStyleSheet() {
   settings->sync();
 }
 
-void form_settingsgui::clicked_sortingEnabled(bool enabled) {
+void SettingsGui::clicked_sortingEnabled(bool enabled) {
   settings->beginGroup("UserList");
   settings->setValue("SortingEnabled", enabled);
   settings->endGroup();
@@ -1142,7 +1132,7 @@ void form_settingsgui::clicked_sortingEnabled(bool enabled) {
   }
 }
 
-void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
+void SettingsGui::clicked_BlockAllUnknownUsers(bool checked) {
   settings->beginGroup("Security");
   settings->setValue("BlockAllUnknownUsers", checked);
   settings->endGroup();
@@ -1155,14 +1145,14 @@ void form_settingsgui::clicked_BlockAllUnknownUsers(bool checked) {
   }
 }
 
-void form_settingsgui::clicked_RequestAuthorization(bool checked) {
+void SettingsGui::clicked_RequestAuthorization(bool checked) {
   settings->beginGroup("Security");
   settings->setValue("RequestAuthorization", checked);
   settings->endGroup();
   settings->sync();
 }
 
-void form_settingsgui::clicked_sortAlphabetically(bool checked) {
+void SettingsGui::clicked_sortAlphabetically(bool checked) {
   if (checked) {
     settings->beginGroup("UserList");
     settings->setValue("SortType", 0);
@@ -1173,7 +1163,7 @@ void form_settingsgui::clicked_sortAlphabetically(bool checked) {
   }
 }
 
-void form_settingsgui::clicked_sortByDateAdded(bool checked) {
+void SettingsGui::clicked_sortByDateAdded(bool checked) {
   if (checked) {
     settings->beginGroup("UserList");
     settings->setValue("SortType", 1);
@@ -1184,7 +1174,7 @@ void form_settingsgui::clicked_sortByDateAdded(bool checked) {
   }
 }
 
-void form_settingsgui::clicked_sortByLastCommunication(bool checked) {
+void SettingsGui::clicked_sortByLastCommunication(bool checked) {
   if (checked) {
     settings->beginGroup("UserList");
     settings->setValue("SortType", 2);
@@ -1195,7 +1185,7 @@ void form_settingsgui::clicked_sortByLastCommunication(bool checked) {
   }
 }
 
-void form_settingsgui::clicked_sortByLastOnline(bool checked) {
+void SettingsGui::clicked_sortByLastOnline(bool checked) {
   if (checked) {
     settings->beginGroup("UserList");
     settings->setValue("SortType", 3);
@@ -1206,13 +1196,13 @@ void form_settingsgui::clicked_sortByLastOnline(bool checked) {
   }
 }
 
-void form_settingsgui::clicked_AutoAwayEnabled(bool enabled) {
+void SettingsGui::clicked_AutoAwayEnabled(bool enabled) {
   AutoAwaySpinBox->setEnabled(enabled);
   NoActivityLabel->setEnabled(enabled);
   mCore.applyAutoAwaySettings(enabled ? AutoAwaySpinBox->value() : 0);
 }
 
-void form_settingsgui::clicked_nonPersistDest(bool checked) {
+void SettingsGui::clicked_nonPersistDest(bool checked) {
   settings->beginGroup("Network");
   settings->setValue("NonPersistentDestination", checked);
   settings->endGroup();

@@ -6,20 +6,17 @@
 #include "FileTransferSend.h"
 #include "HttpServer.h"
 #include "I2PStream.h"
-#include "LoadHTML.h"
 #include "User.h"
 #include "UserManager.h"
 
 #include <QDateTime>
 #include <QDir>
-#include <QErrorMessage>
 #include <QFile>
 #include <QMap>
+#include <QMessageBox>
 #include <QSettings>
 #include <QTextStream>
 #include <QUuid>
-
-#include <iostream>
 
 namespace {
 constexpr int MAX_LOGIN_ATTEMPTS = 3;

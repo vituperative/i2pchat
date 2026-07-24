@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QFileInfoList>
+#include <QImage>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -76,7 +77,6 @@ CCore::CCore(const QString &configPath) {
   mProtocol = new CProtocol(*this);
   this->mCurrentOnlineStatus = User::USEROFFLINE;
 
-  qDebug() << "CCore constructor: calling loadUserInfos";
   loadUserInfos();
   mUnsentChatMessageStorage = new CUnsentChatMessageStorage(mConfigPath + "/UnsentChatMessageStorage.ini");
   mUserBlockManager = new CUserBlockManager(*this, mConfigPath + "/UserBlockList.dat");
@@ -167,18 +167,9 @@ QString CCore::calcSessionOptionString() const {
                              " ");
   SessionOptionString.append("outbound.length=" + settings.value("outbound.length", "3").toString() + " ");
 
-  // throttle per client dest to max 60 connections/min to mitigate denial of
-  // service ?? is this hampering our file transfers???
-  // SessionOptionString.append(
-  //    "i2p.streaming.maxConnsPerMinute=" +
-  //    settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + "
-  //    ");
-
   // SIGNATURE_TYPE
 
   {
-    // TODO: get from ui_form_settingsgui.h
-
     QStringList AllowSignTypes = {
       "ECDSA_SHA256_P256", "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519", "RedDSA_SHA512_Ed25519"};
 
@@ -231,7 +222,6 @@ void CCore::init() {
   if (tmpDir.exists())
     tmpDir.removeRecursively();
 
-  qDebug() << "CCore::init() called";
   this->mMyDestination = "";
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
@@ -242,16 +232,11 @@ void CCore::init() {
   bool nonPersist = settings.value("NonPersistentDestination", false).toBool();
   QString SamPrivKey = nonPersist ? "" : settings.value("SamPrivKey", "").toString();
 
-  qDebug() << "CCore::init() - SamHost:" << SamHost << "SamPort:" << SamPort << "HasPrivKey:" << !SamPrivKey.isEmpty();
-
   if (mConnectionManager->isComponentStopped()) {
-    qDebug() << "CCore::init() - Connection manager stopped, restarting...";
     mConnectionManager->doReStart();
   }
 
-  qDebug() << "CCore::init() - Creating session...";
   mConnectionManager->doCreateSession(STREAM, SamPrivKey, calcSessionOptionString());
-  qDebug() << "CCore::init() - Session create called";
 
   settings.endGroup();
   settings.sync();
@@ -529,11 +514,9 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
     return;
 
   if (mCurrentOnlineStatus == USEROFFLINE) {
-    qDebug() << "setOnlineStatus: Transitioning from OFFLINE, storing next status =" << newStatus;
     mNextOnlineStatus = newStatus;
     mCurrentOnlineStatus = USERTRYTOCONNECT;
     mKeepAliveTimer.stop();
-    qDebug() << "setOnlineStatus: Calling init()...";
     init();
     emit signOnlineStatusChanged();
     return;
@@ -938,12 +921,6 @@ void CCore::setMyDestinationB32(const QString &B32Dest) {
   settings.sync();
 
   mMyDestinationB32 = B32Dest;
-}
-
-QString CCore::canonicalizeTopicId(QString topicIdNonCanonicalized) {
-
-  // FIXME canonicalizeTopicId(topicIdNonCanonicalized);
-  return topicIdNonCanonicalized;
 }
 
 void CCore::changeAccessIncomingUsers(bool m) {

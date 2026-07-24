@@ -1,23 +1,24 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#ifndef FORM_FILESEND_H
-#define FORM_FILESEND_H
+#ifndef FILESEND_H
+#define FILESEND_H
 
 #include "FileTransferSend.h"
-#include "ui_form_fileSend.h"
+#include "ui_FileSend.h"
 
-#include <QtGlobal>
-#include <QtGui>
+#include <QCloseEvent>
+#include <QDialog>
+#include <QKeyEvent>
 
-class form_fileSend : public QDialog, public Ui::form_FileSend {
+class FileSend : public QDialog, public Ui::FileSend {
   Q_OBJECT
 public:
-  form_fileSend(CFileTransferSend &FileTransfer);
-  ~form_fileSend();
+  FileSend(CFileTransferSend &FileTransfer);
+  ~FileSend();
 
   // forbid some operators
-  form_fileSend(const form_fileSend &) = delete;
-  form_fileSend &operator=(const form_fileSend &) = delete;
+  FileSend(const FileSend &) = delete;
+  FileSend &operator=(const FileSend &) = delete;
 
   void getFocus();
 signals:

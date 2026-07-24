@@ -9,7 +9,7 @@
 #include "FileTransferSend.h"
 #include "TextEmotionChanger.h"
 #include "gui_icons.h"
-#include "ui_form_chatwidget.h"
+#include "ui_ChatWidget.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -18,28 +18,16 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileDialog>
-#include <QFileInfo>
 #include <QFileSystemWatcher>
-#include <QFocusEvent>
-#include <QFontDialog>
 #include <QKeyEvent>
 #include <QListView>
+#include <QMainWindow>
 #include <QMimeData>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPalette>
-#include <QPushButton>
-#include <QScreen>
-#include <QScrollBar>
-#include <QSettings>
 #include <QStackedWidget>
 #include <QStandardItemModel>
-#include <QSvgRenderer>
-#include <QTextBrowser>
 #include <QTimer>
 #include <QUrl>
 #include <Qt>
-#include <QtGui>
 
 class ChatEventEater : public QObject {
   Q_OBJECT
@@ -57,15 +45,15 @@ protected:
 };
 
 class CUser;
-class form_ChatWidget : public QMainWindow, public Ui::form_chatwidget {
+class ChatWidget : public QMainWindow, public Ui::ChatWidget {
   Q_OBJECT
 public:
-  form_ChatWidget(CUser &user, CCore &Core, QDialog *parent = 0);
-  ~form_ChatWidget();
+  ChatWidget(CUser &user, CCore &Core, QDialog *parent = 0);
+  ~ChatWidget();
 
   // forbid some operators
-  form_ChatWidget(const form_ChatWidget &) = delete;
-  form_ChatWidget &operator=(const form_ChatWidget &) = delete;
+  ChatWidget(const ChatWidget &) = delete;
+  ChatWidget &operator=(const ChatWidget &) = delete;
 
   struct ChatBubbleStyle {
     QString sentBg, sentColor;

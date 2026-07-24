@@ -8,6 +8,9 @@
 #include "Protocol.h"
 #include "UserManager.h"
 
+#include <QBuffer>
+#include <QDateTime>
+#include <QPixmap>
 #include <utility>
 
 CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PDestination, qint32 I2PStream_ID)
@@ -125,7 +128,6 @@ void CUser::slotIncomingNewChatMessage(QString newMessage) {
   newMessage = mChatMessageChanger.changeChatMessage(newMessage);
   auto myMessage = QDateTime::currentDateTime().toString("hh:mm:ss") + " ‣ " + mName + ":" + newMessage + "<br>";
 
-  // TODO fix this in OOP way
   this->mAllMessages.push_back(myMessage);
   this->mNewMessages.push_back(myMessage);
 

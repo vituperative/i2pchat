@@ -2,8 +2,6 @@
 
 #include "DebugMessageManager.h"
 
-// cDebugMessageManager::cDebugMessageManager(CConnectionManager*
-// ConnectionManager)
 CDebugMessageManager::CDebugMessageManager(const QString &Group, const QString &configPath) {
 
   QSettings settings(configPath + "/application.ini", QSettings::IniFormat);

@@ -1,23 +1,24 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#ifndef FORM_FILERECEIVE_H
-#define FORM_FILERECEIVE_H
+#ifndef FILERECEIVE_H
+#define FILERECEIVE_H
 
-#include "ui_form_fileReceive.h"
+#include "ui_FileReceive.h"
 
-#include <QFileDialog>
-#include <QtGui>
+#include <QCloseEvent>
+#include <QDialog>
+#include <QKeyEvent>
 
 class CFileTransferReceive;
-class form_fileReceive : public QDialog, public Ui::form_FileReceive {
+class FileReceive : public QDialog, public Ui::FileReceive {
   Q_OBJECT
 public:
-  form_fileReceive(CFileTransferReceive &FileReceive);
-  ~form_fileReceive();
+  FileReceive(CFileTransferReceive &transfer);
+  ~FileReceive();
 
   // forbid some operators
-  form_fileReceive(const form_fileReceive &) = delete;
-  form_fileReceive &operator=(const form_fileReceive &) = delete;
+  FileReceive(const FileReceive &) = delete;
+  FileReceive &operator=(const FileReceive &) = delete;
 
   void getFocus();
   void start();
@@ -33,7 +34,7 @@ private slots:
   void slot_SpeedChanged(const QString &SNumber, const QString &Type);
 
 private:
-  CFileTransferReceive &FileReceive;
+  CFileTransferReceive &mFileTransfer;
   const qint32 mStreamID;
 
   void closeEvent(QCloseEvent *e);
