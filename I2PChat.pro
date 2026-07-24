@@ -99,7 +99,7 @@ FORMS += \
 	src/gui/forms/SettingsGui.ui \
 	src/gui/forms/About.ui
 
-RESOURCES += src/gui/resourcen.qrc
+RESOURCES += src/gui/forms/resourcen.qrc
 
 # MinGW static build
 mingw {

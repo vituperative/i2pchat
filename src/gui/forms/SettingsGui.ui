@@ -37,7 +37,7 @@
    <string>Settings</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resourcen.qrc">
+   <iconset resource="resourcen.qrc">
     <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
   </property>
   <property name="locale">
@@ -1761,7 +1761,7 @@ border-radius: 2px;
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resourcen.qrc">:/icons/silhouette.svg</pixmap>
+            <pixmap resource="resourcen.qrc">:/icons/silhouette.svg</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -3777,7 +3777,7 @@ border-radius: 2px;
                  <string>B</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -3818,7 +3818,7 @@ border-radius: 2px;
                  <string>U</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -3859,7 +3859,7 @@ border-radius: 2px;
                  <string>C</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -3897,7 +3897,7 @@ border-radius: 2px;
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -3935,7 +3935,7 @@ border-radius: 2px;
                  <string>I</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4064,7 +4064,7 @@ border-radius: 2px;
                  <string>C</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/palette.svg</normaloff>:/icons/palette.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4102,7 +4102,7 @@ border-radius: 2px;
                  <string>I</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/italic.svg</normaloff>:/icons/italic.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4143,7 +4143,7 @@ border-radius: 2px;
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/font.svg</normaloff>:/icons/font.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4181,7 +4181,7 @@ border-radius: 2px;
                  <string>B</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/bold.svg</normaloff>:/icons/bold.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4259,7 +4259,7 @@ border-radius: 2px;
                  <string>U</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resourcen.qrc">
+                 <iconset resource="resourcen.qrc">
                   <normaloff>:/icons/underline.svg</normaloff>:/icons/underline.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -4655,7 +4655,7 @@ border-radius: 2px;
             <string>Unblock</string>
            </property>
            <property name="icon">
-            <iconset resource="../resourcen.qrc">
+            <iconset resource="resourcen.qrc">
              <normaloff>:/emoticons/good.svg</normaloff>:/emoticons/good.svg</iconset>
            </property>
           </widget>
@@ -4678,7 +4678,7 @@ border-radius: 2px;
             <string>Delete</string>
            </property>
            <property name="icon">
-            <iconset resource="../resourcen.qrc">
+            <iconset resource="resourcen.qrc">
              <normaloff>:/icons/delete.svg</normaloff>:/icons/delete.svg</iconset>
            </property>
            <property name="iconSize">
@@ -4787,7 +4787,7 @@ border-radius: 2px;
       </font>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
      </property>
     </item>
@@ -4796,7 +4796,7 @@ border-radius: 2px;
       <string>Network</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/network.svg</normaloff>:/icons/network.svg</iconset>
      </property>
     </item>
@@ -4805,7 +4805,7 @@ border-radius: 2px;
       <string>User Details</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/avatar.svg</normaloff>:/icons/avatar.svg</iconset>
      </property>
     </item>
@@ -4814,7 +4814,7 @@ border-radius: 2px;
       <string>Style</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/theme.svg</normaloff>:/icons/theme.svg</iconset>
      </property>
     </item>
@@ -4823,7 +4823,7 @@ border-radius: 2px;
       <string>Web Server</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/webserver.svg</normaloff>:/icons/webserver.svg</iconset>
      </property>
     </item>
@@ -4832,7 +4832,7 @@ border-radius: 2px;
       <string>Security</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/security.svg</normaloff>:/icons/security.svg</iconset>
      </property>
     </item>
@@ -4841,7 +4841,7 @@ border-radius: 2px;
       <string>Sound</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/sound_on.svg</normaloff>
        <disabledoff>:/icons/sound_off.svg</disabledoff>:/icons/sound_on.svg</iconset>
      </property>
@@ -4851,7 +4851,7 @@ border-radius: 2px;
       <string>Chat</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/newmail.svg</normaloff>:/icons/newmail.svg</iconset>
      </property>
     </item>
@@ -4860,7 +4860,7 @@ border-radius: 2px;
       <string>Blocklist</string>
      </property>
      <property name="icon">
-      <iconset theme="blocked.svg" resource="../resourcen.qrc">
+      <iconset theme="blocked.svg" resource="resourcen.qrc">
        <normaloff>:/icons/blocked.svg</normaloff>:/icons/blocked.svg</iconset>
      </property>
     </item>
@@ -4951,7 +4951,7 @@ border-radius: 2px;
       <string>Cancel</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/cancel.svg</normaloff>:/icons/cancel.svg</iconset>
      </property>
      <property name="iconSize">
@@ -4986,7 +4986,7 @@ border-radius: 2px;
       <string>OK</string>
      </property>
      <property name="icon">
-      <iconset resource="../resourcen.qrc">
+      <iconset resource="resourcen.qrc">
        <normaloff>:/icons/tick.svg</normaloff>:/icons/tick.svg</iconset>
      </property>
      <property name="iconSize">
@@ -5013,8 +5013,8 @@ border-radius: 2px;
   <tabstop>cancel_Button</tabstop>
  </tabstops>
  <resources>
-  <include location="../resourcen.qrc"/>
-  <include location="../resourcen.qrc"/>
+  <include location="resourcen.qrc"/>
+  <include location="resourcen.qrc"/>
  </resources>
  <connections>
   <connection>
