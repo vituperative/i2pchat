@@ -14,7 +14,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Qt5
         run: |
@@ -29,7 +29,7 @@ jobs:
         run: bash build.sh --appimage --upx --deb
 
       - name: Upload binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-linux
           path: |
@@ -40,7 +40,7 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: jurplel/install-qt-action@v4
         with:
@@ -75,13 +75,13 @@ jobs:
 
       - name: Upload build log
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: build-log
           path: build.log
 
       - name: Upload Windows binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-windows
           path: dist/I2PChat.exe
@@ -89,9 +89,9 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: cache-qt5
         with:
           path: /usr/local/Cellar/qt@5
@@ -115,7 +115,7 @@ jobs:
             cp dist/I2PChat.app/Contents/MacOS/I2PChat dist/I2PChat
 
       - name: Upload macOS binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-macos
           path: dist/I2PChat
@@ -125,8 +125,8 @@ jobs:
     needs: [linux, windows, macos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
 
       - name: Collect artifacts
         run: |
@@ -141,7 +141,7 @@ jobs:
           cd sounds && zip -r ../release-assets/sounds.zip . && cd ..
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: release-assets/*
           generate_release_notes: true
@@ -153,8 +153,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
 
       - name: Collect artifacts
         run: |
