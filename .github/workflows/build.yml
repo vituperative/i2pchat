@@ -156,7 +156,7 @@ jobs:
       - name: Collect artifacts
         run: |
           mkdir -p release-assets
-          cp I2PChat-linux/I2PChat release-assets/ 2>/dev/null || echo "MISSING I2PChat-linux"
+          cp I2PChat-linux/I2PChat release-assets/I2PChat-Linux 2>/dev/null || echo "MISSING I2PChat-linux"
           cp I2PChat-windows/I2PChat.exe release-assets/ 2>/dev/null || echo "MISSING I2PChat-windows"
           cp I2PChat-macos/I2PChat release-assets/I2PChat-macos 2>/dev/null || echo "MISSING I2PChat-macos"
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
