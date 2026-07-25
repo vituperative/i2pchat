@@ -167,6 +167,7 @@ jobs:
           ls I2PChat-linux/i2pchat_*.deb 2>/dev/null && \
             cp I2PChat-linux/i2pchat_*.deb release-assets/ || echo "No .deb"
           cd sounds && zip -r ../release-assets/sounds.zip . && cd ..
+          git archive --format=zip HEAD -o "release-assets/i2pchat-source-${GITHUB_SHA::7}.zip"
 
       - name: Upload continuous release
         uses: ncipollo/release-action@v1
@@ -182,4 +183,5 @@ jobs:
           makeLatest: true
           omitBodyDuringUpdate: true
           skipIfReleaseExists: false
+          skipSourceArchive: true
           token: ${{ secrets.GITHUB_TOKEN }}
