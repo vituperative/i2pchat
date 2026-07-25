@@ -24,23 +24,19 @@ static QString truncateDbg(const QString &msg) {
 CSessionController::CSessionController(QString SamHost,
                                        QString SamPort,
                                        QString BridgeName,
-                                       QString SamPrivKey,
+                                       const QString &SamPrivKey,
                                        QString ConfigPath,
                                        QString SessionOptions)
   : mSamHost(std::move(SamHost))
   , mSamPort(std::move(SamPort))
   , mBridgeName(std::move(BridgeName))
   , mConfigPath(std::move(ConfigPath))
-  , mSessionOptions(std::move(SessionOptions)) {
+  , mSessionOptions(std::move(SessionOptions))
+  , mAnalyser("CStreamController")
+  , mIncomingPackets()
+  , mReconnectTimer(this) {
 
-  mIncomingPackets = new QByteArray();
   mDoneDisconnect = false;
-  mReconnectTimer = new QTimer(this);
-
-  mAnalyser = new CI2PSamMessageAnalyser("CStreamController");
-  mHandshakeSuccessful = false;
-  mSessionWasSuccesfullCreated = false;
-  mSamPrivKey = std::move(SamPrivKey);
 
   connect(&mTcpSocket, SIGNAL(connected()), this, SLOT(slotConnected()), Qt::DirectConnection);
 
@@ -51,7 +47,7 @@ CSessionController::CSessionController(QString SamHost,
 
   connect(&mTcpSocket, SIGNAL(readyRead()), this, SLOT(slotReadFromSocket()), Qt::DirectConnection);
 
-  connect(mReconnectTimer, SIGNAL(timeout()), this, SLOT(slotReconnectTimeout()), Qt::DirectConnection);
+  connect(&mReconnectTimer, SIGNAL(timeout()), this, SLOT(slotReconnectTimeout()), Qt::DirectConnection);
 
   emit signDebugMessages(truncateDbg("I2P Stream Controller started"));
 }
@@ -59,15 +55,12 @@ CSessionController::CSessionController(QString SamHost,
 CSessionController::~CSessionController() {
   doDisconnect();
   mTcpSocket.deleteLater();
-  delete mReconnectTimer;
-  delete mAnalyser;
-  delete mIncomingPackets;
   emit signDebugMessages(truncateDbg("I2P Stream Controller stopped"));
 }
 
 void CSessionController::slotConnected() {
   emit signDebugMessages(truncateDbg("I2P Stream Controller connected"));
-  mReconnectTimer->stop();
+  mReconnectTimer.stop();
   emit signDebugMessages(truncateDbg(SAM_HANDSHAKE_V3.trimmed()));
   if (mTcpSocket.state() == QAbstractSocket::ConnectedState) {
     mTcpSocket.write(SAM_HANDSHAKE_V3.toUtf8());
@@ -83,9 +76,9 @@ void CSessionController::slotDisconnected() {
     emit signSessionStreamStatusOK(false);
 
     // Start auto-reconnect timer
-    if (!mReconnectTimer->isActive()) {
+    if (!mReconnectTimer.isActive()) {
       emit signDebugMessages(truncateDbg("I2P Stream Controller ‣ Scheduling reconnect in 60 seconds"));
-      mReconnectTimer->start(60000); // 60 seconds
+      mReconnectTimer.start(60000); // 60 seconds
     }
   }
 }
@@ -95,14 +88,14 @@ void CSessionController::slotReadFromSocket() {
 
   QByteArray newData = mTcpSocket.readAll();
   QByteArray CurrentPacket;
-  mIncomingPackets->append(newData);
+  mIncomingPackets.append(newData);
 
-  while (mIncomingPackets->contains("\n") == true) {
-    CurrentPacket = mIncomingPackets->left(mIncomingPackets->indexOf("\n", 0) + 1);
+  while (mIncomingPackets.contains("\n") == true) {
+    CurrentPacket = mIncomingPackets.left(mIncomingPackets.indexOf("\n", 0) + 1);
 
     QString t(CurrentPacket.data());
 
-    SAM_MESSAGE sam = mAnalyser->Analyse(t);
+    SAM_MESSAGE sam = mAnalyser.Analyse(t);
     switch (sam.type) { // emit the signals
     case HELLO_REPLAY: {
       emit signDebugMessages(truncateDbg(t));
@@ -146,15 +139,9 @@ void CSessionController::slotReadFromSocket() {
         emit signSessionStreamStatusOK(true);
       } else {
         if (sam.result == DUPLICATED_DEST) {
-          QMessageBox msgBox(NULL);
-          msgBox.setIcon(QMessageBox::Critical);
-          msgBox.setText(tr("DUPLICATE DESTINATION DETECTED!"));
-          msgBox.setInformativeText(tr("Do not attempt to run I2PChat with the same destination twice!"
-                                       "\nThe SAM client may need to be restarted."));
-          msgBox.setStandardButtons(QMessageBox::Ok);
-          msgBox.setDefaultButton(QMessageBox::Ok);
-          msgBox.setWindowModality(Qt::NonModal);
-          msgBox.exec();
+          // Emit signal to show error dialog in GUI thread (non-blocking)
+          emit signDebugMessages(
+            truncateDbg("DUPLICATED_DEST — Only one Messenger per Destination. SAM client may need restart."));
 
           qCritical() << "File\t" << __FILE__ << Qt::endl
                       << "Line:\t" << __LINE__ << Qt::endl
@@ -199,7 +186,7 @@ void CSessionController::slotReadFromSocket() {
       break;
     }
     }
-    mIncomingPackets->remove(0, mIncomingPackets->indexOf("\n", 0) + 1);
+    mIncomingPackets.remove(0, mIncomingPackets.indexOf("\n", 0) + 1);
   } // while
 }
 
@@ -213,7 +200,7 @@ void CSessionController::doConnect() {
 
 void CSessionController::doDisconnect() {
   mDoneDisconnect = true;
-  mReconnectTimer->stop();
+  mReconnectTimer.stop();
 
   if (mTcpSocket.state() != 0) {
     mTcpSocket.disconnectFromHost();
@@ -264,7 +251,7 @@ void CSessionController::doDestGenerate(const QString &Options) {
 }
 
 void CSessionController::slotReconnectTimeout() {
-  mReconnectTimer->stop();
+  mReconnectTimer.stop();
   emit signDebugMessages(truncateDbg("I2P Stream Controller ‣ Attempting to reconnect to SAM"));
   emit signReconnectAttempt();
   doConnect();

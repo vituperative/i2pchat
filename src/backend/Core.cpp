@@ -47,8 +47,7 @@ CCore::CCore(const QString &configPath) {
   connect(mConnectionManager,
           SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
           this,
-          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
-          Qt::DirectConnection);
+          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)));
 
   connect(
     mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this, SLOT(slotStreamControllerStatusOK(bool)));
@@ -113,26 +112,24 @@ CCore::CCore(const QString &configPath) {
 }
 
 CCore::~CCore() {
-
   this->closeAllActiveConnections();
   this->mUserManager->saveUserList();
   delete mUnsentChatMessageStorage;
-  delete mUserManager;
-  delete mSoundManager;
+  mUserManager->deleteLater();
+  mSoundManager->deleteLater();
 
   while (!mDataPacketsManagers.isEmpty()) {
-    delete mDataPacketsManagers.takeFirst();
+    mDataPacketsManagers.takeFirst()->deleteLater();
   }
 
   if (mProtocol != NULL) {
-    delete this->mProtocol;
+    mProtocol->deleteLater();
   }
 
-  delete mConnectionManager;
-
-  delete mUserBlockManager;
-  delete mDebugMessageHandler;
-  delete mFileTransferManager;
+  mConnectionManager->deleteLater();
+  mUserBlockManager->deleteLater();
+  mDebugMessageHandler->deleteLater();
+  mFileTransferManager->deleteLater();
 }
 
 void CCore::doNamingLookUP(const QString &Name) const {
@@ -739,10 +736,10 @@ void CCore::createStreamObjectForUser(CUser &User) {
     return;
   }
 
-  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings->beginGroup("General");
-  msec = settings->value("Waittime_between_rechecking_offline_mUsers", "60000").toInt();
-  settings->endGroup();
+  QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("General");
+  msec = settings.value("Waittime_between_rechecking_offline_mUsers", "60000").toInt();
+  settings.endGroup();
 
   CI2PStream *t = mConnectionManager->doCreateNewStreamObject(CONNECT);
   if (t == NULL) {
@@ -764,19 +761,16 @@ void CCore::createStreamObjectForUser(CUser &User) {
           SLOT(slotInputUnknown(const qint32, const QByteArray)));
   t->doConnect(User.getI2PDestination());
   t->startUnlimintedReconnect(msec);
-  settings->sync();
-  delete settings;
 }
 
 void CCore::slotNewSamPrivKeyGenerated(const QString &SamPrivKey) {
-  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings->beginGroup("Network");
-  bool nonPersist = settings->value("NonPersistentDestination", false).toBool();
+  QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("Network");
+  bool nonPersist = settings.value("NonPersistentDestination", false).toBool();
   if (!nonPersist)
-    settings->setValue("SamPrivKey", SamPrivKey);
-  settings->endGroup();
-  settings->sync();
-  delete settings;
+    settings.setValue("SamPrivKey", SamPrivKey);
+  settings.endGroup();
+  settings.sync();
 }
 
 bool CCore::useThisChatConnection(const QString &Destination, const qint32 ID) {

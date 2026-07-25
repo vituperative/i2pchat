@@ -9,32 +9,21 @@
 
 CPacketManager::CPacketManager(CConnectionManager &ConnectionManager, qint32 ID)
   : mConnectionManager(ConnectionManager)
-  , mID(ID) {
-  mData = new QByteArray();
-}
+  , mID(ID) {}
 
-CPacketManager::~CPacketManager() {
-  delete mData;
-  mData = NULL;
-}
+CPacketManager::~CPacketManager() {}
 
 void CPacketManager::operator<<(const QByteArray &t) {
-  if (mData != NULL) {
-    mData->append(t);
-    checkIfOnePacketIsComplete();
-  }
+  mData.append(t);
+  checkIfOnePacketIsComplete();
 }
 
 void CPacketManager::checkIfOnePacketIsComplete() {
   /* Wire format: first 4 bytes = hex-encoded payload length, followed by
      the payload itself. Recursively extracts all complete packets from
      the accumulation buffer mData. */
-  if (mData == NULL) {
-    return;
-  }
-
-  if (mData != NULL && mData->length() >= 8) {
-    QString sPacketLength = mData->mid(0, 4);
+  if (mData.length() >= 8) {
+    QString sPacketLength = mData.mid(0, 4);
 
     bool OK = false;
     int iPacketLength = sPacketLength.toInt(&OK, 16);
@@ -55,9 +44,9 @@ void CPacketManager::checkIfOnePacketIsComplete() {
       return;
     }
 
-    if (mData != NULL && mData->length() >= iPacketLength + 4) {
-      QByteArray CurrentPacket(mData->mid(4), iPacketLength);
-      mData->remove(0, iPacketLength + 4);
+    if (mData.length() >= iPacketLength + 4) {
+      QByteArray CurrentPacket(mData.mid(4), iPacketLength);
+      mData.remove(0, iPacketLength + 4);
 
       emit signAPacketIsComplete(mID, CurrentPacket);
       checkIfOnePacketIsComplete();

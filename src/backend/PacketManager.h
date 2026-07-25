@@ -28,7 +28,7 @@ signals:
 private:
   CConnectionManager &mConnectionManager;
   const qint32 mID;
-  QByteArray *mData;
+  QByteArray mData;
 
   void checkIfOnePacketIsComplete();
 };

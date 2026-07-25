@@ -14,7 +14,7 @@ public:
   CSessionController(QString SamHost,
                      QString SamPort,
                      QString BridgeName,
-                     QString SamPrivKey,
+                     const QString& SamPrivKey,
                      QString ConfigPath,
                      QString SessionOptions = "");
 
@@ -46,6 +46,11 @@ private slots:
 
 private:
   void doSessionCreate();
+  inline void ConnectionReadyCheck() {
+    if (mHandshakeSuccessful == false || mSessionWasSuccesfullCreated == false ||
+        mTcpSocket.state() != QAbstractSocket::ConnectedState)
+      return;
+  }
 
   const QString mSamHost;
   const QString mSamPort;
@@ -55,18 +60,12 @@ private:
   const QString mSessionOptions;
 
   QTcpSocket mTcpSocket;
-  CI2PSamMessageAnalyser *mAnalyser;
-  QByteArray *mIncomingPackets;
-  QTimer *mReconnectTimer;
+  CI2PSamMessageAnalyser mAnalyser;
+  QByteArray mIncomingPackets;
+  QTimer mReconnectTimer;
 
   bool mHandshakeSuccessful;
   bool mSessionWasSuccesfullCreated;
   bool mDoneDisconnect;
-
-  inline void ConnectionReadyCheck() {
-    if (mHandshakeSuccessful == false || mSessionWasSuccesfullCreated == false ||
-        mTcpSocket.state() != QAbstractSocket::ConnectedState)
-      return;
-  }
 };
 #endif
