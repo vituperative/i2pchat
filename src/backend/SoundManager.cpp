@@ -71,8 +71,10 @@ void CSoundManager::reInit() {
   mSoundFileUser_go_Online = settings.value("User_go_Online", mConfigPath + "/sounds/online.wav").toString();
   mSoundFileUser_go_Offline = settings.value("User_go_Offline", mConfigPath + "/sounds/offline.wav").toString();
   mSoundFileFileSend_Finished = settings.value("FileSend_Finished", mConfigPath + "/sounds/complete.wav").toString();
-  mSoundFileFileReceive_Incoming = settings.value("FileReceive_Incoming", mConfigPath + "/sounds/fileincoming.wav").toString();
-  mSoundFileFileReceive_Finished = settings.value("FileReceive_Finished", mConfigPath + "/sounds/complete.wav").toString();
+  mSoundFileFileReceive_Incoming =
+    settings.value("FileReceive_Incoming", mConfigPath + "/sounds/fileincoming.wav").toString();
+  mSoundFileFileReceive_Finished =
+    settings.value("FileReceive_Finished", mConfigPath + "/sounds/complete.wav").toString();
   mSoundFileNewChatMessage = settings.value("NewChatMessage", mConfigPath + "/sounds/newmessage.wav").toString();
   settings.endGroup();
   settings.endGroup();

@@ -11,6 +11,7 @@
 #include <QBuffer>
 #include <QDateTime>
 #include <QPixmap>
+
 #include <utility>
 
 CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PDestination, qint32 I2PStream_ID)
