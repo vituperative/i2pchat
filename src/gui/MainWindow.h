@@ -103,7 +103,7 @@ private:
   void initTryIcon();
   void initToolBars();
 
-  void setTrayIcon(const QIcon &icon);
+  void setTrayIcon(const QPixmap &pixmap);
 
   CCore *Core;
   bool applicationIsClosing;

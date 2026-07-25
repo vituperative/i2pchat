@@ -149,8 +149,11 @@ bool CStatusNotifier::registerNotifier() {
 void CStatusNotifier::setIcon(const QPixmap &pixmap) {
   mIconPixmap = pixmap;
   mToolTipIcon = pixmap;
-  // Keep mIconName as "i2pchat" (a resolvable theme icon installed locally);
-  // sntray ignores IconPixmap when IconName is empty, so we must not clear it.
+  // sntray ignores IconPixmap when IconName is empty, so we must not clear it,
+  // but the name must NOT resolve to a real theme icon — otherwise the host
+  // uses the theme icon and ignores our pixmap.  "i2pchat-tray" does not
+  // exist in any theme, so the host falls back to IconPixmap.
+  mIconName = QStringLiteral("i2pchat-tray");
   emit propertyChanged();
 }
 

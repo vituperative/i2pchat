@@ -9,6 +9,7 @@
 #include <QCryptographicHash>
 #include <QIcon>
 #include <QMessageBox>
+#include <QPainter>
 #include <QPixmap>
 
 static const QPixmap &avatarPixmap() {
@@ -16,18 +17,63 @@ static const QPixmap &avatarPixmap() {
   return pix;
 }
 
-// Scaled-down, alias-free version of newmail.svg for the taskbar tray icon.
-// The SVG is rasterized at a small tray size and resampled with Lanczos to
-// avoid the jaggies that appear when Qt scales the vector straight to 16-22px.
-static const QPixmap &newmailTrayPixmap() {
-  static QPixmap pix;
-  if (pix.isNull()) {
+// Lanczos-scaled tray pixmaps — one SVG per state, no compositing.
+// Renders at 4× target, Lanczos down to tray size, then thresholds alpha
+// so icon pixels are fully opaque (no edge blending with panel colour)
+// while the background stays transparent.
+static const QPixmap &trayPixmap(const QString &resource) {
+  static QMap<QString, QPixmap> cache;
+  auto it = cache.find(resource);
+  if (it == cache.end()) {
     const int traySize = 22;
-    QImage img = QIcon(":/icons/newmail.svg").pixmap(traySize, traySize).toImage();
-    img = CCore::scaleImageLanczos(img, traySize, traySize);
-    pix = QPixmap::fromImage(img);
+    const int hiRes = traySize * 4;
+    QImage hi(hiRes, hiRes, QImage::Format_ARGB32);
+    hi.fill(Qt::transparent);
+    {
+      QPainter p(&hi);
+      p.setRenderHint(QPainter::Antialiasing);
+      p.setRenderHint(QPainter::SmoothPixmapTransform);
+      QIcon(resource).paint(&p, hi.rect());
+    }
+    QImage scaled = CCore::scaleImageLanczos(hi, traySize, traySize);
+    scaled = scaled.convertToFormat(QImage::Format_ARGB32);
+    uchar *bits = scaled.bits();
+    int byteCount = scaled.sizeInBytes();
+    for (int i = 3; i < byteCount; i += 4)
+      if (bits[i] > 0)
+        bits[i] = 255;
+    it = cache.insert(resource, QPixmap::fromImage(scaled));
   }
-  return pix;
+  return it.value();
+}
+
+static const QPixmap &avatarTrayPixmap() {
+  return trayPixmap(QStringLiteral(":/icons/avatar.svg"));
+}
+
+static const QPixmap &newmailTrayPixmap() {
+  return trayPixmap(QStringLiteral(":/icons/newmail.svg"));
+}
+
+static const QPixmap &statusTrayPixmap(User::ONLINESTATE state) {
+  switch (state) {
+  case User::USERONLINE:
+    return trayPixmap(QStringLiteral(":/icons/status_online.svg"));
+  case User::USERWANTTOCHAT:
+    return trayPixmap(QStringLiteral(":/icons/status_online.svg"));
+  case User::USERAWAY:
+    return trayPixmap(QStringLiteral(":/icons/status_away.svg"));
+  case User::USERDONT_DISTURB:
+    return trayPixmap(QStringLiteral(":/icons/status_dnd.svg"));
+  case User::USERINVISIBLE:
+    return trayPixmap(QStringLiteral(":/icons/status_invisible.svg"));
+  case User::USERTRYTOCONNECT:
+    return trayPixmap(QStringLiteral(":/icons/status_connecting.svg"));
+  case User::USEROFFLINE:
+  case User::USERBLOCKEDYOU:
+  default:
+    return avatarTrayPixmap();
+  }
 }
 
 MainWindow::MainWindow(const QString &configDir, QWidget *parent)
@@ -353,7 +399,7 @@ void MainWindow::eventUserChanged() {
   if (showUnreadMessageAtTray == false) {
     OnlineStateChanged();
   } else {
-    setTrayIcon(QIcon(newmailTrayPixmap()));
+    setTrayIcon(newmailTrayPixmap());
   }
 }
 
@@ -594,7 +640,6 @@ void MainWindow::OnlineStateChanged() {
                       tr("Connecting..."));                     // index 0
     comboBox->addItem(QIcon(ICON_USER_OFFLINE), tr("Offline")); // 1
     comboBox->setCurrentIndex(0);
-    setTrayIcon(QIcon(ICON_USER_TRYTOCONNECT));
   } else {
     if (comboBox->count() < 6) {
       comboBox->clear();
@@ -609,24 +654,20 @@ void MainWindow::OnlineStateChanged() {
 
     if (onlinestatus == User::USERONLINE) {
       comboBox->setCurrentIndex(0);
-      setTrayIcon(QIcon(ICON_USER_ONLINE));
     } else if (onlinestatus == User::USERWANTTOCHAT) {
       comboBox->setCurrentIndex(1);
-      setTrayIcon(QIcon(ICON_USER_WANTTOCHAT));
     } else if (onlinestatus == User::USERAWAY) {
       comboBox->setCurrentIndex(2);
-      setTrayIcon(QIcon(ICON_USER_AWAY));
     } else if (onlinestatus == User::USERDONT_DISTURB) {
       comboBox->setCurrentIndex(3);
-      setTrayIcon(QIcon(ICON_USER_DONT_DISTURB));
     } else if (onlinestatus == User::USERINVISIBLE) {
       comboBox->setCurrentIndex(4);
-      setTrayIcon(QIcon(ICON_USER_INVISIBLE));
     } else if (onlinestatus == User::USEROFFLINE) {
       comboBox->setCurrentIndex(5);
-      setTrayIcon(QIcon(ICON_USER_OFFLINE));
     }
   }
+
+  setTrayIcon(statusTrayPixmap(onlinestatus));
 
   // Refresh contact list icons when online status changes
   slotLoadOwnAvatarImage();
@@ -662,9 +703,9 @@ void MainWindow::initTryIconMenu() {
   menu->addAction(QIcon(ICON_CLOSE), tr("&Quit"), this, SLOT(closeApplication()));
 }
 
-void MainWindow::setTrayIcon(const QIcon &icon) {
+void MainWindow::setTrayIcon(const QPixmap &pixmap) {
   if (mStatusNotifier != NULL)
-    mStatusNotifier->setIcon(icon.pixmap(22, 22));
+    mStatusNotifier->setIcon(pixmap);
 }
 
 void MainWindow::initTryIcon() {
