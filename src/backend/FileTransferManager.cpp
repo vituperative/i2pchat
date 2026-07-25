@@ -6,6 +6,7 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <QStandardPaths>
 
 CFileTransferManager::CFileTransferManager(CCore &Core)
@@ -237,8 +238,35 @@ void CFileTransferManager::removeFileReceive(const qint32 ID) {
   }
 }
 const QString CFileTransferManager::FilterForFileName(QString FileName) const {
+  // Remove path separators and directory traversal sequences
   FileName.replace("\\", "");
   FileName.replace("/", "");
   FileName.replace("..", "");
+
+  // Remove control characters and other dangerous characters
+  FileName.remove(QRegularExpression("[\\x00-\\x1F\\x7F]"));
+
+  // Reject reserved Windows filenames (case-insensitive)
+  static const QStringList reservedNames = {"CON",  "PRN",  "AUX",  "NUL",  "COM1", "COM2", "COM3", "COM4",
+                                            "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3",
+                                            "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+  QString upperName = FileName.toUpper();
+  for (const QString &reserved : reservedNames) {
+    if (upperName == reserved || upperName.startsWith(reserved + ".")) {
+      FileName.clear();
+      break;
+    }
+  }
+
+  // Limit length
+  if (FileName.length() > 255) {
+    FileName.truncate(255);
+  }
+
+  // Ensure filename is not empty after sanitization
+  if (FileName.isEmpty() || FileName == "." || FileName == "..") {
+    FileName = "unnamed";
+  }
+
   return FileName;
 }
