@@ -440,7 +440,7 @@ static QByteArray minifyHtml(const QByteArray &input) {
   QString html = QString::fromUtf8(input);
 
   // Preserve <pre> blocks
-  QList<QPair<int, int>> preRanges;
+  QList<QString> preContents;
   int pos = 0;
   while (true) {
     int ps = html.indexOf(QLatin1String("<pre"), pos, Qt::CaseInsensitive);
@@ -453,12 +453,12 @@ static QByteArray minifyHtml(const QByteArray &input) {
     if (cs < 0)
       break;
     int ce = cs + 6;
-    preRanges.append(qMakePair(ps, ce));
+    preContents.append(html.mid(ps, ce - ps));
     pos = ce;
   }
-  for (int i = preRanges.size() - 1; i >= 0; --i) {
+  for (int i = preContents.size() - 1; i >= 0; --i) {
     QString ph = QString(QChar(0)) + QStringLiteral("PRE%1").arg(i) + QString(QChar(0));
-    html.replace(preRanges[i].first, preRanges[i].second - preRanges[i].first, ph);
+    html.replace(preContents[i], ph);
   }
 
   // Minify inline <style> blocks
@@ -489,11 +489,11 @@ static QByteArray minifyHtml(const QByteArray &input) {
   html.replace(attrRe, QStringLiteral("\\1=\\2"));
   html = html.trimmed();
 
-  for (int i = 0; i < preRanges.size(); ++i) {
+  for (int i = 0; i < preContents.size(); ++i) {
     QString ph = QString(QChar(0)) + QStringLiteral("PRE%1").arg(i) + QString(QChar(0));
     int pi = html.indexOf(ph);
     if (pi >= 0)
-      html.replace(pi, ph.size(), QStringLiteral("<pre></pre>"));
+      html.replace(pi, ph.size(), preContents[i]);
   }
 
   return html.toUtf8();
