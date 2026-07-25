@@ -22,70 +22,7 @@ namespace {
 constexpr int MAX_LOGIN_ATTEMPTS = 3;
 constexpr qint64 BAN_DURATION_MS = 3600 * 1000;
 constexpr qint64 CLEANUP_INTERVAL_MS = 300000;
-
-struct RateLimitEntry {
-  int failures = 0;
-  qint64 banUntil = 0;
-};
-
-QMap<QString, RateLimitEntry> s_rateLimits;
-QString s_bansFile;
 const QString BANS_MAGIC = "I2PChat_BANv1\t";
-
-void loadBans() {
-  s_rateLimits.clear();
-  QFile f(s_bansFile);
-  if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
-    return;
-  qint64 now = QDateTime::currentMSecsSinceEpoch();
-  QTextStream in(&f);
-  while (!in.atEnd()) {
-    QString line = in.readLine().trimmed();
-    if (!line.startsWith(BANS_MAGIC))
-      continue;
-    QString payload = line.mid(BANS_MAGIC.length());
-    int tab = payload.indexOf(QLatin1Char('\t'));
-    if (tab < 0)
-      continue;
-    qint64 banUntil = payload.left(tab).toLongLong();
-    if (banUntil <= now)
-      continue;
-    QString dest = payload.mid(tab + 1);
-    if (!dest.isEmpty()) {
-      RateLimitEntry e;
-      e.banUntil = banUntil;
-      s_rateLimits[dest] = e;
-    }
-  }
-}
-
-void saveBans() {
-  QFile f(s_bansFile);
-  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-    return;
-  qint64 now = QDateTime::currentMSecsSinceEpoch();
-  QTextStream out(&f);
-  for (auto it = s_rateLimits.constBegin(); it != s_rateLimits.constEnd(); ++it) {
-    if (it.value().banUntil > now) {
-      out << BANS_MAGIC << it.value().banUntil << QLatin1Char('\t') << it.key() << QLatin1Char('\n');
-    }
-  }
-}
-
-bool isBansLoaded() {
-  static bool loaded = false;
-  if (!loaded && !s_bansFile.isEmpty()) {
-    loadBans();
-    loaded = true;
-  }
-  return loaded;
-}
-
-struct WebSession {
-  QString username;
-  qint64 expiry;
-};
-QMap<QString, WebSession> s_sessions;
 
 QString generateSessionToken() {
   return QUuid::createUuid().toString(QUuid::WithoutBraces);
@@ -109,13 +46,55 @@ void clearCookieInResponse(QByteArray &response) {
 
 } // namespace
 
+void CProtocol::loadBans() {
+  QMutexLocker locker(&mRateLimitMutex);
+  mRateLimits.clear();
+  QFile f(mBansFile);
+  if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+    return;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  QTextStream in(&f);
+  while (!in.atEnd()) {
+    QString line = in.readLine().trimmed();
+    if (!line.startsWith(BANS_MAGIC))
+      continue;
+    QString payload = line.mid(BANS_MAGIC.length());
+    int tab = payload.indexOf(QLatin1Char('\t'));
+    if (tab < 0)
+      continue;
+    qint64 banUntil = payload.left(tab).toLongLong();
+    if (banUntil <= now)
+      continue;
+    QString dest = payload.mid(tab + 1);
+    if (!dest.isEmpty()) {
+      RateLimitEntry e;
+      e.banUntil = banUntil;
+      mRateLimits[dest] = e;
+    }
+  }
+}
+
+void CProtocol::saveBans() {
+  QMutexLocker locker(&mRateLimitMutex);
+  QFile f(mBansFile);
+  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+    return;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  QTextStream out(&f);
+  for (auto it = mRateLimits.constBegin(); it != mRateLimits.constEnd(); ++it) {
+    if (it.value().banUntil > now) {
+      out << BANS_MAGIC << it.value().banUntil << QLatin1Char('\t') << it.key() << QLatin1Char('\n');
+    }
+  }
+}
+
 CProtocol::CProtocol(CCore &Core)
   : mCore(Core) {
-  if (s_bansFile.isEmpty())
-    s_bansFile = mCore.getConfigPath() + QStringLiteral("/bans.txt");
+  mBansFile = mCore.getConfigPath() + QStringLiteral("/bans.txt");
   mRateLimitCleanupTimer = new QTimer(this);
   connect(mRateLimitCleanupTimer, &QTimer::timeout, this, &CProtocol::cleanupRateLimits);
   mRateLimitCleanupTimer->start(CLEANUP_INTERVAL_MS);
+  loadBans();
 }
 
 void CProtocol::newConnectionChat(const qint32 ID) {
@@ -243,9 +222,8 @@ void CProtocol::send(const COMMANDS_TAGS TAG, const qint32 ID) const {
                 << "Function:\t"
                 << "CProtocol::send" << Qt::endl
                 << "Message:\t"
-                << "unhandeld Command-TAG"
-                << "exit" << Qt::endl;
-    exit(-1);
+                << "unhandled Command-TAG: " << static_cast<int>(TAG);
+    return;
   }
   }
   Data.insert(0, ProtocolInfoTag);
@@ -369,10 +347,8 @@ void CProtocol::send(const MESSAGES_TAGS TAG, const qint32 ID, QByteArray Data) 
                 << "Function:\t"
                 << "CProtocol::send" << Qt::endl
                 << "Message:\t"
-                << "unhandeld Message-TAG"
-                << "exit" << Qt::endl;
-
-    exit(-1);
+                << "unhandled Message-TAG: " << static_cast<int>(TAG);
+    return;
   }
   }
   QString temp;
@@ -722,15 +698,18 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
     return;
   }
 
-  // Load persisted bans on first request
-  isBansLoaded();
-
+  // Load persisted bans on first request - now done in constructor
   // Rate-limit check: ban remote destination after 3 failed login attempts
   QString remoteDest = stream->getDestination();
   qint64 now = QDateTime::currentMSecsSinceEpoch();
-  auto &rateEntry = s_rateLimits[remoteDest];
+  RateLimitEntry &rateEntry = [&]() -> RateLimitEntry & {
+    QMutexLocker locker(&mRateLimitMutex);
+    return mRateLimits[remoteDest];
+  }();
   if (rateEntry.banUntil > 0 && now >= rateEntry.banUntil) {
-    rateEntry = RateLimitEntry();
+    QMutexLocker locker(&mRateLimitMutex);
+    mRateLimits[remoteDest] = RateLimitEntry();
+    rateEntry = mRateLimits[remoteDest];
   }
   if (rateEntry.banUntil > 0) {
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
@@ -797,13 +776,14 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
   QString sessionUser;
   bool hadValidSession = false;
   if (!req.sessionToken.isEmpty()) {
-    auto sit = s_sessions.find(req.sessionToken);
-    if (sit != s_sessions.end()) {
+    QMutexLocker locker(&mRateLimitMutex);
+    auto sit = mSessions.find(req.sessionToken);
+    if (sit != mSessions.end()) {
       if (sit.value().expiry > now) {
         sessionUser = sit.value().username;
         hadValidSession = true;
       } else {
-        s_sessions.erase(sit);
+        mSessions.erase(sit);
       }
     }
   }
@@ -825,7 +805,8 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
   // ---- /logout ----
   if (req.path == QStringLiteral("/logout")) {
     if (hadValidSession) {
-      s_sessions.remove(req.sessionToken);
+      QMutexLocker locker(&mRateLimitMutex);
+      mSessions.remove(req.sessionToken);
       shallDestroySession = true;
     }
     if (authRequired) {
@@ -857,8 +838,10 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
 
   // ---- Auth-required mode ----
   if (authRequired && authUser.isEmpty()) {
-    if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
-      s_rateLimits[remoteDest].failures++;
+    if (!req.authUser.isEmpty() && !req.authPassword.isEmpty()) {
+      QMutexLocker locker(&mRateLimitMutex);
+      mRateLimits[remoteDest].failures++;
+    }
     QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 401, QStringLiteral("Unauthorized"));
     if (!resp.isEmpty()) {
       int pos = resp.indexOf("\r\n\r\n");
@@ -869,10 +852,13 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
     }
     *(stream) << resp;
     mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-    auto &re = s_rateLimits[remoteDest];
-    if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
-      re.banUntil = now + BAN_DURATION_MS;
-      saveBans();
+    {
+      QMutexLocker locker(&mRateLimitMutex);
+      auto &re = mRateLimits[remoteDest];
+      if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
+        re.banUntil = now + BAN_DURATION_MS;
+        saveBans();
+      }
     }
     return;
   }
@@ -891,8 +877,10 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
       return;
     }
     if (authUser.isEmpty()) {
-      if (!req.authUser.isEmpty() && !req.authPassword.isEmpty())
-        s_rateLimits[remoteDest].failures++;
+      if (!req.authUser.isEmpty() && !req.authPassword.isEmpty()) {
+        QMutexLocker locker(&mRateLimitMutex);
+        mRateLimits[remoteDest].failures++;
+      }
       QByteArray resp = CSimpleHttpServer::tryCustomErrorPage(docroot, 401, QStringLiteral("Unauthorized"));
       if (!resp.isEmpty()) {
         int pos = resp.indexOf("\r\n\r\n");
@@ -903,17 +891,23 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
       }
       *(stream) << resp;
       mCore.getConnectionManager()->doDestroyStreamObjectByID(ID);
-      auto &re = s_rateLimits[remoteDest];
-      if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
-        re.banUntil = now + BAN_DURATION_MS;
-        saveBans();
+      {
+        QMutexLocker locker(&mRateLimitMutex);
+        auto &re = mRateLimits[remoteDest];
+        if (re.failures >= MAX_LOGIN_ATTEMPTS && re.banUntil == 0) {
+          re.banUntil = now + BAN_DURATION_MS;
+          saveBans();
+        }
       }
       return;
     }
     // Valid creds on /login → create session and redirect
     newSessionToken = generateSessionToken().toUtf8();
-    s_sessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
-    s_rateLimits[remoteDest] = RateLimitEntry();
+    {
+      QMutexLocker locker(&mRateLimitMutex);
+      mSessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
+      mRateLimits[remoteDest] = RateLimitEntry();
+    }
 
     QByteArray redirect;
     redirect += "HTTP/1.0 302 Found\r\n";
@@ -932,11 +926,15 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
   } else if (!hadValidSession) {
     shallCreateSession = true;
     newSessionToken = generateSessionToken().toUtf8();
-    s_sessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
-    s_rateLimits[remoteDest] = RateLimitEntry();
+    {
+      QMutexLocker locker(&mRateLimitMutex);
+      mSessions[newSessionToken] = {authUser, now + sessionMaxAgeSecs * 1000LL};
+      mRateLimits[remoteDest] = RateLimitEntry();
+    }
   } else {
     // Valid session – reset rate-limit counter as good behavior
-    s_rateLimits[remoteDest] = RateLimitEntry();
+    QMutexLocker locker(&mRateLimitMutex);
+    mRateLimits[remoteDest] = RateLimitEntry();
   }
 
   // Apply user docroot if authenticated
@@ -1000,24 +998,27 @@ void CProtocol::handleWebProfileProtocolPacket(const qint32 ID, const QByteArray
 void CProtocol::cleanupRateLimits() {
   qint64 now = QDateTime::currentMSecsSinceEpoch();
   bool dirty = false;
-  for (auto it = s_rateLimits.begin(); it != s_rateLimits.end();) {
-    if (it.value().banUntil > 0 && now >= it.value().banUntil) {
-      it = s_rateLimits.erase(it);
-      dirty = true;
-    } else {
-      ++it;
+  {
+    QMutexLocker locker(&mRateLimitMutex);
+    for (auto it = mRateLimits.begin(); it != mRateLimits.end();) {
+      if (it.value().banUntil > 0 && now >= it.value().banUntil) {
+        it = mRateLimits.erase(it);
+        dirty = true;
+      } else {
+        ++it;
+      }
+    }
+
+    // Clean expired sessions
+    for (auto it = mSessions.begin(); it != mSessions.end();) {
+      if (it.value().expiry <= now)
+        it = mSessions.erase(it);
+      else
+        ++it;
     }
   }
   if (dirty)
     saveBans();
-
-  // Clean expired sessions
-  for (auto it = s_sessions.begin(); it != s_sessions.end();) {
-    if (it.value().expiry <= now)
-      it = s_sessions.erase(it);
-    else
-      ++it;
-  }
 }
 
 CProtocol::~CProtocol() {}
