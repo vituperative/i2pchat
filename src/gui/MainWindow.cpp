@@ -18,9 +18,7 @@ static const QPixmap &avatarPixmap() {
 }
 
 // Lanczos-scaled tray pixmaps — one SVG per state, no compositing.
-// Renders at 4× target, Lanczos down to tray size, then thresholds alpha
-// so icon pixels are fully opaque (no edge blending with panel colour)
-// while the background stays transparent.
+// Renders at 4× target, Lanczos down to tray size, preserving alpha.
 static const QPixmap &trayPixmap(const QString &resource) {
   static QMap<QString, QPixmap> cache;
   auto it = cache.find(resource);
@@ -37,11 +35,6 @@ static const QPixmap &trayPixmap(const QString &resource) {
     }
     QImage scaled = CCore::scaleImageLanczos(hi, traySize, traySize);
     scaled = scaled.convertToFormat(QImage::Format_ARGB32);
-    uchar *bits = scaled.bits();
-    int byteCount = scaled.sizeInBytes();
-    for (int i = 3; i < byteCount; i += 4)
-      if (bits[i] > 0)
-        bits[i] = 255;
     it = cache.insert(resource, QPixmap::fromImage(scaled));
   }
   return it.value();
@@ -57,22 +50,12 @@ static const QPixmap &newmailTrayPixmap() {
 
 static const QPixmap &statusTrayPixmap(User::ONLINESTATE state) {
   switch (state) {
-  case User::USERONLINE:
-    return trayPixmap(QStringLiteral(":/icons/status_online.svg"));
-  case User::USERWANTTOCHAT:
-    return trayPixmap(QStringLiteral(":/icons/status_online.svg"));
-  case User::USERAWAY:
-    return trayPixmap(QStringLiteral(":/icons/status_away.svg"));
-  case User::USERDONT_DISTURB:
-    return trayPixmap(QStringLiteral(":/icons/status_dnd.svg"));
-  case User::USERINVISIBLE:
-    return trayPixmap(QStringLiteral(":/icons/status_invisible.svg"));
-  case User::USERTRYTOCONNECT:
-    return trayPixmap(QStringLiteral(":/icons/status_connecting.svg"));
   case User::USEROFFLINE:
   case User::USERBLOCKEDYOU:
-  default:
+  case User::USERTRYTOCONNECT:
     return avatarTrayPixmap();
+  default:
+    return trayPixmap(QStringLiteral(":/icons/status_online.svg"));
   }
 }
 
