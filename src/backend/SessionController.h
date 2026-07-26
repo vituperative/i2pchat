@@ -14,7 +14,7 @@ public:
   CSessionController(QString SamHost,
                      QString SamPort,
                      QString BridgeName,
-                     const QString& SamPrivKey,
+                     const QString &SamPrivKey,
                      QString ConfigPath,
                      QString SessionOptions = "");
 
