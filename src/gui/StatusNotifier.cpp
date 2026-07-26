@@ -29,12 +29,19 @@ static KDbusImageVector pixmapToImageVector(const QPixmap &pm) {
   KDbusImageVector vec;
   if (pm.isNull())
     return vec;
-  QImage img = pm.toImage().convertToFormat(QImage::Format_ARGB32);
-  KDbusImageStruct s;
-  s.width = img.width();
-  s.height = img.height();
-  s.data = QByteArray(reinterpret_cast<const char *>(img.constBits()), static_cast<int>(img.sizeInBytes()));
-  vec.append(s);
+  // Provide multiple standard sizes so the host can pick the best fit.
+  const QList<int> sizes = {16, 22, 24, 32, 48};
+  for (int sz : sizes) {
+    QImage img = pm.toImage().convertToFormat(QImage::Format_ARGB32);
+    if (!img.isNull() && !img.isDetached())
+      img = img.copy();
+    img = img.scaled(sz, sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    KDbusImageStruct s;
+    s.width = img.width();
+    s.height = img.height();
+    s.data = QByteArray(reinterpret_cast<const char *>(img.constBits()), static_cast<int>(img.sizeInBytes()));
+    vec.append(s);
+  }
   return vec;
 }
 
@@ -107,10 +114,7 @@ CStatusNotifier::CStatusNotifier(QObject *parent)
   mId = QStringLiteral("i2pchat");
   mTitle = QStringLiteral("I2PChat");
   mStatus = QStringLiteral("Active");
-  // Non-empty IconName is required: sntray ignores IconPixmap unless a name
-  // is set. "i2pchat" resolves to the avatar installed in the local icon
-  // themes, so the host renders the avatar consistently.
-  mIconName = QStringLiteral("i2pchat");
+  mIconName = QString();
   new CStatusNotifierAdaptor(this);
 }
 
@@ -149,11 +153,7 @@ bool CStatusNotifier::registerNotifier() {
 void CStatusNotifier::setIcon(const QPixmap &pixmap) {
   mIconPixmap = pixmap;
   mToolTipIcon = pixmap;
-  // sntray ignores IconPixmap when IconName is empty, so we must not clear it,
-  // but the name must NOT resolve to a real theme icon — otherwise the host
-  // uses the theme icon and ignores our pixmap.  "i2pchat-tray" does not
-  // exist in any theme, so the host falls back to IconPixmap.
-  mIconName = QStringLiteral("i2pchat-tray");
+  mIconName = QString();
   emit propertyChanged();
 }
 
@@ -176,14 +176,11 @@ void CStatusNotifier::setIconFromSvg(const QString &svgPath, int size) {
     QSvgRenderer(svgData).render(&p, QRectF(0, 0, 48, 48));
   }
   QImage img = big.toImage().convertToFormat(QImage::Format_ARGB32);
-  if (img.isNull() == false)
+  if (!img.isNull())
     img = img.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   mIconPixmap = QPixmap::fromImage(img);
   mToolTipIcon = mIconPixmap;
-  // sntray refuses to render IconPixmap unless IconName is non-empty, so set a
-  // fixed dummy name. It points at no theme icon (no installs), so the host
-  // falls back to our internal resource pixmap above — fully self-contained.
-  mIconName = QStringLiteral("i2pchat");
+  mIconName = QString();
   emit propertyChanged();
 }
 
