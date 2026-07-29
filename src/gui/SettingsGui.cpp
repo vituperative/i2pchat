@@ -44,11 +44,11 @@ SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
 
   connect(cmd_openFile_4, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile4()));
 
-  connect(checkBox_5, SIGNAL(clicked(bool)), this, SLOT(clicked_sortingEnabled(bool)));
-  connect(radioButton_2, SIGNAL(clicked(bool)), this, SLOT(clicked_sortAlphabetically(bool)));
-  connect(radioButton_3, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByDateAdded(bool)));
-  connect(radioButton_4, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastCommunication(bool)));
-  connect(radioButton_5, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastOnline(bool)));
+  connect(check_AutoSort, SIGNAL(clicked(bool)), this, SLOT(clicked_sortingEnabled(bool)));
+  connect(radio_SortAlpha, SIGNAL(clicked(bool)), this, SLOT(clicked_sortAlphabetically(bool)));
+  connect(radio_SortDateAdded, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByDateAdded(bool)));
+  connect(radio_SortLastComm, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastCommunication(bool)));
+  connect(radio_SortLastOnline, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastOnline(bool)));
 
   connect(cmd_openFile_5, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile5()));
 
@@ -145,21 +145,21 @@ void SettingsGui::loadSettings() {
   settings->endGroup();
 
   settings->beginGroup("UserList");
-  checkBox_5->setChecked(settings->value("SortingEnabled", false).toBool());
+  check_AutoSort->setChecked(settings->value("SortingEnabled", false).toBool());
   int sortType = settings->value("SortType", 0).toInt();
 
   // Set radio button states
-  radioButton_2->setChecked(sortType == 0);
-  radioButton_3->setChecked(sortType == 1);
-  radioButton_4->setChecked(sortType == 2);
-  radioButton_5->setChecked(sortType == 3);
+  radio_SortAlpha->setChecked(sortType == 0);
+  radio_SortDateAdded->setChecked(sortType == 1);
+  radio_SortLastComm->setChecked(sortType == 2);
+  radio_SortLastOnline->setChecked(sortType == 3);
 
   // Enable/disable radio buttons based on checkbox state
   bool sortingEnabled = settings->value("SortingEnabled", false).toBool();
-  radioButton_2->setEnabled(sortingEnabled);
-  radioButton_3->setEnabled(sortingEnabled);
-  radioButton_4->setEnabled(sortingEnabled);
-  radioButton_5->setEnabled(sortingEnabled);
+  radio_SortAlpha->setEnabled(sortingEnabled);
+  radio_SortDateAdded->setEnabled(sortingEnabled);
+  radio_SortLastComm->setEnabled(sortingEnabled);
+  radio_SortLastOnline->setEnabled(sortingEnabled);
 
   settings->endGroup();
 
@@ -189,33 +189,33 @@ void SettingsGui::loadSettings() {
   settings->endGroup();
 
   settings->beginGroup("Network");
-  lineEdit_3->setText(settings->value("SamHost", "127.0.0.1").toString());
+  edit_SAMHost->setText(settings->value("SamHost", "127.0.0.1").toString());
   lineEdit->setText(settings->value("TunnelName", "I2PChat").toString());
-  spinBox_10->setValue(settings->value("SamPort", "7656").toInt());
+  spin_SAMPort->setValue(settings->value("SamPort", "7656").toInt());
 
-  spinBox_4->setMinimum(1);
-  spinBox_4->setValue(settings->value("inbound.length", "3").toInt());
-  spinBox_4->setMaximum(7);
+  spin_InLength->setMinimum(1);
+  spin_InLength->setValue(settings->value("inbound.length", "3").toInt());
+  spin_InLength->setMaximum(7);
 
-  spinBox_5->setMinimum(0);
-  spinBox_5->setValue(settings->value("inbound.quantity", "1").toInt());
-  spinBox_5->setMaximum(3);
+  spin_InQuantity->setMinimum(0);
+  spin_InQuantity->setValue(settings->value("inbound.quantity", "1").toInt());
+  spin_InQuantity->setMaximum(3);
 
-  spinBox_6->setMinimum(0);
-  spinBox_6->setValue(settings->value("inbound.backupQuantity", "1").toInt());
-  spinBox_6->setMaximum(3);
+  spin_InBackupQty->setMinimum(0);
+  spin_InBackupQty->setValue(settings->value("inbound.backupQuantity", "1").toInt());
+  spin_InBackupQty->setMaximum(3);
 
-  spinBox_7->setMinimum(0);
-  spinBox_7->setValue(settings->value("outbound.backupQuantity", "1").toInt());
-  spinBox_7->setMaximum(3);
+  spin_OutBackupQty->setMinimum(0);
+  spin_OutBackupQty->setValue(settings->value("outbound.backupQuantity", "1").toInt());
+  spin_OutBackupQty->setMaximum(3);
 
-  spinBox_8->setMinimum(1);
-  spinBox_8->setValue(settings->value("outbound.length", "3").toInt());
-  spinBox_8->setMaximum(7);
+  spin_OutLength->setMinimum(1);
+  spin_OutLength->setValue(settings->value("outbound.length", "3").toInt());
+  spin_OutLength->setMaximum(7);
 
-  spinBox_9->setMinimum(0);
-  spinBox_9->setValue(settings->value("outbound.quantity", "1").toInt());
-  spinBox_9->setMaximum(3);
+  spin_OutQuantity->setMinimum(0);
+  spin_OutQuantity->setValue(settings->value("outbound.quantity", "1").toInt());
+  spin_OutQuantity->setMaximum(3);
 
   comboBox_SigType->setEditable(false);
   comboBox_SigType->setCurrentIndex(
@@ -427,12 +427,11 @@ void SettingsGui::loadSettings() {
     i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
     b32buffer[52] = '\0';
     QString strb32address = "http://" + QString(b32buffer) + ".b32.i2p";
-    b32address->setPlainText(QApplication::translate("SettingsGui", strb32address.toUtf8().constData(), Q_NULLPTR));
+    b32address->setText(QApplication::translate("SettingsGui", strb32address.toUtf8().constData(), Q_NULLPTR));
     free(outputbuffer);
     free(b32buffer);
   } else {
-    b32address->setPlainText(
-      QApplication::translate("SettingsGui", "b32 address will be displayed when online", Q_NULLPTR));
+    b32address->setText(QApplication::translate("SettingsGui", "b32 address will be displayed when online", Q_NULLPTR));
   }
 
   settings->endGroup();
@@ -453,17 +452,17 @@ void SettingsGui::saveSettings() {
   settings->endGroup();
 
   settings->beginGroup("Network");
-  settings->setValue("SamHost", lineEdit_3->text());
+  settings->setValue("SamHost", edit_SAMHost->text());
   settings->setValue("TunnelName", lineEdit->text());
-  settings->setValue("SamPort", spinBox_10->value());
+  settings->setValue("SamPort", spin_SAMPort->value());
   // Inbound options
-  settings->setValue("inbound.quantity", spinBox_5->value());
-  settings->setValue("inbound.backupQuantity", spinBox_6->value());
-  settings->setValue("inbound.length", spinBox_4->value());
+  settings->setValue("inbound.quantity", spin_InQuantity->value());
+  settings->setValue("inbound.backupQuantity", spin_InBackupQty->value());
+  settings->setValue("inbound.length", spin_InLength->value());
   // Outpound options
-  settings->setValue("outbound.quantity", spinBox_9->value());
-  settings->setValue("outbound.backupQuantity", spinBox_7->value());
-  settings->setValue("outbound.length", spinBox_8->value());
+  settings->setValue("outbound.quantity", spin_OutQuantity->value());
+  settings->setValue("outbound.backupQuantity", spin_OutBackupQty->value());
+  settings->setValue("outbound.length", spin_OutLength->value());
 
   // Signature_type
   settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());

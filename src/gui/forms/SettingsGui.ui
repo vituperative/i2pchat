@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -88,19 +88,19 @@
       <x>136</x>
       <y>2</y>
       <width>390</width>
-      <height>453</height>
+      <height>460</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>390</width>
-      <height>0</height>
+      <height>460</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
       <width>390</width>
-      <height>16777215</height>
+      <height>460</height>
      </size>
     </property>
     <property name="currentIndex">
@@ -110,13 +110,13 @@
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -303,7 +303,7 @@
           </widget>
          </item>
          <item row="4" column="0" colspan="2">
-          <spacer name="horizontalSpacer_3">
+          <spacer name="spacer_FileXfer">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>
@@ -676,13 +676,13 @@
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -690,7 +690,7 @@
      </property>
      <layout class="QVBoxLayout" name="vlay_network_Page">
       <property name="spacing">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -747,7 +747,7 @@
           <number>2</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_17">
+          <widget class="QLabel" name="label_SAMHost">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -775,7 +775,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_3">
+          <widget class="QLineEdit" name="edit_SAMHost">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -794,7 +794,7 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QLabel" name="label_18">
+          <widget class="QLabel" name="label_SAMPort">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -813,7 +813,7 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QSpinBox" name="spinBox_10">
+          <widget class="QSpinBox" name="spin_SAMPort">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -848,13 +848,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>114</height>
+          <height>120</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>390</width>
-          <height>114</height>
+          <height>120</height>
          </size>
         </property>
         <property name="title">
@@ -879,14 +879,14 @@
          <property name="verticalSpacing">
           <number>2</number>
          </property>
-         <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="requestAuthcheckBox">
+         <item row="0" column="0">
+          <widget class="QComboBox" name="comboBox_SigType">
            <property name="enabled">
             <bool>true</bool>
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>100</width>
              <height>26</height>
             </size>
            </property>
@@ -896,57 +896,35 @@
              <height>26</height>
             </size>
            </property>
-           <property name="text">
-            <string>Request Authorization</string>
-           </property>
+           <item>
+            <property name="text">
+             <string>ECDSA_SHA256_P256</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ECDSA_SHA384_P384</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ECDSA_SHA512_P521</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string extracomment="Default">EdDSA_SHA512_Ed25519</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>RedDSA_SHA512_Ed25519</string>
+            </property>
+           </item>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="comboBox_SigType">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>26</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>390</width>
-              <height>26</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>ECDSA_SHA256_P256</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ECDSA_SHA384_P384</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ECDSA_SHA512_P521</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string extracomment="Default">EdDSA_SHA512_Ed25519</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>RedDSA_SHA512_Ed25519</string>
-             </property>
-            </item>
-           </widget>
-         </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_26">
+          <widget class="QLabel" name="label_NewDest">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1025,13 +1003,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>58</height>
+          <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>390</width>
-          <height>58</height>
+          <height>56</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1092,42 +1070,42 @@
          </item>
          <item row="0" column="1" colspan="2">
           <widget class="QComboBox" name="comboBox_EncType">
-            <property name="enabled">
-             <bool>true</bool>
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>390</width>
+             <height>26</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>ECIES (X25519)</string>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>26</height>
-             </size>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-512 + ECIES</string>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>390</width>
-              <height>26</height>
-             </size>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-768 + ECIES</string>
             </property>
-            <item>
-             <property name="text">
-              <string>ECIES (X25519)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ML-KEM-512 + ECIES</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ML-KEM-768 + ECIES</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ML-KEM-1024 + ECIES</string>
-             </property>
-            </item>
-           </widget>
+           </item>
+           <item>
+            <property name="text">
+             <string>ML-KEM-1024 + ECIES</string>
+            </property>
+           </item>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1135,7 +1113,7 @@
       <item>
        <widget class="QGroupBox" name="TunnelConfig">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -1149,7 +1127,7 @@
         <property name="maximumSize">
          <size>
           <width>390</width>
-          <height>170</height>
+          <height>16777215</height>
          </size>
         </property>
         <property name="title">
@@ -1175,7 +1153,7 @@
           <number>2</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="label_TunnelName">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1222,7 +1200,7 @@
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLabel" name="label_14">
+          <widget class="QLabel" name="label_Outbound">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1241,7 +1219,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_15">
+          <widget class="QLabel" name="label_Inbound">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1260,7 +1238,7 @@
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QSpinBox" name="spinBox_8">
+          <widget class="QSpinBox" name="spin_OutLength">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1276,7 +1254,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSpinBox" name="spinBox_4">
+          <widget class="QSpinBox" name="spin_InLength">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1292,7 +1270,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="label_InLength">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1320,7 +1298,7 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QSpinBox" name="spinBox_5">
+          <widget class="QSpinBox" name="spin_InQuantity">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1336,7 +1314,7 @@
           </widget>
          </item>
          <item row="3" column="2">
-          <widget class="QSpinBox" name="spinBox_9">
+          <widget class="QSpinBox" name="spin_OutQuantity">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1352,7 +1330,7 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="label_InQuantity">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1380,7 +1358,7 @@
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="QSpinBox" name="spinBox_7">
+          <widget class="QSpinBox" name="spin_OutBackupQty">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1396,7 +1374,7 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_12">
+          <widget class="QLabel" name="label_InBackupQty">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1424,7 +1402,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="spinBox_6">
+          <widget class="QSpinBox" name="spin_InBackupQty">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1448,13 +1426,13 @@
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -1476,7 +1454,7 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
+      <item alignment="Qt::AlignmentFlag::AlignLeft">
        <widget class="QGroupBox" name="UserBio">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1486,14 +1464,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>58</height>
+          <width>390</width>
+          <height>64</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>58</height>
+          <width>390</width>
+          <height>64</height>
          </size>
         </property>
         <property name="title">
@@ -1518,28 +1496,6 @@
          <property name="verticalSpacing">
           <number>2</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_19">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Nickname:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1" colspan="2">
           <widget class="QLineEdit" name="txt_Nickname">
            <property name="enabled">
@@ -1562,101 +1518,56 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="UserSuppInfo">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>110</height>
-         </size>
-        </property>
-        <property name="title">
-         <string>Supplementary Info</string>
-        </property>
-        <layout class="QGridLayout" name="grid_UserSuppInfo">
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>2</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <property name="horizontalSpacing">
-          <number>10</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>2</number>
-         </property>
-         <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
-          <widget class="QPlainTextEdit" name="txt_Interests">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_SAMNickname">
            <property name="minimumSize">
             <size>
-             <width>368</width>
-             <height>60</height>
+             <width>64</width>
+             <height>26</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>370</width>
-             <height>16777215</height>
+             <width>64</width>
+             <height>26</height>
             </size>
+           </property>
+           <property name="text">
+            <string>Nickname:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
-         </item>
-         <item row="2" column="0">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="SelectAvatar">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="SelectAvatar">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>200</height>
+          <width>390</width>
+          <height>196</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>390</width>
-          <height>200</height>
+          <height>196</height>
          </size>
         </property>
         <property name="title">
@@ -1670,7 +1581,7 @@
           <number>6</number>
          </property>
          <property name="topMargin">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
           <number>6</number>
@@ -1684,7 +1595,7 @@
          <property name="verticalSpacing">
           <number>2</number>
          </property>
-         <item row="4" column="1">
+         <item row="3" column="1">
           <widget class="QPushButton" name="cmd_clearAvatarImage">
            <property name="minimumSize">
             <size>
@@ -1700,25 +1611,6 @@
            </property>
            <property name="text">
             <string>Clear</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QPushButton" name="cmd_selectAvatarImage">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Select</string>
            </property>
           </widget>
          </item>
@@ -1768,6 +1660,25 @@ border-radius: 2px;
            </property>
           </widget>
          </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="cmd_selectAvatarImage">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Select</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="1">
           <widget class="QLabel" name="label">
            <property name="minimumSize">
@@ -1791,18 +1702,72 @@ border-radius: 2px;
            </property>
           </widget>
          </item>
-         <item row="2" column="0" colspan="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="UserSuppInfo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>390</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>390</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Supplementary Info</string>
+        </property>
+        <layout class="QGridLayout" name="grid_UserSuppInfo">
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>2</number>
+         </property>
+         <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
+          <widget class="QPlainTextEdit" name="txt_Interests">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="sizeHint" stdset="0">
+           <property name="minimumSize">
             <size>
-             <width>40</width>
-             <height>20</height>
+             <width>368</width>
+             <height>48</height>
             </size>
            </property>
-          </spacer>
+           <property name="maximumSize">
+            <size>
+             <width>370</width>
+             <height>48</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1813,13 +1778,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -1887,7 +1852,7 @@ border-radius: 2px;
           <number>2</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="label_WindowStyle">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1994,7 +1959,7 @@ border-radius: 2px;
           <number>2</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="label_StyleSheet">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -2104,7 +2069,7 @@ border-radius: 2px;
           <number>2</number>
          </property>
          <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="checkBox_5">
+          <widget class="QCheckBox" name="check_AutoSort">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2129,7 +2094,7 @@ border-radius: 2px;
           </widget>
          </item>
          <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="radio_SortAlpha">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2154,7 +2119,7 @@ border-radius: 2px;
           </widget>
          </item>
          <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QRadioButton" name="radioButton_3">
+          <widget class="QRadioButton" name="radio_SortDateAdded">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2179,7 +2144,7 @@ border-radius: 2px;
           </widget>
          </item>
          <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QRadioButton" name="radioButton_4">
+          <widget class="QRadioButton" name="radio_SortLastComm">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2204,7 +2169,7 @@ border-radius: 2px;
           </widget>
          </item>
          <item row="4" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QRadioButton" name="radioButton_5">
+          <widget class="QRadioButton" name="radio_SortLastOnline">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2237,13 +2202,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -2251,7 +2216,7 @@ border-radius: 2px;
      </property>
      <layout class="QVBoxLayout" name="vlay_webserver_Page">
       <property name="spacing">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -2266,7 +2231,7 @@ border-radius: 2px;
        <number>0</number>
       </property>
       <item>
-       <widget class="QGroupBox" name="WebServer">
+       <widget class="QGroupBox" name="WebPage">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -2276,7 +2241,207 @@ border-radius: 2px;
         <property name="minimumSize">
          <size>
           <width>390</width>
-          <height>310</height>
+          <height>160</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>390</width>
+          <height>160</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Web Server</string>
+        </property>
+        <layout class="QGridLayout" name="grid_WebPage">
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>4</number>
+         </property>
+         <item row="0" column="0" colspan="3" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QCheckBox" name="WebProfileCheckbox">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Enable Web Server</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="3" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QCheckBox" name="HideWebCheckbox">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Hide page when status is invisible for any contact</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="QLineEdit" name="b32address">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Share this address with new contacts to facilitate adding you to their contact list</string>
+           </property>
+           <property name="text">
+            <string>http://b32.i2p</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QLabel" name="label_Docroot">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Document Root:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="WebProfileDocrootEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QPushButton" name="browseDocrootButton">
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>28</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="WebServer">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>390</width>
+          <height>232</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -2286,7 +2451,7 @@ border-radius: 2px;
          </size>
         </property>
         <property name="title">
-         <string>Web Server Access</string>
+         <string>Access Control</string>
         </property>
         <layout class="QGridLayout" name="grid_WebServer">
          <property name="leftMargin">
@@ -2305,10 +2470,10 @@ border-radius: 2px;
           <number>10</number>
          </property>
          <property name="verticalSpacing">
-          <number>2</number>
+          <number>4</number>
          </property>
-         <item row="6" column="2">
-          <widget class="QPushButton" name="webServerDeleteUserButton">
+         <item row="0" column="0" colspan="3" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QCheckBox" name="WebServerAuthCheckbox">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -2322,29 +2487,123 @@ border-radius: 2px;
             </size>
            </property>
            <property name="text">
-            <string>Delete</string>
+            <string>Require login</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
-         <item row="5" column="0" colspan="3">
-          <widget class="QTableView" name="webServerUserTable">
+         <item row="1" column="0" colspan="3" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QCheckBox" name="WebProfileDirectoryListingCheckbox">
            <property name="minimumSize">
             <size>
-             <width>360</width>
-             <height>120</height>
+             <width>0</width>
+             <height>26</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>360</width>
-             <height>16777215</height>
+             <width>16777215</width>
+             <height>26</height>
             </size>
            </property>
-           <property name="selectionMode">
-            <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+           <property name="text">
+            <string>Show file listing when no index.html exists</string>
            </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignRight">
+          <widget class="QLabel" name="labelRealm">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>172</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Realm:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLineEdit" name="webServerRealmEdit">
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>I2PChat Webserver</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignRight">
+          <widget class="QLabel" name="labelSessionTimeout">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>172</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Timeout (minutes):</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSpinBox" name="webServerSessionTimeout">
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>1440</number>
+           </property>
+           <property name="singleStep">
+            <number>5</number>
+           </property>
+           <property name="value">
+            <number>60</number>
            </property>
           </widget>
          </item>
@@ -2370,151 +2629,25 @@ border-radius: 2px;
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="labelSessionTimeout">
+         <item row="5" column="0" colspan="3">
+          <widget class="QTableView" name="webServerUserTable">
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>26</height>
+             <width>360</width>
+             <height>32</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
-             <height>26</height>
+             <width>360</width>
+             <height>16777215</height>
             </size>
            </property>
-           <property name="text">
-            <string>Session timeout (minutes):</string>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
            </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="webServerSessionTimeout">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>1440</number>
-           </property>
-           <property name="singleStep">
-            <number>5</number>
-           </property>
-           <property name="value">
-            <number>60</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="WebProfileDirectoryListingCheckbox">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Show file listing when no index.html exists</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="webServerRealmEdit">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>I2PChat Webserver</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QPushButton" name="webServerEditUserButton">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="WebServerAuthCheckbox">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Require login</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="labelRealm">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Realm:</string>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
            </property>
           </widget>
          </item>
@@ -2537,69 +2670,8 @@ border-radius: 2px;
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="Docroot">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>58</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>390</width>
-          <height>58</height>
-         </size>
-        </property>
-        <property name="title">
-         <string>Document Root</string>
-        </property>
-        <layout class="QGridLayout" name="grid_Docroot">
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>2</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <property name="horizontalSpacing">
-          <number>10</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>2</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLineEdit" name="WebProfileDocrootEdit">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="browseDocrootButton">
+         <item row="6" column="2">
+          <widget class="QPushButton" name="webServerEditUserButton">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -2613,9 +2685,54 @@ border-radius: 2px;
             </size>
            </property>
            <property name="text">
-            <string>Browse...</string>
+            <string>Edit</string>
            </property>
           </widget>
+         </item>
+         <item row="6" column="3">
+          <widget class="QPushButton" name="webServerDeleteUserButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -2626,13 +2743,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -2657,20 +2774,20 @@ border-radius: 2px;
       <item>
        <widget class="QGroupBox" name="UserBlocking">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>390</width>
           <height>86</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>390</width>
           <height>86</height>
          </size>
         </property>
@@ -2771,14 +2888,14 @@ border-radius: 2px;
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>58</height>
+          <width>390</width>
+          <height>90</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
-          <height>58</height>
+          <width>390</width>
+          <height>90</height>
          </size>
         </property>
         <property name="title">
@@ -2825,53 +2942,8 @@ border-radius: 2px;
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="WebPage">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>390</width>
-          <height>166</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>390</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="title">
-         <string>Profile Page</string>
-        </property>
-        <layout class="QGridLayout" name="grid_WebPage">
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>2</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <property name="horizontalSpacing">
-          <number>10</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>2</number>
-         </property>
-         <item row="0" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="WebProfileCheckbox">
+         <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QCheckBox" name="requestAuthcheckBox">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -2883,88 +2955,12 @@ border-radius: 2px;
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>390</width>
              <height>26</height>
             </size>
            </property>
            <property name="text">
-            <string>Enable profile web page</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QPlainTextEdit" name="b32address">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Share this address with new contacts to facilitate adding you to their contact list</string>
-           </property>
-           <property name="inputMethodHints">
-            <set>Qt::InputMethodHint::ImhNone</set>
-           </property>
-           <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-           </property>
-           <property name="lineWrapMode">
-            <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="plainText">
-            <string>http://b32.i2p</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="2" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QCheckBox" name="HideWebCheckbox">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Hide page when status is invisible for any contact</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
+            <string>Request authorization from new contacts</string>
            </property>
           </widget>
          </item>
@@ -2977,13 +2973,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -3587,13 +3583,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>540</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -3605,19 +3601,19 @@ border-radius: 2px;
         <x>0</x>
         <y>0</y>
         <width>560</width>
-        <height>408</height>
+        <height>460</height>
        </rect>
       </property>
       <property name="minimumSize">
        <size>
         <width>560</width>
-        <height>408</height>
+        <height>460</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>560</width>
-        <height>408</height>
+        <height>460</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -3635,7 +3631,7 @@ border-radius: 2px;
          <x>0</x>
          <y>0</y>
          <width>560</width>
-         <height>408</height>
+         <height>460</height>
         </rect>
        </property>
        <property name="autoFillBackground">
@@ -3658,7 +3654,7 @@ border-radius: 2px;
          <number>0</number>
         </property>
         <item>
-         <widget class="QFrame" name="frame_18">
+         <widget class="QFrame" name="frame_StyleContainer">
           <property name="minimumSize">
            <size>
             <width>390</width>
@@ -3730,7 +3726,7 @@ border-radius: 2px;
                <number>2</number>
               </property>
               <item row="0" column="0">
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="label_LocalStyle">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -4559,13 +4555,13 @@ border-radius: 2px;
      <property name="minimumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>560</width>
-       <height>408</height>
+       <height>460</height>
       </size>
      </property>
      <property name="autoFillBackground">
@@ -5024,12 +5020,12 @@ border-radius: 2px;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>211</x>
-     <y>229</y>
+     <x>233</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>537</x>
-     <y>268</y>
+     <x>523</x>
+     <y>135</y>
     </hint>
    </hints>
   </connection>
