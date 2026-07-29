@@ -38,19 +38,31 @@ End-to-end encrypted peer-to-peer messenger over I2P. Uses the SAM bridge for an
 
 #### Dependencies
 
-Qt 5.14 or later (Qt 6 is not yet supported).
+Qt 5.14+ or Qt 6.2+ is required.
 
 <details><summary>Debian / Ubuntu (including 24.04+, trixie+)</summary>
 
+**Qt 5:**
 ```
 sudo apt-get install -y build-essential qt5-qmake qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+```
+
+**Qt 6:**
+```
+sudo apt-get install -y build-essential qmake6 qt6-base-dev qt6-multimedia-dev qt6-svg-dev
 ```
 </details>
 
 <details><summary>Fedora</summary>
 
+**Qt 5:**
 ```
 sudo dnf install make qt5-qtmultimedia-devel qt5-qtsvg-devel qt5-qtbase-devel
+```
+
+**Qt 6:**
+```
+sudo dnf install make qt6-qtmultimedia-devel qt6-qtsvg-devel qt6-qtbase-devel
 ```
 </details>
 
@@ -83,10 +95,29 @@ bash build.sh
 
 Run `bash build.sh --help` for all options (incremental by default, `--clean` for full rebuild, `--format` and `--tidy` for linting, `--appimage` for a portable AppImage, `--deb` for a .deb package, `--windows` to cross-compile a Windows .exe, `--upx` to compress the binary with UPX).
 
-#### Manual compilation
+#### Qt 6
+
+Qt 6 support lives on the `qt6` branch. To build with Qt 6:
 
 ```
+git checkout qt6
+qmake6 I2PChat.pro
+make -j$(nproc)
+```
+
+The `qt6` branch is periodically merged from `master` and includes fixes for all Qt 6 deprecations and API changes.
+
+#### Manual compilation
+
+**Qt 5:**
+```
 qmake I2PChat.pro "CONFIG += release"
+make -j$(nproc)
+```
+
+**Qt 6:**
+```
+qmake6 I2PChat.pro
 make -j$(nproc)
 ```
 
