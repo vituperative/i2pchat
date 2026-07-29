@@ -13,7 +13,6 @@ public:
   CSoundManager(QString ConfigPath);
   ~CSoundManager();
 
-  // forbid some operators
   CSoundManager(const CSoundManager &) = delete;
   CSoundManager &operator=(const CSoundManager &) = delete;
 

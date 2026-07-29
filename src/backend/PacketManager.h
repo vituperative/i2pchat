@@ -3,8 +3,7 @@
 #ifndef PACKETMANAGER_H
 #define PACKETMANAGER_H
 
-#include <Qt>
-#include <QtGui>
+#include <QObject>
 
 class CConnectionManager;
 class CPacketManager : public QObject {
@@ -14,7 +13,6 @@ public:
   CPacketManager(CConnectionManager &ConnectionManager, qint32 ID);
   ~CPacketManager();
 
-  // forbid some operators
   CPacketManager(const CPacketManager &) = delete;
   CPacketManager &operator=(const CPacketManager &) = delete;
 
@@ -30,7 +28,7 @@ signals:
 private:
   CConnectionManager &mConnectionManager;
   const qint32 mID;
-  QByteArray *mData;
+  QByteArray mData;
 
   void checkIfOnePacketIsComplete();
 };

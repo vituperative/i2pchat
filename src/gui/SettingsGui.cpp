@@ -1,0 +1,1169 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+#include "SettingsGui.h"
+
+#include "Base.h"
+#include "Core.h"
+#include "UserBlockManager.h"
+
+#include <QBuffer>
+#include <QCryptographicHash>
+#include <QDebug>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QFormLayout>
+#include <QHBoxLayout>
+#include <QStandardItemModel>
+
+SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
+  : QDialog(parent, flags)
+  , mCore(Core)
+  , mConfigPath(Core.getConfigPath()) {
+  setupUi(this);
+  this->setAttribute(Qt::WA_DeleteOnClose, true);
+  Sections->setCurrentRow(0);
+
+  settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings->setDefaultFormat(QSettings::IniFormat);
+
+  loadqss();
+  styleCombo->addItems(QStyleFactory::keys());
+  loadSettings();
+  showUserBlockList();
+
+  connect(ok_Button, SIGNAL(clicked(bool)), this, SLOT(saveSettings()));
+
+  connect(cancel_Button, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+  connect(cmd_openFile, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile()));
+
+  connect(cmd_openFile_2, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile2()));
+
+  connect(cmd_openFile_3, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile3()));
+
+  connect(cmd_openFile_4, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile4()));
+
+  connect(check_AutoSort, SIGNAL(clicked(bool)), this, SLOT(clicked_sortingEnabled(bool)));
+  connect(radio_SortAlpha, SIGNAL(clicked(bool)), this, SLOT(clicked_sortAlphabetically(bool)));
+  connect(radio_SortDateAdded, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByDateAdded(bool)));
+  connect(radio_SortLastComm, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastCommunication(bool)));
+  connect(radio_SortLastOnline, SIGNAL(clicked(bool)), this, SLOT(clicked_sortByLastOnline(bool)));
+
+  connect(cmd_openFile_5, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile5()));
+
+  connect(cmd_openFile_6, SIGNAL(clicked(bool)), this, SLOT(clicked_openFile6()));
+
+  connect(browseDocrootButton, SIGNAL(clicked(bool)), this, SLOT(clicked_browseDocroot()));
+
+  connect(webServerAddUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerAddUser()));
+  connect(webServerEditUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerEditUser()));
+  connect(webServerDeleteUserButton, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerDeleteUser()));
+  connect(WebServerAuthCheckbox, SIGNAL(clicked(bool)), this, SLOT(clicked_webServerAuthToggled(bool)));
+
+  connect(cmd_DestGenerate, SIGNAL(clicked(bool)), this, SLOT(clicked_DestinationGenerate()));
+
+  connect(cmd_Downloads, SIGNAL(clicked(bool)), this, SLOT(clicked_IncomingFileFolder()));
+
+  connect(cmdBoldChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageBold(bool)));
+
+  connect(cmdUnderChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageUnderline(bool)));
+
+  connect(cmdItalicChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageItalic(bool)));
+
+  connect(cmdColorChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageTextColor()));
+
+  connect(cmdFontChat, SIGNAL(clicked(bool)), this, SLOT(clicked_ChatMessageFont()));
+
+  connect(cmdOverwriteBoldChat, SIGNAL(clicked(bool)), this, SLOT(clicked_OverWriteChatMessageBold(bool)));
+
+  connect(cmdOverwriteUnderChat, SIGNAL(clicked(bool)), this, SLOT(clicked_OverWriteChatMessageUnderline(bool)));
+
+  connect(cmdOverwriteItalicChat, SIGNAL(clicked(bool)), this, SLOT(clicked_OverWriteChatMessageItalic(bool)));
+
+  connect(cmdOverwriteColorChat, SIGNAL(clicked(bool)), this, SLOT(clicked_OverWriteChatMessageTextColor()));
+
+  connect(cmdOverwriteFontChat, SIGNAL(clicked(bool)), this, SLOT(clicked_OverWriteChatMessageFont()));
+
+  connect(cmd_deleteUserFromBlockList, SIGNAL(clicked()), this, SLOT(clicked_BlockListDelete()));
+
+  connect(cmd_unblockUserFromBlockList, SIGNAL(clicked()), this, SLOT(clicked_BlockListUnblock()));
+
+  connect(checkBox_AutoAcceptFiles, SIGNAL(clicked(bool)), checkBox_Subfolders, SLOT(setChecked(bool)));
+
+  connect(checkBox_AutoAcceptFiles, SIGNAL(toggled(bool)), checkBox_Subfolders, SLOT(setEnabled(bool)));
+
+  connect(cmd_selectAvatarImage, SIGNAL(clicked()), this, SLOT(clicked_SelectAvatarImage()));
+
+  connect(cmd_clearAvatarImage, SIGNAL(clicked()), this, SLOT(clicked_ClearAvatarImage()));
+
+  connect(blockallcheckBox, SIGNAL(clicked(bool)), this, SLOT(clicked_BlockAllUnknownUsers(bool)));
+
+  connect(requestAuthcheckBox, SIGNAL(clicked(bool)), this, SLOT(clicked_RequestAuthorization(bool)));
+
+  connect(AutoAway, SIGNAL(toggled(bool)), this, SLOT(clicked_AutoAwayEnabled(bool)));
+
+  connect(nonpersistdest, SIGNAL(clicked(bool)), this, SLOT(clicked_nonPersistDest(bool)));
+
+  mThemeWatcher = new QFileSystemWatcher(this);
+  QString themesDir = mConfigPath + "/themes/chat";
+  if (QDir(themesDir).exists())
+    mThemeWatcher->addPath(themesDir);
+  connect(mThemeWatcher, &QFileSystemWatcher::directoryChanged, this, &SettingsGui::slotThemeDirChanged);
+}
+
+SettingsGui::~SettingsGui() {
+  settings->sync();
+  delete (settings);
+}
+
+void SettingsGui::loadSettings() {
+  settings->beginGroup("General");
+  bool autoAwayEnabled = settings->value("AutoAwayEnabled", false).toBool();
+  AutoAway->setChecked(autoAwayEnabled);
+  AutoAwaySpinBox->setValue(settings->value("AutoAwayMinutes", 10).toInt());
+  AutoAwaySpinBox->setEnabled(autoAwayEnabled);
+  NoActivityLabel->setEnabled(autoAwayEnabled);
+  spinBox->setValue(settings->value("Debug_Max_Message_count", "20").toInt());
+  OfflineChkSpinBox->setValue(settings->value("Waittime_between_rechecking_offline_users", "1000").toInt() / 1000);
+  checkBox_DebugLog->setChecked(settings->value(("DebugLogging"), "true").toBool());
+
+  if (settings->value("current_Style", "").toString().isEmpty() == false)
+    styleCombo->setCurrentIndex(styleCombo->findText(settings->value("current_Style", "").toString()));
+  else {
+    // find default Style for this System
+    QRegularExpression regExp("^Q(.*)Style$");
+    QString defaultStyle = QApplication::style()->metaObject()->className();
+
+    if (defaultStyle == QLatin1String("QMacStyle"))
+      defaultStyle = QLatin1String("Macintosh (Aqua)");
+    else {
+      auto m = regExp.match(defaultStyle);
+      if (m.hasMatch())
+        defaultStyle = m.captured(1);
+    }
+
+    styleCombo->setCurrentIndex(styleCombo->findText(defaultStyle));
+  }
+  settings->endGroup();
+
+  settings->beginGroup("UserList");
+  check_AutoSort->setChecked(settings->value("SortingEnabled", false).toBool());
+  int sortType = settings->value("SortType", 0).toInt();
+
+  // Set radio button states
+  radio_SortAlpha->setChecked(sortType == 0);
+  radio_SortDateAdded->setChecked(sortType == 1);
+  radio_SortLastComm->setChecked(sortType == 2);
+  radio_SortLastOnline->setChecked(sortType == 3);
+
+  // Enable/disable radio buttons based on checkbox state
+  bool sortingEnabled = settings->value("SortingEnabled", false).toBool();
+  radio_SortAlpha->setEnabled(sortingEnabled);
+  radio_SortDateAdded->setEnabled(sortingEnabled);
+  radio_SortLastComm->setEnabled(sortingEnabled);
+  radio_SortLastOnline->setEnabled(sortingEnabled);
+
+  settings->endGroup();
+
+  // Sync UserManager with persisted sort settings
+  mCore.getUserManager()->setSortingEnabled(sortingEnabled);
+  if (sortingEnabled) {
+    mCore.getUserManager()->sortUserList(sortType);
+  }
+
+  settings->beginGroup("General");
+
+  checkBox_AutoAcceptFiles->setChecked(settings->value("AutoAcceptFileReceive", false).toBool());
+  if (checkBox_AutoAcceptFiles->isChecked() == true) {
+    cmd_Downloads->setEnabled(true);
+    checkBox_Subfolders->setChecked(settings->value("UseIncomingSubFolderForEveryUser", false).toBool());
+    txt_IncomingFileFolder->setReadOnly(false);
+    txt_IncomingFileFolder->setEnabled(true);
+  } else {
+    checkBox_Subfolders->setDisabled(true);
+    txt_IncomingFileFolder->setReadOnly(true); // no workee :(
+  }
+
+  txt_IncomingFileFolder->setText(settings->value("IncomingFileFolder", mConfigPath + "/Incoming").toString());
+
+  styleSheetCombo->setCurrentIndex(
+    styleSheetCombo->findText(settings->value("current_Style_sheet", "Default").toString()));
+  settings->endGroup();
+
+  settings->beginGroup("Network");
+  edit_SAMHost->setText(settings->value("SamHost", "127.0.0.1").toString());
+  lineEdit->setText(settings->value("TunnelName", "I2PChat").toString());
+  spin_SAMPort->setValue(settings->value("SamPort", "7656").toInt());
+
+  spin_InLength->setMinimum(1);
+  spin_InLength->setValue(settings->value("inbound.length", "3").toInt());
+  spin_InLength->setMaximum(7);
+
+  spin_InQuantity->setMinimum(0);
+  spin_InQuantity->setValue(settings->value("inbound.quantity", "1").toInt());
+  spin_InQuantity->setMaximum(3);
+
+  spin_InBackupQty->setMinimum(0);
+  spin_InBackupQty->setValue(settings->value("inbound.backupQuantity", "1").toInt());
+  spin_InBackupQty->setMaximum(3);
+
+  spin_OutBackupQty->setMinimum(0);
+  spin_OutBackupQty->setValue(settings->value("outbound.backupQuantity", "1").toInt());
+  spin_OutBackupQty->setMaximum(3);
+
+  spin_OutLength->setMinimum(1);
+  spin_OutLength->setValue(settings->value("outbound.length", "3").toInt());
+  spin_OutLength->setMaximum(7);
+
+  spin_OutQuantity->setMinimum(0);
+  spin_OutQuantity->setValue(settings->value("outbound.quantity", "1").toInt());
+  spin_OutQuantity->setMaximum(3);
+
+  comboBox_SigType->setEditable(false);
+  comboBox_SigType->setCurrentIndex(
+    comboBox_SigType->findText(settings->value("SIGNATURE_TYPE", "EdDSA_SHA512_Ed25519").toString()));
+
+  // Encryption type combo — store values as user data
+  comboBox_EncType->setItemData(0, "4");
+  comboBox_EncType->setItemData(1, "5,4");
+  comboBox_EncType->setItemData(2, "6,4");
+  comboBox_EncType->setItemData(3, "7,4");
+  {
+    QString savedEnc = settings->value("i2cp.leaseSetEncType", "4").toString();
+    for (int i = 0; i < comboBox_EncType->count(); i++) {
+      if (comboBox_EncType->itemData(i).toString() == savedEnc) {
+        comboBox_EncType->setCurrentIndex(i);
+        break;
+      }
+    }
+  }
+
+  nonpersistdest->setChecked(settings->value("NonPersistentDestination", false).toBool());
+  settings->endGroup();
+
+  settings->beginGroup("Sound");
+  settings->beginGroup("SoundFilePath");
+  txt_SoundFile->setText(settings->value("User_go_Online", "./sounds/online.wav").toString());
+  txt_SoundFile2->setText(settings->value("User_go_Offline", "./sounds/offline.wav").toString());
+  txt_SoundFile3->setText(settings->value("FileSend_Finished", "./sounds/complete.wav").toString());
+  txt_SoundFile4->setText(settings->value("FileReceive_Incoming", "./sounds/fileincoming.wav").toString());
+  txt_SoundFile5->setText(settings->value("FileReceive_Finished", "./sounds/complete.wav").toString());
+  txt_SoundFile6->setText(settings->value("NewChatMessage", "./sounds/newmessage.wav").toString());
+
+  checkBoxSound->setEnabled(!txt_SoundFile->text().isEmpty());
+  checkBoxSound_2->setEnabled(!txt_SoundFile2->text().isEmpty());
+  checkBoxSound_3->setEnabled(!txt_SoundFile3->text().isEmpty());
+  checkBoxSound_4->setEnabled(!txt_SoundFile4->text().isEmpty());
+  checkBoxSound_5->setEnabled(!txt_SoundFile5->text().isEmpty());
+  checkBoxSound_6->setEnabled(!txt_SoundFile6->text().isEmpty());
+
+  settings->endGroup();
+
+  settings->beginGroup("Enable");
+  checkBoxSound->setChecked(settings->value("User_go_Online", true).toBool());
+  checkBoxSound_2->setChecked(settings->value("User_go_Offline", true).toBool());
+  checkBoxSound_3->setChecked(settings->value("FileSend_Finished", true).toBool());
+  checkBoxSound_4->setChecked(settings->value("FileReceive_Incoming", true).toBool());
+  checkBoxSound_5->setChecked(settings->value("FileReceive_Finished", true).toBool());
+  checkBoxSound_6->setChecked(settings->value("NewChatMessage", true).toBool());
+  settings->endGroup();
+
+  settings->endGroup();
+
+  settings->beginGroup("User");
+  txt_Nickname->setMaxLength(12);
+  txt_Nickname->setText(settings->value("Nickname", "").toString());
+
+  txt_Interests->setPlainText(settings->value("Interests", "").toString());
+
+  QPixmap tmpPixmap;
+  avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
+
+  if (avatarImageByteArray.isEmpty()) {
+    tmpPixmap.load(":/icons/silhouette.svg");
+  } else {
+    tmpPixmap.loadFromData(avatarImageByteArray);
+    if (tmpPixmap.width() != ownavatar_label->width() || tmpPixmap.height() != ownavatar_label->height()) {
+      QImage img = tmpPixmap.toImage();
+      img = CCore::scaleImageLanczos(img, ownavatar_label->width(), ownavatar_label->height());
+      tmpPixmap = QPixmap::fromImage(img);
+    }
+  }
+
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+
+  settings->endGroup();
+
+  settings->beginGroup("Chat");
+  populateChatStyleCombo();
+  {
+    QString cfg = settings->value("ChatStyle", "Minimal").toString();
+    bool found = false;
+    for (int i = 0; i < comboBoxChatStyle->count(); ++i) {
+      if (comboBoxChatStyle->itemData(i).toString().toLower() == cfg.toLower()) {
+        comboBoxChatStyle->setCurrentIndex(i);
+        found = true;
+        break;
+      }
+    }
+    if (!found)
+      comboBoxChatStyle->setCurrentIndex(0);
+  }
+
+  txtShowCurrentChatStyle->setText("Local settings preview");
+  txtOverrideRemote->setText("Remote override preview");
+
+  txtShowCurrentChatStyle->selectAll();
+  QFont font;
+  QColor color;
+
+  font.fromString(settings->value("DefaultFont", "SansSerif,10").toString());
+  color.setNamedColor(settings->value("DefaultColor", "#000000").toString());
+
+  txtShowCurrentChatStyle->setFont(font);
+  txtShowCurrentChatStyle->setTextColor(color);
+  txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtShowCurrentChatStyle->textCursor().clearSelection();
+
+  // override remote chatmessage settings -> font/color
+  chatOverrideBox->setChecked(settings->value("Override", false).toBool());
+  if (chatOverrideBox->isChecked() == false) {
+    txtOverrideRemote->selectAll();
+    QFont font;
+    QColor color;
+
+    font.fromString(settings->value("FontForOverwrite", "SansSerif,10").toString());
+    color.setNamedColor(settings->value("ColorForOverwrite", "#000000").toString());
+
+    txtOverrideRemote->setFont(font);
+    txtOverrideRemote->setTextColor(color);
+
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    txtOverrideRemote->textCursor().clearSelection();
+  } else {
+    txtOverrideRemote->selectAll();
+    QFont font;
+    font.fromString(settings->value("FontForOverwrite", "SansSerif,10").toString());
+    QColor color(settings->value("ColorForOverwrite", "#000000").toString());
+
+    txtOverrideRemote->setFont(font);
+    txtOverrideRemote->setTextColor(color);
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    txtOverrideRemote->textCursor().clearSelection();
+  }
+
+  checkboxUserEvents->setChecked(settings->value("LogOnlineStatesOfUsers", true).toBool());
+  checkBox_DisplayImagesInline->setChecked(settings->value("DisplayImagesInline", false).toBool());
+
+  settings->endGroup();
+
+  settings->beginGroup("Security");
+  if (settings->value("BlockStyle", "Normal").toString() == "Normal") {
+    check_BlockNormal->setChecked(true);
+  } else {
+
+    check_BlockInvisible->setChecked(true);
+  }
+
+  if (settings->value("WebProfile", "Enabled").toString() == "Enabled") {
+    WebProfileCheckbox->setChecked(true);
+  } else {
+    WebProfileCheckbox->setChecked(false);
+  }
+  if (settings->value("HideWebProfileWhenInvisible", "True").toString() == "True") {
+    HideWebCheckbox->setChecked(true);
+  } else {
+    HideWebCheckbox->setChecked(false);
+  }
+  if (settings->value("WebProfileDirectoryListing", "False").toString() == "True") {
+    WebProfileDirectoryListingCheckbox->setChecked(true);
+  } else {
+    WebProfileDirectoryListingCheckbox->setChecked(false);
+  }
+  if (settings->value("WebServerAuthRequired", "False").toString() == "True") {
+    WebServerAuthCheckbox->setChecked(true);
+  } else {
+    WebServerAuthCheckbox->setChecked(false);
+  }
+  webServerRealmEdit->setText(settings->value("WebServerRealm", "I2PChat Webserver").toString());
+  webServerSessionTimeout->setValue(settings->value("WebServerSessionTimeout", 3600).toInt() / 60);
+  int userCount = settings->value("WebServerUserCount", 0).toInt();
+  auto *tableModel = new QStandardItemModel(userCount, 2, this);
+  tableModel->setHorizontalHeaderLabels({"User", "Path"});
+  webServerUserTable->setModel(tableModel);
+  for (int i = 0; i < userCount; i++) {
+    QString name = settings->value(QStringLiteral("WebServerUser_%1_Name").arg(i)).toString();
+    QString folder = settings->value(QStringLiteral("WebServerUser_%1_Folder").arg(i)).toString();
+    auto *nameItem = new QStandardItem(name);
+    nameItem->setData(settings->value(QStringLiteral("WebServerUser_%1_Password").arg(i)), Qt::UserRole);
+    tableModel->setItem(i, 0, nameItem);
+    tableModel->setItem(i, 1, new QStandardItem(folder));
+  }
+  { // WebProfileDocroot — show default path if unset
+    QString d = settings->value("WebProfileDocroot", "").toString();
+    WebProfileDocrootEdit->setText(d.isEmpty() ? mConfigPath + QStringLiteral("/www") : d);
+  }
+  clicked_webServerAuthToggled(WebServerAuthCheckbox->isChecked());
+
+  // Load blocking settings
+  blockallcheckBox->setChecked(settings->value("BlockAllUnknownUsers", false).toBool());
+  requestAuthcheckBox->setChecked(settings->value("RequestAuthorization", true).toBool());
+  requestAuthcheckBox->setEnabled(!blockallcheckBox->isChecked());
+  settings->endGroup();
+
+  if (!mCore.getMyDestination().isEmpty()) {
+    size_t buffersize = 2048;
+    uint8_t *outputbuffer = (uint8_t *)malloc(buffersize);
+    char *b32buffer = (char *)malloc(buffersize);
+    QByteArray sha256hash;
+    int outputcount = i2p::data::Base64ToByteStream(
+      mCore.getMyDestination().toUtf8().constData(), mCore.getMyDestination().size(), outputbuffer, buffersize);
+    QByteArray qarraysha256hash = QByteArray((char *)outputbuffer, outputcount);
+    while (outputcount > qarraysha256hash.size()) {
+      qarraysha256hash.append((char)0);
+    }
+    sha256hash = QCryptographicHash::hash(qarraysha256hash, QCryptographicHash::Sha256);
+    i2p::data::ByteStreamToBase32((uint8_t *)sha256hash.data(), sha256hash.size(), b32buffer, 52);
+    b32buffer[52] = '\0';
+    QString strb32address = "http://" + QString(b32buffer) + ".b32.i2p";
+    b32address->setText(QApplication::translate("SettingsGui", strb32address.toUtf8().constData(), Q_NULLPTR));
+    free(outputbuffer);
+    free(b32buffer);
+  } else {
+    b32address->setText(QApplication::translate("SettingsGui", "b32 address will be displayed when online", Q_NULLPTR));
+  }
+
+  settings->endGroup();
+  settings->sync();
+}
+void SettingsGui::saveSettings() {
+  settings->beginGroup("General");
+  settings->setValue("AutoAwayEnabled", AutoAway->isChecked());
+  settings->setValue("AutoAwayMinutes", AutoAwaySpinBox->value());
+  settings->setValue("Debug_Max_Message_count", spinBox->value());
+  settings->setValue("Waittime_between_rechecking_offline_users", OfflineChkSpinBox->value() * 1000);
+  settings->setValue("current_Style", styleCombo->currentText());
+  settings->setValue("current_Style_sheet", styleSheetCombo->currentText());
+  settings->setValue("AutoAcceptFileReceive", checkBox_AutoAcceptFiles->isChecked());
+  settings->setValue("IncomingFileFolder", txt_IncomingFileFolder->text());
+  settings->setValue("UseIncomingSubFolderForEveryUser", checkBox_Subfolders->isChecked());
+  settings->setValue("DebugLogging", checkBox_DebugLog->isChecked());
+  settings->endGroup();
+
+  settings->beginGroup("Network");
+  settings->setValue("SamHost", edit_SAMHost->text());
+  settings->setValue("TunnelName", lineEdit->text());
+  settings->setValue("SamPort", spin_SAMPort->value());
+  // Inbound options
+  settings->setValue("inbound.quantity", spin_InQuantity->value());
+  settings->setValue("inbound.backupQuantity", spin_InBackupQty->value());
+  settings->setValue("inbound.length", spin_InLength->value());
+  // Outpound options
+  settings->setValue("outbound.quantity", spin_OutQuantity->value());
+  settings->setValue("outbound.backupQuantity", spin_OutBackupQty->value());
+  settings->setValue("outbound.length", spin_OutLength->value());
+
+  // Signature_type
+  settings->setValue("SIGNATURE_TYPE", comboBox_SigType->currentText());
+
+  // Encryption type
+  settings->setValue("i2cp.leaseSetEncType", comboBox_EncType->itemData(comboBox_EncType->currentIndex()).toString());
+
+  settings->setValue("NonPersistentDestination", nonpersistdest->isChecked());
+  settings->endGroup();
+
+  settings->beginGroup("Sound");
+  settings->beginGroup("Enable");
+  settings->setValue("User_go_Online", checkBoxSound->isChecked());
+  settings->setValue("User_go_Offline", checkBoxSound_2->isChecked());
+  settings->setValue("FileSend_Finished", checkBoxSound_3->isChecked());
+  settings->setValue("FileReceive_Incoming", checkBoxSound_4->isChecked());
+  settings->setValue("FileReceive_Finished", checkBoxSound_5->isChecked());
+  settings->setValue("NewChatMessage", checkBoxSound_6->isChecked());
+  settings->endGroup();
+  settings->beginGroup("SoundFilePath");
+  settings->setValue("User_go_Online", txt_SoundFile->text());
+  settings->setValue("User_go_Offline", txt_SoundFile2->text());
+  settings->setValue("FileSend_Finished", txt_SoundFile3->text());
+  settings->setValue("FileReceive_Incoming", txt_SoundFile4->text());
+  settings->setValue("FileReceive_Finished", txt_SoundFile5->text());
+  settings->setValue("NewChatMessage", txt_SoundFile6->text());
+  settings->endGroup();
+  settings->endGroup();
+
+  settings->beginGroup("Style"); // application.ini
+  // settings->setValue("CurrentStyle", "Fusion");
+  settings->setValue("CustomStyleSheet", "");
+  settings->endGroup();
+
+  settings->beginGroup("User");
+  settings->setValue("Nickname", txt_Nickname->text());
+  settings->setValue("Interests", txt_Interests->toPlainText());
+  settings->setValue("AvatarBinaryImage", avatarImageByteArray);
+  settings->endGroup();
+  settings->sync();
+
+  settings->beginGroup("Chat");
+  {
+    int idx = comboBoxChatStyle->currentIndex();
+    QString val = comboBoxChatStyle->itemData(idx).toString();
+    if (val.isEmpty())
+      val = "classic";
+    settings->setValue("ChatStyle", val);
+  }
+  settings->sync();
+  mCore.getSoundManager()->reInit();
+  emit mCore.signChatStyleChanged();
+  settings->setValue("DefaultFont", txtShowCurrentChatStyle->currentFont().toString());
+  settings->setValue("DefaultColor", txtShowCurrentChatStyle->textColor().name());
+
+  // override remoute chatmessageSettings Font/Color
+  settings->setValue("Override", chatOverrideBox->isChecked());
+  settings->setValue("FontForOverwrite", txtOverrideRemote->currentFont().toString());
+  settings->setValue("ColorForOverwrite", txtOverrideRemote->textColor().name());
+  settings->setValue("LogOnlineStatesOfUsers", checkboxUserEvents->isChecked());
+  settings->setValue("DisplayImagesInline", checkBox_DisplayImagesInline->isChecked());
+  settings->endGroup();
+
+  settings->beginGroup("Security");
+  if (check_BlockInvisible->isChecked() == true) {
+    settings->setValue("BlockStyle", "Invisible");
+  } else {
+    settings->setValue("BlockStyle", "Normal");
+  }
+  if (WebProfileCheckbox->isChecked() == true) {
+    settings->setValue("WebProfile", "Enabled");
+  } else {
+    settings->setValue("WebProfile", "Disabled");
+  }
+  if (HideWebCheckbox->isChecked() == true) {
+    settings->setValue("HideWebProfileWhenInvisible", "True");
+  } else {
+    settings->setValue("HideWebProfileWhenInvisible", "False");
+  }
+  if (WebProfileDirectoryListingCheckbox->isChecked() == true) {
+    settings->setValue("WebProfileDirectoryListing", "True");
+  } else {
+    settings->setValue("WebProfileDirectoryListing", "False");
+  }
+  if (WebServerAuthCheckbox->isChecked() == true) {
+    settings->setValue("WebServerAuthRequired", "True");
+  } else {
+    settings->setValue("WebServerAuthRequired", "False");
+  }
+  settings->setValue("WebServerRealm", webServerRealmEdit->text());
+  settings->setValue("WebServerSessionTimeout", webServerSessionTimeout->value() * 60);
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  int userCount = tableModel ? tableModel->rowCount() : 0;
+  settings->setValue("WebServerUserCount", userCount);
+  for (int i = 0; i < userCount; i++) {
+    QStandardItem *nameItem = tableModel->item(i, 0);
+    QStandardItem *folderItem = tableModel->item(i, 1);
+    if (nameItem && !nameItem->text().isEmpty()) {
+      settings->setValue(QStringLiteral("WebServerUser_%1_Name").arg(i), nameItem->text());
+      settings->setValue(QStringLiteral("WebServerUser_%1_Password").arg(i), nameItem->data(Qt::UserRole).toString());
+      settings->setValue(QStringLiteral("WebServerUser_%1_Folder").arg(i), folderItem ? folderItem->text() : QString());
+    }
+  }
+  settings->setValue("WebProfileDocroot", WebProfileDocrootEdit->text());
+  settings->setValue("BlockAllUnknownUsers", blockallcheckBox->isChecked());
+  settings->setValue("RequestAuthorization", requestAuthcheckBox->isChecked());
+  settings->endGroup();
+  settings->sync();
+
+  settings->sync();
+  mCore.loadUserInfos();
+
+  int autoMinutes = 0;
+  bool autoEnabled = settings->value("General/AutoAwayEnabled", false).toBool();
+  if (autoEnabled)
+    autoMinutes = settings->value("General/AutoAwayMinutes", 0).toInt();
+  mCore.applyAutoAwaySettings(autoEnabled, autoMinutes);
+  mCore.getUserManager()->avatarImageChanged();
+
+  // Force update nickname display in main window
+  emit mCore.signNicknameChanged();
+
+  // Refresh avatar display in config panel AFTER avatar update signals have been sent
+  QPixmap tmpPixmap;
+  avatarImageByteArray = settings->value("AvatarBinaryImage", "").toByteArray();
+
+  if (avatarImageByteArray.isEmpty()) {
+    tmpPixmap.load(":/icons/silhouette.svg");
+  } else {
+    // Decode B64 string to raw binary data if needed
+    QByteArray decodedData = QByteArray::fromBase64(avatarImageByteArray);
+    if (!decodedData.isEmpty()) {
+      // Use decoded data if successful
+      tmpPixmap.loadFromData(decodedData);
+    } else {
+      // Fall back to original data if decoding fails
+      tmpPixmap.loadFromData(avatarImageByteArray);
+    }
+  }
+
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+
+  this->close();
+}
+
+void SettingsGui::on_styleCombo_activated(const QString &styleName) {
+  qApp->setStyle(styleName);
+}
+
+void SettingsGui::on_styleSheetCombo_activated(const QString &sheetName) {
+  loadStyleSheet(sheetName);
+}
+
+void SettingsGui::loadStyleSheet(const QString &sheetName) {
+  //
+  // external Stylesheets
+  QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
+  if (file.exists()) {
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+
+    qApp->setStyleSheet(styleSheet);
+  } else
+    qWarning() << "WARNING: stylesheet file is broken";
+}
+
+void SettingsGui::loadqss() {
+
+  QFileInfoList slist = QDir(mConfigPath + "/qss/").entryInfoList();
+  foreach (QFileInfo st, slist) {
+    if (st.fileName() != "." && st.fileName() != ".." && st.isFile())
+      styleSheetCombo->addItem(st.fileName().remove(".qss"));
+  }
+}
+
+void SettingsGui::populateChatStyleCombo() {
+  QString current = comboBoxChatStyle->currentData().toString();
+  comboBoxChatStyle->clear();
+  comboBoxChatStyle->addItem(tr("Classic"), "classic");
+  QDir themesDir(mConfigPath + "/themes/chat");
+  if (themesDir.exists()) {
+    QStringList filters;
+    filters << "*.css";
+    for (const QFileInfo &fi : themesDir.entryInfoList(filters, QDir::Files, QDir::Name)) {
+      QString name = fi.completeBaseName();
+      comboBoxChatStyle->addItem(name, name);
+    }
+  }
+  if (!current.isEmpty()) {
+    for (int i = 0; i < comboBoxChatStyle->count(); ++i) {
+      if (comboBoxChatStyle->itemData(i).toString() == current) {
+        comboBoxChatStyle->setCurrentIndex(i);
+        return;
+      }
+    }
+  }
+}
+
+void SettingsGui::slotThemeDirChanged() {
+  populateChatStyleCombo();
+}
+
+void SettingsGui::clicked_openFile() {
+  txt_SoundFile->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile->text().isEmpty()) {
+    checkBoxSound->setChecked(false);
+    checkBoxSound->setEnabled(false);
+  } else
+    checkBoxSound->setEnabled(true);
+}
+
+void SettingsGui::clicked_openFile2() {
+  txt_SoundFile2->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile2->text().isEmpty()) {
+    checkBoxSound_2->setChecked(false);
+    checkBoxSound_2->setEnabled(false);
+  } else
+    checkBoxSound_2->setEnabled(true);
+}
+void SettingsGui::clicked_openFile3() {
+  txt_SoundFile3->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile3->text().isEmpty()) {
+    checkBoxSound_3->setChecked(false);
+    checkBoxSound_3->setEnabled(false);
+  } else
+    checkBoxSound_3->setEnabled(true);
+}
+void SettingsGui::clicked_openFile4() {
+  txt_SoundFile4->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile4->text().isEmpty()) {
+    checkBoxSound_4->setChecked(false);
+    checkBoxSound_4->setEnabled(false);
+  } else
+    checkBoxSound_4->setEnabled(true);
+}
+void SettingsGui::clicked_openFile5() {
+  txt_SoundFile5->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile5->text().isEmpty()) {
+    checkBoxSound_5->setChecked(false);
+    checkBoxSound_5->setEnabled(false);
+  } else
+    checkBoxSound_5->setEnabled(true);
+}
+void SettingsGui::clicked_openFile6() {
+  txt_SoundFile6->setText(QFileDialog::getOpenFileName(this, tr("Open File"), ".", "wav (*.wav)"));
+  if (txt_SoundFile6->text().isEmpty()) {
+    checkBoxSound_6->setChecked(false);
+    checkBoxSound_6->setEnabled(false);
+  } else
+    checkBoxSound_6->setEnabled(true);
+}
+
+void SettingsGui::clicked_browseDocroot() {
+  QString dir = QFileDialog::getExistingDirectory(
+    this,
+    tr("Choose Document Root"),
+    WebProfileDocrootEdit->text().isEmpty() ? mConfigPath + QStringLiteral("/www") : WebProfileDocrootEdit->text());
+  if (!dir.isEmpty())
+    WebProfileDocrootEdit->setText(dir);
+}
+
+static bool editUserDialog(QWidget *parent, QString &name, QString &password, QString &folder) {
+  QDialog d(parent);
+  d.setWindowTitle(name.isEmpty() ? QObject::tr("Add User") : QObject::tr("Edit User"));
+  QFormLayout *form = new QFormLayout(&d);
+  QLineEdit *nameEdit = new QLineEdit(name, &d);
+  QLineEdit *passEdit = new QLineEdit(password, &d);
+  passEdit->setEchoMode(QLineEdit::Password);
+  QWidget *folderRow = new QWidget(&d);
+  QHBoxLayout *folderLayout = new QHBoxLayout(folderRow);
+  folderLayout->setContentsMargins(0, 0, 0, 0);
+  QLineEdit *folderEdit = new QLineEdit(folder, folderRow);
+  QPushButton *browseBtn = new QPushButton(QObject::tr("Browse..."), folderRow);
+  folderLayout->addWidget(folderEdit);
+  folderLayout->addWidget(browseBtn);
+  QObject::connect(browseBtn, &QPushButton::clicked, [parent, folderEdit]() {
+    QString dir = QFileDialog::getExistingDirectory(parent, QObject::tr("Choose Folder"), folderEdit->text());
+    if (!dir.isEmpty())
+      folderEdit->setText(dir);
+  });
+  form->addRow(QObject::tr("Username:"), nameEdit);
+  form->addRow(QObject::tr("Password:"), passEdit);
+  form->addRow(QObject::tr("Folder:"), folderRow);
+  QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &d);
+  form->addRow(buttons);
+  QObject::connect(buttons, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+  QObject::connect(buttons, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+  if (d.exec() != QDialog::Accepted)
+    return false;
+  name = nameEdit->text().trimmed();
+  password = passEdit->text();
+  folder = folderEdit->text().trimmed();
+  return true;
+}
+
+void SettingsGui::clicked_webServerAddUser() {
+  QString name, password, folder;
+  if (!editUserDialog(this, name, password, folder))
+    return;
+  if (name.isEmpty())
+    return;
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = tableModel->rowCount();
+  tableModel->insertRow(row);
+  auto *nameItem = new QStandardItem(name);
+  nameItem->setData(password, Qt::UserRole);
+  tableModel->setItem(row, 0, nameItem);
+  tableModel->setItem(row, 1, new QStandardItem(folder));
+}
+
+void SettingsGui::clicked_webServerEditUser() {
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = webServerUserTable->selectionModel()->currentIndex().row();
+  if (row < 0)
+    return;
+  QStandardItem *nameItem = tableModel->item(row, 0);
+  QStandardItem *folderItem = tableModel->item(row, 1);
+  if (!nameItem)
+    return;
+  QString name = nameItem->text();
+  QString password = nameItem->data(Qt::UserRole).toString();
+  QString folder = folderItem ? folderItem->text() : QString();
+  if (!editUserDialog(this, name, password, folder))
+    return;
+  if (name.isEmpty())
+    return;
+  nameItem->setText(name);
+  nameItem->setData(password, Qt::UserRole);
+  if (folderItem)
+    folderItem->setText(folder);
+}
+
+void SettingsGui::clicked_webServerDeleteUser() {
+  auto *tableModel = qobject_cast<QStandardItemModel *>(webServerUserTable->model());
+  if (!tableModel)
+    return;
+  int row = webServerUserTable->selectionModel()->currentIndex().row();
+  if (row < 0)
+    return;
+  tableModel->removeRow(row);
+}
+
+void SettingsGui::clicked_webServerAuthToggled(bool checked) {
+  webServerUserTable->setEnabled(checked);
+  webServerAddUserButton->setEnabled(checked);
+  webServerEditUserButton->setEnabled(checked);
+  webServerDeleteUserButton->setEnabled(checked);
+  labelRealm->setEnabled(checked);
+  webServerRealmEdit->setEnabled(checked);
+}
+
+void SettingsGui::clicked_DestinationGenerate() {
+
+  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings->beginGroup("Network");
+  settings->setValue("SamPrivKey", "");
+  settings->endGroup();
+  settings->sync();
+  delete settings;
+
+  QMessageBox msgBox(NULL);
+  msgBox.setIcon(QMessageBox::Information);
+  msgBox.setText(tr("Please restart I2PChat"));
+  msgBox.setStandardButtons(QMessageBox::Ok);
+  msgBox.setDefaultButton(QMessageBox::Ok);
+  msgBox.setWindowModality(Qt::NonModal);
+  msgBox.exec();
+}
+
+void SettingsGui::clicked_IncomingFileFolder() {
+  txt_IncomingFileFolder->setText(QFileDialog::getExistingDirectory(
+    this, tr("Open Folder"), mConfigPath + "/Incoming", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks));
+
+  if (txt_IncomingFileFolder->text().isEmpty()) {
+    checkBox_AutoAcceptFiles->setChecked(false);
+  }
+}
+
+void SettingsGui::clicked_ChatMessageTextColor() {
+  txtShowCurrentChatStyle->selectAll();
+  txtShowCurrentChatStyle->setTextColor(QColorDialog::getColor(Qt::black, this));
+
+  txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtShowCurrentChatStyle->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_ChatMessageBold(bool t) {
+  QFont font = txtShowCurrentChatStyle->currentFont();
+  font.setBold(t);
+  txtShowCurrentChatStyle->selectAll();
+  txtShowCurrentChatStyle->setCurrentFont(font);
+  txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtShowCurrentChatStyle->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_ChatMessageFont() {
+  bool ok;
+  QFont newFont = QFontDialog::getFont(&ok, txtShowCurrentChatStyle->currentFont(), this);
+  if (ok == true) {
+    txtShowCurrentChatStyle->selectAll();
+    txtShowCurrentChatStyle->setCurrentFont(newFont);
+    txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    txtShowCurrentChatStyle->textCursor().clearSelection();
+  }
+}
+
+void SettingsGui::clicked_OverWriteChatMessageTextColor() {
+  txtOverrideRemote->selectAll();
+  txtOverrideRemote->setTextColor(QColorDialog::getColor(Qt::black, this));
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtOverrideRemote->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_OverWriteChatMessageBold(bool t) {
+  QFont font = txtOverrideRemote->currentFont();
+  font.setBold(t);
+  txtOverrideRemote->selectAll();
+  txtOverrideRemote->setCurrentFont(font);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtOverrideRemote->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_OverWriteChatMessageFont() {
+  bool ok;
+  QFont newFont = QFontDialog::getFont(&ok, txtShowCurrentChatStyle->currentFont(), this);
+  if (ok == true) {
+    txtOverrideRemote->selectAll();
+    txtOverrideRemote->setCurrentFont(newFont);
+    txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    txtOverrideRemote->textCursor().clearSelection();
+  }
+}
+
+void SettingsGui::clicked_ChatMessageItalic(bool t) {
+  txtShowCurrentChatStyle->selectAll();
+  txtShowCurrentChatStyle->setFontItalic(t);
+  txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtShowCurrentChatStyle->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_ChatMessageUnderline(bool t) {
+  txtShowCurrentChatStyle->selectAll();
+  txtShowCurrentChatStyle->setFontUnderline(t);
+  txtShowCurrentChatStyle->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtShowCurrentChatStyle->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_OverWriteChatMessageItalic(bool t) {
+  txtOverrideRemote->selectAll();
+  txtOverrideRemote->setFontItalic(t);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtOverrideRemote->textCursor().clearSelection();
+}
+
+void SettingsGui::clicked_OverWriteChatMessageUnderline(bool t) {
+  txtOverrideRemote->selectAll();
+  txtOverrideRemote->setFontUnderline(t);
+  txtOverrideRemote->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+  txtOverrideRemote->textCursor().clearSelection();
+}
+
+void SettingsGui::showUserBlockList() {
+  QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
+
+  QMap<QString, CUserBlockManager::CUserBlockEntity *> UserBlockMap;
+  UserBlockMap = mCore.getUserBlockManager()->getBlockList();
+  QMapIterator<QString, CUserBlockManager::CUserBlockEntity *> i(UserBlockMap);
+
+  UserBlockTreeWidget->setColumnCount(2);
+  UserBlockTreeWidget->setHeaderLabels(QStringList() << tr("User") << tr(""));
+
+  UserBlockTreeWidget->clear();
+
+  while (i.hasNext()) {
+    i.next();
+    CUserBlockManager::CUserBlockEntity *currentEntity = i.value();
+
+    QTreeWidgetItem *itemTopLevel = new QTreeWidgetItem();
+    QTreeWidgetItem *itemNickname = new QTreeWidgetItem();
+    QTreeWidgetItem *itemBlockDate = new QTreeWidgetItem();
+    QTreeWidgetItem *itemDestination = new QTreeWidgetItem();
+
+    itemTopLevel->setText(0, currentEntity->mNickName);
+
+    itemNickname->setText(0, tr("Nickname"));
+    itemNickname->setText(1, currentEntity->mNickName);
+
+    itemBlockDate->setText(0, tr("Blocked on"));
+    itemBlockDate->setText(1, currentEntity->mBlockDate);
+
+    itemDestination->setText(0, tr("Destination"));
+    itemDestination->setText(1, currentEntity->mDestination);
+
+    itemTopLevel->addChild(itemNickname);
+    itemTopLevel->addChild(itemBlockDate);
+    itemTopLevel->addChild(itemDestination);
+
+    UserBlockTreeWidget->addTopLevelItem(itemTopLevel);
+  }
+  UserBlockTreeWidget->sortByColumn(0, Qt::AscendingOrder);
+}
+
+void SettingsGui::clicked_BlockListDelete() {
+  QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
+  QTreeWidgetItem *item;
+  QTreeWidgetItem *parent;
+  QString Destination;
+
+  item = UserBlockTreeWidget->currentItem();
+
+  if (item != NULL) {
+    parent = item->parent();
+    if (parent == NULL) {
+      parent = item;
+    }
+
+    Destination = parent->child(1)->text(1);
+    mCore.getUserBlockManager()->removeBlockEntity(Destination, false);
+    showUserBlockList();
+  }
+}
+
+void SettingsGui::clicked_BlockListUnblock() {
+  QTreeWidget *UserBlockTreeWidget = this->UserBlockTreeWidget;
+  QTreeWidgetItem *item;
+  QTreeWidgetItem *parent;
+  QString Nickname;
+  QString Destination;
+
+  item = UserBlockTreeWidget->currentItem();
+  if (item != NULL) {
+    parent = item->parent();
+    if (parent == NULL) {
+      parent = item;
+    }
+
+    Nickname = parent->text(0);
+    Destination = parent->child(1)->text(1);
+
+    mCore.getUserBlockManager()->removeBlockEntity(Destination, true);
+    showUserBlockList();
+  }
+}
+
+void SettingsGui::clicked_SelectAvatarImage() {
+  QPixmap tmpPixmap;
+
+  QString tmp = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("Images (*.png *.svg *.jpg *.gif)"));
+  if (tmp.isEmpty() == false && QFile::exists(tmp) == true) {
+    tmpPixmap.load(tmp);
+    if (tmpPixmap.width() > 90 || tmpPixmap.height() > 90) {
+      QImage img = tmpPixmap.toImage();
+      img = CCore::scaleImageLanczos(img, 90, 90);
+      tmpPixmap = QPixmap::fromImage(img);
+    }
+    avatarImageByteArray.clear();
+
+    QBuffer buffer(&avatarImageByteArray);
+    buffer.open(QIODevice::WriteOnly);
+    tmpPixmap.save(&buffer, "PNG");
+    ownavatar_label->setAlignment(Qt::AlignCenter);
+    ownavatar_label->setPixmap(tmpPixmap);
+    ownavatar_label->setAlignment(Qt::AlignCenter);
+    ownavatar_label->setPixmap(tmpPixmap);
+  }
+}
+void SettingsGui::clicked_ClearAvatarImage() {
+  avatarImageByteArray.clear();
+  QPixmap tmpPixmap;
+  tmpPixmap.load(":/icons/silhouette.svg");
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+  ownavatar_label->setAlignment(Qt::AlignCenter);
+  ownavatar_label->setPixmap(tmpPixmap);
+}
+
+void SettingsGui::setCustomStyleSheet() {
+
+  auto fileName =
+    QFileDialog::getOpenFileName(this, tr("open your StyleSheet"), "", tr("StyleSheet(*.css *.qss *.txt)"));
+  loadStyleSheet(fileName);
+  settings->beginGroup("Style");
+  settings->setValue("CustomStyleSheet", fileName);
+  settings->endGroup();
+  settings->sync();
+}
+
+void SettingsGui::clicked_sortingEnabled(bool enabled) {
+  settings->beginGroup("UserList");
+  settings->setValue("SortingEnabled", enabled);
+  settings->endGroup();
+  settings->sync();
+
+  mCore.getUserManager()->setSortingEnabled(enabled);
+  if (enabled) {
+    int sortType = settings->value("UserList/SortType", 0).toInt();
+    mCore.getUserManager()->sortUserList(sortType);
+  }
+}
+
+void SettingsGui::clicked_BlockAllUnknownUsers(bool checked) {
+  settings->beginGroup("Security");
+  settings->setValue("BlockAllUnknownUsers", checked);
+  settings->endGroup();
+  settings->sync();
+
+  // If blocking all unknown users, disable request authorization
+  requestAuthcheckBox->setEnabled(!checked);
+  if (checked) {
+    requestAuthcheckBox->setChecked(false);
+  }
+}
+
+void SettingsGui::clicked_RequestAuthorization(bool checked) {
+  settings->beginGroup("Security");
+  settings->setValue("RequestAuthorization", checked);
+  settings->endGroup();
+  settings->sync();
+}
+
+void SettingsGui::clicked_sortAlphabetically(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 0);
+    settings->endGroup();
+    settings->sync();
+
+    mCore.getUserManager()->sortUserList(0);
+  }
+}
+
+void SettingsGui::clicked_sortByDateAdded(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 1);
+    settings->endGroup();
+    settings->sync();
+
+    mCore.getUserManager()->sortUserList(1);
+  }
+}
+
+void SettingsGui::clicked_sortByLastCommunication(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 2);
+    settings->endGroup();
+    settings->sync();
+
+    mCore.getUserManager()->sortUserList(2);
+  }
+}
+
+void SettingsGui::clicked_sortByLastOnline(bool checked) {
+  if (checked) {
+    settings->beginGroup("UserList");
+    settings->setValue("SortType", 3);
+    settings->endGroup();
+    settings->sync();
+
+    mCore.getUserManager()->sortUserList(3);
+  }
+}
+
+void SettingsGui::clicked_AutoAwayEnabled(bool enabled) {
+  AutoAwaySpinBox->setEnabled(enabled);
+  NoActivityLabel->setEnabled(enabled);
+  mCore.applyAutoAwaySettings(enabled, enabled ? AutoAwaySpinBox->value() : 0);
+}
+
+void SettingsGui::clicked_nonPersistDest(bool checked) {
+  settings->beginGroup("Network");
+  settings->setValue("NonPersistentDestination", checked);
+  settings->endGroup();
+  settings->sync();
+
+  if (checked) {
+    settings->beginGroup("Network");
+    settings->setValue("SamPrivKey", "");
+    settings->endGroup();
+    settings->sync();
+
+    QMessageBox *msgBox = new QMessageBox(NULL);
+    msgBox->setIcon(QMessageBox::Information);
+    msgBox->setWindowTitle(tr("I2PChat"));
+    msgBox->setText(tr("Non-persistent destination enabled"));
+    msgBox->setInformativeText(tr("A new destination will be generated on next start.\n"
+                                  "Your current identity will not be saved."));
+    msgBox->setStandardButtons(QMessageBox::Ok);
+    msgBox->setDefaultButton(QMessageBox::Ok);
+    msgBox->setWindowModality(Qt::NonModal);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose);
+    msgBox->show();
+  }
+}

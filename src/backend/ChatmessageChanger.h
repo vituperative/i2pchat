@@ -3,8 +3,9 @@
 #ifndef CHATMESSAGECHANGER_H
 #define CHATMESSAGECHANGER_H
 
+#include <QColor>
+#include <QFont>
 #include <QTextEdit>
-#include <QtGui>
 
 class CCore;
 class CChatMessageChanger {

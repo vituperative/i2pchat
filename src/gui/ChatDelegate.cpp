@@ -2,7 +2,6 @@
 
 #include "ChatDelegate.h"
 
-#include <QAbstractItemView>
 #include <QAbstractTextDocumentLayout>
 #include <QMouseEvent>
 #include <QPainter>

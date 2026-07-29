@@ -5,6 +5,8 @@
 #include "UserManager.h"
 
 #include <QFile>
+#include <QMessageBox>
+#include <QRegularExpression>
 #include <QStandardPaths>
 
 CFileTransferManager::CFileTransferManager(CCore &Core)
@@ -13,11 +15,6 @@ CFileTransferManager::CFileTransferManager(CCore &Core)
 CFileTransferManager::~CFileTransferManager() {}
 
 CFileTransferReceive *CFileTransferManager::getFileReceiveByID(qint32 ID) const {
-  /*for(int i=0;i<mFileReceives.size();i++){
-          if(mFileReceives.at(i)->getStreamID()==ID){
-                  return mFileReceives.at(i);
-          }
-  }*/
   for (auto it : mFileReceives)
     if (it->getStreamID() == ID)
       return it;
@@ -30,11 +27,6 @@ CFileTransferSend *CFileTransferManager::getFileSendByID(qint32 ID) const {
     if (it->getStreamID() == ID)
       return it;
 
-  /*for(int i=0;i<mFileSends.size();i++){
-          if(mFileSends.at(i)->getStreamID()==ID){
-                  return mFileSends.at(i);
-          }
-  }*/
   return NULL;
 }
 
@@ -63,7 +55,6 @@ void CFileTransferManager::addNewFileTransfer(const QString &FilePath, const QSt
   if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
       this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
     qCritical() << "Already exists transfer for user";
-    throw std::runtime_error("Already exists transfer for user");
     return;
   }
 
@@ -150,7 +141,6 @@ void CFileTransferManager::addNewFileReceive(qint32 ID,
       if (this->getFileSendByID(User->getI2PStreamID()) != NULL ||
           this->getFileReceiveByID(User->getI2PStreamID()) != NULL) {
         qCritical() << "File is already in the transfer queue";
-        throw std::runtime_error("File is already in the transfer queue");
         return;
       }
     }
@@ -248,8 +238,35 @@ void CFileTransferManager::removeFileReceive(const qint32 ID) {
   }
 }
 const QString CFileTransferManager::FilterForFileName(QString FileName) const {
+  // Remove path separators and directory traversal sequences
   FileName.replace("\\", "");
   FileName.replace("/", "");
   FileName.replace("..", "");
+
+  // Remove control characters and other dangerous characters
+  FileName.remove(QRegularExpression("[\\x00-\\x1F\\x7F]"));
+
+  // Reject reserved Windows filenames (case-insensitive)
+  static const QStringList reservedNames = {"CON",  "PRN",  "AUX",  "NUL",  "COM1", "COM2", "COM3", "COM4",
+                                            "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3",
+                                            "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+  QString upperName = FileName.toUpper();
+  for (const QString &reserved : reservedNames) {
+    if (upperName == reserved || upperName.startsWith(reserved + ".")) {
+      FileName.clear();
+      break;
+    }
+  }
+
+  // Limit length
+  if (FileName.length() > 255) {
+    FileName.truncate(255);
+  }
+
+  // Ensure filename is not empty after sanitization
+  if (FileName.isEmpty() || FileName == "." || FileName == "..") {
+    FileName = "unnamed";
+  }
+
   return FileName;
 }

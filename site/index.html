@@ -32,8 +32,13 @@
     <p id=screenshots><img src=screenshots/main.png alt=screenshot-roster> <img src=screenshots/chat.png alt=screenshot-chat>
     <hr>
     <h3 id=downloads>Downloads</h3>
+    <p><a href=https://github.com/vituperative/i2pchat/releases/tag/continuous>Latest CI build</a> (all platforms)
     <ul>
-      <li><a href=https://github.com/vituperative/i2pchat/actions/workflows/build.yml>Latest CI build (Linux)</a>
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat-Linux>Linux</a> (binary)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat.exe>Windows</a> (.exe)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/I2PChat-macos>macOS</a>
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/i2pchat_0.2.43_amd64.deb>Debian/Ubuntu</a> (.deb)
+      <li><a href=https://github.com/vituperative/i2pchat/releases/download/continuous/sounds.zip>Sounds</a> (.zip)
     </ul>
     <hr>
     <h3 id=features>Features</h3>
@@ -42,7 +47,8 @@
       <li>Transient (session-only) identity — no keys persisted to disk
       <li>Offline message queue — compose while offline, delivered automatically on reconnect
       <li>File transfer with per-user auto-download policy
-      <li>Optional b32.i2p web profile page with avatar, bio, and interests
+      <li>Optional b32.i2p web profile page — drop HTML, CSS, JS, and images into <code>~/.i2pchat/www/</code> for a multi-file static site at your b32 address
+      <li>Multi-user web server with per-user folder mapping, HTTP Basic Auth, cookie sessions, and directory listing
       <li>Configurable tunnel length, quantity, and backup; ECIES (Ratchet) and EdDSA
       <li>Emoticon support with punctuation-boundary detection
     </ul>
@@ -65,6 +71,7 @@
       <li>AppImage (<code>--appimage</code>): needs <code>wget</code> plus the native prerequisites above.
       <li>Windows cross-compile (<code>--windows</code>): needs <code>git gperf libtool</code> plus the native prerequisites. MXE is cloned and built automatically on first run.
       <li>UPX compression (<code>--upx</code>): needs <code>upx</code>.
+      <li>.deb package (<code>--deb</code>): needs <code>dpkg-deb</code> (pre-installed on Debian/Ubuntu).
       <li>Format (<code>--format</code>): needs <code>clang-format</code>.
       <li>Tidy (<code>--tidy</code>): needs <code>clang-tidy bear compiledb</code>.
     </ul>
@@ -78,6 +85,7 @@ Options:
   --format      Run clang-format (auto-fix sources)
   --tidy        Run clang-tidy with --fix (check and auto-fix issues)
   --appimage    Build portable AppImage (Linux only)
+  --deb         Build .deb package (Linux only)
   --windows     Cross-compile Windows .exe via MinGW-w64
   --upx         Compress binary with UPX (reduces size, all platforms)
   --bump        Bump patch version, update Core.h and create git tag
@@ -98,6 +106,29 @@ Options:
       <li>Select <strong>Online</strong> from the dropdown menu. Your unique I2P destination is created automatically on first SAM connection.
       <li>Settings and contacts are stored in <code>~/.i2pchat/</code> (Linux) or <code>%APPDATA%\Roaming\I2PChat\</code> (Windows).
     </ul>
+    <details>
+      <summary>Web server</summary>
+      <p>Static files in <code>~/.i2pchat/www/</code> (or a custom docroot) are served on your b32.i2p address. Supports HTTP Basic Auth, per-user folder mapping, cookie-based sessions, directory listing, and rate-limited login. Visit Settings → Web Server to configure:</p>
+      <ul>
+        <li><strong>Require login</strong> — when ON, all paths challenge for credentials; when OFF, only <code>/login</code> challenges and <code>/logout</code> returns to the public root
+        <li><strong>Session timeout</strong> — configurable cookie lifetime (default 60 min)
+        <li><strong>Users</strong> — per-user username, password, and document root folder
+        <li><strong>Directory listing</strong> — file index when no <code>index.html</code> exists
+      </ul>
+      <p>Content-Security-Policy: <code>default-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'</code>. Only GET/HEAD accepted. Request headers limited to 4KB. Symlinks rejected. Session cookies are HttpOnly+SameSite=Lax. 3 failed logins = 1h ban. Transport security by I2P's garlic routing.</p>
+    </details>
+    <details>
+      <summary>Sounds</summary>
+      <p>I2PChat plays notification sounds for online/offline events, incoming messages, and file transfers.</p>
+      <p><strong>Debian/Ubuntu (`.deb`):</strong> Sounds are included and automatically copied to <code>~/.i2pchat/sounds/</code> on first run.</p>
+      <p><strong>Other platforms:</strong> Download the <a href=https://github.com/vituperative/i2pchat/releases>sounds archive</a> and extract to the config directory:</p>
+      <ul>
+        <li><strong>Linux:</strong> <code>~/.i2pchat/sounds/</code>
+        <li><strong>Windows:</strong> <code>%APPDATA%\Roaming\I2PChat\sounds\</code>
+        <li><strong>macOS:</strong> <code>~/Library/Application Support/I2PChat/sounds/</code>
+      </ul>
+      <p>Sound files can be customized by editing <code>application.ini</code> under <code>[Sound][SoundFilePath]</code>.</p>
+    </details>
     <hr>
     <h3 id=license>License</h3>
     <p>Licensed under GPLv3.

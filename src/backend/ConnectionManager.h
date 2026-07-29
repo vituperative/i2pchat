@@ -9,14 +9,9 @@
 #include <QDateTime>
 #include <QElapsedTimer>
 #include <QMap>
-#include <QMapIterator>
 
 namespace SESSION_ENUMS {
-enum SESSION_STYLEV3 {
-  STREAM,
-  DATAGRAMM //,
-            // RAW
-};
+enum SESSION_STYLEV3 { STREAM, DATAGRAMM };
 };
 
 class CConnectionManager : public QObject {
@@ -25,7 +20,6 @@ public:
   CConnectionManager(QString SamHost, QString SamPort, QString ConfigPath);
   ~CConnectionManager();
 
-  // forbid some operators
   CConnectionManager(const CConnectionManager &) = delete;
   CConnectionManager &operator=(const CConnectionManager &) = delete;
 
@@ -70,7 +64,7 @@ private:
   QString generateBridgeName() const;
   void stop();
 
-  QMap<qint32, CI2PStream *> StreamIncomingListener; // listeners waiting for incoming streams (ACCEPT mode)
+  QMap<qint32, CI2PStream *> StreamIncomingListener;
   CSessionController *StreamController;
 
   bool mSessionStreamStatusOK;
@@ -81,6 +75,6 @@ private:
   const QString mConfigPath;
 
   inline bool SessionStreamStatusOKCheck() const { return mSessionStreamStatusOK; }
-  QMap<qint32, CI2PStream *> allStreams; // all active streams (both CONNECT and ACCEPT), keyed by stream ID
+  QMap<qint32, CI2PStream *> allStreams;
 };
 #endif

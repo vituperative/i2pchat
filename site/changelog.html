@@ -32,6 +32,18 @@
     <ul>
       <li>Offline file-offer queuing with inline accept/reject, cancel icon, and persistent queue across restarts
       <li>Transient (non-persistent) destination option
+      <li>Multi-user web server
+        <ul>
+          <li>HTTP Basic Auth (dual mode: optional/required, configurable per-profile user mapping)
+          <li>Cookie-based sessions with configurable timeout (1–1440 min, default 60)
+          <li>Rate-limited logins: 3 failed attempts = 1h ban (persisted to bans.txt)
+          <li>Static file serving with MIME detection and content-security-policy header
+          <li>Directory listing (dotfiles and temp/backup files hidden)
+          <li>Custom error-page fallback from <code>/.resources/{code}.html</code>
+          <li>On-the-fly HTML/CSS/JS minification
+          <li>Custom-styled directory listings via <code>filelist.css</code> (dark/light theme, file-type icons)
+          <li>Configurable document root and /login+/logout endpoints
+        </ul>
       <li>Userlist: persistent sort mode, dynamic re-sort by online/new-message timestamps
       <li>Auto-away with settings toggle
       <li>Chat: header icons, bubble sizing/padding/CSS fixes, message order fix, pending→send notification suppression
@@ -41,6 +53,9 @@
       <li>Debug Messages: monospace 8pt, single-div HTML layout
       <li>Minimal theme as sole default; log display improvements (newline trim, 9pt)
       <li>Sound defaults aligned with real files; pending→send notification suppressed
+      <li>Settings dialog overhaul: layout-based UI, removed Gender/Age
+      <li>Added .deb packaging via <code>build.sh --deb</code>
+      <li>CI: always UPX Linux builds, strip Windows binaries
     </ul>
 
     <h3>January, 2026</h3>

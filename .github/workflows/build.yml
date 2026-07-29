@@ -14,7 +14,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Qt6
         run: |
@@ -30,20 +30,21 @@ jobs:
           sudo apt-get install -y g++ make upx
 
       - name: Build
-        run: bash build.sh --appimage $( [[ '${{ github.ref }}' == refs/tags/v* ]] && echo --upx )
+        run: bash build.sh --appimage --upx --deb
 
       - name: Upload binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-linux
           path: |
             dist/I2PChat
             dist/I2PChat-*.AppImage
+            dist/i2pchat_*.deb
 
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: jurplel/install-qt-action@v4
         with:
@@ -72,15 +73,19 @@ jobs:
             )
           )
 
+      - name: Strip binary
+        shell: cmd
+        run: llvm-strip dist\I2PChat.exe
+
       - name: Upload build log
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: build-log
           path: build.log
 
       - name: Upload Windows binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-windows
           path: dist/I2PChat.exe
@@ -88,9 +93,9 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: cache-qt5
         with:
           path: /usr/local/Cellar/qt@5
@@ -115,7 +120,7 @@ jobs:
           fi
 
       - name: Upload macOS binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: I2PChat-macos
           path: dist/I2PChat
@@ -125,7 +130,8 @@ jobs:
     needs: [linux, windows, macos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
 
       - name: Collect artifacts
         run: |
@@ -135,9 +141,12 @@ jobs:
           cp I2PChat-macos/I2PChat release-assets/I2PChat-macos
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
             cp I2PChat-linux/I2PChat-*.AppImage release-assets/
+          ls I2PChat-linux/i2pchat_*.deb 2>/dev/null && \
+            cp I2PChat-linux/i2pchat_*.deb release-assets/ || echo "No .deb"
+          cd sounds && zip -r ../release-assets/sounds.zip . && cd ..
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: release-assets/*
           generate_release_notes: true
@@ -226,7 +235,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
 
       - name: Collect artifacts
         run: |
@@ -236,6 +246,10 @@ jobs:
           cp I2PChat-macos/I2PChat release-assets/I2PChat-macos 2>/dev/null || echo "MISSING I2PChat-macos"
           ls I2PChat-linux/I2PChat-*.AppImage 2>/dev/null && \
             cp I2PChat-linux/I2PChat-*.AppImage release-assets/ || echo "No AppImage"
+          ls I2PChat-linux/i2pchat_*.deb 2>/dev/null && \
+            cp I2PChat-linux/i2pchat_*.deb release-assets/ || echo "No .deb"
+          cd sounds && zip -r ../release-assets/sounds.zip . && cd ..
+          git archive --format=zip HEAD -o "release-assets/i2pchat-source-${GITHUB_SHA::7}.zip"
 
       - name: Upload continuous release
         uses: ncipollo/release-action@v1
@@ -251,4 +265,5 @@ jobs:
           makeLatest: true
           omitBodyDuringUpdate: true
           skipIfReleaseExists: false
+          skipSourceArchive: true
           token: ${{ secrets.GITHUB_TOKEN }}

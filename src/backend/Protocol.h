@@ -3,8 +3,11 @@
 #ifndef PROTOCOL
 #define PROTOCOL
 
+#include <QMap>
+#include <QMutex>
 #include <QThread>
-#include <QtGui>
+#include <QTimer>
+#include <QUuid>
 
 /*
         First packet on connection must be:
@@ -13,7 +16,7 @@
                 CHATSYSTEMFILETRANSFER\tProtocolVersion\nSizeinBit\nFileName
    -> for FileTransfer else send <the html info-page > 	//maybe with information
    about the user ???
-                                                //maybe good for usersearch ?
+                                                 //maybe good for usersearch ?
 
         Every packet must be >= 8 Byte
         1-4 Byte = Packetlength in Byte (HEX) without the 4 Byte Packetlength
@@ -165,6 +168,7 @@ public:
 public slots:
   void slotInputUnknown(const qint32 ID, const QByteArray &Data);
   void slotInputKnown(const qint32 ID, const QByteArray &Data);
+  void cleanupRateLimits();
 
 private:
   void dispatchKnownCommand(const qint32 ID, const QByteArray &Data, const QString &tag);
@@ -172,7 +176,22 @@ private:
   void handleChatProtocolPacket(const qint32 ID, const QByteArray &Data, class CI2PStream *stream);
   void handleFileTransferProtocolPacket(const qint32 ID, const QByteArray &Data, class CI2PStream *stream);
   void handleWebProfileProtocolPacket(const qint32 ID, const QByteArray &Data, class CI2PStream *stream);
+  void loadBans();
+  void saveBans();
 
   CCore &mCore;
+  QTimer *mRateLimitCleanupTimer;
+  QMutex mRateLimitMutex;
+  QString mBansFile;
+  struct RateLimitEntry {
+    int failures = 0;
+    qint64 banUntil = 0;
+  };
+  QMap<QString, RateLimitEntry> mRateLimits;
+  struct WebSession {
+    QString username;
+    qint64 expiry;
+  };
+  QMap<QString, WebSession> mSessions;
 };
 #endif

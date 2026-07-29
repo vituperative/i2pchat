@@ -11,7 +11,7 @@ NUL
 *.pro.user*
 .qmake*
 release/
-/src/gui/ui_form_*.h
+
 temp/**
 
 compile_commands.json
@@ -24,4 +24,3 @@ users.config
 wip/
 AGENTS.md
 tools/
-

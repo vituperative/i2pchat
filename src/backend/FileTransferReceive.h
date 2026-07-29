@@ -6,8 +6,8 @@
 #include "I2PStream.h"
 
 #include <QElapsedTimer>
+#include <QFile>
 #include <QTimer>
-#include <QtGui>
 
 #define TIMERCOUNTFORAVERAGETRANSFERSPEED_READ 1000 // 1 sec
 

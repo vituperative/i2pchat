@@ -1,5 +1,12 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #include "TextEmotionChanger.h"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
+#include <QPixmap>
 #include <QRegularExpression>
 
 CTextEmotionChanger *CTextEmotionChanger::instanz = NULL;

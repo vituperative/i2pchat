@@ -2,8 +2,8 @@
 
 #include "DebugMessageManager.h"
 
-// cDebugMessageManager::cDebugMessageManager(CConnectionManager*
-// ConnectionManager)
+#include <QDateTime>
+
 CDebugMessageManager::CDebugMessageManager(const QString &Group, const QString &configPath) {
 
   QSettings settings(configPath + "/application.ini", QSettings::IniFormat);
@@ -12,7 +12,8 @@ CDebugMessageManager::CDebugMessageManager(const QString &Group, const QString &
   settings.endGroup();
   settings.sync();
 
-  slotNewIncomingDebugMessage("• I2PChat Debug Message Manager started");
+  slotNewIncomingDebugMessage(QDateTime::currentDateTime().toString("hh:mm:ss") +
+                              " • I2PChat Debug Message Manager started");
 }
 
 CDebugMessageManager::~CDebugMessageManager() {}

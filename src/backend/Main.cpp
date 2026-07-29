@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include "Core.h"
-#include "form_Main.h"
+#include "MainWindow.h"
 
 #include <QApplication>
 #include <QDateTime>
 #include <QDir>
-#include <QElapsedTimer>
 #include <QFile>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QStyleFactory>
+#include <QTextCodec>
 #include <QTextStream>
 #include <QtDebug>
-#include <QtGui>
 
 #ifndef _WIN32
 #include <getopt.h>
@@ -129,6 +129,24 @@ int main(int argc, char *argv[]) {
 
   QDir().mkpath(configPath + "/themes/chat");
   QDir().mkpath(configPath + "/themes/app");
+  QDir().mkpath(configPath + "/www");
+  QDir().mkpath(configPath + "/sounds");
+
+  // Copy default sound files on first run
+  QString soundsDest = configPath + "/sounds/";
+  if (QDir(soundsDest).entryList(QDir::Files).isEmpty()) {
+    QStringList searchPaths = {"/usr/share/i2pchat/sounds", "./sounds"};
+    for (const QString &src : searchPaths) {
+      QDir srcDir(src);
+      if (srcDir.exists()) {
+        for (const QString &file : srcDir.entryList(QDir::Files)) {
+          QFile::copy(src + "/" + file, soundsDest + file);
+        }
+        if (!QDir(soundsDest).entryList(QDir::Files).isEmpty())
+          break;
+      }
+    }
+  }
 
   // Write the default Minimal theme CSS — always overwritten on startup so defaults stay fresh.
   // Users who want custom themes should copy Minimal.css to a new name in themes/chat/.
@@ -183,7 +201,7 @@ int main(int argc, char *argv[]) {
 
   enableDebugLogging(configPath);
 
-  form_MainWindow *mainForm = new form_MainWindow(configPath);
+  MainWindow *mainForm = new MainWindow(configPath);
 
   {
 
@@ -192,7 +210,6 @@ int main(int argc, char *argv[]) {
     auto CurrentStyle = settings.value("current_Style", "Fusion").toString();
     auto CustomStyleSheet = settings.value("CustomStyleSheet", "").toString();
     settings.endGroup();
-    qDebug() << "Current style: " << CurrentStyle;
     mainForm->setStyle(QStyleFactory::create(CurrentStyle));
     if (CustomStyleSheet.size() > 1)
       styleSheetFile.setFileName(CustomStyleSheet);

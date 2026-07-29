@@ -4,14 +4,10 @@
 #define USERBLOCKMANAGER_H
 
 #include <QDate>
-#include <QElapsedTimer>
 #include <QFile>
 #include <QMap>
-#include <QMapIterator>
 #include <QStringList>
 #include <QTextStream>
-#include <QtDebug>
-#include <QtGlobal>
 
 class CCore;
 class CUserBlockManager : public QObject {
@@ -37,7 +33,6 @@ public:
   CUserBlockManager(CCore &Core, const QString &FilePathToBlockFile);
   ~CUserBlockManager();
 
-  // forbid some operators
   CUserBlockManager(const CUserBlockManager &) = delete;
   CUserBlockManager &operator=(const CUserBlockManager &) = delete;
 

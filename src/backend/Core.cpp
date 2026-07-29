@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+
 #include "Core.h"
 
 #include "ConnectionManager.h"
@@ -13,6 +17,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QFileInfoList>
+#include <QImage>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QtGlobal>
@@ -42,8 +47,7 @@ CCore::CCore(const QString &configPath) {
   connect(mConnectionManager,
           SIGNAL(signNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
           this,
-          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)),
-          Qt::DirectConnection);
+          SLOT(slotNamingReplyReceived(const SAM_Message_Types::RESULT, QString, QString, QString)));
 
   connect(
     mConnectionManager, SIGNAL(signStreamControllerStatusOK(bool)), this, SLOT(slotStreamControllerStatusOK(bool)));
@@ -76,7 +80,6 @@ CCore::CCore(const QString &configPath) {
   mProtocol = new CProtocol(*this);
   this->mCurrentOnlineStatus = User::USEROFFLINE;
 
-  qDebug() << "CCore constructor: calling loadUserInfos";
   loadUserInfos();
   mUnsentChatMessageStorage = new CUnsentChatMessageStorage(mConfigPath + "/UnsentChatMessageStorage.ini");
   mUserBlockManager = new CUserBlockManager(*this, mConfigPath + "/UserBlockList.dat");
@@ -103,31 +106,30 @@ CCore::CCore(const QString &configPath) {
   connect(&mAutoAwayTimer, SIGNAL(timeout()), this, SLOT(slotAutoAwayTimeout()));
   QSettings autoSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
   mAutoAwayMinutes = autoSettings.value("General/AutoAwayMinutes", 0).toInt();
-  if (mAutoAwayMinutes > 0 && autoSettings.value("General/AutoAwayEnabled", false).toBool())
+  mAutoAwayEnabled = autoSettings.value("General/AutoAwayEnabled", false).toBool();
+  if (mAutoAwayEnabled && mAutoAwayMinutes > 0)
     mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
 }
 
 CCore::~CCore() {
-
   this->closeAllActiveConnections();
   this->mUserManager->saveUserList();
   delete mUnsentChatMessageStorage;
-  delete mUserManager;
-  delete mSoundManager;
+  mUserManager->deleteLater();
+  mSoundManager->deleteLater();
 
   while (!mDataPacketsManagers.isEmpty()) {
-    delete mDataPacketsManagers.takeFirst();
+    mDataPacketsManagers.takeFirst()->deleteLater();
   }
 
   if (mProtocol != NULL) {
-    delete this->mProtocol;
+    mProtocol->deleteLater();
   }
 
-  delete mConnectionManager;
-
-  delete mUserBlockManager;
-  delete mDebugMessageHandler;
-  delete mFileTransferManager;
+  mConnectionManager->deleteLater();
+  mUserBlockManager->deleteLater();
+  mDebugMessageHandler->deleteLater();
+  mFileTransferManager->deleteLater();
 }
 
 void CCore::doNamingLookUP(const QString &Name) const {
@@ -167,18 +169,9 @@ QString CCore::calcSessionOptionString() const {
                              " ");
   SessionOptionString.append("outbound.length=" + settings.value("outbound.length", "3").toString() + " ");
 
-  // throttle per client dest to max 60 connections/min to mitigate denial of
-  // service ?? is this hampering our file transfers???
-  // SessionOptionString.append(
-  //    "i2p.streaming.maxConnsPerMinute=" +
-  //    settings.value("i2p.streaming.maxConnsPerMinute", "60").toString() + "
-  //    ");
-
   // SIGNATURE_TYPE
 
   {
-    // TODO: get from ui_form_settingsgui.h
-
     QStringList AllowSignTypes = {
       "ECDSA_SHA256_P256", "ECDSA_SHA384_P384", "ECDSA_SHA512_P521", "EdDSA_SHA512_Ed25519", "RedDSA_SHA512_Ed25519"};
 
@@ -231,7 +224,6 @@ void CCore::init() {
   if (tmpDir.exists())
     tmpDir.removeRecursively();
 
-  qDebug() << "CCore::init() called";
   this->mMyDestination = "";
 
   QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
@@ -242,16 +234,11 @@ void CCore::init() {
   bool nonPersist = settings.value("NonPersistentDestination", false).toBool();
   QString SamPrivKey = nonPersist ? "" : settings.value("SamPrivKey", "").toString();
 
-  qDebug() << "CCore::init() - SamHost:" << SamHost << "SamPort:" << SamPort << "HasPrivKey:" << !SamPrivKey.isEmpty();
-
   if (mConnectionManager->isComponentStopped()) {
-    qDebug() << "CCore::init() - Connection manager stopped, restarting...";
     mConnectionManager->doReStart();
   }
 
-  qDebug() << "CCore::init() - Creating session...";
   mConnectionManager->doCreateSession(STREAM, SamPrivKey, calcSessionOptionString());
-  qDebug() << "CCore::init() - Session create called";
 
   settings.endGroup();
   settings.sync();
@@ -529,11 +516,9 @@ void CCore::setOnlineStatus(const ONLINESTATE newStatus) {
     return;
 
   if (mCurrentOnlineStatus == USEROFFLINE) {
-    qDebug() << "setOnlineStatus: Transitioning from OFFLINE, storing next status =" << newStatus;
     mNextOnlineStatus = newStatus;
     mCurrentOnlineStatus = USERTRYTOCONNECT;
     mKeepAliveTimer.stop();
-    qDebug() << "setOnlineStatus: Calling init()...";
     init();
     emit signOnlineStatusChanged();
     return;
@@ -666,16 +651,17 @@ void CCore::slotAutoAwayTimeout() {
 }
 
 void CCore::resetAutoAway() {
-  if (mAutoAwayMinutes > 0) {
+  if (mAutoAwayEnabled && mAutoAwayMinutes > 0) {
     mAutoAwayTimer.start(mAutoAwayMinutes * 60000);
     if (mCurrentOnlineStatus == USERAWAY)
       setOnlineStatus(USERONLINE);
   }
 }
 
-void CCore::applyAutoAwaySettings(int minutes) {
+void CCore::applyAutoAwaySettings(bool enabled, int minutes) {
+  mAutoAwayEnabled = enabled;
   mAutoAwayMinutes = minutes;
-  if (minutes > 0)
+  if (enabled && minutes > 0)
     mAutoAwayTimer.start(minutes * 60000);
   else
     mAutoAwayTimer.stop();
@@ -750,10 +736,10 @@ void CCore::createStreamObjectForUser(CUser &User) {
     return;
   }
 
-  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings->beginGroup("General");
-  msec = settings->value("Waittime_between_rechecking_offline_mUsers", "60000").toInt();
-  settings->endGroup();
+  QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("General");
+  msec = settings.value("Waittime_between_rechecking_offline_mUsers", "60000").toInt();
+  settings.endGroup();
 
   CI2PStream *t = mConnectionManager->doCreateNewStreamObject(CONNECT);
   if (t == NULL) {
@@ -775,19 +761,16 @@ void CCore::createStreamObjectForUser(CUser &User) {
           SLOT(slotInputUnknown(const qint32, const QByteArray)));
   t->doConnect(User.getI2PDestination());
   t->startUnlimintedReconnect(msec);
-  settings->sync();
-  delete settings;
 }
 
 void CCore::slotNewSamPrivKeyGenerated(const QString &SamPrivKey) {
-  QSettings *settings = new QSettings(mConfigPath + "/application.ini", QSettings::IniFormat);
-  settings->beginGroup("Network");
-  bool nonPersist = settings->value("NonPersistentDestination", false).toBool();
+  QSettings settings(mConfigPath + "/application.ini", QSettings::IniFormat);
+  settings.beginGroup("Network");
+  bool nonPersist = settings.value("NonPersistentDestination", false).toBool();
   if (!nonPersist)
-    settings->setValue("SamPrivKey", SamPrivKey);
-  settings->endGroup();
-  settings->sync();
-  delete settings;
+    settings.setValue("SamPrivKey", SamPrivKey);
+  settings.endGroup();
+  settings.sync();
 }
 
 bool CCore::useThisChatConnection(const QString &Destination, const qint32 ID) {
@@ -938,12 +921,6 @@ void CCore::setMyDestinationB32(const QString &B32Dest) {
   settings.sync();
 
   mMyDestinationB32 = B32Dest;
-}
-
-QString CCore::canonicalizeTopicId(QString topicIdNonCanonicalized) {
-
-  // FIXME canonicalizeTopicId(topicIdNonCanonicalized);
-  return topicIdNonCanonicalized;
 }
 
 void CCore::changeAccessIncomingUsers(bool m) {
