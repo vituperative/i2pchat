@@ -433,6 +433,7 @@ void MainWindow::openUserListeClicked() {
   }
 }
 void MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
+  Q_UNUSED(point)
   QListWidget *listWidget = this->listWidget;
 
   if (listWidget->count() == 0)
@@ -440,8 +441,6 @@ void MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
 
   QMenu contextMnu(this);
   QMenu contextMnuPos("Position", this);
-
-  QMouseEvent mevent(QEvent::MouseButtonPress, point, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
   QAction *UserChat = new QAction(QIcon(ICON_CHAT), tr("Chat"), this);
   connect(UserChat, SIGNAL(triggered()), this, SLOT(openUserListeClicked()));
@@ -539,7 +538,7 @@ void MainWindow::connecttreeWidgetCostumPopupMenu(QPoint point) {
     contextMnu.addMenu(&contextMnuPos);
     // TODO: Fix width of context menu and ensure sub-menu overlaps
     // contextMnu.setMaximumWidth(170);
-    contextMnu.exec(mevent.globalPos());
+    contextMnu.exec(QCursor::pos());
   }
 }
 

@@ -15,7 +15,7 @@ CChatMessageChanger::CChatMessageChanger(QString &ConfigPath) {
   if (mDoChange == true) {
     mControllForChange = new QTextEdit();
     mFont.fromString(settings.value("FontForOverwrite", "SansSerif,10").toString());
-    mColor.setNamedColor(settings.value("ColorForOverwrite", "#000000").toString());
+    mColor = QColor::fromString(settings.value("ColorForOverwrite", "#000000").toString());
   }
   settings.endGroup();
 }

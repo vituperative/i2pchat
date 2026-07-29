@@ -32,7 +32,7 @@ CUser::CUser(CCore &Core, CProtocol &Protocol, QString Name, const QString &I2PD
 
   settings.beginGroup("Chat");
   this->mTextFont.fromString(settings.value("DefaultFont", "SansSerif,10").toString());
-  this->mTextColor.setNamedColor(settings.value("DefaultColor", "#000").toString());
+  this->mTextColor = QColor::fromString(settings.value("DefaultColor", "#000").toString());
   this->mLogOnlineStateOfUsers = (settings.value("LogOnlineStatesOfUsers", true).toBool());
   settings.endGroup();
   settings.sync();

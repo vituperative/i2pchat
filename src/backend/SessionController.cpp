@@ -31,6 +31,7 @@ CSessionController::CSessionController(QString SamHost,
   : mSamHost(std::move(SamHost))
   , mSamPort(std::move(SamPort))
   , mBridgeName(std::move(BridgeName))
+  , mSamPrivKey(SamPrivKey)
   , mConfigPath(std::move(ConfigPath))
   , mSessionOptions(std::move(SessionOptions))
   , mAnalyser("CStreamController")

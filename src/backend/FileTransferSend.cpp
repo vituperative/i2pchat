@@ -216,7 +216,8 @@ void CFileTransferSend::slotDataReceived(const qint32 ID, const QByteArray &t) {
 
 void CFileTransferSend::StartFileTransfer(qint64 mFromPos) {
   mAlreadySentSize = 0;
-  mFileForSend.open(QIODevice::ReadOnly);
+  if (!mFileForSend.open(QIODevice::ReadOnly))
+    return;
   mFileForSend.seek(mFromPos);
   if (mFromPos != 0) {
     mAlreadySentSize = mFromPos;

@@ -105,7 +105,8 @@ void CUserManager::loadUserList() {
 
 void CUserManager::saveUserList() {
   QFile file(mCore.getConfigPath() + "/users.config");
-  file.open(QIODevice::WriteOnly | QIODevice::Text);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    return;
   QTextStream out(&file);
   QString InvisibleText;
 

@@ -10,7 +10,6 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QStyleFactory>
-#include <QTextCodec>
 #include <QTextStream>
 #include <QtDebug>
 
@@ -41,7 +40,7 @@ int main(int argc, char *argv[]) {
   constexpr auto NameOfConfigDirectoryOnLinux = "/.i2pchat/";
 #endif
 
-#if QT_VERSION >= 0x050600
+#if QT_VERSION >= 0x050600 && QT_VERSION < 0x060000
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
@@ -216,8 +215,8 @@ int main(int argc, char *argv[]) {
   }
 
   mainForm->show();
-  styleSheetFile.open(QFile::ReadOnly);
-  app.setStyleSheet(styleSheetFile.readAll());
+  if (styleSheetFile.open(QFile::ReadOnly))
+    app.setStyleSheet(styleSheetFile.readAll());
   app.exec();
   app.closeAllWindows();
 
@@ -267,7 +266,8 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
   }
   }
   QFile outFile(debugLogDir + "/DebugLog.txt");
-  outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-  QTextStream ts(&outFile);
-  ts << txt << Qt::endl;
+  if (outFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
+    QTextStream ts(&outFile);
+    ts << txt << Qt::endl;
+  }
 }

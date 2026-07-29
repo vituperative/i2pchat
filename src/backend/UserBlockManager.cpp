@@ -53,7 +53,8 @@ void CUserBlockManager::readBlockListe() {
 
 void CUserBlockManager::saveBlockListe() {
   QFile file(mFilePathToBlockFile);
-  file.open(QIODevice::WriteOnly | QIODevice::Text);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    return;
   QTextStream out(&file);
 
   QMapIterator<QString, CUserBlockEntity *> i(mUserBlockMap);

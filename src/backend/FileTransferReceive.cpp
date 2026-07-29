@@ -349,7 +349,8 @@ void CFileTransferReceive::start(const QString &FilePath, bool Accepted) {
     mFileName = FilePath.mid(FilePath.lastIndexOf("/") + 1);
 
     mFileForReceive.setFileName(FilePath);
-    mFileForReceive.open(QIODevice::WriteOnly);
+    if (!mFileForReceive.open(QIODevice::WriteOnly))
+      return;
     mTimer.start();
     mTimerForActAverageTransferSpeed.start(TIMERCOUNTFORAVERAGETRANSFERSPEED_READ);
 

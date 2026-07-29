@@ -321,7 +321,7 @@ void SettingsGui::loadSettings() {
   QColor color;
 
   font.fromString(settings->value("DefaultFont", "SansSerif,10").toString());
-  color.setNamedColor(settings->value("DefaultColor", "#000000").toString());
+  color = QColor::fromString(settings->value("DefaultColor", "#000000").toString());
 
   txtShowCurrentChatStyle->setFont(font);
   txtShowCurrentChatStyle->setTextColor(color);
@@ -336,7 +336,7 @@ void SettingsGui::loadSettings() {
     QColor color;
 
     font.fromString(settings->value("FontForOverwrite", "SansSerif,10").toString());
-    color.setNamedColor(settings->value("ColorForOverwrite", "#000000").toString());
+    color = QColor::fromString(settings->value("ColorForOverwrite", "#000000").toString());
 
     txtOverrideRemote->setFont(font);
     txtOverrideRemote->setTextColor(color);
@@ -626,12 +626,12 @@ void SettingsGui::loadStyleSheet(const QString &sheetName) {
   // external Stylesheets
   QFile file(mConfigPath + "/qss/" + sheetName.toLower() + ".qss");
   if (file.exists()) {
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-
-    qApp->setStyleSheet(styleSheet);
-  } else
-    qWarning() << "WARNING: stylesheet file is broken";
+    if (file.open(QFile::ReadOnly)) {
+      QString styleSheet = QLatin1String(file.readAll());
+      qApp->setStyleSheet(styleSheet);
+    } else
+      qWarning() << "WARNING: stylesheet file is broken";
+  }
 }
 
 void SettingsGui::loadqss() {

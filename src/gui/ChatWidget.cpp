@@ -278,7 +278,7 @@ static QString sentOfferIconHtml() {
     QSvgRenderer(QStringLiteral(":/icons/download.svg")).render(&p, QRectF(QPointF(0, 0), srcSize));
     p.end();
 
-    img = img.mirrored(false, true);
+    img = img.flipped(Qt::Vertical);
     img = CCore::scaleImageLanczos(img, 12, 12);
 
     QByteArray bytes;
