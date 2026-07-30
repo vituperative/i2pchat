@@ -159,13 +159,13 @@ QString CCore::calcSessionOptionString() const {
 
   // inbound options
   SessionOptionString.append("inbound.quantity=" + settings.value("inbound.quantity", "1").toString() + " ");
-  SessionOptionString.append("inbound.backupQuantity=" + settings.value("inbound.backupQuantity", "1").toString() +
+  SessionOptionString.append("inbound.lengthVariance=" + settings.value("inbound.lengthVariance", "0").toString() +
                              " ");
   SessionOptionString.append("inbound.length=" + settings.value("inbound.length", "3").toString() + " ");
 
   // outbound options
   SessionOptionString.append("outbound.quantity=" + settings.value("outbound.quantity", "1").toString() + " ");
-  SessionOptionString.append("outbound.backupQuantity=" + settings.value("outbound.backupQuantity", "1").toString() +
+  SessionOptionString.append("outbound.lengthVariance=" + settings.value("outbound.lengthVariance", "0").toString() +
                              " ");
   SessionOptionString.append("outbound.length=" + settings.value("outbound.length", "3").toString() + " ");
 

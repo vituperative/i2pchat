@@ -82,6 +82,8 @@ private slots:
   void setCustomStyleSheet();
   void populateChatStyleCombo();
   void slotThemeDirChanged();
+  void validateInboundHopCount();
+  void validateOutboundHopCount();
 
 private:
   CCore &mCore;
