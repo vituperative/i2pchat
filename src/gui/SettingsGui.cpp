@@ -109,6 +109,11 @@ SettingsGui::SettingsGui(CCore &Core, QWidget *parent, Qt::WindowFlags flags)
   if (QDir(themesDir).exists())
     mThemeWatcher->addPath(themesDir);
   connect(mThemeWatcher, &QFileSystemWatcher::directoryChanged, this, &SettingsGui::slotThemeDirChanged);
+
+  connect(spin_InLength, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsGui::validateInboundHopCount);
+  connect(spin_InLengthVariance, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsGui::validateInboundHopCount);
+  connect(spin_OutLength, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsGui::validateOutboundHopCount);
+  connect(spin_OutLengthVariance, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsGui::validateOutboundHopCount);
 }
 
 SettingsGui::~SettingsGui() {
@@ -203,13 +208,13 @@ void SettingsGui::loadSettings() {
   spin_InQuantity->setValue(settings->value("inbound.quantity", "1").toInt());
   spin_InQuantity->setMaximum(3);
 
-  spin_InBackupQty->setMinimum(0);
-  spin_InBackupQty->setValue(settings->value("inbound.backupQuantity", "1").toInt());
-  spin_InBackupQty->setMaximum(3);
+  spin_InLengthVariance->setMinimum(-1);
+  spin_InLengthVariance->setValue(settings->value("inbound.lengthVariance", "0").toInt());
+  spin_InLengthVariance->setMaximum(1);
 
-  spin_OutBackupQty->setMinimum(0);
-  spin_OutBackupQty->setValue(settings->value("outbound.backupQuantity", "1").toInt());
-  spin_OutBackupQty->setMaximum(3);
+  spin_OutLengthVariance->setMinimum(-1);
+  spin_OutLengthVariance->setValue(settings->value("outbound.lengthVariance", "0").toInt());
+  spin_OutLengthVariance->setMaximum(1);
 
   spin_OutLength->setMinimum(1);
   spin_OutLength->setValue(settings->value("outbound.length", "3").toInt());
@@ -459,11 +464,11 @@ void SettingsGui::saveSettings() {
   settings->setValue("SamPort", spin_SAMPort->value());
   // Inbound options
   settings->setValue("inbound.quantity", spin_InQuantity->value());
-  settings->setValue("inbound.backupQuantity", spin_InBackupQty->value());
+  settings->setValue("inbound.lengthVariance", spin_InLengthVariance->value());
   settings->setValue("inbound.length", spin_InLength->value());
   // Outpound options
   settings->setValue("outbound.quantity", spin_OutQuantity->value());
-  settings->setValue("outbound.backupQuantity", spin_OutBackupQty->value());
+  settings->setValue("outbound.lengthVariance", spin_OutLengthVariance->value());
   settings->setValue("outbound.length", spin_OutLength->value());
 
   // Signature_type
@@ -668,6 +673,32 @@ void SettingsGui::populateChatStyleCombo() {
 
 void SettingsGui::slotThemeDirChanged() {
   populateChatStyleCombo();
+}
+
+void SettingsGui::validateInboundHopCount() {
+  int length = spin_InLength->value();
+  int variance = spin_InLengthVariance->value();
+  if (length + variance < 1) {
+    spin_InLengthVariance->blockSignals(true);
+    spin_InLengthVariance->setValue(1 - length);
+    spin_InLengthVariance->blockSignals(false);
+    QMessageBox::warning(this, tr("Invalid Hop Count"),
+                         tr("Hop count (length + variation) must be at least 1.\nVariation adjusted to %1.")
+                           .arg(spin_InLengthVariance->value()));
+  }
+}
+
+void SettingsGui::validateOutboundHopCount() {
+  int length = spin_OutLength->value();
+  int variance = spin_OutLengthVariance->value();
+  if (length + variance < 1) {
+    spin_OutLengthVariance->blockSignals(true);
+    spin_OutLengthVariance->setValue(1 - length);
+    spin_OutLengthVariance->blockSignals(false);
+    QMessageBox::warning(this, tr("Invalid Hop Count"),
+                         tr("Hop count (length + variation) must be at least 1.\nVariation adjusted to %1.")
+                           .arg(spin_OutLengthVariance->value()));
+  }
 }
 
 void SettingsGui::clicked_openFile() {

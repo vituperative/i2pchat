@@ -1358,7 +1358,7 @@
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="QSpinBox" name="spin_OutBackupQty">
+          <widget class="QSpinBox" name="spin_OutLengthVariance">
            <property name="minimumSize">
             <size>
              <width>80</width>
@@ -1374,7 +1374,7 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_InBackupQty">
+          <widget class="QLabel" name="label_InLengthVariance">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -1394,7 +1394,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Backup Quantity:</string>
+            <string>Hop Variation:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -1402,7 +1402,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="spin_InBackupQty">
+          <widget class="QSpinBox" name="spin_InLengthVariance">
            <property name="minimumSize">
             <size>
              <width>80</width>
